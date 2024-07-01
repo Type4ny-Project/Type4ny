@@ -1,5 +1,4 @@
 _lang_: "日本語"
-
 headlineMisskey: "ノートでつながるネットワーク"
 introMisskey: "ようこそ！Misskeyは、オープンソースの分散型マイクロブログサービスです。\n「ノート」を作成して、いま起こっていることを共有したり、あなたについて皆に発信しよう📡\n「リアクション」機能で、皆のノートに素早く反応を追加することもできます👍\n新しい世界を探検しよう🚀"
 poweredByMisskeyDescription: "{name}は、オープンソースのプラットフォーム<b>Misskey</b>のサーバーのひとつです。"
@@ -1242,7 +1241,6 @@ keepOriginalFilenameDescription: "この設定をオフにすると、アップ�
 noDescription: "説明文はありません"
 alwaysConfirmFollow: "フォローの際常に確認する"
 inquiry: "お問い合わせ"
-
 _delivery:
   status: "配信状態"
   stop: "配信停止"
@@ -1252,7 +1250,6 @@ _delivery:
     manuallySuspended: "手動停止中"
     goneSuspended: "サーバー削除のため停止中"
     autoSuspendedForNotResponding: "サーバー応答なしのため停止中"
-
 _bubbleGame:
   howToPlay: "遊び方"
   hold: "ホールド"
@@ -1268,7 +1265,6 @@ _bubbleGame:
     section1: "位置を調整してハコにモノを落とします。"
     section2: "同じ種類のモノがくっつくと別のモノに変化して、スコアが得られます。"
     section3: "モノがハコからあふれるとゲームオーバーです。ハコからあふれないようにしつつモノを融合させてハイスコアを目指そう！"
-
 _announcement:
   forExistingUsers: "既存ユーザーのみ"
   forExistingUsersDescription: "有効にすると、このお知らせ作成時点で存在するユーザーにのみお知らせが表示されます。無効にすると、このお知らせ作成後にアカウントを作成したユーザーにもお知らせが表示されます。"
@@ -1282,7 +1278,6 @@ _announcement:
   dialogAnnouncementUxWarn: "ダイアログ形式のお知らせが同時に2つ以上ある場合、UXに悪影響を及ぼす可能性が非常に高いため、使用は慎重に行うことを推奨します。"
   silence: "非通知"
   silenceDescription: "オンにすると、このお知らせは通知されず、既読にする必要もなくなります。"
-
 _initialAccountSetting:
   accountCreated: "アカウントの作成が完了しました！"
   letsStartAccountSetup: "さっそくアカウントの初期設定を行いましょう。"
@@ -1299,7 +1294,6 @@ _initialAccountSetting:
   startTutorial: "チュートリアルを開始"
   skipAreYouSure: "初期設定をスキップしますか？"
   laterAreYouSure: "初期設定をあとでやり直しますか？"
-
 _initialTutorial:
   launchTutorial: "チュートリアルを見る"
   title: "チュートリアル"
@@ -1362,16 +1356,13 @@ _initialTutorial:
   _done:
     title: "チュートリアルは終了です🎉"
     description: "ここで紹介した機能はほんの一部にすぎません。Misskeyの使い方をより詳しく知るには、{link}をご覧ください。"
-
 _timelineDescription:
   home: "ホームタイムラインでは、あなたがフォローしているアカウントの投稿を見られます。"
   local: "ローカルタイムラインでは、このサーバーにいるユーザー全員の投稿を見られます。"
   social: "ソーシャルタイムラインには、ホームタイムラインとローカルタイムラインの投稿が両方表示されます。"
   global: "グローバルタイムラインでは、接続している他のすべてのサーバーからの投稿を見られます。"
-
 _serverRules:
   description: "新規登録前に表示する、サーバーの簡潔なルールを設定します。内容は利用規約の要約とすることを推奨します。"
-
 _serverSettings:
   iconUrl: "アイコン画像のURL"
   appIconDescription: "{host}がアプリとして表示される際のアイコンを指定します。"
@@ -1386,7 +1377,6 @@ _serverSettings:
   fanoutTimelineDbFallbackDescription: "有効にすると、タイムラインがキャッシュされていない場合にDBへ追加で問い合わせを行うフォールバック処理を行います。無効にすると、フォールバック処理を行わないことでさらにサーバーの負荷を軽減することができますが、タイムラインが取得できる範囲に制限が生じます。"
   inquiryUrl: "問い合わせ先URL"
   inquiryUrlDescription: "サーバー運営者へのお問い合わせフォームのURLや、運営者の連絡先等が記載されたWebページのURLを指定します。"
-
 _accountMigration:
   moveFrom: "別のアカウントからこのアカウントに移行"
   moveFromSub: "別のアカウントへエイリアスを作成"
@@ -1402,7 +1392,6 @@ _accountMigration:
   movedAndCannotBeUndone: "\nアカウントは移行されています。\n移行を取り消すことはできません。"
   postMigrationNote: "このアカウントからのフォロー解除は移行操作から24時間後に実行されます。\nこのアカウントのフォロー・フォロワー数は0になっています。フォロワーの解除はされないため、あなたのフォロワーはこのアカウントのフォロワー向け投稿を引き続き閲覧できます。"
   movedTo: "移行先のアカウント:"
-
 _achievements:
   earnedAt: "獲得日時"
   _types:
@@ -1655,7 +1644,6 @@ _achievements:
       title: "ダブル🤯"
       description: "バブルゲームで最も大きいモノを2つ同時に出した"
       flavor: "これくらいの　おべんとばこに　🤯　🤯　ちょっとつめて"
-
 _role:
   new: "ロールの作成"
   edit: "ロールの編集"
@@ -1739,7 +1727,6 @@ _role:
     and: "～かつ～"
     or: "～または～"
     not: "～ではない"
-
 _sensitiveMediaDetection:
   description: "機械学習を使って自動でセンシティブなメディアを検出し、モデレーションに役立てることができます。サーバーの負荷が少し増えます。"
   sensitivity: "検出感度"
@@ -1748,7 +1735,6 @@ _sensitiveMediaDetection:
   setSensitiveFlagAutomaticallyDescription: "この設定をオフにしても内部的に判定結果は保持されます。"
   analyzeVideos: "動画の解析を有効化"
   analyzeVideosDescription: "静止画に加えて動画も解析するようにします。サーバーの負荷が少し増えます。"
-
 _emailUnavailable:
   used: "既に使用されています"
   format: "形式が正しくありません"
@@ -1756,17 +1742,14 @@ _emailUnavailable:
   mx: "正しいメールサーバーではありません"
   smtp: "メールサーバーが応答しません"
   banned: "このメールアドレスでは登録できません"
-
 _ffVisibility:
   public: "公開"
   followers: "フォロワーだけに公開"
   private: "非公開"
-
 _signup:
   almostThere: "ほとんど完了です"
   emailAddressInfo: "あなたが使っているメールアドレスを入力してください。メールアドレスが公開されることはありません。"
   emailSent: "入力されたメールアドレス({email})宛に確認のメールが送信されました。メールに記載されたリンクにアクセスすると、アカウントの作成が完了します。メールに記載されているリンクの有効期限は30分です。"
-
 _accountDelete:
   accountDelete: "アカウントの削除"
   mayTakeTime: "アカウントの削除は負荷のかかる処理であるため、作成したコンテンツの数やアップロードしたファイルの数が多いと完了までに時間がかかることがあります。"
@@ -1774,7 +1757,6 @@ _accountDelete:
   requestAccountDelete: "アカウント削除をリクエスト"
   started: "削除処理が開始されました。"
   inProgress: "削除が進行中"
-
 _ad:
   back: "戻る"
   reduceFrequencyOfThisAd: "この広告の表示頻度を下げる"
@@ -1784,31 +1766,26 @@ _ad:
   notesPerOneAd: "リアルタイム更新中に広告を配信する間隔（ノートの個数）"
   setZeroToDisable: "0でリアルタイム更新時の広告配信を無効"
   adsTooClose: "広告の配信間隔が極めて短いため、ユーザー体験が著しく損われる可能性があります。"
-
 _forgotPassword:
   enterEmail: "アカウントに登録したメールアドレスを入力してください。そのアドレス宛てに、パスワードリセット用のリンクが送信されます。"
   ifNoEmail: "メールアドレスを登録していない場合は、管理者までお問い合わせください。"
   contactAdmin: "このサーバーではメールがサポートされていないため、パスワードリセットを行う場合は管理者までお問い合わせください。"
-
 _gallery:
   my: "自分の投稿"
   liked: "いいねした投稿"
   like: "いいね！"
   unlike: "いいね解除"
-
 _email:
   _follow:
     title: "フォローされました"
   _receiveFollowRequest:
     title: "フォローリクエストを受け取りました"
-
 _plugin:
   install: "プラグインのインストール"
   installWarn: "信頼できないプラグインはインストールしないでください。"
   manage: "プラグインの管理"
   viewSource: "ソースを表示"
   viewLog: "ログを表示"
-
 _preferencesBackups:
   list: "作成したバックアップ"
   saveNew: "新規保存"
@@ -1827,14 +1804,12 @@ _preferencesBackups:
   updatedAt: "更新日時: {date} {time}"
   cannotLoad: "読み込みできません"
   invalidFile: "ファイル形式が違います。"
-
 _registry:
   scope: "スコープ"
   key: "キー"
   keys: "キー"
   domain: "ドメイン"
   createKey: "キーを作成"
-
 _aboutMisskey:
   about: "Misskeyはsyuiloによって2014年から開発されている、オープンソースのソフトウェアです。"
   contributors: "コントリビューター"
@@ -1847,22 +1822,18 @@ _aboutMisskey:
   morePatrons: "他にも多くの方が支援してくれています。ありがとうございます🥰"
   patrons: "支援者"
   projectMembers: "プロジェクトメンバー"
-
 _displayOfSensitiveMedia:
   respect: "センシティブ設定されたメディアを隠す"
   ignore: "センシティブ設定されたメディアを隠さない"
   force: "常にメディアを隠す"
-
 _instanceTicker:
   none: "表示しない"
   remote: "リモートユーザーに表示"
   always: "常に表示"
-
 _serverDisconnectedBehavior:
   reload: "自動でリロード"
   dialog: "ダイアログで警告"
   quiet: "控えめに警告"
-
 _channel:
   create: "チャンネルを作成"
   edit: "チャンネルを編集"
@@ -1876,24 +1847,20 @@ _channel:
   nameAndDescription: "名前と説明"
   nameOnly: "名前のみ"
   allowRenoteToExternal: "チャンネル外へのリノートと引用リノートを許可する"
-
 _menuDisplay:
   sideFull: "横"
   sideIcon: "横(アイコン)"
   top: "上部"
   hide: "隠す"
-
 _wordMute:
   muteWords: "ミュートするワード"
   muteWordsDescription: "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。"
   muteWordsDescription2: "キーワードをスラッシュで囲むと正規表現になります。"
-
 _instanceMute:
   instanceMuteDescription: "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとRenoteをミュートします。"
   instanceMuteDescription2: "改行で区切って設定します"
   title: "設定したサーバーのノートを隠します。"
   heading: "ミュートするサーバー"
-
 _theme:
   explore: "テーマを探す"
   install: "テーマのインストール"
@@ -1924,7 +1891,6 @@ _theme:
   inputConstantName: "定数名を入力してください"
   importInfo: "ここにテーマコードを貼り付けて、エディターにインポートできます"
   deleteConstantConfirm: "定数 {const} を削除しても良いですか？"
-
   keys:
     accent: "アクセント"
     bg: "背景"
@@ -1966,7 +1932,6 @@ _theme:
     accentDarken: "アクセント (暗め)"
     accentLighten: "アクセント (明るめ)"
     fgHighlighted: "強調された文字"
-
 _sfx:
   note: "ノート"
   noteMy: "ノート(自分)"
@@ -1974,7 +1939,6 @@ _sfx:
   antenna: "アンテナ受信"
   channel: "チャンネル通知"
   reaction: "リアクション選択時"
-
 _soundSettings:
   driveFile: "ドライブの音声を使用"
   driveFileWarn: "ドライブのファイルを選択してください"
@@ -1982,7 +1946,6 @@ _soundSettings:
   driveFileTypeWarnDescription: "音声ファイルを選択してください"
   driveFileDurationWarn: "音声が長すぎます"
   driveFileDurationWarnDescription: "長い音声を使用するとMisskeyの使用に支障をきたす可能性があります。それでも続行しますか？"
-
 _ago:
   future: "未来"
   justNow: "たった今"
@@ -1994,7 +1957,6 @@ _ago:
   monthsAgo: "{n}ヶ月前"
   yearsAgo: "{n}年前"
   invalid: "日時の解析に失敗"
-
 _timeIn:
   seconds: "{n}秒後"
   minutes: "{n}分後"
@@ -2003,13 +1965,11 @@ _timeIn:
   weeks: "{n}週間後"
   months: "{n}ヶ月後"
   years: "{n}年後"
-
 _time:
   second: "秒"
   minute: "分"
   hour: "時間"
   day: "日"
-
 _2fa:
   alreadyRegistered: "既に設定は完了しています。"
   registerTOTP: "認証アプリの設定を開始"
@@ -2039,7 +1999,6 @@ _2fa:
   backupCodeUsedWarning: "バックアップコードが使用されました。認証アプリが使えなくなっている場合、なるべく早く認証アプリを再設定してください。"
   backupCodesExhaustedWarning: "バックアップコードが全て使用されました。認証アプリを利用できない場合、これ以上アカウントにアクセスできなくなります。認証アプリを再登録してください。"
   moreDetailedGuideHere: "詳細なガイドはこちら"
-
 _permissions:
   "read:account": "アカウントの情報を見る"
   "write:account": "アカウントの情報を変更する"
@@ -2125,7 +2084,6 @@ _permissions:
   "read:clip-favorite": "クリップのいいねを見る"
   "read:federation": "連合に関する情報を取得する"
   "write:report-abuse": "違反を報告する"
-
 _auth:
   shareAccessTitle: "アプリへのアクセス許可"
   shareAccess: "「{name}」がアカウントにアクセスすることを許可しますか？"
@@ -2136,14 +2094,12 @@ _auth:
   callback: "アプリケーションに戻っています"
   denied: "アクセスを拒否しました"
   pleaseLogin: "アプリケーションにアクセス許可を与えるには、ログインが必要です。"
-
 _antennaSources:
   all: "全てのノート"
   homeTimeline: "フォローしているユーザーのノート"
   users: "指定した一人または複数のユーザーのノート"
   userList: "指定したリストのユーザーのノート"
   userBlacklist: "指定した一人または複数のユーザーを除いた全てのノート"
-
 _weekday:
   sunday: "日曜日"
   monday: "月曜日"
@@ -2152,7 +2108,6 @@ _weekday:
   thursday: "木曜日"
   friday: "金曜日"
   saturday: "土曜日"
-
 _widgets:
   profile: "プロフィール"
   instanceInfo: "サーバー情報"
@@ -2184,13 +2139,11 @@ _widgets:
     chooseList: "リストを選択"
   clicker: "クリッカー"
   birthdayFollowings: "今日誕生日のユーザー"
-
 _cw:
   hide: "隠す"
   show: "もっと見る"
   chars: "{count}文字"
   files: "{count}ファイル"
-
 _poll:
   noOnlyOneChoice: "選択肢は最低2つ必要です"
   choiceN: "選択肢{n}"
@@ -2213,7 +2166,6 @@ _poll:
   remainingHours: "終了まであと{h}時間{m}分"
   remainingMinutes: "終了まであと{m}分{s}秒"
   remainingSeconds: "終了まであと{s}秒"
-
 _visibility:
   public: "パブリック"
   publicDescription: "全てのユーザーに公開"
@@ -2225,7 +2177,6 @@ _visibility:
   specifiedDescription: "指定したユーザーのみに公開"
   disableFederation: "連合なし"
   disableFederationDescription: "他サーバーへの配信を行いません"
-
 _postForm:
   replyPlaceholder: "このノートに返信..."
   quotePlaceholder: "このノートを引用..."
@@ -2237,7 +2188,6 @@ _postForm:
     d: "言いたいことは？"
     e: "ここに書いてください"
     f: "あなたが書くのを待っています..."
-
 _profile:
   name: "名前"
   username: "ユーザー名"
@@ -2252,7 +2202,6 @@ _profile:
   changeBanner: "バナー画像を変更"
   verifiedLinkDescription: "内容にURLを設定すると、リンク先のWebサイトに自分のプロフィールへのリンクが含まれている場合に所有者確認済みアイコンを表示させることができます。"
   avatarDecorationMax: "最大{max}つまでデコレーションを付けられます。"
-
 _exportOrImport:
   allNotes: "全てのノート"
   favoritedNotes: "お気に入りにしたノート"
@@ -2264,7 +2213,6 @@ _exportOrImport:
   excludeMutingUsers: "ミュートしているユーザーを除外"
   excludeInactiveUsers: "使われていないアカウントを除外"
   withReplies: "インポートした人による返信をTLに含むようにする"
-
 _charts:
   federation: "連合"
   apRequest: "リクエスト"
@@ -2279,7 +2227,6 @@ _charts:
   filesTotal: "ファイルの合計"
   storageUsageIncDec: "ストレージ使用量の増減"
   storageUsageTotal: "ストレージ使用量の合計"
-
 _instanceCharts:
   requests: "リクエスト"
   users: "ユーザーの増減"
@@ -2292,13 +2239,11 @@ _instanceCharts:
   cacheSizeTotal: "キャッシュサイズの累積"
   files: "ファイル数の増減"
   filesTotal: "ファイル数の累積"
-
 _timelines:
   home: "ホーム"
   local: "ローカル"
   social: "ソーシャル"
   global: "グローバル"
-
 _play:
   new: "Playの作成"
   edit: "Playの編集"
@@ -2315,7 +2260,6 @@ _play:
   script: "スクリプト"
   summary: "説明"
   visibilityDescription: "非公開に設定するとプロフィールに表示されなくなりますが、URLを知っている人は引き続きアクセスできます。"
-
 _pages:
   newPage: "ページの作成"
   editPage: "ページの編集"
@@ -2362,18 +2306,15 @@ _pages:
     button: "ボタン"
     dynamic: "動的ブロック"
     dynamicDescription: "このブロックは廃止されています。今後は{play}を利用してください。"
-
     note: "ノート埋め込み"
     _note:
       id: "ノートID"
       idDescription: "ノートURLをペーストして設定することもできます。"
       detailed: "詳細な表示"
-
 _relayStatus:
   requesting: "承認待ち"
   accepted: "承認済み"
   rejected: "拒否済み"
-
 _notification:
   fileUploaded: "ファイルがアップロードされました"
   youGotMention: "{name}からのメンション"
@@ -2398,7 +2339,6 @@ _notification:
   renotedBySomeUsers: "{n}人がリノートしました"
   followedBySomeUsers: "{n}人にフォローされました"
   flushNotification: "通知の履歴をリセットする"
-
   _types:
     all: "すべて"
     note: "ユーザーの新規投稿"
@@ -2414,12 +2354,10 @@ _notification:
     roleAssigned: "ロールが付与された"
     achievementEarned: "実績の獲得"
     app: "連携アプリからの通知"
-
   _actions:
     followBack: "フォローバック"
     reply: "返信"
     renote: "Renote"
-
 _deck:
   alwaysShowMainColumn: "常にメインカラムを表示"
   columnAlign: "カラムの寄せ"
@@ -2441,7 +2379,6 @@ _deck:
   useSimpleUiForNonRootPages: "非ルートページは簡易UIで表示"
   usedAsMinWidthWhenFlexible: "「幅を自動調整」が有効の場合、これが幅の最小値となります"
   flexible: "幅を自動調整"
-
   _columns:
     main: "メイン"
     widgets: "ウィジェット"
@@ -2453,19 +2390,15 @@ _deck:
     mentions: "あなた宛て"
     direct: "ダイレクト"
     roleTimeline: "ロールタイムライン"
-
 _dialog:
   charactersExceeded: "最大文字数を超えています！ 現在 {current} / 制限 {max}"
   charactersBelow: "最小文字数を下回っています！ 現在 {current} / 制限 {min}"
-
 _disabledTimeline:
   title: "無効化されたタイムライン"
   description: "現在のロールでは、このタイムラインを使用することはできません。"
-
 _drivecleaner:
   orderBySizeDesc: "サイズが大きい順"
   orderByCreatedAtAsc: "追加日が古い順"
-
 _webhookSettings:
   createWebhook: "Webhookを作成"
   modifyWebhook: "Webhookを編集"
@@ -2485,7 +2418,6 @@ _webhookSettings:
     abuseReport: "ユーザーから通報があったとき"
     abuseReportResolved: "ユーザーからの通報を処理したとき"
   deleteConfirm: "Webhookを削除しますか？"
-
 _abuseReport:
   _notificationRecipient:
     createRecipient: "通報の通知先を追加"
@@ -2501,7 +2433,6 @@ _abuseReport:
     notifiedUser: "通知先ユーザー"
     notifiedWebhook: "使用するWebhook"
     deleteConfirm: "通知先を削除しますか？"
-
 _moderationLogTypes:
   createRole: "ロールを作成"
   deleteRole: "ロールを削除"
@@ -2545,7 +2476,6 @@ _moderationLogTypes:
   createAbuseReportNotificationRecipient: "通報の通知先を作成"
   updateAbuseReportNotificationRecipient: "通報の通知先を更新"
   deleteAbuseReportNotificationRecipient: "通報の通知先を削除"
-
 _fileViewer:
   title: "ファイルの詳細"
   type: "ファイルタイプ"
@@ -2554,7 +2484,6 @@ _fileViewer:
   uploadedAt: "追加日"
   attachedNotes: "添付されているノート"
   thisPageCanBeSeenFromTheAuthor: "このページは、このファイルをアップロードしたユーザーしか閲覧できません。"
-
 _externalResourceInstaller:
   title: "外部サイトからインストール"
   checkVendorBeforeInstall: "配布元が信頼できるかを確認した上でインストールしてください。"
@@ -2596,7 +2525,6 @@ _externalResourceInstaller:
     _themeInstallFailed:
       title: "テーマのインストールに失敗しました"
       description: "テーマのインストール中に問題が発生しました。もう一度お試しください。エラーの詳細はJavascriptコンソールをご覧ください。"
-
 _dataSaver:
   _media:
     title: "メディアの読み込みを無効化"
@@ -2610,12 +2538,10 @@ _dataSaver:
   _code:
     title: "コードハイライトを非表示"
     description: "MFMなどでコードハイライト記法が使われている場合、タップするまで読み込まれなくなります。コードハイライトではハイライトする言語ごとにその定義ファイルを読み込む必要がありますが、それらが自動で読み込まれなくなるため、通信量の削減が見込めます。"
-
 _hemisphere:
   N: "北半球"
   S: "南半球"
   caption: "一部のクライアント設定で、季節を判定するために使用します。"
-
 _reversi:
   reversi: "リバーシ"
   gameSettings: "対局の設定"
@@ -2660,11 +2586,9 @@ _reversi:
   disallowIrregularRules: "変則なし"
   showBoardLabels: "盤面に行・列番号を表示"
   useAvatarAsStone: "石をアイコンにする"
-
 _offlineScreen:
   title: "オフライン - サーバーに接続できません"
   header: "サーバーに接続できません"
-
 _urlPreviewSetting:
   title: "URLプレビューの設定"
   enable: "URLプレビューを有効にする"
@@ -2679,7 +2603,6 @@ _urlPreviewSetting:
   summaryProxy: "プレビューを生成するプロキシのエンドポイント"
   summaryProxyDescription: "Misskey本体ではなく、サマリープロキシを使用してプレビューを生成します。"
   summaryProxyDescription2: "プロキシには下記パラメータがクエリ文字列として連携されます。プロキシ側がこれらをサポートしない場合、設定値は無視されます。"
-
 _mediaControls:
   pip: "ピクチャインピクチャ"
   playbackRate: "再生速度"
