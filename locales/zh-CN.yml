@@ -1,4 +1,3 @@
----
 _lang_: "中文(简体)"
 headlineMisskey: "通过帖子连接在一起的网络"
 introMisskey: "欢迎！Misskey是一个开源的、去中心化的“微博客”服务。\n通过编写「帖文」来和大家分享你的以及你周围的事情吧！📡\n通过「回应」功能，可以让你快速地对大家的帖文表达反馈👍\n来探索新的世界吧！🚀"
@@ -837,6 +836,7 @@ administration: "管理"
 accounts: "账户"
 switch: "切换"
 noMaintainerInformationWarning: "管理人员信息未设置。"
+noInquiryUrlWarning: "問い合わせ先URLが設定されていません。"
 noBotProtectionWarning: "Bot 防御未设置。"
 configure: "设置"
 postToGallery: "发送到图库"
@@ -1375,6 +1375,8 @@ _serverSettings:
   fanoutTimelineDescription: "当启用时，可显著提高获取各种时间线时的性能，并减轻数据库的负荷。但是相对的 Redis 的内存使用量将会增加。如果服务器的内存不是很大，又或者运行不稳定的话可以把它关掉。"
   fanoutTimelineDbFallback: "回退到数据库"
   fanoutTimelineDbFallbackDescription: "当启用时，若时间线未被缓存，则将额外查询数据库。禁用该功能可通过不执行回退处理进一步减少服务器负载，但会限制可检索的时间线范围。"
+  inquiryUrl: "問い合わせ先URL"
+  inquiryUrlDescription: "サーバー運営者へのお問い合わせフォームのURLや、運営者の連絡先等が記載されたWebページのURLを指定します。"
 _accountMigration:
   moveFrom: "从别的账号迁移到此账户"
   moveFromSub: "为另一个账户建立别名"
@@ -1641,6 +1643,7 @@ _achievements:
     _bubbleGameDoubleExplodingHead:
       title: "两个🤯"
       description: "你合成出了2个游戏里最大的Emoji"
+      flavor: "これくらいの　おべんとばこに　🤯　🤯　ちょっとつめて"
 _role:
   new: "创建角色"
   edit: "编辑角色"
@@ -2398,6 +2401,7 @@ _drivecleaner:
   orderByCreatedAtAsc: "按添加日期降序排列"
 _webhookSettings:
   createWebhook: "创建 Webhook"
+  modifyWebhook: "Webhookを編集"
   name: "名称"
   secret: "密钥"
   events: "何时运行 Webhook"
@@ -2410,6 +2414,25 @@ _webhookSettings:
     renote: "被转发时"
     reaction: "被回应时"
     mention: "被提及时"
+  _systemEvents:
+    abuseReport: "ユーザーから通報があったとき"
+    abuseReportResolved: "ユーザーからの通報を処理したとき"
+  deleteConfirm: "Webhookを削除しますか？"
+_abuseReport:
+  _notificationRecipient:
+    createRecipient: "通報の通知先を追加"
+    modifyRecipient: "通報の通知先を編集"
+    recipientType: "通知先の種類"
+    _recipientType:
+      mail: "メール"
+      webhook: "Webhook"
+      _captions:
+        mail: "モデレーター権限を持つユーザーのメールアドレスに通知を送ります(通報を受けた時のみ)"
+        webhook: "指定したSystemWebhookに通知を送ります(通報を受けた時と通報を解決した時にそれぞれ発信)"
+    keywords: "キーワード"
+    notifiedUser: "通知先ユーザー"
+    notifiedWebhook: "使用するWebhook"
+    deleteConfirm: "通知先を削除しますか？"
 _moderationLogTypes:
   createRole: "创建角色"
   deleteRole: "删除角色"
@@ -2447,6 +2470,12 @@ _moderationLogTypes:
   deleteAvatarDecoration: "删除头像挂件"
   unsetUserAvatar: "清除用户头像"
   unsetUserBanner: "清除用户横幅"
+  createSystemWebhook: "SystemWebhookを作成"
+  updateSystemWebhook: "SystemWebhookを更新"
+  deleteSystemWebhook: "SystemWebhookを削除"
+  createAbuseReportNotificationRecipient: "通報の通知先を作成"
+  updateAbuseReportNotificationRecipient: "通報の通知先を更新"
+  deleteAbuseReportNotificationRecipient: "通報の通知先を削除"
 _fileViewer:
   title: "文件信息"
   type: "文件类型"
