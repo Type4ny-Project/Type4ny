@@ -1,4 +1,3 @@
----
 _lang_: "繁體中文（台灣）"
 headlineMisskey: "貼文連繫網路"
 introMisskey: "歡迎！Misskey 是一個開放原始碼且去中心化的社群網路服務。\n發布「貼文」向身邊的人分享您的想法！📡\n利用「反應」表達您對貼文的感覺！👍\n讓我們一起探索新的世界吧！🚀"
@@ -837,6 +836,7 @@ administration: "管理"
 accounts: "帳戶"
 switch: "切換"
 noMaintainerInformationWarning: "尚未設定管理員訊息。"
+noInquiryUrlWarning: "問い合わせ先URLが設定されていません。"
 noBotProtectionWarning: "尚未設定 Bot 防護。"
 configure: "設定"
 postToGallery: "發佈到相簿"
@@ -2401,6 +2401,7 @@ _drivecleaner:
   orderByCreatedAtAsc: "按新增日期降序排列"
 _webhookSettings:
   createWebhook: "建立 Webhook"
+  modifyWebhook: "Webhookを編集"
   name: "名字"
   secret: "密鑰"
   events: "何時運行 Webhook"
@@ -2413,6 +2414,25 @@ _webhookSettings:
     renote: "當被轉發時"
     reaction: "當獲得反應時"
     mention: "當被提到時"
+  _systemEvents:
+    abuseReport: "ユーザーから通報があったとき"
+    abuseReportResolved: "ユーザーからの通報を処理したとき"
+  deleteConfirm: "Webhookを削除しますか？"
+_abuseReport:
+  _notificationRecipient:
+    createRecipient: "通報の通知先を追加"
+    modifyRecipient: "通報の通知先を編集"
+    recipientType: "通知先の種類"
+    _recipientType:
+      mail: "メール"
+      webhook: "Webhook"
+      _captions:
+        mail: "モデレーター権限を持つユーザーのメールアドレスに通知を送ります(通報を受けた時のみ)"
+        webhook: "指定したSystemWebhookに通知を送ります(通報を受けた時と通報を解決した時にそれぞれ発信)"
+    keywords: "キーワード"
+    notifiedUser: "通知先ユーザー"
+    notifiedWebhook: "使用するWebhook"
+    deleteConfirm: "通知先を削除しますか？"
 _moderationLogTypes:
   createRole: "新增角色"
   deleteRole: "刪除角色 "
@@ -2450,6 +2470,12 @@ _moderationLogTypes:
   deleteAvatarDecoration: "刪除頭像裝飾"
   unsetUserAvatar: "移除使用者的大頭貼"
   unsetUserBanner: "移除使用者的橫幅圖像"
+  createSystemWebhook: "SystemWebhookを作成"
+  updateSystemWebhook: "SystemWebhookを更新"
+  deleteSystemWebhook: "SystemWebhookを削除"
+  createAbuseReportNotificationRecipient: "通報の通知先を作成"
+  updateAbuseReportNotificationRecipient: "通報の通知先を更新"
+  deleteAbuseReportNotificationRecipient: "通報の通知先を削除"
 _fileViewer:
   title: "檔案詳細資訊"
   type: "檔案類型 "
