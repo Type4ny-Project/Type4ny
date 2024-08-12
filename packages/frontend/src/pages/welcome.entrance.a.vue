@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <div v-if="meta" class="rsqzvsbo">
 	<MkFeaturedPhotos class="bg"/>
-	<div class="shape1"></div>
+	<!--<div class="shape1"></div>
 	<div class="shape2"></div>
-	<XTimeline class="tl"/>
+	<XTimeline class="tl"/>-->
 	<div class="logo-wrapper">
 		<div class="powered-by">Powered by</div>
 		<img :src="type4nySVG" class="type4ny" alt="Type4ny Logo"/>
@@ -68,12 +68,13 @@ misskeyApiGet('federation/instances', {
 <style lang="scss" scoped>
 .rsqzvsbo {
 	display:flex;
-	justify-content: center;
+	justify-content: flex-end;
+
 	> .bg {
 		position: fixed;
 		top: 0;
 		right: 0;
-		width: 80vw; // 100%からshapeの幅を引いている
+		width: 100vw; // 100%からshapeの幅を引いている
 		height: 100vh;
 	}
 	> .tl {
@@ -164,7 +165,8 @@ misskeyApiGet('federation/instances', {
 		padding: 128px 0 0 0;
 		top: 0;
 		bottom: 0;
-		margin-right: 32px;
+
+		margin-right: 128px;
 		@media (max-width: 1200px) {
 			margin: auto;
 		}

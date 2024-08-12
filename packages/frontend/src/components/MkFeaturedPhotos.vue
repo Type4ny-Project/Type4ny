@@ -30,6 +30,7 @@ onMounted(() => {
 <style lang="scss" module>
 .root {
 	background-position: center;
-	background-size: cover;
+	background-repeat: no-repeat;
+	aspect-ratio: 16 / 9;
 }
 </style>
