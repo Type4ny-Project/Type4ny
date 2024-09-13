@@ -128,6 +128,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				})).map(u => u.id);
 			}
 
+			if ( !( channel.userId === me.id || iAmModerator ) ) {
+				collaboratorIds = channel.collaboratorIds;
+			};
+
 			const updateValues = {
 				...(ps.name !== undefined ? { name: ps.name } : {}),
 				...(ps.description !== undefined ? { description: ps.description } : {}),
