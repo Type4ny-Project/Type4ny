@@ -38,7 +38,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import {computed, watch, provide, shallowRef, ref, onMounted, onActivated, defineAsyncComponent} from 'vue';
+import { computed, watch, provide, shallowRef, ref, onMounted, onActivated, defineAsyncComponent } from 'vue';
 import type { Tab } from '@/components/global/MkPageHeader.tabs.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
 import MkInfo from '@/components/MkInfo.vue';
@@ -65,7 +65,6 @@ import { ui } from '@/config.js';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
 
 provide('shouldOmitHeaderTitle', true);
-
 
 const tlComponent = shallowRef<InstanceType<typeof MkTimeline>>();
 const rootEl = shallowRef<HTMLElement>();

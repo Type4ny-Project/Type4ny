@@ -169,7 +169,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 		</template>
 		<template v-else-if="log.type === 'inboxRejected'">
-			<div>{{ log.info.rule.name }} {{ i18n.ts._moderationLogTypes.rejectedWithTheRule}}</div>
+			<div>{{ log.info.rule.name }} {{ i18n.ts._moderationLogTypes.rejectedWithTheRule }}</div>
 		</template>
 
 		<details>

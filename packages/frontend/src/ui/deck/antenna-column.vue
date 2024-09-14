@@ -14,9 +14,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, ref, shallowRef, watch, defineAsyncComponent } from 'vue';
-import type { entities as MisskeyEntities } from 'misskey-js';
 import XColumn from './column.vue';
 import { updateColumn, Column } from './deck-store.js';
+import type { entities as MisskeyEntities } from 'misskey-js';
 import MkTimeline from '@/components/MkTimeline.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';

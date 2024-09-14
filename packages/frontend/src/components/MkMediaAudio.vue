@@ -40,8 +40,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<audio
 			ref="audioEl"
 			preload="metadata"
-			@keydown.prevent="() => {}"
 			:src="audio.url"
+			@keydown.prevent="() => {}"
 		>
 		</audio>
 		<div :class="[$style.controlsChild, $style.controlsLeft]">

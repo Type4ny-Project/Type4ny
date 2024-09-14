@@ -11,7 +11,7 @@ export const basicTimelineTypes = [
 	'local',
 	'social',
 	'global',
-	'media'
+	'media',
 ] as const;
 
 export type BasicTimelineType = typeof basicTimelineTypes[number];

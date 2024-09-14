@@ -57,7 +57,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 					<FormSection>
 						<template #label>{{ i18n.ts.files }}</template>
-						<template #description v-if="isManaged">{{ i18n.ts.managedInstanceIsNotEditable }}</template>
+						<template v-if="isManaged" #description>{{ i18n.ts.managedInstanceIsNotEditable }}</template>
 						<div class="_gaps_m">
 							<MkSwitch v-model="cacheRemoteFiles" :disabled="isManaged">
 								<template #label>{{ i18n.ts.cacheRemoteFiles }}</template>
@@ -98,7 +98,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 					<FormSection>
 						<template #label>Misskey® Fan-out Timeline Technology™ (FTT)</template>
-						<template #description v-if="isManaged">{{ i18n.ts.managedInstanceIsNotEditable }}</template>
+						<template v-if="isManaged" #description>{{ i18n.ts.managedInstanceIsNotEditable }}</template>
 
 						<div class="_gaps_m">
 							<MkSwitch v-model="enableFanoutTimeline" :disabled="isManaged">
@@ -251,6 +251,7 @@ const urlPreviewRequireContentLength = ref<boolean>(true);
 const urlPreviewUserAgent = ref<string | null>(null);
 const urlPreviewSummaryProxyUrl = ref<string | null>(null);
 const isManaged = ref<boolean>(false);
+
 async function init(): Promise<void> {
 	const meta = await misskeyApi('admin/meta');
 	name.value = meta.name;

@@ -15,7 +15,7 @@ import { computed } from 'vue';
 import { instanceName } from '@/config';
 import { instance as Instance } from '@/instance';
 import { getProxiedImageUrlNullable } from '@/scripts/media-proxy';
-import {defaultStore} from "@/store";
+import { defaultStore } from '@/store';
 
 const props = defineProps<{
 	instance?: {

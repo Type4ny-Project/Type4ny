@@ -85,7 +85,7 @@ export const ACHIEVEMENT_TYPES = [
 	'tutorialCompleted',
 	'bubbleGameExplodingHead',
 	'bubbleGameDoubleExplodingHead',
-	'markedAsGorilla'
+	'markedAsGorilla',
 ] as const;
 
 export const ACHIEVEMENT_BADGES = {

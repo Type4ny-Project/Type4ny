@@ -10,11 +10,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkSpacer :contentMax="700" :marginMin="16" :marginMax="32">
 			<FormSuspense :p="init">
 				<div class="_gaps_m">
-					<MkSwitch v-model="enableRegistration" :disabled="isManaged" >
+					<MkSwitch v-model="enableRegistration" :disabled="isManaged">
 						<template #label>
 							{{ i18n.ts.enableRegistration }}
 						</template>
-						<template #caption v-if="isManaged">{{ i18n.ts.managedInstanceIsNotEditable }}</template>
+						<template v-if="isManaged" #caption>{{ i18n.ts.managedInstanceIsNotEditable }}</template>
 					</MkSwitch>
 
 					<MkSwitch v-model="emailRequiredForSignup">

@@ -7,8 +7,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { instance } from '@/instance.js';
 import { ref, onMounted } from 'vue';
+import { instance } from '@/instance.js';
 
 const imgUrl = ref<string>('');
 

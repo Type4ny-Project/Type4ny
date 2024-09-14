@@ -71,14 +71,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</template>
 			</div>
 			<div v-else class="_gaps_m">
-				{{i18n.ts.managedInstanceIsNotEditable}}
+				{{ i18n.ts.managedInstanceIsNotEditable }}
 			</div>
 		</FormSuspense>
 	</MkSpacer>
 	<template #footer>
 		<div :class="$style.footer">
 			<MkSpacer :contentMax="700" :marginMin="16" :marginMax="16">
-				<MkButton primary rounded @click="save" v-if="!isManaged"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
+				<MkButton v-if="!isManaged" primary rounded @click="save"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
 			</MkSpacer>
 		</div>
 	</template>

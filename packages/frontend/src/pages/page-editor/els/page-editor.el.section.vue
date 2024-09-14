@@ -21,16 +21,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable vue/no-mutating-props */
+ 
 import { defineAsyncComponent, inject, onMounted, watch, ref } from 'vue';
 import { v4 as uuid } from 'uuid';
 import XContainer from '../page-editor.container.vue';
+import XBlocks from '../page-editor.blocks.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { deepClone } from '@/scripts/clone.js';
 import MkButton from '@/components/MkButton.vue';
 import { getPageBlockList } from '@/pages/page-editor/common.js';
-import XBlocks from '../page-editor.blocks.vue';
 
 const props = withDefaults(defineProps<{
 	modelValue: any,

@@ -19,33 +19,33 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
+import { computed, ref, watch } from 'vue';
 import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
 import { GetFormResultType } from '@/scripts/form';
 import { host } from '@/config';
 import { instance } from '@/instance';
-import {bannerDark, bannerLight, defaultStore, iconDark, iconLight} from "@/store";
-import {computed, ref, watch} from "vue";
+import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store';
 
 const name = 'instanceInfo';
 let bannerUrl = ref(defaultStore.state.bannerUrl);
 let iconUrl = ref(defaultStore.state.iconUrl);
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-if (darkMode.value){
-  bannerUrl.value = bannerDark;
-  iconUrl.value = iconDark;
-}else{
-  bannerUrl.value = bannerLight;
-  iconUrl.value = iconLight;
+if (darkMode.value) {
+	bannerUrl.value = bannerDark;
+	iconUrl.value = iconDark;
+} else {
+	bannerUrl.value = bannerLight;
+	iconUrl.value = iconLight;
 }
 watch(darkMode, () => {
-  if (darkMode.value){
-    bannerUrl.value = bannerDark;
-    iconUrl.value = iconDark;
-  }else{
-    bannerUrl.value = bannerLight;
-    iconUrl.value = iconLight;
-  }
-})
+	if (darkMode.value) {
+		bannerUrl.value = bannerDark;
+		iconUrl.value = iconDark;
+	} else {
+		bannerUrl.value = bannerLight;
+		iconUrl.value = iconLight;
+	}
+});
 
 const widgetPropsDef = {
 };

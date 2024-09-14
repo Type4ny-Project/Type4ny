@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	</button>
 	<Suspense>
 		<template #fallback>
-			<MkLoading />
+			<MkLoading/>
 		</template>
 		<XCode v-if="show && lang" :code="code" :lang="lang"/>
 		<pre v-else-if="show" :class="$style.codeBlockFallbackRoot"><code :class="$style.codeBlockFallbackCode">{{ code }}</code></pre>

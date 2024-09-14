@@ -35,24 +35,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkFolder :defaultOpen="true">
 					<template #label>{{ i18n.ts._webhookSettings.trigger }}</template>
 
-				<div class="_gaps_s">
-					<MkSwitch v-model="events.abuseReport" :disabled="disabledEvents.abuseReport">
-						<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReport }}</template>
-					</MkSwitch>
-					<MkSwitch v-model="events.abuseReportResolved" :disabled="disabledEvents.abuseReportResolved">
-						<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReportResolved }}</template>
-					</MkSwitch>
-					<MkSwitch v-model="events.customEmojiRequest" :disabled="disabledEvents.customEmojiRequest">
-						<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequest }}</template>
-					</MkSwitch>
-					<MkSwitch v-model="events.customEmojiRequestResolved" :disabled="disabledEvents.customEmojiRequestResolved">
-						<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequestResolved }}</template>
-					</MkSwitch>
-					<MkSwitch v-model="events.userRegistered" :disabled="disabledEvents.userRegistered">
-						<template #label>{{ i18n.ts._webhookSettings._systemEvents.userRegistered }}</template>
-					</MkSwitch>
-				</div>
-			</MkFolder>
+					<div class="_gaps_s">
+						<MkSwitch v-model="events.abuseReport" :disabled="disabledEvents.abuseReport">
+							<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReport }}</template>
+						</MkSwitch>
+						<MkSwitch v-model="events.abuseReportResolved" :disabled="disabledEvents.abuseReportResolved">
+							<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReportResolved }}</template>
+						</MkSwitch>
+						<MkSwitch v-model="events.customEmojiRequest" :disabled="disabledEvents.customEmojiRequest">
+							<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequest }}</template>
+						</MkSwitch>
+						<MkSwitch v-model="events.customEmojiRequestResolved" :disabled="disabledEvents.customEmojiRequestResolved">
+							<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequestResolved }}</template>
+						</MkSwitch>
+						<MkSwitch v-model="events.userRegistered" :disabled="disabledEvents.userRegistered">
+							<template #label>{{ i18n.ts._webhookSettings._systemEvents.userRegistered }}</template>
+						</MkSwitch>
+					</div>
+				</MkFolder>
 
 				<MkSwitch v-model="isActive">
 					<template #label>{{ i18n.ts.enable }}</template>

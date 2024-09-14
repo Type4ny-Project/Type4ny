@@ -24,7 +24,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script setup lang="ts">
 import * as Misskey from 'misskey-js';
-import {ref, reactive, defineAsyncComponent} from 'vue';
+import { ref, reactive, defineAsyncComponent } from 'vue';
 import { i18n } from '@/i18n.js';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 

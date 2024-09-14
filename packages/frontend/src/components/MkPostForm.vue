@@ -638,7 +638,6 @@ async function toggleLocalOnly() {
 		});
 		if (confirm.canceled) return;
 		if (confirm.result === 'no') return;
-
 	}
 
 	localOnly.value = !localOnly.value;
@@ -826,8 +825,8 @@ async function saveDraft(auto = true) {
 		files: files.value,
 		poll: poll.value,
 		visibleUserIds: visibility.value === 'specified' ? visibleUsers.value.map(x => x.id) : undefined,
-	quoteId: quoteId.value,
-			reactionAcceptance: reactionAcceptance.value,}, draftAuxId.value as string);
+		quoteId: quoteId.value,
+		reactionAcceptance: reactionAcceptance.value }, draftAuxId.value as string);
 
 	if (!auto) {
 		clear();

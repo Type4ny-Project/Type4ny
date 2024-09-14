@@ -152,9 +152,6 @@ export const packedUserLiteSchema = {
 				type: 'string',
 			},
 		},
-		onlineStatus: {
-			type: 'string',
-			nullable: false, optional: false,
 		isGorilla: {
 			type: 'boolean',
 			nullable: false, optional: true,
@@ -188,7 +185,6 @@ export const packedUserLiteSchema = {
 			},
 		},
 	},
-}
 } as const;
 
 export const packedUserDetailedNotMeOnlySchema = {

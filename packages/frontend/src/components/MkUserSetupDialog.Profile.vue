@@ -48,7 +48,7 @@ const description = ref($i.description ?? '');
 watch(name, () => {
 	os.apiWithDialog('i/update', {
 		// 空文字列をnullにしたいので??は使うな
-		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+		 
 		name: name.value || null,
 	});
 });
@@ -56,7 +56,7 @@ watch(name, () => {
 watch(description, () => {
 	os.apiWithDialog('i/update', {
 		// 空文字列をnullにしたいので??は使うな
-		// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+		 
 		description: description.value || null,
 	});
 });

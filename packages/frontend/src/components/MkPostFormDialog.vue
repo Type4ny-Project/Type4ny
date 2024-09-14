@@ -10,11 +10,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import {shallowRef} from 'vue';
+import { shallowRef } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkModal from '@/components/MkModal.vue';
 import MkPostForm from '@/components/MkPostForm.vue';
-
 
 const props = withDefaults(defineProps<{
 	reply?: Misskey.entities.Note;

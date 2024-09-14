@@ -449,7 +449,6 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 			}
 
 			case 'emojiCode': {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				console.log('emojiCode', props.emojireq);
 				if (props.author?.host == null && !props.emojireq ) {
 					return [h(MkCustomEmoji, {
@@ -472,7 +471,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 							name: token.props.name,
 							url: props.emojiUrls && props.emojiUrls[token.props.name],
 							normal: props.plain,
-							host: props?.author?.host ? props?.author?.host : null,
+							host: props.author?.host ? props.author.host : null,
 							useOriginalSize: scale >= 2.5,
 						})];
 					}

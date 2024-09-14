@@ -13,6 +13,7 @@ import {
 import { AbuseReportNotificationService } from '@/core/AbuseReportNotificationService.js';
 import { SystemWebhookService } from '@/core/SystemWebhookService.js';
 import { UserSearchService } from '@/core/UserSearchService.js';
+import { InboxRuleService } from '@/core/InboxRuleService.js';
 import { AccountMoveService } from './AccountMoveService.js';
 import { AccountUpdateService } from './AccountUpdateService.js';
 import { AiService } from './AiService.js';
@@ -152,7 +153,6 @@ import { QueueModule } from './QueueModule.js';
 import { QueueService } from './QueueService.js';
 import { LoggerService } from './LoggerService.js';
 import type { Provider } from '@nestjs/common';
-import {InboxRuleService} from "@/core/InboxRuleService.js";
 
 //#region 文字列ベースでのinjection用(循環参照対応のため)
 const $LoggerService: Provider = { provide: 'LoggerService', useExisting: LoggerService };

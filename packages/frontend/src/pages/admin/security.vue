@@ -112,13 +112,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #label> Signup Protection</template>
 
 					<div class="_gaps_m">
-                        <MkSwitch v-model="enableProxyCheckio">
-                            <template #label>Use ProxyCheck.io API</template>
-                        </MkSwitch>
-                        <MkInput v-model="proxyCheckioApiKey">
-                            <template #prefix><i class="ti ti-key"></i></template>
-                            <template #label>ProxyCheck.io API Key</template>
-                        </MkInput>
+						<MkSwitch v-model="enableProxyCheckio">
+							<template #label>Use ProxyCheck.io API</template>
+						</MkSwitch>
+						<MkInput v-model="proxyCheckioApiKey">
+							<template #prefix><i class="ti ti-key"></i></template>
+							<template #label>ProxyCheck.io API Key</template>
+						</MkInput>
 						<MkButton primary @click="save"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
 					</div>
 				</MkFolder>
@@ -200,8 +200,8 @@ async function init() {
 	truemailInstance.value = meta.truemailInstance;
 	truemailAuthKey.value = meta.truemailAuthKey;
 	bannedEmailDomains.value = meta.bannedEmailDomains?.join('\n') || '';
-    enableProxyCheckio.value = meta.enableProxyCheckio;
-    proxyCheckioApiKey.value = meta.proxyCheckioApiKey;
+	enableProxyCheckio.value = meta.enableProxyCheckio;
+	proxyCheckioApiKey.value = meta.proxyCheckioApiKey;
 }
 
 function save() {
@@ -224,8 +224,8 @@ function save() {
 		truemailInstance: truemailInstance.value,
 		truemailAuthKey: truemailAuthKey.value,
 		bannedEmailDomains: bannedEmailDomains.value.split('\n'),
-        enableProxyCheckio: enableProxyCheckio.value,
-        proxyCheckioApiKey: proxyCheckioApiKey.value,
+		enableProxyCheckio: enableProxyCheckio.value,
+		proxyCheckioApiKey: proxyCheckioApiKey.value,
 	}).then(() => {
 		fetchInstance(true);
 	});

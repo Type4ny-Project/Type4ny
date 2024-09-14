@@ -31,11 +31,11 @@ export class S3Service {
 	public getS3Client(meta: MiMeta): S3Client {
 		if (envOption.managed && this.config.objectStorage) {
 			const objectStorageConfig = this.config.objectStorage;
-			const u = objectStorageConfig?.objectStorageEndpoint
+			const u = objectStorageConfig.objectStorageEndpoint
 				? `${objectStorageConfig.objectStorageUseSSL ? 'https' : 'http'}://${objectStorageConfig.objectStorageEndpoint}`
-				: `${objectStorageConfig?.objectStorageUseSSL ? 'https' : 'http'}://example.net`; // dummy url to select http(s) agent
+				: `${objectStorageConfig.objectStorageUseSSL ? 'https' : 'http'}://example.net`; // dummy url to select http(s) agent
 
-			const agent = this.httpRequestService.getAgentByUrl(new URL(u), !objectStorageConfig?.objectStorageUseProxy);
+			const agent = this.httpRequestService.getAgentByUrl(new URL(u), !objectStorageConfig.objectStorageUseProxy);
 			const handlerOption: NodeHttpHandlerOptions = {};
 			if (meta.objectStorageUseSSL) {
 				handlerOption.httpsAgent = agent as https.Agent;
@@ -44,14 +44,14 @@ export class S3Service {
 			}
 
 			return new S3Client({
-				endpoint: objectStorageConfig?.objectStorageEndpoint ? u : undefined,
-				credentials: (objectStorageConfig?.objectStorageAccessKey && objectStorageConfig?.objectStorageSecretKey ) ? {
+				endpoint: objectStorageConfig.objectStorageEndpoint ? u : undefined,
+				credentials: (objectStorageConfig.objectStorageAccessKey && objectStorageConfig.objectStorageSecretKey ) ? {
 					accessKeyId: objectStorageConfig.objectStorageAccessKey,
 					secretAccessKey: objectStorageConfig.objectStorageSecretKey,
 				} : undefined,
-				region: objectStorageConfig?.objectStorageRegion ? objectStorageConfig.objectStorageRegion : undefined, // 空文字列もundefinedにするため ?? は使わない
-				tls: objectStorageConfig?.objectStorageUseSSL ?? false,
-				forcePathStyle: objectStorageConfig?.objectStorageEndpoint ? objectStorageConfig?.objectStorageS3ForcePathStyle : false, // AWS with endPoint omitted
+				region: objectStorageConfig.objectStorageRegion ? objectStorageConfig.objectStorageRegion : undefined, // 空文字列もundefinedにするため ?? は使わない
+				tls: objectStorageConfig.objectStorageUseSSL ?? false,
+				forcePathStyle: objectStorageConfig.objectStorageEndpoint ? objectStorageConfig.objectStorageS3ForcePathStyle : false, // AWS with endPoint omitted
 				requestHandler: new NodeHttpHandler(handlerOption),
 			});
 		} else {
