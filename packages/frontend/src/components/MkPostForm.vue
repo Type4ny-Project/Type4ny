@@ -147,7 +147,7 @@ import { listSchedulePost } from '@/os.js';
 const $i = signinRequired();
 
 const modal = inject('modal');
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
 	reply?: Misskey.entities.Note;

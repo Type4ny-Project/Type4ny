@@ -3,79 +3,91 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 <template>
-  <button
-      class="_button"
-      :class="[$style.root, { [$style.wait]: wait, [$style.active]: isFollowing || hasPendingFollowRequestFromYou, [$style.full]: full, [$style.large]: large },{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'
-,}]"
-      :disabled="wait"
-      @click="onClick"
-  >
-    <template v-if="!wait">
-      <template v-if="hasPendingFollowRequestFromYou && user.isLocked">
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]">{{
-            i18n.ts.followRequestPending
-          }}</span><i class="ti ti-hourglass-empty"></i>
-      </template>
-      <template v-else-if="hasPendingFollowRequestFromYou && !user.isLocked">
-        <!-- つまりリモートフォローの場合。 -->
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] ">{{
-            i18n.ts.processing
-          }}</span>
-        <MkLoading :em="true" :colored="false"/>
-      </template>
-      <template v-else-if="isFollowing">
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] ">{{
-            i18n.ts.unfollow
-          }}</span><i class="ti ti-minus"></i>
-      </template>
-      <template v-else-if="!isFollowing && user.isLocked">
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]">{{
-            i18n.ts.followRequest
-          }}</span><i class="ti ti-plus"></i>
-      </template>
-      <template v-else-if="!isFollowing && !user.isLocked">
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]">{{
-            i18n.ts.follow
-          }}</span><i class="ti ti-plus"></i>
-      </template>
-    </template>
-    <template v-else>
-      <span v-if="full"
-            :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark' ,[$style.gamingLight]: gamingType === 'light'} ]">{{
-          i18n.ts.processing
-        }}</span>
-      <MkLoading :em="true" :colored="false"/>
-    </template>
-  </button>
+<button
+	class="_button"
+	:class="[$style.root, { [$style.wait]: wait, [$style.active]: isFollowing || hasPendingFollowRequestFromYou, [$style.full]: full, [$style.large]: large },{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'
+	,}]"
+	:disabled="wait"
+	@click="onClick"
+>
+	<template v-if="!wait">
+		<template v-if="hasPendingFollowRequestFromYou && user.isLocked">
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
+			>{{
+				i18n.ts.followRequestPending
+			}}</span><i class="ti ti-hourglass-empty"></i>
+		</template>
+		<template v-else-if="hasPendingFollowRequestFromYou && !user.isLocked">
+			<!-- つまりリモートフォローの場合。 -->
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] "
+			>{{
+				i18n.ts.processing
+			}}</span>
+			<MkLoading :em="true" :colored="false"/>
+		</template>
+		<template v-else-if="isFollowing">
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] "
+			>{{
+				i18n.ts.unfollow
+			}}</span><i class="ti ti-minus"></i>
+		</template>
+		<template v-else-if="!isFollowing && user.isLocked">
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
+			>{{
+				i18n.ts.followRequest
+			}}</span><i class="ti ti-plus"></i>
+		</template>
+		<template v-else-if="!isFollowing && !user.isLocked">
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
+			>{{
+				i18n.ts.follow
+			}}</span><i class="ti ti-plus"></i>
+		</template>
+	</template>
+	<template v-else>
+		<span
+			v-if="full"
+			:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark' ,[$style.gamingLight]: gamingType === 'light'} ]"
+		>{{
+			i18n.ts.processing
+		}}</span>
+		<MkLoading :em="true" :colored="false"/>
+	</template>
+</button>
 </template>
 
 <script lang="ts" setup>
-import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import {useStream} from '@/stream.js';
-import {i18n} from '@/i18n.js';
-import {claimAchievement} from '@/scripts/achievements.js';
-import {pleaseLogin } from '@/scripts/please-login.js';
+import { useStream } from '@/stream.js';
+import { i18n } from '@/i18n.js';
+import { claimAchievement } from '@/scripts/achievements.js';
+import { pleaseLogin } from '@/scripts/please-login.js';
 import { host } from '@/config.js';
-import {$i} from '@/account.js';
-import {defaultStore} from '@/store.js';
+import { $i } from '@/account.js';
+import { defaultStore } from '@/store.js';
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed,
   full?: boolean,
   large?: boolean,
 }>(), {
-  full: false,
-  large: false,
+	full: false,
+	large: false,
 });
 
 const emit = defineEmits<{
@@ -88,38 +100,38 @@ const wait = ref(false);
 const connection = useStream().useChannel('main');
 
 if (props.user.isFollowing == null && $i) {
-  misskeyApi('users/show', {
-    userId: props.user.id,
-  })
-      .then(onFollowChange);
+	misskeyApi('users/show', {
+		userId: props.user.id,
+	})
+		.then(onFollowChange);
 }
 
 function onFollowChange(user: Misskey.entities.UserDetailed) {
-  if (user.id === props.user.id) {
-    isFollowing.value = user.isFollowing;
-    hasPendingFollowRequestFromYou.value = user.hasPendingFollowRequestFromYou;
-  }
+	if (user.id === props.user.id) {
+		isFollowing.value = user.isFollowing;
+		hasPendingFollowRequestFromYou.value = user.hasPendingFollowRequestFromYou;
+	}
 }
 
 async function onClick() {
-  pleaseLogin(undefined, { type: 'web', path: `/@${props.user.username}@${props.user.host ?? host}` });
+	pleaseLogin(undefined, { type: 'web', path: `/@${props.user.username}@${props.user.host ?? host}` });
 
 	wait.value = true;
 
-  try {
-    if (isFollowing.value) {
-      const {canceled} = await os.confirm({
-        type: 'warning',
-        text: i18n.tsx.unfollowConfirm({name: props.user.name || props.user.username}),
-      });
+	try {
+		if (isFollowing.value) {
+			const { canceled } = await os.confirm({
+				type: 'warning',
+				text: i18n.tsx.unfollowConfirm({ name: props.user.name || props.user.username }),
+			});
 
-      if (canceled) return;
+			if (canceled) return;
 
-      await misskeyApi('following/delete', {
-        userId: props.user.id,
-      });
-    } else {
-      if (defaultStore.state.alwaysConfirmFollow) {
+			await misskeyApi('following/delete', {
+				userId: props.user.id,
+			});
+		} else {
+			if (defaultStore.state.alwaysConfirmFollow) {
 				const { canceled } = await os.confirm({
 					type: 'question',
 					text: i18n.tsx.followConfirm({ name: props.user.name || props.user.username }),
@@ -132,14 +144,14 @@ async function onClick() {
 			}
 
 			if (hasPendingFollowRequestFromYou.value) {
-        await misskeyApi('following/requests/cancel', {
-          userId: props.user.id,
-        });
-        hasPendingFollowRequestFromYou.value = false;
-      } else {
-        await misskeyApi('following/create', {
-          userId: props.user.id,
-        withReplies: defaultStore.state.defaultWithReplies,
+				await misskeyApi('following/requests/cancel', {
+					userId: props.user.id,
+				});
+				hasPendingFollowRequestFromYou.value = false;
+			} else {
+				await misskeyApi('following/create', {
+					userId: props.user.id,
+					withReplies: defaultStore.state.defaultWithReplies,
 				});
 				emit('update:user', {
 					...props.user,
@@ -147,38 +159,38 @@ async function onClick() {
 				});
 				hasPendingFollowRequestFromYou.value = true;
 
-        if ($i == null) return;
+				if ($i == null) return;
 
 				claimAchievement('following1');
 
-        if ($i.followingCount >= 10) {
-          claimAchievement('following10');
-        }
-        if ($i.followingCount >= 50) {
-          claimAchievement('following50');
-        }
-        if ($i.followingCount >= 100) {
-          claimAchievement('following100');
-        }
-        if ($i.followingCount >= 300) {
-          claimAchievement('following300');
-        }
-      }
-    }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    wait.value = false;
-  }
+				if ($i.followingCount >= 10) {
+					claimAchievement('following10');
+				}
+				if ($i.followingCount >= 50) {
+					claimAchievement('following50');
+				}
+				if ($i.followingCount >= 100) {
+					claimAchievement('following100');
+				}
+				if ($i.followingCount >= 300) {
+					claimAchievement('following300');
+				}
+			}
+		}
+	} catch (err) {
+		console.error(err);
+	} finally {
+		wait.value = false;
+	}
 }
 
 onMounted(() => {
-  connection.on('follow', onFollowChange);
-  connection.on('unfollow', onFollowChange);
+	connection.on('follow', onFollowChange);
+	connection.on('unfollow', onFollowChange);
 });
 
 onBeforeUnmount(() => {
-  connection.dispose();
+	connection.dispose();
 });
 </script>
 
@@ -194,7 +206,6 @@ onBeforeUnmount(() => {
   font-size: 16px;
   border-radius: 32px;
   background: #fff;
-
 
   &.gamingDark {
     color: black !important;

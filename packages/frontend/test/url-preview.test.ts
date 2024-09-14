@@ -95,7 +95,7 @@ describe('MkUrlPreview', () => {
 			},
 		});
 		assert.exists(iframe, 'iframe should exist');
-		assert.strictEqual(iframe?.src, 'https://example.local/player?autoplay=1&auto_play=1');
+		assert.strictEqual(iframe?.src, 'https://example.local/player?autoplay=0&auto_play=0');
 		assert.strictEqual(
 			iframe?.sandbox.toString(),
 			'allow-popups allow-scripts allow-storage-access-by-user-activation allow-same-origin',
@@ -127,7 +127,7 @@ describe('MkUrlPreview', () => {
 			},
 		});
 		assert.exists(iframe, 'iframe should exist');
-		assert.strictEqual(iframe?.allow, 'autoplay;encrypted-media;fullscreen');
+		assert.strictEqual(iframe?.allow, 'encrypted-media;fullscreen');
 	});
 
 	test('Filtering the allow list from the Summaly proxy', async () => {
@@ -141,7 +141,7 @@ describe('MkUrlPreview', () => {
 			},
 		});
 		assert.exists(iframe, 'iframe should exist');
-		assert.strictEqual(iframe?.allow, 'autoplay;fullscreen');
+		assert.strictEqual(iframe?.allow, 'fullscreen');
 	});
 
 	test('Having a player width should keep the fixed aspect ratio', async () => {

@@ -4,75 +4,81 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-  <button
-      class="_button"
-      :class="[$style.root, { [$style.wait]: wait, [$style.active]: isFollowing, [$style.full]: full },[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]]"
-      :disabled="wait"
-      @click="onClick"
-  >
-    <template v-if="!wait">
-      <template v-if="isFollowing">
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{
-            i18n.ts.unfollow
-          }}</span><i class="ti ti-minus"></i>
-      </template>
-      <template v-else>
-        <span v-if="full"
-              :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{
-            i18n.ts.follow
-          }}</span><i class="ti ti-plus"></i>
-      </template>
-    </template>
-    <template v-else>
-      <span v-if="full"
-            :class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{
-          i18n.ts.processing
-        }}</span>
-      <MkLoading :em="true"/>
-    </template>
-  </button>
+<button
+	class="_button"
+	:class="[$style.root, { [$style.wait]: wait, [$style.active]: isFollowing, [$style.full]: full },[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]]"
+	:disabled="wait"
+	@click="onClick"
+>
+	<template v-if="!wait">
+		<template v-if="isFollowing">
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]"
+			>{{
+				i18n.ts.unfollow
+			}}</span><i class="ti ti-minus"></i>
+		</template>
+		<template v-else>
+			<span
+				v-if="full"
+				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]"
+			>{{
+				i18n.ts.follow
+			}}</span><i class="ti ti-plus"></i>
+		</template>
+	</template>
+	<template v-else>
+		<span
+			v-if="full"
+			:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]"
+		>{{
+			i18n.ts.processing
+		}}</span>
+		<MkLoading :em="true"/>
+	</template>
+</button>
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue';
+import { computed, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import {i18n} from '@/i18n.js';
-import {defaultStore} from "@/store.js";
+import { i18n } from '@/i18n.js';
+import { defaultStore } from '@/store.js';
 
 const props = withDefaults(defineProps<{
   channel: Misskey.entities.Channel;
   full?: boolean;
 }>(), {
-  full: false,
+	full: false,
 });
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const isFollowing = ref(props.channel.isFollowing);
 const wait = ref(false);
 
 async function onClick() {
-  wait.value = true;
+	wait.value = true;
 
-  try {
-    if (isFollowing.value) {
-      await misskeyApi('channels/unfollow', {
-        channelId: props.channel.id,
-      });
-      isFollowing.value = false;
-    } else {
-      await misskeyApi('channels/follow', {
-        channelId: props.channel.id,
-      });
-      isFollowing.value = true;
-    }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    wait.value = false;
-  }
+	try {
+		if (isFollowing.value) {
+			await misskeyApi('channels/unfollow', {
+				channelId: props.channel.id,
+			});
+			isFollowing.value = false;
+		} else {
+			await misskeyApi('channels/follow', {
+				channelId: props.channel.id,
+			});
+			isFollowing.value = true;
+		}
+	} catch (err) {
+		console.error(err);
+	} finally {
+		wait.value = false;
+	}
 }
 </script>
 

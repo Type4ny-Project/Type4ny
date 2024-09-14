@@ -33,7 +33,7 @@ import { navbarItemDef } from '@/navbar.js';
 import { defaultStore } from '@/store.js';
 import { deviceKind } from '@/scripts/device-kind.js';
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
 
 const props = withDefaults(defineProps<{

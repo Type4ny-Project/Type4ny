@@ -67,7 +67,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, shallowRef, computed, ref, watch } from 'vue';
+import { nextTick, onMounted, shallowRef, computed } from 'vue';
 import { defaultStore } from '@/store.js';
 
 const props = defineProps<{
@@ -93,7 +93,7 @@ const props = defineProps<{
 	disabled?: boolean;
 }>();
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const emit = defineEmits<{
   (ev: 'click', payload: MouseEvent): void;

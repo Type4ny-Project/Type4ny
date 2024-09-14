@@ -4,8 +4,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <span
-    v-tooltip="checked ? i18n.ts.itsOn : i18n.ts.itsOff"
-    :class="{
+	v-tooltip="checked ? i18n.ts.itsOn : i18n.ts.itsOff"
+	:class="{
 		[$style.button]: true,
 		[$style.gamingDark]: gamingType === 'dark' && checked,
 		[$style.gamingLight]: gamingType === 'light' && checked,
@@ -13,26 +13,27 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		[$style.buttonDisabled]: props.disabled,
 
 	}"
-    data-cy-switch-toggle
-    @click.prevent.stop="toggle"
+	data-cy-switch-toggle
+	@click.prevent.stop="toggle"
 >
 	<div
-      :class="{ [$style.knob]: true, [$style.knobChecked]: checked,	[$style.gamingDark]: gamingType === 'dark' && checked,[$style.gamingLight]: gamingType === 'light' && checked}"></div>
+		:class="{ [$style.knob]: true, [$style.knobChecked]: checked,	[$style.gamingDark]: gamingType === 'dark' && checked,[$style.gamingLight]: gamingType === 'light' && checked}"
+	></div>
 </span>
 </template>
 
 <script lang="ts" setup>
-import {toRefs, Ref, computed} from 'vue';
-import {i18n} from '@/i18n.js';
-import {defaultStore} from "@/store.js";
+import { toRefs, Ref, computed } from 'vue';
+import { i18n } from '@/i18n.js';
+import { defaultStore } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
   checked: boolean | Ref<boolean>;
   disabled?: boolean | Ref<boolean>;
 }>(), {
-  disabled: false,
+	disabled: false,
 });
 
 const emit = defineEmits<{
@@ -41,7 +42,7 @@ const emit = defineEmits<{
 
 const checked = toRefs(props).checked;
 const toggle = () => {
-  emit('toggle');
+	emit('toggle');
 };
 </script>
 

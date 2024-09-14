@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div>
-  <div :class="[$style.banner ,{[$style.gamingDark]: gamingType ==='dark' , [$style.gamingLight]: gamingType ==='light'}]">
+	<div :class="[$style.banner ,{[$style.gamingDark]: gamingType ==='dark' , [$style.gamingLight]: gamingType ==='light'}]">
 		<i class="ti ti-checklist"></i>
 	</div>
 	<MkSpacer :marginMin="20" :marginMax="28">
@@ -69,8 +69,9 @@ import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import * as os from '@/os.js';
-import {defaultStore} from "@/store.js";
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+import { defaultStore } from '@/store.js';
+
+const gamingType = defaultStore.state.gamingType;
 
 const availableServerRules = instance.serverRules.length > 0;
 const availableTos = instance.tosUrl != null && instance.tosUrl !== '';

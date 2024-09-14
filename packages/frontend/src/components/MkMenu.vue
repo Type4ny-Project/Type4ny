@@ -174,7 +174,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts">
 import { computed, defineAsyncComponent, inject, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, unref, watch } from 'vue';
-import MkSwitchButton from '@/components/MkSwitch.button.vue';
 import { MenuItem, InnerMenuItem, MenuPending, MenuAction, MenuSwitch, MenuRadio, MenuRadioOption, MenuParent } from '@/types/menu.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
@@ -182,13 +181,14 @@ import { isTouchUsing } from '@/scripts/touch.js';
 import { type Keymap } from '@/scripts/hotkey.js';
 import { isFocusable } from '@/scripts/focus.js';
 import { getNodeOrNull } from '@/scripts/get-dom-node-or-null.js';
-import { defaultStore } from '@/store.js';
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
 
 const childrenCache = new WeakMap<MenuParent, MenuItem[]>();
 </script>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { defaultStore } from '@/store.js';
+
 const XChild = defineAsyncComponent(() => import('./MkMenu.child.vue'));
 
 const props = defineProps<{
@@ -203,6 +203,8 @@ const emit = defineEmits<{
 	(ev: 'close', actioned?: boolean): void;
 	(ev: 'hide'): void;
 }>();
+
+const gamingType = defaultStore.state.gamingType;
 
 const isNestingMenu = inject<boolean>('isNestingMenu', false);
 

@@ -140,7 +140,8 @@ import { host } from '@/config.js';
 import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowButton.vue';
 import { defaultStore } from '@/store.js';
 import * as os from '@/os.js';
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+
+const gamingType = defaultStore.state.gamingType;
 
 const emit = defineEmits<{
 	(ev: 'closed'): void;

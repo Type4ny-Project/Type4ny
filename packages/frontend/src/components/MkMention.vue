@@ -22,7 +22,7 @@ import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
 import { MkABehavior } from '@/components/global/MkA.vue';
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = defineProps<{
 	username: string;
