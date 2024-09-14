@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 export class Meta1723290939001 {
     name = 'Meta1723290939001'
 
