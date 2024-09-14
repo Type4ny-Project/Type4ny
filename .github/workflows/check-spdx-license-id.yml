@@ -16,7 +16,6 @@ jobs:
       - name: Check
         run: |
           #!/bin/bash
-          set -e
           counter=0
 
           search() {
