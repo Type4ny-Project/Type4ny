@@ -12,8 +12,8 @@ import { DI } from '@/di-symbols.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { IdService } from '@/core/IdService.js';
 import { FanoutTimelineService } from '@/core/FanoutTimelineService.js';
+import { RoleService } from '@/core/RoleService.js';
 import { ApiError } from '../../error.js';
-import { RoleService } from "@/core/RoleService.js";
 
 export const meta = {
 	tags: ['role', 'notes'],

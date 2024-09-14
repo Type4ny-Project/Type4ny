@@ -147,14 +147,13 @@ const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'))
 
 if (darkMode.value) {
 	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
-	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark) ;
-
+	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark);
 } else {
 	bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
 	iconUrl.value = (enablehanntenn.value ? iconDark : iconLight);
 }
 
-if (!iconUrl.value){
+if (!iconUrl.value) {
 	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
 }
 
@@ -485,7 +484,6 @@ function more(ev: MouseEvent) {
     box-sizing: border-box;
     color: var(--navFg);
 		transition: all 0.2s ease;
-
 
     &.gamingDark {
       color: var(--navFg);

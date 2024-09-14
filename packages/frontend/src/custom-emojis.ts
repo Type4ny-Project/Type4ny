@@ -41,8 +41,8 @@ stream.on('emojiAdded', emojiData => {
 
 stream.on('emojiUpdated', emojiData => {
 	customEmojis.value = customEmojis.value.map(item => emojiData.emojis.find(search => search.name === item.name) as Misskey.entities.EmojiSimple ?? item);
-    triggerRef(customEmojis);
-    set('emojis', customEmojis.value);
+	triggerRef(customEmojis);
+	set('emojis', customEmojis.value);
 });
 
 stream.on('emojiDeleted', emojiData => {

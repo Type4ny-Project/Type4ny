@@ -248,8 +248,8 @@ export const paramDef = {
 				type: 'null',
 			},
 			schedule: {
-				type: 'null'
-			}
+				type: 'null',
+			},
 		},
 	},
 	then: {

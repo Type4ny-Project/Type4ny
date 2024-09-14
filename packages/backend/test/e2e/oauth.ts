@@ -237,7 +237,7 @@ describe('OAuth', () => {
 		assert.strictEqual(createResult.status, 200);
 
 		const createResultBody = createResult.body as misskey.Endpoints['notes/create']['res'];
-		assert.strictEqual(createResultBody.createdNote.text, 'test');
+		assert.strictEqual(createResultBody.createdNote?.text, 'test');
 	});
 
 	test('Two concurrent flows', async () => {
@@ -308,10 +308,10 @@ describe('OAuth', () => {
 		assert.strictEqual(createResultAlice.status, 200);
 
 		const createResultBodyAlice = await createResultAlice.body as misskey.Endpoints['notes/create']['res'];
-		assert.strictEqual(createResultBodyAlice.createdNote.user.username, 'alice');
+		assert.strictEqual(createResultBodyAlice.createdNote?.user.username, 'alice');
 
 		const createResultBodyBob = await createResultBob.body as misskey.Endpoints['notes/create']['res'];
-		assert.strictEqual(createResultBodyBob.createdNote.user.username, 'bob');
+		assert.strictEqual(createResultBodyBob.createdNote?.user.username, 'bob');
 	});
 
 	// https://datatracker.ietf.org/doc/html/rfc7636.html

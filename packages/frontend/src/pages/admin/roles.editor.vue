@@ -101,7 +101,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkFolder>
 
 			<MkFoldableSection>
-				<template #header>{{ i18n.ts.timeline}}</template>
+				<template #header>{{ i18n.ts.timeline }}</template>
 
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.gtlAvailable, 'gtlAvailable'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.gtlAvailable }}</template>
@@ -245,7 +245,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</MkRange>
 					</div>
 				</MkFolder>
-
 			</MkFoldableSection>
 
 			<MkFoldableSection>
@@ -259,7 +258,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.canInvite)"></i></span>
 					</template>
 					<div class="_gaps">
-						<MkSwitch v-model="role.policies.canInvite.useDefault" :readonly="readonly" >
+						<MkSwitch v-model="role.policies.canInvite.useDefault" :readonly="readonly">
 							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
 						</MkSwitch>
 						<MkSwitch v-model="role.policies.canInvite.value" :disabled="role.policies.canInvite.useDefault" :readonly="readonly">
@@ -288,7 +287,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<template #label>{{ i18n.ts._role.priority }}</template>
 						</MkRange>
 					</div>
-				</MkFolder >
+				</MkFolder>
 
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.inviteLimitCycle, 'inviteLimitCycle'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.inviteLimitCycle }}</template>
@@ -330,7 +329,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFolder>
 			</MkFoldableSection>
-			<MkFoldableSection >
+			<MkFoldableSection>
 				<template #header>カスタム絵文字系</template>
 
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.canManageCustomEmojis, 'canManageCustomEmojis'])" class="_margin">
@@ -373,63 +372,62 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</MkFolder>
 			</MkFoldableSection>
 			<MkFoldableSection>
-	<template #header>Type4ny</template>
-	<MkFolder v-if="matchQuery([i18n.ts._role._options.emojiPickerProfileLimit, 'emojiPickerProfileLimit'])" class="_margin">
-		<template #label>{{ i18n.ts._role._options.emojiPickerProfileLimit }}</template>
-		<template #suffix>
-			<span v-if="role.policies.emojiPickerProfileLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-			<span v-else>{{ role.policies.emojiPickerProfileLimit.value }}</span>
-			<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.emojiPickerProfileLimit)"></i></span>
-		</template>
-		<div class="_gaps">
-			<MkSwitch v-model="role.policies.emojiPickerProfileLimit.useDefault" :readonly="readonly">
-				<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-			</MkSwitch>
-			<MkInput v-model="role.policies.emojiPickerProfileLimit.value" :disabled="role.policies.emojiPickerProfileLimit.useDefault" type="number" :readonly="readonly">
-			</MkInput>
-			<MkRange v-model="role.policies.emojiPickerProfileLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-				<template #label>{{ i18n.ts._role.priority }}</template>
-			</MkRange>
-		</div>
-	</MkFolder>
-	<MkFolder v-if="matchQuery([i18n.ts._role._options.listPinnedLimit, 'listPinnedLimit'])" class="_margin">
-		<template #label>{{ i18n.ts._role._options.listPinnedLimit }}</template>
-		<template #suffix>
-			<span v-if="role.policies.listPinnedLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-			<span v-else>{{ role.policies.listPinnedLimit.value }}</span>
-			<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.listPinnedLimit)"></i></span>
-		</template>
-		<div class="_gaps">
-			<MkSwitch v-model="role.policies.listPinnedLimit.useDefault" :readonly="readonly">
-				<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-			</MkSwitch>
-			<MkInput v-model="role.policies.listPinnedLimit.value" :disabled="role.policies.listPinnedLimit.useDefault" type="number" :readonly="readonly">
-			</MkInput>
-			<MkRange v-model="role.policies.listPinnedLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-				<template #label>{{ i18n.ts._role.priority }}</template>
-			</MkRange>
-		</div>
-	</MkFolder>
-	<MkFolder v-if="matchQuery([i18n.ts._role._options.localTimelineAnyLimit, 'localTimelineAnyLimit'])" class="_margin">
-		<template #label>{{ i18n.ts._role._options.localTimelineAnyLimit }}</template>
-		<template #suffix>
-			<span v-if="role.policies.localTimelineAnyLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-			<span v-else>{{ role.policies.antennaLimit.value }}</span>
-			<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.localTimelineAnyLimit)"></i></span>
-		</template>
-		<div class="_gaps">
-			<MkSwitch v-model="role.policies.localTimelineAnyLimit.useDefault" :readonly="readonly">
-				<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-			</MkSwitch>
-			<MkInput v-model="role.policies.localTimelineAnyLimit.value" :disabled="role.policies.localTimelineAnyLimit.useDefault" type="number" :readonly="readonly">
+				<template #header>Type4ny</template>
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.emojiPickerProfileLimit, 'emojiPickerProfileLimit'])" class="_margin">
+					<template #label>{{ i18n.ts._role._options.emojiPickerProfileLimit }}</template>
+					<template #suffix>
+						<span v-if="role.policies.emojiPickerProfileLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.emojiPickerProfileLimit.value }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.emojiPickerProfileLimit)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.emojiPickerProfileLimit.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkInput v-model="role.policies.emojiPickerProfileLimit.value" :disabled="role.policies.emojiPickerProfileLimit.useDefault" type="number" :readonly="readonly">
 						</MkInput>
-			<MkRange v-model="role.policies.localTimelineAnyLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-				<template #label>{{ i18n.ts._role.priority }}</template>
-			</MkRange>
-		</div>
-	</MkFolder>
-
-</MkFoldableSection>
+						<MkRange v-model="role.policies.emojiPickerProfileLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.listPinnedLimit, 'listPinnedLimit'])" class="_margin">
+					<template #label>{{ i18n.ts._role._options.listPinnedLimit }}</template>
+					<template #suffix>
+						<span v-if="role.policies.listPinnedLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.listPinnedLimit.value }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.listPinnedLimit)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.listPinnedLimit.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkInput v-model="role.policies.listPinnedLimit.value" :disabled="role.policies.listPinnedLimit.useDefault" type="number" :readonly="readonly">
+						</MkInput>
+						<MkRange v-model="role.policies.listPinnedLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.localTimelineAnyLimit, 'localTimelineAnyLimit'])" class="_margin">
+					<template #label>{{ i18n.ts._role._options.localTimelineAnyLimit }}</template>
+					<template #suffix>
+						<span v-if="role.policies.localTimelineAnyLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.antennaLimit.value }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.localTimelineAnyLimit)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.localTimelineAnyLimit.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkInput v-model="role.policies.localTimelineAnyLimit.value" :disabled="role.policies.localTimelineAnyLimit.useDefault" type="number" :readonly="readonly">
+						</MkInput>
+						<MkRange v-model="role.policies.localTimelineAnyLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
+			</MkFoldableSection>
 			<MkFoldableSection>
 				<template #header>{{ i18n.ts.drive }}, {{ i18n.ts.files }}</template>
 
@@ -474,28 +472,28 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</MkFolder>
 			</MkFoldableSection>
 			<MkFoldableSection>
-				<template #header>{{ i18n.ts.avatarDecorations}}</template>
+				<template #header>{{ i18n.ts.avatarDecorations }}</template>
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.canUpdateBioMedia, 'canUpdateBioMedia'])">
-				<template #label>{{ i18n.ts._role._options.canUpdateBioMedia }}</template>
-				<template #suffix>
-					<span v-if="role.policies.canUpdateBioMedia.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-					<span v-else>{{ role.policies.canUpdateBioMedia.value ? i18n.ts.yes : i18n.ts.no }}</span>
-					<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.canUpdateBioMedia)"></i></span>
-				</template>
-				<div class="_gaps">
-					<MkSwitch v-model="role.policies.canUpdateBioMedia.useDefault" :readonly="readonly">
-						<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-					</MkSwitch>
-					<MkSwitch v-model="role.policies.canUpdateBioMedia.value" :disabled="role.policies.canUpdateBioMedia.useDefault" :readonly="readonly">
-						<template #label>{{ i18n.ts.enable }}</template>
-					</MkSwitch>
-					<MkRange v-model="role.policies.canUpdateBioMedia.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-						<template #label>{{ i18n.ts._role.priority }}</template>
-					</MkRange>
-				</div>
-			</MkFolder>
+					<template #label>{{ i18n.ts._role._options.canUpdateBioMedia }}</template>
+					<template #suffix>
+						<span v-if="role.policies.canUpdateBioMedia.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.canUpdateBioMedia.value ? i18n.ts.yes : i18n.ts.no }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.canUpdateBioMedia)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.canUpdateBioMedia.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkSwitch v-model="role.policies.canUpdateBioMedia.value" :disabled="role.policies.canUpdateBioMedia.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts.enable }}</template>
+						</MkSwitch>
+						<MkRange v-model="role.policies.canUpdateBioMedia.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
 
-			<MkFolder v-if="matchQuery([i18n.ts._role._options.canManageAvatarDecorations, 'canManageAvatarDecorations'])" class="_margin">
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.canManageAvatarDecorations, 'canManageAvatarDecorations'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.canManageAvatarDecorations }}</template>
 					<template #suffix>
 						<span v-if="role.policies.canManageAvatarDecorations.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
@@ -533,50 +531,48 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</MkRange>
 					</div>
 				</MkFolder>
-
 			</MkFoldableSection>
-		<MkFoldableSection>
-			<template #header>{{i18n.ts.clip}}</template>
-			<MkFolder v-if="matchQuery([i18n.ts._role._options.clipMax, 'clipLimit'])" class="_margin">
-				<template #label>{{ i18n.ts._role._options.clipMax }}</template>
-				<template #suffix>
-					<span v-if="role.policies.clipLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-					<span v-else>{{ role.policies.clipLimit.value }}</span>
-					<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.clipLimit)"></i></span>
-				</template>
-				<div class="_gaps">
-					<MkSwitch v-model="role.policies.clipLimit.useDefault" :readonly="readonly">
-						<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-					</MkSwitch>
-					<MkInput v-model="role.policies.clipLimit.value" :disabled="role.policies.clipLimit.useDefault" type="number" :readonly="readonly">
-					</MkInput>
-					<MkRange v-model="role.policies.clipLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-						<template #label>{{ i18n.ts._role.priority }}</template>
-					</MkRange>
-				</div>
-			</MkFolder>
-			<MkFolder v-if="matchQuery([i18n.ts._role._options.noteEachClipsMax, 'noteEachClipsLimit'])" class="_margin">
-				<template #label>{{ i18n.ts._role._options.noteEachClipsMax }}</template>
-				<template #suffix>
-					<span v-if="role.policies.noteEachClipsLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-					<span v-else>{{ role.policies.noteEachClipsLimit.value }}</span>
-					<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.noteEachClipsLimit)"></i></span>
-				</template>
-				<div class="_gaps">
-					<MkSwitch v-model="role.policies.noteEachClipsLimit.useDefault" :readonly="readonly">
-						<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-					</MkSwitch>
-					<MkInput v-model="role.policies.noteEachClipsLimit.value" :disabled="role.policies.noteEachClipsLimit.useDefault" type="number" :readonly="readonly">
-					</MkInput>
-					<MkRange v-model="role.policies.noteEachClipsLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-						<template #label>{{ i18n.ts._role.priority }}</template>
-					</MkRange>
-				</div>
-			</MkFolder>
-
-		</MkFoldableSection>
-			<MkFoldableSection >
-				<template #header>{{i18n.ts.userList}}</template>
+			<MkFoldableSection>
+				<template #header>{{ i18n.ts.clip }}</template>
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.clipMax, 'clipLimit'])" class="_margin">
+					<template #label>{{ i18n.ts._role._options.clipMax }}</template>
+					<template #suffix>
+						<span v-if="role.policies.clipLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.clipLimit.value }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.clipLimit)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.clipLimit.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkInput v-model="role.policies.clipLimit.value" :disabled="role.policies.clipLimit.useDefault" type="number" :readonly="readonly">
+						</MkInput>
+						<MkRange v-model="role.policies.clipLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.noteEachClipsMax, 'noteEachClipsLimit'])" class="_margin">
+					<template #label>{{ i18n.ts._role._options.noteEachClipsMax }}</template>
+					<template #suffix>
+						<span v-if="role.policies.noteEachClipsLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
+						<span v-else>{{ role.policies.noteEachClipsLimit.value }}</span>
+						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.noteEachClipsLimit)"></i></span>
+					</template>
+					<div class="_gaps">
+						<MkSwitch v-model="role.policies.noteEachClipsLimit.useDefault" :readonly="readonly">
+							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
+						</MkSwitch>
+						<MkInput v-model="role.policies.noteEachClipsLimit.value" :disabled="role.policies.noteEachClipsLimit.useDefault" type="number" :readonly="readonly">
+						</MkInput>
+						<MkRange v-model="role.policies.noteEachClipsLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
+							<template #label>{{ i18n.ts._role.priority }}</template>
+						</MkRange>
+					</div>
+				</MkFolder>
+			</MkFoldableSection>
+			<MkFoldableSection>
+				<template #header>{{ i18n.ts.userList }}</template>
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.userListMax, 'userListLimit'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.userListMax }}</template>
 					<template #suffix>
@@ -596,7 +592,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFolder>
 
-				<MkFolder v-if="matchQuery([i18n.ts._role._options.userEachUserListsMax, 'userEachUserListsLimit'])" >
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.userEachUserListsMax, 'userEachUserListsLimit'])">
 					<template #label>{{ i18n.ts._role._options.userEachUserListsMax }}</template>
 					<template #suffix>
 						<span v-if="role.policies.userEachUserListsLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
@@ -616,7 +612,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</MkFolder>
 			</MkFoldableSection>
 			<MkFoldableSection>
-				<template #header>{{i18n.ts.note}}</template>
+				<template #header>{{ i18n.ts.note }}</template>
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.canSearchNotes, 'canSearchNotes'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.canSearchNotes }}</template>
 					<template #suffix>
@@ -736,7 +732,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFolder>
 
-				<MkFolder v-if="matchQuery([i18n.ts._role._options.canHideAds, 'canHideAds'])" >
+				<MkFolder v-if="matchQuery([i18n.ts._role._options.canHideAds, 'canHideAds'])">
 					<template #label>{{ i18n.ts._role._options.canHideAds }}</template>
 					<template #suffix>
 						<span v-if="role.policies.canHideAds.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
@@ -756,10 +752,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFolder>
 			</MkFoldableSection>
-
-
-
-
 		</div>
 	</FormSlot>
 </div>
@@ -781,7 +773,7 @@ import { i18n } from '@/i18n.js';
 import { ROLE_POLICIES } from '@/const.js';
 import { instance } from '@/instance.js';
 import { deepClone } from '@/scripts/clone.js';
-import MkFoldableSection from "@/components/MkFoldableSection.vue";
+import MkFoldableSection from '@/components/MkFoldableSection.vue';
 
 const emit = defineEmits<{
 	(ev: 'update:modelValue', v: any): void;

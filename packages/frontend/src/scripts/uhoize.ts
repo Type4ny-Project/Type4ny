@@ -1,16 +1,16 @@
 export function uhoize(str) {
 	const punctuation = ['。', '！', '？', '.', '!', '?'];
-	let lines = str.split('\n');
+	const lines = str.split('\n');
 	let voice = 'ウホ';
 	return lines.map(line => {
 		if (Math.floor(Math.random() * 2) === 0) {
-			voice = 'ウホッ'
+			voice = 'ウホッ';
 		} else {
-			voice = 'ウホ'
+			voice = 'ウホ';
 		}
-		let lastChar = line.trim().slice(-1);
+		const lastChar = line.trim().slice(-1);
 		if (punctuation.includes(lastChar)) {
-			let lineWithoutPunctuation = line.trim().slice(0, -1);
+			const lineWithoutPunctuation = line.trim().slice(0, -1);
 			return lineWithoutPunctuation + voice + lastChar;
 		} else {
 			return line + voice;

@@ -727,20 +727,19 @@ export function post(props: Record<string, any> = {}): Promise<void> {
 		//       複数のpost formを開いたときに場合によってはエラーになる
 		//       もちろん複数のpost formを開けること自体Misskeyサイドのバグなのだが
 		if (ui !== 'twilike') {
-
 			const { dispose } = popup(MkPostFormDialog, props, {
 				closed: () => {
 					resolve();
 					dispose();
 				},
-			})
+			});
 		} else {
 			const { dispose } = popup(XPostFormDialog, props, {
 				closed: () => {
 					resolve();
 					dispose();
 				},
-			})
+			});
 		}
 	});
 }

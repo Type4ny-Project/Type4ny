@@ -3878,7 +3878,17 @@ export type components = {
       emojis: {
         [key: string]: string;
       };
-      onlineStatus: string;
+      isGorilla?: boolean;
+      /**
+       * Format: url
+       * @enum {string|null}
+       */
+      onlineStatus: 'unknown' | 'online' | 'active' | 'offline';
+      badgeRoles?: ({
+          name: string;
+          iconUrl: string | null;
+          displayOrder: number;
+        })[];
     };
     UserDetailedNotMeOnly: {
       /** Format: url */
@@ -4685,6 +4695,7 @@ export type components = {
       isFavorited?: boolean;
       pinnedNotes?: components['schemas']['Note'][];
       isLocalOnly: boolean | null;
+      collaboratorUsers: components['schemas']['User'][] | null;
     };
     QueueCount: {
       waiting: number;
@@ -5091,6 +5102,9 @@ export type components = {
       hcaptchaSiteKey: string | null;
       enableMcaptcha: boolean;
       mcaptchaSiteKey: string | null;
+      backgroundImageUrls: {
+          url: string;
+        }[];
       mcaptchaInstanceUrl: string | null;
       enableRecaptcha: boolean;
       recaptchaSiteKey: string | null;
@@ -5177,7 +5191,7 @@ export type components = {
       latestSentAt: string | null;
       latestStatus: number | null;
       name: string;
-      on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered')[];
+      on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated')[];
       url: string;
       secret: string;
     };
@@ -10897,7 +10911,7 @@ export type operations = {
         'application/json': {
           isActive: boolean;
           name: string;
-          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered')[];
+          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated')[];
           url: string;
           secret: string;
         };
@@ -11007,7 +11021,7 @@ export type operations = {
       content: {
         'application/json': {
           isActive?: boolean;
-          on?: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered')[];
+          on?: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated')[];
         };
       };
     };
@@ -11120,7 +11134,7 @@ export type operations = {
           id: string;
           isActive: boolean;
           name: string;
-          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered')[];
+          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated')[];
           url: string;
           secret: string;
         };
@@ -12281,6 +12295,7 @@ export type operations = {
           isSensitive?: boolean | null;
           allowRenoteToExternal?: boolean | null;
           isLocalOnly?: boolean | null;
+          collaboratorIds?: string[];
         };
       };
     };
@@ -12735,6 +12750,9 @@ export type operations = {
           isSensitive?: boolean | null;
           allowRenoteToExternal?: boolean | null;
           isLocalOnly?: boolean | null;
+          collaboratorIds?: string[];
+          /** Format: misskey:id */
+          transferAdminUserId?: string | null;
         };
       };
     };

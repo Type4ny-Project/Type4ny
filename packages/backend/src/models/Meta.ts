@@ -139,7 +139,6 @@ export class MiMeta {
 	})
 	public backgroundImageUrls: { url: string }[];
 
-
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,
@@ -371,7 +370,6 @@ export class MiMeta {
 		nullable: true,
 	})
 	public smtpUser: string | null;
-
 
 	@Column('varchar', {
 		length: 1024,

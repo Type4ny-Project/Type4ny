@@ -127,7 +127,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, shallowRef, watch, nextTick, defineAsyncComponent } from 'vue';
+import { computed, ref, shallowRef, watch, nextTick, defineAsyncComponent } from 'vue';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkButton from '@/components/MkButton.vue';
 import XProfile from '@/components/MkUserSetupDialog.Profile.vue';
@@ -148,8 +148,7 @@ const emit = defineEmits<{
 }>();
 
 const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
-
-// eslint-disable-next-line vue/no-setup-props-reactivity-loss
+ 
 const page = ref(defaultStore.state.accountSetupWizard);
 
 watch(page, () => {

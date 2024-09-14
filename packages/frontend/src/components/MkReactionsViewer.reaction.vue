@@ -114,7 +114,7 @@ function getReactionName(reaction: string, formated = false) {
 async function toggleReaction() {
 	if (!canToggle.value) return;
 
-	const oldReaction = props.note.myReactions?.includes(props.reaction)
+	const oldReaction = props.note.myReactions.includes(props.reaction)
 		? props.reaction
 		: null;
 	if (oldReaction) {

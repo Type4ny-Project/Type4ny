@@ -66,41 +66,39 @@ const pagination = {
 };
 
 const selectAll = () => {
-
-    if (selectedEmojis.value.length > 0) {
-        selectedEmojis.value = [];
-    } else {
-        selectedEmojis.value = Array.from(emojisPaginationComponent.value.items.values(), item => item.id);
-    }
+	if (selectedEmojis.value.length > 0) {
+		selectedEmojis.value = [];
+	} else {
+		selectedEmojis.value = Array.from(emojisPaginationComponent.value.items.values(), item => item.id);
+	}
 };
 const setisSensitiveBulk = async () => {
 	const { canceled, result } = await os.switch1({
 		title: 'isSensitive',
-		type: "mksw"
+		type: 'mksw',
 	});
 	if (canceled) return;
 	await os.apiWithDialog('admin/emoji/set-issensitive-bulk', {
 		ids: selectedEmojis.value,
-		isSensitive: result
+		isSensitive: result,
 	});
 	emojisPaginationComponent.value.reload();
 };
 const setlocalOnlyBulk = async () => {
 	const { canceled, result } = await os.switch1({
 		title: 'localOnly',
-		type: "mksw"
+		type: 'mksw',
 	});
 	if (canceled) return;
 	await os.apiWithDialog('admin/emoji/set-localonly-bulk', {
 		ids: selectedEmojis.value,
-		localOnly: result
+		localOnly: result,
 	});
 	emojisPaginationComponent.value.reload();
 };
 
-
 const toggleSelect = (emoji) => {
-    console.log(selectedEmojis.value)
+	console.log(selectedEmojis.value);
 	if (selectedEmojis.value.includes(emoji.id)) {
 		selectedEmojis.value = selectedEmojis.value.filter(x => x !== emoji.id);
 	} else {
@@ -229,7 +227,6 @@ const delBulk = async () => {
   &:hover {
     border-color: var(--inputBorderHover);
   }
-
 
 }
 .selected {

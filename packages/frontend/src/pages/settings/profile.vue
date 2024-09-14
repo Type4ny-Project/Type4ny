@@ -92,8 +92,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<template #label>{{ i18n.ts.advancedSettings }}</template>
 
 		<div class="_gaps_m">
-			<MkSwitch :disabled="profile.isGorilla" v-model="profile.isCat">{{ i18n.ts.flagAsCat }}<template #caption>{{ i18n.ts.flagAsCatDescription }}</template></MkSwitch>
-            <MkSwitch :disabled="profile.isCat" v-model="profile.isGorilla">{{ i18n.ts.flagAsGorilla }}<template #caption>{{ i18n.ts.flagAsGorillaDescription }}</template></MkSwitch>
+			<MkSwitch v-model="profile.isCat" :disabled="profile.isGorilla">{{ i18n.ts.flagAsCat }}<template #caption>{{ i18n.ts.flagAsCatDescription }}</template></MkSwitch>
+			<MkSwitch v-model="profile.isGorilla" :disabled="profile.isCat">{{ i18n.ts.flagAsGorilla }}<template #caption>{{ i18n.ts.flagAsGorillaDescription }}</template></MkSwitch>
 			<MkSwitch v-model="profile.isBot">{{ i18n.ts.flagAsBot }}<template #caption>{{ i18n.ts.flagAsBotDescription }}</template></MkSwitch>
 		</div>
 	</MkFolder>
@@ -144,7 +144,7 @@ const profile = reactive({
 	lang: $i.lang,
 	isBot: $i.isBot ?? false,
 	isCat: $i.isCat ?? false,
-    isGorilla: $i.isGorilla,
+	isGorilla: $i.isGorilla,
 });
 
 watch(() => profile, () => {
@@ -194,7 +194,7 @@ function save() {
 		lang: profile.lang || null,
 		isBot: !!profile.isBot,
 		isCat: !!profile.isCat,
-        isGorilla: !!profile.isGorilla,
+		isGorilla: !!profile.isGorilla,
 	});
 	globalEvents.emit('requestClearPageCache');
 	claimAchievement('profileFilled');
@@ -204,9 +204,9 @@ function save() {
 	if (profile.isCat) {
 		claimAchievement('markedAsCat');
 	}
-    if (profile.isGorilla) {
-        claimAchievement('markedAsGorilla');
-    }
+	if (profile.isGorilla) {
+		claimAchievement('markedAsGorilla');
+	}
 }
 
 function changeAvatar(ev) {

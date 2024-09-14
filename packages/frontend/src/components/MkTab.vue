@@ -3,8 +3,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <script lang="ts">
-import {computed, defineComponent, h, resolveDirective, withDirectives , ref , watch} from 'vue';
-import {defaultStore} from "@/store.js";
+import { computed, defineComponent, h, resolveDirective, withDirectives, ref, watch } from 'vue';
+import { defaultStore } from '@/store.js';
 const gamingType = defaultStore.state.gamingType;
 
 export default defineComponent({
@@ -19,7 +19,7 @@ export default defineComponent({
 		return () => h('div', {
 			class: 'pxhvhrfw',
 		}, options.map(option => withDirectives(h('button', {
-			class: ['_button', { active: props.modelValue === option.props?.value , gamingDark: gamingType.value == 'dark' && props.modelValue === option.props.value,gamingLight: gamingType.value == 'light' && props.modelValue === option.props.value } ],
+			class: ['_button', { active: props.modelValue === option.props?.value, gamingDark: gamingType.value == 'dark' && props.modelValue === option.props.value, gamingLight: gamingType.value == 'light' && props.modelValue === option.props.value }],
 			key: option.key as string,
 			disabled: props.modelValue === option.props?.value,
 			onClick: () => {

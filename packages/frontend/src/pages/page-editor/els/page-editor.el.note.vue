@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable vue/no-mutating-props */
+ 
 import { watch, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import XContainer from '../page-editor.container.vue';

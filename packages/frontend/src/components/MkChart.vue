@@ -13,11 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable id-denylist --
-  Chart.js has a `data` attribute in most chart definitions, which triggers the
-  id-denylist violation when setting it. This is causing about 60+ lint issues.
-  As this is part of Chart.js's API it makes sense to disable the check here.
-*/
+ 
 import { onMounted, ref, shallowRef, watch } from 'vue';
 import { Chart } from 'chart.js';
 import * as Misskey from 'misskey-js';
@@ -846,7 +842,7 @@ watch(() => [props.src, props.span], fetchAndRender);
 onMounted(() => {
 	fetchAndRender();
 });
-/* eslint-enable id-denylist */
+ 
 </script>
 
 <style lang="scss" module>
