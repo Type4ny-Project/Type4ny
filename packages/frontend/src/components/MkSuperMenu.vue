@@ -32,7 +32,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { ref, computed, watch } from 'vue';
 import { defaultStore } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 defineProps<{
 	def: any[];
@@ -122,7 +122,6 @@ defineProps<{
 				padding-top: 0;
 				border-top: none;
 			}
-
 
 			> .title {
 				font-size: 1em;

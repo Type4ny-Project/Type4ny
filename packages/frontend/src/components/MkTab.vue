@@ -5,8 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts">
 import {computed, defineComponent, h, resolveDirective, withDirectives , ref , watch} from 'vue';
 import {defaultStore} from "@/store.js";
-
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 export default defineComponent({
 	props: {

@@ -5,12 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <button
 	v-if="isFollowing"
-	class="_button" :class="[$style.root,{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light'
+	class="_button" :class="[$style.root,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'
 	,}]"
 	@click="onClick"
 >
-	<span v-if="props.user.notify === 'none'" :class="[{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }] "><i class="ti ti-bell"></i></span>
-	<span v-else-if="props.user.notify === 'normal'" :class="[{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"><i class="ti ti-bell-off"></i></span>
+	<span v-if="props.user.notify === 'none'" :class="[{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] "><i class="ti ti-bell"></i></span>
+	<span v-else-if="props.user.notify === 'normal'" :class="[{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"><i class="ti ti-bell-off"></i></span>
 </button>
 </template>
 
@@ -21,37 +21,9 @@ import * as os from '@/os.js';
 import { useStream } from '@/stream.js';
 import { defaultStore } from '@/store.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-let gaming = ref('');
+import { $i } from '@/account.js';
 
-const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-if (darkMode.value && gamingMode.value == true) {
-	gaming.value = 'dark';
-} else if (!darkMode.value && gamingMode.value == true) {
-	gaming.value = 'light';
-} else {
-	gaming.value = '';
-}
-
-watch(darkMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
-
-watch(gamingMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
+const gamingType = computed(() => defaultStore.state.gamingType);
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed,
@@ -66,13 +38,13 @@ let isFollowing = ref(props.user.isFollowing);
 let notify = ref(props.user.notify);
 const connection = useStream().useChannel('main');
 
-if (props.user.isFollowing == null) {
+if (props.user.isFollowing == null && $i) {
 	misskeyApi('users/show', {
 		userId: props.user.id,
 	}).then(onFollowChange);
 }
 
-if (props.user.notify == null) {
+if (props.user.notify == null && $i) {
 	misskeyApi('users/show', {
 		userId: props.user.id,
 	}).then(onNotifyChange);

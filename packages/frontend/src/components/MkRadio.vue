@@ -28,7 +28,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { ref, computed, watch } from 'vue';
 import { defaultStore } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = defineProps<{
 	modelValue: any;

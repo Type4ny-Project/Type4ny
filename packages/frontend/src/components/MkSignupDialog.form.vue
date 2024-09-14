@@ -126,8 +126,7 @@ import {instance} from '@/instance.js';
 import {i18n} from '@/i18n.js';
 import {defaultStore} from "@/store.js";
 
-
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
   autoSet?: boolean;

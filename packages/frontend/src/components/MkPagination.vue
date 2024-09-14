@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -31,7 +32,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<MkLoading v-else class="loading"/>
 		</div>
 		<DynamicScroller
-			v-if="props.virtualScrollOn"
+			v-if="virtualScrollOn"
 			:items="Array.from(items.values())"
 			:minItemSize="110"
 			:pageMode="true"
@@ -43,11 +44,11 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 					:active="active"
 					:data-index="index"
 				>
-					<slot :item="item" :index="index" :items="Array.from(items.values())" :fetching="fetching || moreFetching"></slot>
+					<slot :item="item" :index="index" :items="Array.from(items?.values() ?? [])" :fetching="fetching || moreFetching"></slot>
 				</DynamicScrollerItem>
 			</template>
 		</DynamicScroller>
-		<slot v-else :items="Array.from(items.values())" item="none" :fetching="fetching || moreFetching"></slot>
+		<slot v-else :items="Array.from(items?.values() ?? [])" item="none" :fetching="fetching || moreFetching"></slot>
 		<div v-show="!pagination.reversed && more" key="_more_" class="_margin">
 			<MkButton v-if="!moreFetching" v-appear="(enableInfiniteScroll && !props.disableAutoLoad) ? appearFetchMore : null" :class="$style.more" :disabled="moreFetching" :style="{ cursor: moreFetching ? 'wait' : 'pointer' }" primary rounded @click="fetchMore">
 				{{ i18n.ts.loadMore }}
@@ -63,9 +64,8 @@ import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeMount, onB
 import * as Misskey from 'misskey-js';
 
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
+import { onScrollTop, isTopVisible, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
 import { useDocumentVisibility } from '@/scripts/use-document-visibility.js';
-import { defaultStore } from '@/store.js';
 import { MisskeyEntity } from '@/types/date-separated-list.js';
 import { i18n } from '@/i18n.js';
 
@@ -109,7 +109,9 @@ function concatMapWithArray(map: MisskeyEntityMap, entities: MisskeyEntity[]): M
 import { infoImageUrl } from '@/instance.js';
 import MkButton from '@/components/MkButton.vue';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+// eslint-disable-next-line import/order
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+import { defaultStore } from '@/store.js';
 
 const props = withDefaults(defineProps<{
 	pagination: Paging;
@@ -118,7 +120,7 @@ const props = withDefaults(defineProps<{
 	displayLimit?: number;
 }>(), {
 	displayLimit: 40,
-		virtualScrollOn: false,
+	virtualScrollOn: false,
 });
 
 const emit = defineEmits<{
@@ -159,9 +161,7 @@ const preventAppearFetchMoreTimer = ref<number | null>(null);
 const isBackTop = ref(false);
 const empty = computed(() => items.value.size === 0);
 const error = ref(false);
-const {
-	enableInfiniteScroll,
-} = defaultStore.reactiveState;
+const enableInfiniteScroll = computed(() => defaultStore.reactiveState.enableInfiniteScroll);
 
 const contentEl = computed(() => props.pagination.pageEl ?? rootEl.value);
 const scrollableElement = computed(() => contentEl.value ? getScrollContainer(contentEl.value) : document.body);

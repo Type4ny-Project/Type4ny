@@ -25,8 +25,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch, sha
 import * as os from '@/os.js';
 import { defaultStore } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
-
+const gamingType = defaultStore.state.gamingType;
 const props = withDefaults(defineProps<{
 	modelValue: number;
 	disabled?: boolean;
