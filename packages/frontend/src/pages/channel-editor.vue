@@ -68,9 +68,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkButton @click="addUser()">
 						{{ i18n.ts._channel.addCollaborator }}
 					</MkButton>
-					<div v-for="user in collaboratorUsers" :class="$style.collaborator">
-						<MkAvatar :user="user" style="height: 48px; width: 48px"/>
-						<MkAcct :user="user"/>
+					<div v-for="( user, i ) in collaboratorUsers" :class="$style.userItem">
+						<div :class="$style.userItemMain">
+							<MkA :class="$style.userItemMainBody" :to="`${userPage(user)}`">
+								<MkUserCardMini :user="user"/>
+							</MkA>
+							<button class="_button" :class="$style.unassign" @click="collaboratorUserDelete(i)"><i class="ti ti-x"></i></button>
+						</div>
 					</div>
 				</div>
 			</MkFolder>
@@ -110,6 +114,8 @@ import MkSwitch from '@/components/MkSwitch.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import { useRouter } from '@/router/supplier.js';
 import { $i, iAmModerator } from '@/account.js';
+import { userPage } from '@/filters/user';
+import MkUserCardMini from '@/components/MkUserCardMini.vue';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
@@ -204,6 +210,10 @@ function addUser() {
 			];
 		}
 	});
+}
+
+function collaboratorUserDelete (i:number) {
+	collaboratorUsers.value.splice( i, 1 );
 }
 
 fetchChannel();
@@ -319,4 +329,26 @@ definePageMetadata(() => ({
 	margin: 8px 0;
 	align-items: center;
 }
+
+.userItemMain {
+	display: flex;
+}
+
+.userItemMainBody {
+	flex: 1;
+	min-width: 0;
+	margin-right: 8px;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+.unassign {
+	width: 32px;
+	height: 32px;
+	align-self: center;
+	color: #ff2a2a;
+}
+
 </style>
