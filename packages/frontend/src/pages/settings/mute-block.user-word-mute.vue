@@ -66,7 +66,7 @@ const renderWord = (mutedWords) => mutedWords.map(x => {
 		return x;
 	}
 }).join('\n');
-const render = (mutedWords: { user: userType; words: string }[]): { user: userType; words: string }[] =>
+const render = (mutedWords: { user: UserType; words: string }[]): { user: UserType; words: string }[] =>
 	mutedWords.map((x) => {
 		return {
 			user: {
@@ -83,7 +83,7 @@ const render = (mutedWords: { user: userType; words: string }[]): { user: userTy
 		};
 	});
 
-const mutedUserWords = ref<{ user: userType; words: string }[]>(props.muted ? render(props.muted) : []);
+const mutedUserWords = ref<{ user: UserType; words: string }[]>(props.muted ? render(props.muted) : []);
 
 watch(
 	() => mutedUserWords.value.map((userAndWords) => userAndWords.words),
