@@ -22,10 +22,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<button v-if="thereIsTreasure" class="_button treasure" @click="getTreasure"><img src="/fluent-emoji/1f3c6.png" class="treasureImg"></button>
 				</div>
 				<div style="text-align: center;">
-					{{ i18n.ts._aboutType4ny.about }}<br><a href="https://misskey-hub.net/docs/about-misskey/" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
+					{{ i18n.ts._aboutType4ny.about }}<br><a href="https://type4ny-hub.com/about-type4ny" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
 				</div>
 				<div v-if="$i != null" style="text-align: center;">
-					<MkButton primary rounded inline @click="iLoveMisskey">I <Mfm text="$[jelly ❤]"/> #Misskey</MkButton>
+					<MkButton primary rounded inline @click="iLoveType4ny">I <Mfm text="$[jelly ❤]"/> #Type4ny</MkButton>
 				</div>
 				<FormSection>
 					<div class="_gaps_s">
@@ -183,9 +183,9 @@ function gravity() {
 	easterEggEngine.value = physics(containerEl.value);
 }
 
-function iLoveMisskey() {
+function iLoveType4ny() {
 	os.post({
-		initialText: 'I $[jelly ❤] #Misskey',
+		initialText: 'I $[jelly ❤] #Type4ny',
 		instant: true,
 	});
 }

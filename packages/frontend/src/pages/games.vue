@@ -28,7 +28,7 @@ import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 definePageMetadata(() => ({
-	title: 'Misskey Games',
+	title: 'Games',
 	icon: 'ti ti-device-gamepad',
 }));
 </script>

@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -55,7 +56,7 @@ const exampleNote = reactive<Misskey.entities.Note>({
 		onlineStatus: 'unknown',
 		badgeRoles: [],
 	},
-	text: 'just setting up my msky',
+	text: 'just setting up my Type4ny',
 	cw: null,
 	visibility: 'public',
 	localOnly: false,
