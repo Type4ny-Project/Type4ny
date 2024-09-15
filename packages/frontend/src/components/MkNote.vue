@@ -76,12 +76,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 				style="margin-left: 0.5em"
 				:title="i18n.ts._visibility[note.visibility]"
 			>
-				<i v-if="note.visibility === 'home'" class="ti ti-home"></i>
-				<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"></i>
+				<i v-if="note.visibility === 'home'" class="ti ti-home"
+					data-cy-note-visibility-home
+				></i>
+				<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"
+					 data-cy-note-visibility-followers
+				></i>
 				<i
 					v-else-if="note.visibility === 'specified'"
 					ref="specified"
 					class="ti ti-mail"
+					data-cy-note-visibility-specified
+
 				></i>
 			</span>
 			<span
