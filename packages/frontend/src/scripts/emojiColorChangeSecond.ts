@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 const imageUrl = ref<string>('path_to_your_image.gif'); // または '.apng'
 
 // 1秒あたりの色変化数を保持するリアクティブ変数

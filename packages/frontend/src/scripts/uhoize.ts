@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 export function uhoize(str) {
 	const punctuation = ['。', '！', '？', '.', '!', '?'];
 	const lines = str.split('\n');

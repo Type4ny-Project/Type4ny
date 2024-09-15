@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 import { Injectable } from '@nestjs/common';
 import sharp from 'sharp';
 import { Endpoint } from '@/server/api/endpoint-base.js';

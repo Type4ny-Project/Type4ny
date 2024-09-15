@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <script setup lang="ts">
 import { computed } from 'vue';
 import MkEmoji from './MkEmoji.vue';

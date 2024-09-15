@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
 <template>
 <MkPagination ref="emojisRequestPaginationComponent" :pagination="paginationRequest">
 	<template #empty><span>{{ i18n.ts.noCustomEmojis }}</span></template>
