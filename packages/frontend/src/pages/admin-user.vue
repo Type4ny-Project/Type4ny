@@ -99,7 +99,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkButton v-if="user.host == null" inline style="margin-right: 8px;" @click="resetPassword"><i class="ti ti-key"></i> {{ i18n.ts.resetPassword }}</MkButton>
 						</div>
 						<div>
-							<MkButton v-if="user.host == null" inline style="margin-right: 8px;" @click="presentsPoints">ぷりずむを付与する</MkButton>
+							<MkButton v-if="user.host == null" inline style="margin-right: 8px;" @click="presentsPoints">{{ i18n.tsx.grantPoints({pointName: instance?.pointName ?? "Point"}) }}</MkButton>
 						</div>
 
 						<MkFolder>
@@ -230,6 +230,7 @@ import { i18n } from '@/i18n.js';
 import { iAmAdmin, $i, iAmModerator } from '@/account.js';
 import MkRolePreview from '@/components/MkRolePreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
+import { instance } from "@/instance.js";
 
 const props = withDefaults(defineProps<{
 	userId: string;
