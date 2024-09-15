@@ -11,7 +11,7 @@ describe('Before setup instance', () => {
 	afterEach(() => {
 		// テスト終了直前にページ遷移するようなテストケース(例えばアカウント作成)だと、たぶんCypressのバグでブラウザの内容が次のテストケースに引き継がれてしまう(例えばアカウントが作成し終わった段階からテストが始まる)。
 		// waitを入れることでそれを防止できる
-		cy.wait(1000);
+		cy.wait(100);
 	});
 
   it('successfully loads', () => {
@@ -44,7 +44,7 @@ describe('After setup instance', () => {
 	afterEach(() => {
 		// テスト終了直前にページ遷移するようなテストケース(例えばアカウント作成)だと、たぶんCypressのバグでブラウザの内容が次のテストケースに引き継がれてしまう(例えばアカウントが作成し終わった段階からテストが始まる)。
 		// waitを入れることでそれを防止できる
-		cy.wait(1000);
+		cy.wait(100);
 	});
 
   it('successfully loads', () => {
@@ -109,7 +109,7 @@ describe('After user signup', () => {
 	afterEach(() => {
 		// テスト終了直前にページ遷移するようなテストケース(例えばアカウント作成)だと、たぶんCypressのバグでブラウザの内容が次のテストケースに引き継がれてしまう(例えばアカウントが作成し終わった段階からテストが始まる)。
 		// waitを入れることでそれを防止できる
-		cy.wait(1000);
+		cy.wait(100);
 	});
 
   it('successfully loads', () => {
@@ -162,7 +162,7 @@ describe('After user signed in', () => {
 	afterEach(() => {
 		// テスト終了直前にページ遷移するようなテストケース(例えばアカウント作成)だと、たぶんCypressのバグでブラウザの内容が次のテストケースに引き継がれてしまう(例えばアカウントが作成し終わった段階からテストが始まる)。
 		// waitを入れることでそれを防止できる
-		cy.wait(1000);
+		cy.wait(100);
 	});
 
   it('successfully loads', () => {
@@ -217,30 +217,73 @@ describe('After user setup', () => {
 	afterEach(() => {
 		// テスト終了直前にページ遷移するようなテストケース(例えばアカウント作成)だと、たぶんCypressのバグでブラウザの内容が次のテストケースに引き継がれてしまう(例えばアカウントが作成し終わった段階からテストが始まる)。
 		// waitを入れることでそれを防止できる
-		cy.wait(1000);
+
+		// でもいらない気もする
+		cy.wait(100);
 	});
 
-	it('note', () => {
-		cy.get('[data-cy-open-post-form]').last().should('be.visible');
-		cy.get('[data-cy-open-post-form]').last().click();
-		cy.get('[data-cy-post-form-text]').last().type('Hello, Misskey!');
-		cy.get('[data-cy-open-post-form-submit]').last().click();
+	// メモ
+	// Type4ny では投稿フォームを最初から2つ表示するようにしているので、 last を使って最後の(一番新しく開かれたであろう)投稿フォームを取得している
 
-		cy.contains('Hello, Misskey!');
+	it('note', () => {
+		cy.wait(100);
+		cy.get('[data-cy-post-form-text]').type('Hello, Misskey!');
+		cy.get('[data-cy-open-post-form-submit]').click();
+
+		cy.contains('Hello, Misskey!', { timeout: 10000 }).should('be.visible');
 	});
 
 	it('open note form with hotkey', () => {
-		// Wait until the page loads
-		cy.get('[data-cy-open-post-form]').should('be.visible');
-		// Use trigger() to give different `code` to test if hotkeys also work on non-QWERTY keyboards.
+
+		cy.get('[data-cy-open-post-form]').last().should('be.visible');
 		cy.document().trigger("keydown", { eventConstructor: 'KeyboardEvent', key: "n", code: "KeyL" });
-		// See if the form is opened
 		cy.get('[data-cy-post-form-text]').last().should('be.visible');
-		// Close it
-		cy.focused().trigger("keydown", { eventConstructor: 'KeyboardEvent', key: "Escape", code: "Escape" });
-		// See if the form is closed
-		cy.get('[data-cy-post-form-text]').last().should('not.be.visible');
+		cy.wait(300); //ここでwaitしないとなぜかショートカット扱いになってTLに移動する
+		cy.get('[data-cy-post-form-text]').last().type('Hello, Misskey!');
+		cy.get('[data-cy-open-post-form-submit]').last().click();
+		cy.wait(300);
+		cy.get('[data-cy-post-form-text]').last().should('be.empty');
   });
+
+	it('visibility can be changed in note form (Public)', () => {
+		cy.get('[data-cy-post-form-text]').last().type('Public');
+		cy.get('[data-cy-open-post-form-visibility]', { timeout: 30000 }).last().click();
+		cy.get('[data-cy-open-post-form-visibility-public]', { timeout: 30000 }).click();
+		cy.get('[data-cy-open-post-form-submit]').last().click();
+
+		cy.get('[data-cy-note-visibility-followers]').should('not.exist');
+		cy.get('[data-cy-note-visibility-home]').should('not.exist');
+		cy.get('[data-cy-note-visibility-specified]').should('not.exist');
+
+	});
+
+	it('visibility can be changed in note form (Home)', () => {
+		cy.get('[data-cy-post-form-text]').last().type('Home');
+		cy.get('[data-cy-open-post-form-visibility]').last().click();
+		cy.get('[data-cy-open-post-form-visibility-home]').click();
+		cy.get('[data-cy-open-post-form-submit]').last().click();
+
+		cy.get('[data-cy-note-visibility-home]').last().should('be.visible');
+	});
+
+	it('visibility can be changed in note form (Followers)', () => {
+		cy.get('[data-cy-post-form-text]').last().type('Followers Only');
+		cy.get('[data-cy-open-post-form-visibility]').last().click();
+		cy.get('[data-cy-open-post-form-visibility-followers]').click();
+		cy.get('[data-cy-open-post-form-submit]').last().click();
+
+		cy.get('[data-cy-note-visibility-followers]').last().should('be.visible');
+	});
+
+	it('visibility can be changed in note form (Specified)', () => {
+		cy.get('[data-cy-post-form-text]').last().type('Specified');
+		cy.get('[data-cy-open-post-form-visibility]').last().click();
+		cy.get('[data-cy-open-post-form-visibility-specified]').click();
+		cy.get('[data-cy-open-post-form-submit]').last().click();
+
+		cy.get('[data-cy-note-visibility-specified]').last().should('be.visible');
+	});
+
 });
 
 // TODO: 投稿フォームの公開範囲指定のテスト

@@ -37,9 +37,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkTime :time="note.createdAt"/>
 			</button>
 			<span v-if="note.visibility !== 'public'" style="margin-left: 0.5em;" :title="i18n.ts._visibility[note.visibility]">
-				<i v-if="note.visibility === 'home'" class="ti ti-home"></i>
-				<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"></i>
-				<i v-else-if="note.visibility === 'specified'" ref="specified" class="ti ti-mail"></i>
+				<i v-if="note.visibility === 'home'" data-cy-note-visibility-home class="ti ti-home"></i>
+				<i v-else-if="note.visibility === 'followers'" data-cy-note-visibility-followers class="ti ti-lock"></i>
+				<i v-else-if="note.visibility === 'specified'" data-cy-note-visibility-specified ref="specified" class="ti ti-mail"></i>
 			</span>
 			<span v-if="note.localOnly" style="margin-left: 0.5em;" :title="i18n.ts._visibility['disableFederation']"><i class="ti ti-rocket-off"></i></span>
 		</div>
