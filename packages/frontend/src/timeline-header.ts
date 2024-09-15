@@ -36,11 +36,11 @@ type TimelineHeaderItemsDef = {
 	iconOnly?: boolean; // わからん
 }
 
-const lists = await userListsCache.fetch();
-const userChannels = await userChannelsCache.fetch();
-const userChannelFollowings = await userChannelFollowingsCache.fetch();
-const userFavoriteLists = await userFavoriteListsCache.fetch();
-const antenna = await antennasCache.fetch();
+const lists = $i ? await userListsCache.fetch() : [];
+const userChannels = $i ? await userChannelsCache.fetch() : [];
+const userChannelFollowings = $i ? await userChannelFollowingsCache.fetch() : [];
+const userFavoriteLists = $i ? await userFavoriteListsCache.fetch() : [];
+const antenna = $i ? await antennasCache.fetch() : [];
 
 export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem, TimelineHeaderItemsDef>>>({
 	home: {
