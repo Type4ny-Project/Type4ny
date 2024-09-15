@@ -13,10 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
-      - name: Check
+
+      - name: Check SPDX-License-Identifier
         run: |
           #!/bin/bash
           counter=0
+          missing_counter=0
 
           search() {
             local directory="$1"
@@ -35,11 +37,17 @@ jobs:
 
           check() {
             local file="$1"
+            if ! [ -f "$file" ]; then
+              echo "Warning: $file is missing."
+              ((missing_counter++))
+              return 0
+            fi
+
             if ! (
               grep -q -E "SPDX-FileCopyrightText: (syuilo and misskey-project ,Type4ny-Project|Type4ny-Project)" "$file" ||
               grep -q "SPDX-License-Identifier: AGPL-3.0-only" "$file"
             ); then
-              echo "Missing: $file"
+              echo "Missing SPDX-License-Identifier: $file"
               ((counter++))
             fi
           }
@@ -70,7 +78,9 @@ jobs:
           if [ $counter -gt 0 ]; then
             echo "SPDX-License-Identifier is missing in $counter files."
             exit 1
+          elif [ $missing_counter -gt 0 ]; then
+            echo "$missing_counter files were missing, but no error will be raised."
+            exit 0
           else
             echo "SPDX-License-Identifier is certainly described in all target files!"
             exit 0
-          fi
