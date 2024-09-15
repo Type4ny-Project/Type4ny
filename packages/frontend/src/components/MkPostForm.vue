@@ -515,7 +515,7 @@ function addMissingMention() {
 }
 
 function insertRuby() {
-	insertTextAtCursor(textareaEl.value, '$[ruby 本文 上につくやつ]');
+	insertTextAtCursor(textareaEl.value, '$[ruby 本文 ルビ]');
 }
 
 function togglePoll() {
