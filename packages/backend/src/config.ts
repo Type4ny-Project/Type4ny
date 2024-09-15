@@ -93,6 +93,8 @@ type Source = {
 
 	maxFileSize?: number;
 
+	maxReactionsLimit?: number;
+
 	clusterLimit?: number;
 
 	id: string;
@@ -209,6 +211,7 @@ export type Config = {
 	perUserNotificationsMaxCount: number;
 	deactivateAntennaThreshold: number;
 	maxLocalUsers: number;
+	maxReactionsLimit: number;
 	objectStorage?: {
 		useObjectStorage?: boolean;
 		objectStorageBaseUrl?: string;
@@ -355,6 +358,7 @@ export function loadConfig(): Config {
 		deactivateAntennaThreshold:
 			config.deactivateAntennaThreshold ?? 1000 * 60 * 60 * 24 * 7,
 		maxLocalUsers: config.maxLocalUsers ?? -1,
+		maxReactionsLimit: config.maxReactionsLimit ?? 3,
 		objectStorage: config.objectStorage ?? {},
 		pidFile: config.pidFile,
 	};

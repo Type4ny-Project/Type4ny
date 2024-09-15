@@ -29,6 +29,7 @@ import { RoleService } from '@/core/RoleService.js';
 import { FeaturedService } from '@/core/FeaturedService.js';
 import { trackPromise } from '@/misc/promise-tracker.js';
 import { isQuote, isRenote } from '@/misc/is-renote.js';
+import type { Config } from '@/config.js';
 
 const FALLBACK = '\u2764';
 const PER_NOTE_REACTION_USER_PAIR_CACHE_MAX = 16;
@@ -80,6 +81,8 @@ export class ReactionService {
 		private noteReactionsRepository: NoteReactionsRepository,
 		@Inject(DI.emojisRepository)
 		private emojisRepository: EmojisRepository,
+		@Inject(DI.config)
+		private config: Config,
 		private utilityService: UtilityService,
 		private metaService: MetaService,
 		private customEmojiService: CustomEmojiService,
@@ -210,7 +213,7 @@ export class ReactionService {
 			userId: user.id,
 		});
 
-		if (count > 3) {
+		if (count >= this.config.maxReactionsLimit) {
 			throw new IdentifiableError('51c42bb4-931a-456b-bff7-e5a8a70dd298');
 		}
 
