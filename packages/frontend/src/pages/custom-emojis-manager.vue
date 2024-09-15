@@ -36,7 +36,7 @@ import { i18n } from '@/i18n';
 import { definePageMetadata } from '@/scripts/page-metadata';
 
 const tab = ref('request');
-
+const emojisPaginationComponent = ref<any>(null);
 const add = async (ev: MouseEvent) => {
 	const { dispose } = os.popup(defineAsyncComponent(() => import('../components/MkEmojiEditDialog.vue')), {
 	}, {

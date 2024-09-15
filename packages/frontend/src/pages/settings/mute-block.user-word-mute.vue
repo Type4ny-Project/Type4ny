@@ -35,16 +35,16 @@ import { misskeyApi } from '@/scripts/misskey-api.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 
 const props = defineProps<{
-	muted: { user: userType; words: string }[];
+	muted: { user: UserType; words: string }[];
 }>();
 
 const emit = defineEmits<{
-	(ev: 'save', value: { user: userType; words: string }[]): void;
+	(ev: 'save', value: { user: UserType; words: string }[]): void;
 }>();
 
 const changed = ref(false);
 
-type userType = {
+type UserType = {
 	id: string;
 	avatarBlurhash: string;
 	avatarDecorations: string;

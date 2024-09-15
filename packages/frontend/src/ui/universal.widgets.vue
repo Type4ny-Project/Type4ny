@@ -1,13 +1,14 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
 <div>
 	<XWidgets :edit="editMode" :widgets="widgets" @addWidget="addWidget" @removeWidget="removeWidget" @updateWidget="updateWidget" @updateWidgets="updateWidgets" @exit="editMode = false"/>
 
-	<button v-if="editMode" class="_textButton" style="font-size: 0.9em;" :class="{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }" @click="editMode = false"><i class="ti ti-check"></i> {{ i18n.ts.editWidgetsExit }}</button>
-	<button v-else class="_textButton" data-cy-widget-edit :class="$style.edit, {[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }" style="font-size: 0.9em;" @click="editMode = true"><i class="ti ti-pencil"></i> {{ i18n.ts.editWidgets }}</button>
+	<button v-if="editMode" class="_textButton" style="font-size: 0.9em;" :class="{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }" @click="editMode = false"><i class="ti ti-check"></i> {{ i18n.ts.editWidgetsExit }}</button>
+	<button v-else class="_textButton" data-cy-widget-edit :class="[$style.edit, {[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]" style="font-size: 0.9em;" @click="editMode = true"><i class="ti ti-pencil"></i> {{ i18n.ts.editWidgets }}</button>
 </div>
 </template>
 
@@ -20,37 +21,7 @@ import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 import { defaultStore } from '@/store.js';
 
-let gaming = ref('');
-
-const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-if (darkMode.value && gamingMode.value == true) {
-	gaming.value = 'dark';
-} else if (!darkMode.value && gamingMode.value == true) {
-	gaming.value = 'light';
-} else {
-	gaming.value = '';
-}
-
-watch(darkMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
-
-watch(gamingMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
+const gamingType = computed(() => defaultStore.state.gamingType);
 const props = withDefaults(defineProps<{
 	// null = 全てのウィジェットを表示
 	// left = place: leftだけを表示

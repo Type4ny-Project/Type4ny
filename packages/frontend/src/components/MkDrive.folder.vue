@@ -152,10 +152,10 @@ function onDrop(ev: DragEvent) {
 	if (driveFile != null && driveFile !== '') {
 		const file = JSON.parse(driveFile);
 		emit('removeFile', file.id);
-		if (props.selectedFiles.length > 0) {
-			props.selectedFiles.forEach((e) => {
+		if (props.selectedFiles?.length > 0) {
+			props.selectedFiles?.forEach((file) => {
 				misskeyApi('drive/files/update', {
-					fileId: e.id,
+					fileId: file.id,
 					folderId: props.folder.id,
 				});
 			});

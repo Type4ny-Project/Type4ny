@@ -147,18 +147,18 @@ if (!iconUrl.value) {
 	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
 }
 // gaming.valueに新しい値を代入する
-if (darkMode.value && gamingMode.value == true) {
+if (darkMode.value && gamingMode.value) {
 	gaming.value = 'dark';
-} else if (!darkMode.value && gamingMode.value == true) {
+} else if (!darkMode.value && gamingMode.value) {
 	gaming.value = 'light';
 } else {
 	gaming.value = '';
 }
 
 watch(darkMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
+	if (darkMode.value && gamingMode.value) {
 		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
+	} else if (!darkMode.value && gamingMode.value) {
 		gaming.value = 'light';
 	} else {
 		gaming.value = '';
@@ -166,9 +166,9 @@ watch(darkMode, () => {
 });
 
 watch(gamingMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
+	if (darkMode.value && gamingMode.value) {
 		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
+	} else if (!darkMode.value && gamingMode.value) {
 		gaming.value = 'light';
 	} else {
 		gaming.value = '';

@@ -48,7 +48,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { ref } from 'vue';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';

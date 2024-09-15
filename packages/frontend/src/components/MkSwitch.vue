@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		@click="toggle"
 	>
 	<XButton :class="$style.toggle" :checked="checked" :disabled="disabled" @toggle="toggle"/>
-	<span v-if="!noBody" :class="$style.body,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}">
+	<span v-if="!noBody" :class="[$style.body,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">
 		<!-- TODO: 無名slotの方は廃止 -->
 		<span :class="$style.label">
 			<span @click="toggle">
