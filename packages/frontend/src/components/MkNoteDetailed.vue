@@ -261,6 +261,7 @@ import MkButton from '@/components/MkButton.vue';
 import { infoImageUrl, isEnabledUrlPreview } from '@/instance.js';
 import { getAppearNote } from '@/scripts/get-appear-note.js';
 import { type Keymap } from '@/scripts/hotkey.js';
+import {CodeDiff} from "v-code-diff";
 const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note;
 	initialTab: string;
@@ -272,37 +273,6 @@ const inChannel = inject('inChannel', null);
 
 const note = ref(deepClone(props.note));
 
-let gaming = ref('');
-
-const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-if (darkMode.value && gamingMode.value == true) {
-	gaming.value = 'dark';
-} else if (!darkMode.value && gamingMode.value == true) {
-	gaming.value = 'light';
-} else {
-	gaming.value = '';
-}
-
-watch(darkMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
-
-watch(gamingMode, () => {
-	if (darkMode.value && gamingMode.value == true) {
-		gaming.value = 'dark';
-	} else if (!darkMode.value && gamingMode.value == true) {
-		gaming.value = 'light';
-	} else {
-		gaming.value = '';
-	}
-});
 // plugin
 if (noteViewInterruptors.length > 0) {
 	onMounted(async () => {

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <MkStickyContainer>
-	<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
+	<template #header><MkPageHeader tab="" :actions="headerActions" :tabs="headerTabs"/></template>
 	<MkSpacer :contentMax="900">
 		<MkSwitch v-model="select">SelectMode</MkSwitch>
 		<MkButton @click="setCategoryBulk">Set Category</MkButton>
@@ -60,26 +60,6 @@ function selectItems(decorationId) {
 	}
 }
 
-function del(avatarDecoration) {
-	os.confirm({
-		type: 'warning',
-		text: i18n.tsx.deleteAreYouSure({ x: avatarDecoration.name }),
-	}).then(({ canceled }) => {
-		if (canceled) return;
-		avatarDecorations.value = avatarDecorations.value.filter(x => x !== avatarDecoration);
-		misskeyApi('admin/avatar-decorations/delete', avatarDecoration);
-	});
-}
-
-async function save(avatarDecoration) {
-	if (avatarDecoration.id == null) {
-		await os.apiWithDialog('admin/avatar-decorations/create', avatarDecoration);
-		load();
-	} else {
-		selectItemsId.value.push(decorationId);
-	}
-}
-
 function openDecorationEdit(avatarDecoration) {
 	os.popup(defineAsyncComponent(() => import('@/components/MkAvatarDecoEditDialog.vue')), {
 		avatarDecoration: avatarDecoration,
@@ -129,7 +109,6 @@ async function setCategoryBulk() {
 async function deletes() {
 	if (selectItemsId.value.length > 0) {
 		selectItemsId.value.forEach(decorationId => {
-			console.log(decorationId);
 			misskeyApi('admin/avatar-decorations/delete', { id: decorationId });
 		});
 	}

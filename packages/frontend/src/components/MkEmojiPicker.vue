@@ -380,7 +380,7 @@ function canReact(emoji: Misskey.entities.EmojiSimple | UnicodeEmojiDef | string
 }
 
 function filterCategory(emoji: Misskey.entities.EmojiSimple, category: string): boolean {
-	return category === '' ? (emoji.category === 'null' || !emoji.category) : emoji.category === category && !customEmojis.value.some(e => e.category !== null && e.category.includes(emoji.category + '/')) || emoji.category === category + '/' + category && !emoji.category;
+	return category === '' ? (emoji.category === 'null' || !emoji.category) : emoji.category === category && !customEmojis.value.some(customEmoji => customEmoji.category !== null && customEmoji.category.includes(emoji.category + '/')) || emoji.category === category + '/' + category && !emoji.category;
 }
 
 function focus() {

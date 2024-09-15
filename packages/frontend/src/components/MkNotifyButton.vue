@@ -68,10 +68,10 @@ async function onClick() {
 			userId: props.user.id,
 			notify: props.user.notify === 'normal' ? 'none' : 'normal',
 		}).then(() => {
+			// eslint-disable-next-line vue/no-mutating-props
 			props.user.notify = props.user.notify === 'normal' ? 'none' : 'normal';
 		});
 	} finally {
-
 	}
 }
 

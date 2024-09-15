@@ -93,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				@click="os.post"
 			>
 				<i class="ti ti-pencil ti-fw" :class="$style.postIcon"></i><span
-					:class="$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}"
+					:class="[$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
 				>{{
 					i18n.ts.note
 				}}</span>

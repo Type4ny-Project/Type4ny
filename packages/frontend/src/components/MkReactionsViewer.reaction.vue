@@ -126,6 +126,8 @@ async function toggleReaction() {
 					: i18n.ts.cancelReactionConfirm,
 		});
 		if (confirm.canceled) return;
+
+		// eslint-disable-next-line vue/no-mutating-props
 		props.note.myReactions.splice(
 			props.note.myReactions.indexOf(oldReaction),
 			1,

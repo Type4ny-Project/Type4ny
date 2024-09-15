@@ -15,10 +15,11 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			:key="emoji"
 			:data-emoji="emoji"
 			class="_button item"
-			:disabled="disabledEmojis?.value.includes(emoji)"@pointerenter="computeButtonTitle"
+			:disabled="disabledEmojis?.value.includes(emoji)"
+			@pointerenter="computeButtonTitle"
 			@click="emit('chosen', emoji, $event)"
 		>
-			<MkCustomEmoji v-if="emoji[0] === ':'" class="emoji" :name="emoji" :normal="true":fallbackToImage="true"/>
+			<MkCustomEmoji v-if="emoji[0] === ':'" class="emoji" :name="emoji" :normal="true" :fallbackToImage="true"/>
 			<MkEmoji v-else class="emoji" :emoji="emoji" :normal="true"/>
 		</button>
 	</div>
@@ -46,7 +47,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			v-for="emoji in emojis"
 			:key="emoji"
 			:data-emoji="emoji"
-			class="_button item":disabled="disabledEmojis?.value.includes(emoji)"
+			class="_button item"
+			:disabled="disabledEmojis?.value.includes(emoji)"
 			@pointerenter="computeButtonTitle"
 			@click="emit('chosen', emoji, $event)"
 		>
