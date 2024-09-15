@@ -1997,6 +1997,10 @@ export interface Locale extends ILocale {
      */
     "resetPassword": string;
     /**
+     * {pointName}を付与する
+     */
+    "grantPoints": ParameterizedString<"pointName">;
+    /**
      * 新しいパスワードは「{password}」です
      */
     "newPasswordIs": ParameterizedString<"password">;
