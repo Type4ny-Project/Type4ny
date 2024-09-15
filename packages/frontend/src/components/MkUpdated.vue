@@ -27,7 +27,7 @@ const modal = shallowRef<InstanceType<typeof MkModal>>();
 
 function whatIsNew() {
 	modal.value?.close();
-	window.open(`https://misskey-hub.net/docs/releases/#_${version.replace(/\./g, '')}`, '_blank');
+	window.open(`https://type4ny-hub/changelogs/#_${version.replace(/\./g, '')}`, '_blank');
 }
 
 onMounted(() => {

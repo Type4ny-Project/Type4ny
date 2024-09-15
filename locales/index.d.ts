@@ -5996,7 +5996,7 @@ export interface Locale extends ILocale {
         "_types": {
             "_notes1": {
                 /**
-                 * just setting up my tp4ny
+                 * just setting up my Type4ny
                  */
                 "title": string;
                 /**

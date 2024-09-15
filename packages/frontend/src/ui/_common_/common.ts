@@ -107,13 +107,8 @@ export function openInstanceMenu(ev: MouseEvent) {
 		icon: 'ti ti-shield-lock',
 		href: instance.privacyPolicyUrl,
 		target: '_blank',
-	} : undefined, (!instance.impressumUrl && !instance.tosUrl && !instance.privacyPolicyUrl) ? undefined : { type: 'divider' }, {
-		type: 'a',
-		text: i18n.ts.document,
-		icon: 'ti ti-bulb',
-		href: 'https://misskey-hub.net/docs/for-users/',
-		target: '_blank',
-	}, ($i) ? {
+	} : undefined, (!instance.impressumUrl && !instance.tosUrl && !instance.privacyPolicyUrl) ? undefined : { type: 'divider' }
+	, ($i) ? {
 		text: i18n.ts._initialTutorial.launchTutorial,
 		icon: 'ti ti-presentation',
 		action: () => {

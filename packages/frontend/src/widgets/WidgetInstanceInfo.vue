@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -46,7 +47,9 @@ watch(darkMode, () => {
 		iconUrl.value = iconLight;
 	}
 });
-
+if (!iconUrl.value) {
+	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
+}
 const widgetPropsDef = {
 };
 
