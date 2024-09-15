@@ -39,7 +39,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<span v-if="note.visibility !== 'public'" style="margin-left: 0.5em;" :title="i18n.ts._visibility[note.visibility]">
 				<i v-if="note.visibility === 'home'" data-cy-note-visibility-home class="ti ti-home"></i>
 				<i v-else-if="note.visibility === 'followers'" data-cy-note-visibility-followers class="ti ti-lock"></i>
-				<i v-else-if="note.visibility === 'specified'" data-cy-note-visibility-specified ref="specified" class="ti ti-mail"></i>
+				<i v-else-if="note.visibility === 'specified'" ref="specified" data-cy-note-visibility-specified class="ti ti-mail"></i>
 			</span>
 			<span v-if="note.localOnly" style="margin-left: 0.5em;" :title="i18n.ts._visibility['disableFederation']"><i class="ti ti-rocket-off"></i></span>
 		</div>
@@ -224,7 +224,6 @@ import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import MkNoteSub from '@/components/MkNoteSub.vue';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
-import MkNotePreview from '@/components/MkNotePreview.vue';
 import MkReactionsViewer from '@/components/MkReactionsViewer.vue';
 import MkReactionsViewerDetails from '@/components/MkReactionsViewer.details.vue';
 import MkMediaList from '@/components/MkMediaList.vue';
@@ -261,7 +260,8 @@ import MkButton from '@/components/MkButton.vue';
 import { infoImageUrl, isEnabledUrlPreview } from '@/instance.js';
 import { getAppearNote } from '@/scripts/get-appear-note.js';
 import { type Keymap } from '@/scripts/hotkey.js';
-import {CodeDiff} from "v-code-diff";
+import { CodeDiff } from "v-code-diff";
+
 const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note;
 	initialTab: string;
