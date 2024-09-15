@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
 <template>
 <MkInput v-model="query" :debounce="true" type="search" autocapitalize="off">
 	<template #prefix><i class="ti ti-search"></i></template>

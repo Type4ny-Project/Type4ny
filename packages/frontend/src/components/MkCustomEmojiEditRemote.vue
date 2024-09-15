@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
 <template>
 <FormSplit>
 	<MkInput v-model="queryRemote" :debounce="true" type="search" autocapitalize="off">
