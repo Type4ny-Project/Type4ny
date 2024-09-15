@@ -5,12 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <button
 	v-if="isFollowing"
-	class="_button" :class="[$style.root,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'
+	class="_button" :class="[$style.root,{ [$style.active]: props.user.notify === 'normal', [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'
 	,}]"
 	@click="onClick"
 >
 	<span v-if="props.user.notify === 'none'" :class="[{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] "><i class="ti ti-bell"></i></span>
-	<span v-else-if="props.user.notify === 'normal'" :class="[{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"><i class="ti ti-bell-off"></i></span>
+	<span v-else-if="props.user.notify === 'normal'" :class="[{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"><i class="ti ti-bell-ringing"></i></span>
 </button>
 </template>
 
