@@ -12,7 +12,8 @@ export class Clean1696332072038 {
 		await queryRunner.query('DROP INDEX "public"."IDX_d844bfc6f3f523a05189076efa"');
 		await queryRunner.query('DROP INDEX "public"."IDX_605472305f26818cc93d1baaa7"');
 		await queryRunner.query('DROP INDEX "public"."IDX_90f7da835e4c10aca6853621e1"');
-		await queryRunner.query('ALTER TABLE "meta" ALTER COLUMN "preservedUsernames" SET DEFAULT \'{ "admin", "administrator", "root", "system", "maintainer", "host", "mod", "moderator", "owner", "superuser", "staff", "auth", "i", "me", "everyone", "all", "mention", "mentions", "example", "user", "users", "account", "accounts", "official", "help", "helps", "support", "supports", "info", "information", "informations", "announce", "announces", "announcement", "announcements", "notice", "notification", "notifications", "dev", "developer", "developers", "tech", "misskey" }\'');
+		await queryRunner.query('ALTER TABLE "meta" ALTER COLUMN "preservedUsernames" SET DEFAULT \'{ "admin", "administrator", "root", "system", "maintainer", "host", "mod", "moderator", "owner", "superuser", "staff", "auth", "i", "me", "everyone", "all", "mention", "mentions", "example", "user", "users", "account", "accounts", "official", "help", "helps", "support", "supports", "info", "information", "informations", "announce", "announces", "announcement", "announcements", "notice", "notification", "notifications", "dev", "developer", "developers", "tech", "misskey", "type4ny", "fedihost"}\'');
+
 		await queryRunner.query('COMMENT ON COLUMN "user_list_membership"."createdAt" IS \'The created date of the UserListMembership.\'');
 		await queryRunner.query('CREATE INDEX "IDX_021015e6683570ae9f6b0c62be" ON "user_list_membership" ("userId") ');
 		await queryRunner.query('CREATE INDEX "IDX_cddcaf418dc4d392ecfcca842a" ON "user_list_membership" ("userListId") ');
