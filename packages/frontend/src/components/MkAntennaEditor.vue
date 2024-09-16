@@ -131,6 +131,15 @@ async function saveAntenna() {
 		excludeKeywords: excludeKeywords.value.trim().split('\n').map(x => x.trim().split(' ')),
 	};
 
+	if ( keywords.value === '' ) {
+		os.alert({
+			type: 'error',
+			title: i18n.ts._antennaKeywordNullError.title,
+			text: i18n.ts._antennaKeywordNullError.description,
+		});
+		return;
+	}
+
 	if (initialAntenna.id == null) {
 		const res = await os.apiWithDialog('antennas/create', antennaData);
 		emit('created', res);
