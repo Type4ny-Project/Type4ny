@@ -98,7 +98,8 @@ const canToggle = computed(() => {
 });
 
 const canGetInfo = computed(
-	() => !props.reaction.match(/@\w/) && props.reaction.includes(':'),
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	() => !props.reaction.match(/@\w/) && props.reaction?.includes(':'),
 );
 const plainReaction = computed(() =>
 	customEmojisMap.has(emojiName.value)
@@ -113,8 +114,8 @@ function getReactionName(reaction: string, formated = false) {
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
-
-	const oldReaction = props.note.myReactions.includes(props.reaction)
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	const oldReaction = props.note.myReactions?.includes(props.reaction)
 		? props.reaction
 		: null;
 	if (oldReaction) {
@@ -204,7 +205,7 @@ async function menu(ev) {
 			...(isAvailable.value &&
 			!defaultStore.state[
 				`reactions${defaultStore.state.pickerProfileDefault}`
-			].includes(plainReaction.value)
+			]?.includes(plainReaction.value)
 				? [
 					{
 						text: i18n.ts.addToDefaultEmojiProfile,
