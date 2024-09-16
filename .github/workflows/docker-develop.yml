@@ -40,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/type4ny-project/${{ env.IMAGE_NAME }}
 
       - name: Build and Push Container
         uses: docker/build-push-action@v5
