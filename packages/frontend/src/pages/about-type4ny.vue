@@ -72,6 +72,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<img src="https://avatars.githubusercontent.com/u/56515516?v=4" :class="$style.contributorAvatar">
 							<span :class="$style.contributorUsername">@mattyatea</span>
 						</a>
+						<a href="https://github.com/Suzulu-activity" target="_blank" :class="$style.contributor">
+							<img src="https://avatars.githubusercontent.com/u/101928455?v=4" :class="$style.contributorAvatar">
+							<span :class="$style.contributorUsername">@Suzulu-activity</span>
+						</a>
 					</div>
 				</FormSection>
 				<MkFoldableSection :expanded="false">
