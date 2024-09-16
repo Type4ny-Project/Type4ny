@@ -149,7 +149,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				await this.channelsRepository.update(channel.id, updateValues);
 			}
 
-			if (ps.transferAdminUserId) {
+			if (ps.transferAdminUserId && ( channel.userId === me.id || iAmModerator )) {
 				await this.channelsRepository.update(channel.id, {
 					userId: ps.transferAdminUserId,
 				});
