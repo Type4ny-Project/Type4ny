@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/Type4ny-Project/Type4ny
+          images: ghcr.io/type4ny-Project/type4ny
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -43,7 +43,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache
           cache-to: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache,mode=max
           tags: |
-            ghcr.io/Type4ny-Project/Type4ny:latest
-            ghcr.io/Type4ny-Project/Type4ny:${{ env.FORMATTED_BRANCH_NAME }}
+            ghcr.io/type4ny-Project/type4ny:latest
+            ghcr.io/type4ny-Project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
 
 # https://github.com/MisskeyIO/misskey/blob/io/.github/workflows/docker-io.yml
