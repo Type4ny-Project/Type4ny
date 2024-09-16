@@ -716,6 +716,7 @@ export function post(props: Record<string, any> = {}): Promise<void> {
 			text: props.initialText ?? props.initialNote.text,
 			visibility: props.initialVisibility ?? props.initialNote?.visibility,
 			localOnly: (props.initialLocalOnly || props.initialNote?.localOnly) ? '1' : '0',
+			initialFiles: props.initialFiles ?? [],
 		},
 	} : undefined));
 
