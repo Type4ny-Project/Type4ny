@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/type4ny-Project/type4ny
+          images: ghcr.io/type4ny-project/type4ny
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -40,8 +40,8 @@ jobs:
           platforms: ${{ steps.buildx.outputs.platforms }}
           provenance: false
           labels: ${{ env.FORMATTED_BRANCH_NAME }}
-          cache-from: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache
-          cache-to: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache
+          cache-to: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache,mode=max
           tags: |
             ghcr.io/type4ny-Project/type4ny:latest
             ghcr.io/type4ny-Project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
