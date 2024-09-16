@@ -1832,6 +1832,16 @@ export interface Locale extends ILocale {
      * ファイルが添付されたノートのみ
      */
     "withFileAntenna": string;
+    "_antennaKeywordNullError": {
+        /**
+         * 受信キーワードがありません
+         */
+        "title": string;
+        /**
+         * 受信キーワードが入力されていません。
+         */
+        "description": string;
+    };
     /**
      * ブラウザへのプッシュ通知を有効にする
      */
