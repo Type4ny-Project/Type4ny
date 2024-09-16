@@ -5,19 +5,9 @@ on:
     branches:
       - develop
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: type4ny
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
     if: github.repository == 'type4ny-project/type4ny'
     steps:
       - name: Check out the repo
@@ -31,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/type4ny-project/type4ny
+          images: ghcr.io/Type4ny-Project/Type4ny
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -50,10 +40,10 @@ jobs:
           platforms: ${{ steps.buildx.outputs.platforms }}
           provenance: false
           labels: ${{ env.FORMATTED_BRANCH_NAME }}
-          cache-from: type=registry,ref=ghcr.io/type4ny-project/type4ny:io-buildcache
-          cache-to: type=registry,ref=ghcr.io/type4ny-project/type4ny:io-buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache
+          cache-to: type=registry,ref=ghcr.io/Type4ny-Project/Type4ny:buildcache,mode=max
           tags: |
-            ghcr.io/type4ny-project/type4ny:latest
-            ghcr.io/type4ny-project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
+            ghcr.io/Type4ny-Project/Type4ny:latest
+            ghcr.io/Type4ny-Project/Type4ny:${{ env.FORMATTED_BRANCH_NAME }}
 
 # https://github.com/MisskeyIO/misskey/blob/io/.github/workflows/docker-io.yml
