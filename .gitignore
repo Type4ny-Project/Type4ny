@@ -72,3 +72,6 @@ misskey-assets
 
 # VSCode addon
 .favorites.json
+
+/packages/frontend/dist/stats.html
+/packages/frontend/vite.config.ts.timestamp-*
