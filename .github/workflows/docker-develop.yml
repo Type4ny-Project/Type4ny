@@ -43,7 +43,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache
           cache-to: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache,mode=max
           tags: |
-            ghcr.io/type4ny-Project/type4ny:latest
-            ghcr.io/type4ny-Project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
+            ghcr.io/type4ny-project/type4ny:latest
+            ghcr.io/type4ny-project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
 
 # https://github.com/MisskeyIO/misskey/blob/io/.github/workflows/docker-io.yml
