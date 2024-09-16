@@ -40,8 +40,8 @@ jobs:
           platforms: ${{ steps.buildx.outputs.platforms }}
           provenance: false
           labels: ${{ env.FORMATTED_BRANCH_NAME }}
-          cache-from: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache
-          cache-to: type=registry,ref=ghcr.io/Type4ny-project/Type4ny:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/type4ny-project/type4ny:buildcache
+          cache-to: type=registry,ref=ghcr.io/type4ny-project/type4ny:buildcache,mode=max
           tags: |
             ghcr.io/type4ny-project/type4ny:latest
             ghcr.io/type4ny-project/type4ny:${{ env.FORMATTED_BRANCH_NAME }}
