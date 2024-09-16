@@ -816,6 +816,11 @@ async function saveDraft(auto = true) {
 		await noteDrafts.remove(draftType.value, $i.id, 'default', draftAuxId.value as string);
 	}
 
+	if (text.value === '' && files.value.length === 0) {
+		deleteDraft();
+		return;
+	}
+
 	await noteDrafts.set(draftType.value, $i.id, auto ? 'default' : Date.now().toString(), {
 		text: text.value,
 		useCw: useCw.value,
