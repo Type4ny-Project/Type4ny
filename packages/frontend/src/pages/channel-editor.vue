@@ -175,7 +175,7 @@ function transferAdmin() {
 		os.confirm({
 			type: 'warning',
 			title: i18n.ts._channel.transferAdminConfirmTitle,
-			text: i18n.tsx._channel.transferAdminConfirmDescription({ user: user.name }),
+			text: i18n.tsx._channel.transferAdminConfirmDescription({ user: user.username }),
 		}).then(({ canceled }) => {
 			if (canceled) return;
 			os.confirm({
