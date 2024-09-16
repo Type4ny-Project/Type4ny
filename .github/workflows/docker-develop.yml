@@ -43,12 +43,14 @@ jobs:
           images: ${{ env.REGISTRY }}/type4ny-project/${{ env.IMAGE_NAME }}
 
       - name: Build and Push Container
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
+          builder: ${{ steps.buildx.outputs.name }}
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ steps.buildx.outputs.platforms }}
+          tags: ghcr.io/type4ny-project/type4ny:develop
+          labels: develop
           cache-from: type=gha
           cache-to: type=gha,mode=max
 # https://qiita.com/Jazuma/items/aca397e081a7825d0dec
