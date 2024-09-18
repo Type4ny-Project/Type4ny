@@ -56,7 +56,7 @@ const props = withDefaults(defineProps<{
 	actions?: PageHeaderItem[] | null;
 	thin?: boolean;
 	displayMyAvatar?: boolean;
-    hide?:boolean;
+	hide?:boolean;
 }>(), {
 	tabs: () => ([] as Tab[]),
 });
