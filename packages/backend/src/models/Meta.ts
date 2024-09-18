@@ -116,6 +116,11 @@ export class MiMeta {
 	})
 	public themeColor: string | null;
 
+	@Column('boolean', {
+		default: true,
+	})
+	public enableLoginBonus: boolean;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,

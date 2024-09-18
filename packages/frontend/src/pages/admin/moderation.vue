@@ -25,6 +25,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #label>{{ i18n.ts.enableGDPRMode }}</template>
 					</MkSwitch>
 
+					<MkSwitch v-model="enableLoginBonus">
+						<template #label>{{ i18n.ts.enableLoginBonus }}</template>
+					</MkSwitch>
+
 					<FormLink to="/admin/server-rules">{{ i18n.ts.serverRules }}</FormLink>
 
 					<MkInput v-model="tosUrl" type="url">
@@ -102,6 +106,7 @@ const tosUrl = ref<string | null>(null);
 const privacyPolicyUrl = ref<string | null>(null);
 const inquiryUrl = ref<string | null>(null);
 const enableGDPRMode = ref<boolean>(false);
+const enableLoginBonus = ref<boolean>(false);
 
 async function init() {
 	const meta = await misskeyApi('admin/meta');
@@ -116,6 +121,7 @@ async function init() {
 	privacyPolicyUrl.value = meta.privacyPolicyUrl;
 	inquiryUrl.value = meta.inquiryUrl;
 	enableGDPRMode.value = meta.enableGDPRMode;
+	enableLoginBonus.value = meta.enableLoginBonus;
 }
 
 function save() {
@@ -130,6 +136,7 @@ function save() {
 		hiddenTags: hiddenTags.value.split('\n'),
 		preservedUsernames: preservedUsernames.value.split('\n'),
 		enableGDPRMode: enableGDPRMode.value,
+		enableLoginBonus: enableLoginBonus.value,
 	}).then(() => {
 		fetchInstance(true);
 	});

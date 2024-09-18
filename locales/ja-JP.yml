@@ -960,6 +960,7 @@ on: "オン"
 off: "オフ"
 emailRequiredForSignup: "アカウント登録にメールアドレスを必須にする"
 enableGDPRMode: "GDPRモードを有効にする"
+enableLoginBonus: "ログインボーナスを有効にする"
 unread: "未読"
 filter: "フィルタ"
 controlPanel: "コントロールパネル"
@@ -2590,7 +2591,7 @@ _notification:
     followRequestAccepted: "フォローが受理された"
     roleAssigned: "ロールが付与された"
     achievementEarned: "実績の獲得"
-    loginbonus: "ログインボーナス"
+    loginBonus: "ログインボーナス"
     app: "連携アプリからの通知"
 
   _actions:

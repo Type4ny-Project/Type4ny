@@ -776,6 +776,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				isManaged: false,
 				pointName: instance.pointName,
 				googleAnalyticsId: instance.googleAnalyticsId,
+				enableLoginBonus: instance.enableLoginBonus,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {

@@ -212,6 +212,7 @@ export const paramDef = {
 		bannerLight: { type: 'string', nullable: true },
 		bannerDark: { type: 'string', nullable: true },
 		pointName: { type: 'string', nullable: true },
+		enableLoginBonus: { type: 'boolean', nullable: true },
 	},
 	required: [],
 } as const;
@@ -227,6 +228,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		super(meta, paramDef, async (ps, me) => {
 			const set = {} as Partial<MiMeta>;
 			if (!envOption.managed || this.config.rootUserName === me.username) {
+				// マネージドサービスだったら　
+				// rootUserName が me.username と一致する場合にしか設定を変えられないように
+
 				if (typeof ps.disableRegistration === 'boolean') {
 					set.disableRegistration = ps.disableRegistration;
 				}
@@ -387,6 +391,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
 				});
 			}
+
 			if (Array.isArray(ps.mediaSilencedHosts)) {
 				let lastValue = '';
 				set.mediaSilencedHosts = ps.mediaSilencedHosts.sort().filter((h) => {
@@ -395,21 +400,31 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
 				});
 			}
+
+			if (typeof ps.enableLoginBonus === 'boolean') {
+				set.enableLoginBonus = ps.enableLoginBonus;
+			}
+
 			if (ps.themeColor !== undefined) {
 				set.themeColor = ps.themeColor;
 			}
+
 			if (ps.DiscordWebhookUrl !== undefined) {
 				set.DiscordWebhookUrl = ps.DiscordWebhookUrl;
 			}
+
 			if (ps.DiscordWebhookUrlWordBlock !== undefined) {
 				set.DiscordWebhookUrlWordBlock = ps.DiscordWebhookUrlWordBlock;
 			}
+
 			if (ps.EmojiBotToken !== undefined) {
 				set.EmojiBotToken = ps.EmojiBotToken;
 			}
+
 			if (ps.ApiBase !== undefined) {
 				set.ApiBase = ps.ApiBase;
 			}
+
 			if (ps.mascotImageUrl !== undefined) {
 				set.mascotImageUrl = ps.mascotImageUrl;
 			}

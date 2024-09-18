@@ -9,6 +9,7 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { NotificationService } from '@/core/NotificationService.js';
+import { MetaService } from '@/core/MetaService.js';
 import { ApiError } from '../error.js';
 
 export const meta = {
@@ -49,6 +50,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private notificationService: NotificationService,
 		private userEntityService: UserEntityService,
+		private metaService: MetaService,
 	) {
 		super(meta, paramDef, async (ps, user, token) => {
 			const isSecure = token == null;
@@ -78,26 +80,29 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			if (!userProfile.loggedInDates.includes(today)) {
-				todayGetPoints = generateSecureRandomNumber(1, 5);
+				const meta = await this.metaService.fetch();
+				if (meta.enableLoginBonus) {
+					todayGetPoints = generateSecureRandomNumber(1, 5);
+
+					const user_ = await this.usersRepository.findOne({
+						where: {
+							id: user.id,
+						},
+					});
+
+					if (user_ == null) {
+						throw new ApiError(meta.errors.userIsDeleted);
+					}
+					void this.usersRepository.update( user.id, {
+						getPoints: user_.getPoints + todayGetPoints,
+					});
+					this.notificationService.createNotification(user.id, 'loginBonus', {
+						loginBonus: todayGetPoints,
+					});
+				}
 
 				void this.userProfilesRepository.update({ userId: user.id }, {
 					loggedInDates: [...userProfile.loggedInDates, today],
-				});
-
-				const user_ = await this.usersRepository.findOne({
-					where: {
-						id: user.id,
-					},
-				});
-
-				if (user_ == null) {
-					throw new ApiError(meta.errors.userIsDeleted);
-				}
-				void this.usersRepository.update( user.id, {
-					getPoints: user_.getPoints + todayGetPoints,
-				});
-				this.notificationService.createNotification(user.id, 'loginBonus', {
-					loginBonus: todayGetPoints,
 				});
 				userProfile.loggedInDates = [...userProfile.loggedInDates, today];
 			}

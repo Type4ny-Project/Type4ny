@@ -3855,6 +3855,10 @@ export interface Locale extends ILocale {
      */
     "enableGDPRMode": string;
     /**
+     * ログインボーナスを有効にする
+     */
+    "enableLoginBonus": string;
+    /**
      * 未読
      */
     "unread": string;
@@ -9817,7 +9821,7 @@ export interface Locale extends ILocale {
             /**
              * ログインボーナス
              */
-            "loginbonus": string;
+            "loginBonus": string;
             /**
              * 連携アプリからの通知
              */

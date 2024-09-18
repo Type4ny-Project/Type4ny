@@ -271,6 +271,11 @@ export const packedMetaLiteSchema = {
 				},
 			},
 		},
+		enableLoginBonus: {
+			type: 'boolean',
+			optional: false,
+			nullable: false,
+		},
 		notesPerOneAd: {
 			type: 'number',
 			optional: false,

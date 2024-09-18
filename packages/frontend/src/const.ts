@@ -68,6 +68,7 @@ export const notificationTypes = [
 	'roleAssigned',
 	'achievementEarned',
 	'app',
+	'loginBonus',
 ] as const;
 export const obsoleteNotificationTypes = ['pollVote', 'groupInvited'] as const;
 

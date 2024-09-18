@@ -259,7 +259,7 @@ export class MiUserProfile {
 		} | {
 			type: 'list';
 			userListId: MiUserList['id'];
-		};
+		}
 	};
 
 	@Column('varchar', {

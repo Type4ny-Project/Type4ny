@@ -145,6 +145,12 @@ export class NotificationService implements OnApplicationShutdown {
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		if (type === 'loginBonus' && recieveConfig === false) {
+			return null;
+		}
+
 		const notification = {
 			id: this.idService.gen(),
 			createdAt: new Date(),
