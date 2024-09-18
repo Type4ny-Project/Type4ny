@@ -115,6 +115,14 @@ export const packedUserLiteSchema = {
 			type: 'boolean',
 			nullable: false, optional: true,
 		},
+		getPoints: {
+			type: 'number',
+			nullable: true, optional: true,
+		},
+		loginBonusIsVisible: {
+			type: 'boolean',
+			nullable: false, optional: true,
+		},
 		instance: {
 			type: 'object',
 			nullable: false, optional: true,
