@@ -145,7 +145,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</MkA>
 						<MkA v-if="!user.host">
 							<b> {{ number(user.getPoints) }}</b>
-							<span>{{ instance.pointName ? instance.pointName : i18n.ts.points }}</span>
+							<span>{{ instance.pointName ? instance.pointName : i18n.ts.point }}</span>
 						</MkA>
 					</div>
 				</div>

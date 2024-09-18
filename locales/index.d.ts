@@ -455,7 +455,7 @@ export interface Locale extends ILocale {
     /**
      * ポイント
      */
-    "points": string;
+    "point": string;
     /**
      * フォローされています
      */
@@ -2010,6 +2010,10 @@ export interface Locale extends ILocale {
      * {pointName}を付与する
      */
     "grantPoints": ParameterizedString<"pointName">;
+    /**
+     * {pointName}を剥奪する
+     */
+    "revokePoints": ParameterizedString<"pointName">;
     /**
      * 新しいパスワードは「{password}」です
      */
@@ -5430,6 +5434,10 @@ export interface Locale extends ILocale {
      * Inboxのモデレーション
      */
     "inboxModeration": string;
+    /**
+     * ポイントは正の値である必要があります。
+     */
+    "pointsMustBePositive": string;
     "_delivery": {
         /**
          * 配信状態
