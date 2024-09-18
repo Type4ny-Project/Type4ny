@@ -212,7 +212,6 @@ export const paramDef = {
 		bannerLight: { type: 'string', nullable: true },
 		bannerDark: { type: 'string', nullable: true },
 		pointName: { type: 'string', nullable: true },
-		enableLoginBonus: { type: 'boolean', nullable: true },
 	},
 	required: [],
 } as const;
@@ -400,11 +399,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
 				});
 			}
-
-			if (typeof ps.enableLoginBonus === 'boolean') {
-				set.enableLoginBonus = ps.enableLoginBonus;
-			}
-
 			if (ps.themeColor !== undefined) {
 				set.themeColor = ps.themeColor;
 			}

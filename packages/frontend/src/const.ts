@@ -105,6 +105,7 @@ export const ROLE_POLICIES = [
 	'emojiPickerProfileLimit',
 	'listPinnedLimit',
 	'localTimelineAnyLimit',
+	'loginBonusGrantEnabled',
 ] as const;
 
 // なんか動かない

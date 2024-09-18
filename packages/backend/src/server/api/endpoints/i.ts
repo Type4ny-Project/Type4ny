@@ -10,6 +10,7 @@ import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { NotificationService } from '@/core/NotificationService.js';
 import { MetaService } from '@/core/MetaService.js';
+import { RoleService } from '@/core/RoleService.js';
 import { ApiError } from '../error.js';
 
 export const meta = {
@@ -50,7 +51,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private notificationService: NotificationService,
 		private userEntityService: UserEntityService,
-		private metaService: MetaService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, user, token) => {
 			const isSecure = token == null;
@@ -80,8 +81,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			if (!userProfile.loggedInDates.includes(today)) {
-				const meta = await this.metaService.fetch();
-				if (meta.enableLoginBonus) {
+				if ((await this.roleService.getUserPolicies(user.id)).loginBonusGrantEnabled) {
 					todayGetPoints = generateSecureRandomNumber(1, 5);
 
 					const user_ = await this.usersRepository.findOne({

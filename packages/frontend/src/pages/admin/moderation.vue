@@ -25,10 +25,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #label>{{ i18n.ts.enableGDPRMode }}</template>
 					</MkSwitch>
 
-					<MkSwitch v-model="enableLoginBonus">
-						<template #label>{{ i18n.ts.enableLoginBonus }}</template>
-					</MkSwitch>
-
 					<FormLink to="/admin/server-rules">{{ i18n.ts.serverRules }}</FormLink>
 
 					<MkInput v-model="tosUrl" type="url">

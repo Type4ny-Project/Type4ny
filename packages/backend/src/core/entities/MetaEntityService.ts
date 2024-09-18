@@ -116,7 +116,6 @@ export class MetaEntityService {
 			backgroundImageUrl: instance.backgroundImageUrl,
 			logoImageUrl: instance.logoImageUrl,
 			maxNoteTextLength: MAX_NOTE_TEXT_LENGTH,
-			enableLoginBonus: instance.enableLoginBonus,
 			defaultLightTheme,
 			defaultDarkTheme,
 			ads: ads.map((ad) => ({

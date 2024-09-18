@@ -7121,6 +7121,10 @@ export interface Locale extends ILocale {
              */
             "gtlAvailable": string;
             /**
+             * ログインボーナスの付与
+             */
+            "loginBonusGrantEnabled": string;
+            /**
              * 絵文字ピッカーのプロファイルの上限数(最大5)
              */
             "emojiPickerProfileLimit": string;

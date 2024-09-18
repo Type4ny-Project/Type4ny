@@ -1839,6 +1839,7 @@ _role:
     high: "高"
   _options:
     gtlAvailable: "グローバルタイムラインの閲覧"
+    loginBonusGrantEnabled: "ログインボーナスの付与"
     emojiPickerProfileLimit: "絵文字ピッカーのプロファイルの上限数(最大5)"
     ltlAvailable: "ローカルタイムラインの閲覧"
     canPublicNote: "パブリック投稿の許可"
