@@ -796,6 +796,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageUseProxy: false,
 					objectStorageSetPublicRead: false,
 					objectStorageS3ForcePathStyle: false,
+					summalyProxy: 'Masked',
+					deeplAuthKey: 'Masked',
 					isManaged: true,
 				};
 			}

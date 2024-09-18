@@ -455,7 +455,7 @@ export interface Locale extends ILocale {
     /**
      * ポイント
      */
-    "points": string;
+    "point": string;
     /**
      * フォローされています
      */
@@ -2010,6 +2010,10 @@ export interface Locale extends ILocale {
      * {pointName}を付与する
      */
     "grantPoints": ParameterizedString<"pointName">;
+    /**
+     * {pointName}を剥奪する
+     */
+    "revokePoints": ParameterizedString<"pointName">;
     /**
      * 新しいパスワードは「{password}」です
      */
@@ -3851,6 +3855,18 @@ export interface Locale extends ILocale {
      */
     "enableGDPRMode": string;
     /**
+     * ログインボーナスを有効にする
+     */
+    "enableLoginBonus": string;
+    /**
+     * ログインボーナスのポイントを公開にする
+     */
+    "loginBonusIsVisible": string;
+    /**
+     * あなたがもらったログインボーナスのポイントを他のユーザーから見れるようにします。
+     */
+    "loginBonusIsVisibleDescription": string;
+    /**
      * 未読
      */
     "unread": string;
@@ -5430,6 +5446,10 @@ export interface Locale extends ILocale {
      * Inboxのモデレーション
      */
     "inboxModeration": string;
+    /**
+     * ポイントは正の値である必要があります。
+     */
+    "pointsMustBePositive": string;
     "_delivery": {
         /**
          * 配信状態
@@ -7100,6 +7120,10 @@ export interface Locale extends ILocale {
              * グローバルタイムラインの閲覧
              */
             "gtlAvailable": string;
+            /**
+             * ログインボーナスの付与
+             */
+            "loginBonusGrantEnabled": string;
             /**
              * 絵文字ピッカーのプロファイルの上限数(最大5)
              */
@@ -9809,7 +9833,7 @@ export interface Locale extends ILocale {
             /**
              * ログインボーナス
              */
-            "loginbonus": string;
+            "loginBonus": string;
             /**
              * 連携アプリからの通知
              */

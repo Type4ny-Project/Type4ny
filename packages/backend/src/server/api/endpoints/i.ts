@@ -9,6 +9,8 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { NotificationService } from '@/core/NotificationService.js';
+import { MetaService } from '@/core/MetaService.js';
+import { RoleService } from '@/core/RoleService.js';
 import { ApiError } from '../error.js';
 
 export const meta = {
@@ -49,6 +51,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private notificationService: NotificationService,
 		private userEntityService: UserEntityService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, user, token) => {
 			const isSecure = token == null;
@@ -78,26 +81,28 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			if (!userProfile.loggedInDates.includes(today)) {
-				todayGetPoints = generateSecureRandomNumber(1, 5);
+				if ((await this.roleService.getUserPolicies(user.id)).loginBonusGrantEnabled) {
+					todayGetPoints = generateSecureRandomNumber(1, 5);
+
+					const user_ = await this.usersRepository.findOne({
+						where: {
+							id: user.id,
+						},
+					});
+
+					if (user_ == null) {
+						throw new ApiError(meta.errors.userIsDeleted);
+					}
+					void this.usersRepository.update( user.id, {
+						getPoints: user_.getPoints + todayGetPoints,
+					});
+					this.notificationService.createNotification(user.id, 'loginBonus', {
+						loginBonus: todayGetPoints,
+					});
+				}
 
 				void this.userProfilesRepository.update({ userId: user.id }, {
 					loggedInDates: [...userProfile.loggedInDates, today],
-				});
-
-				const user_ = await this.usersRepository.findOne({
-					where: {
-						id: user.id,
-					},
-				});
-
-				if (user_ == null) {
-					throw new ApiError(meta.errors.userIsDeleted);
-				}
-				void this.usersRepository.update( user.id, {
-					getPoints: user_.getPoints + todayGetPoints,
-				});
-				this.notificationService.createNotification(user.id, 'loginBonus', {
-					loginBonus: todayGetPoints,
 				});
 				userProfile.loggedInDates = [...userProfile.loggedInDates, today];
 			}

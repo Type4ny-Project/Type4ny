@@ -96,10 +96,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkSwitch v-model="suspended" @update:modelValue="toggleSuspend">{{ i18n.ts.suspend }}</MkSwitch>
 
 						<div>
-							<MkButton v-if="user.host == null" inline style="margin-right: 8px;" @click="resetPassword"><i class="ti ti-key"></i> {{ i18n.ts.resetPassword }}</MkButton>
+							<MkButton v-if="user?.host == null" inline style="margin-right: 8px;" @click="resetPassword"><i class="ti ti-key"></i> {{ i18n.ts.resetPassword }}</MkButton>
 						</div>
 						<div>
-							<MkButton v-if="user.host == null" inline style="margin-right: 8px;" @click="presentsPoints">{{ i18n.tsx.grantPoints({pointName: instance?.pointName ?? "Point"}) }}</MkButton>
+							<MkButton v-if="user?.host == null" inline style="margin-right: 8px;" @click="grantPoints">{{ i18n.tsx.grantPoints({pointName: instance?.pointName ?? i18n.ts.point }) }}</MkButton>
+							<MkButton v-if="user?.host == null" inline style="margin-right: 8px;" @click="revokePoints">{{ i18n.tsx.revokePoints({pointName: instance?.pointName ?? i18n.ts.point}) }}</MkButton>
 						</div>
 
 						<MkFolder>
@@ -230,7 +231,7 @@ import { i18n } from '@/i18n.js';
 import { iAmAdmin, $i, iAmModerator } from '@/account.js';
 import MkRolePreview from '@/components/MkRolePreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
-import { instance } from "@/instance.js";
+import { instance } from '@/instance.js';
 
 const props = withDefaults(defineProps<{
 	userId: string;
@@ -316,13 +317,39 @@ async function resetPassword() {
 	}
 }
 
-async function presentsPoints() {
+async function grantPoints() {
 	const { canceled, result } = await os.inputText({
-		title: 'ポイント',
+		title: instance.pointName ?? i18n.ts.point,
 	});
 	if (canceled) return;
-	if (result === null) return;
-	await misskeyApi('admin/accounts/present-points', { userId: user.value.id, points: parseInt(result) });
+	if (!result) return;
+	const points = parseInt(result);
+	if (points <= 0) {
+		await os.alert({
+			type: 'error',
+			text: i18n.ts.pointsMustBePositive,
+		});
+		return;
+	}
+	await misskeyApi('admin/accounts/present-points', { userId: user.value?.id, points });
+}
+
+async function revokePoints() {
+	const { canceled, result } = await os.inputText({
+		title: instance.pointName ?? i18n.ts.point,
+	});
+	if (canceled) return;
+	if (!result) return;
+	let points = parseInt(result);
+	if (points <= 0) {
+		await os.alert({
+			type: 'error',
+			text: i18n.ts.pointsMustBePositive,
+		});
+		return;
+	}
+	points = -points; // 正の数を負の数に反転
+	await misskeyApi('admin/accounts/present-points', { userId: user.value?.id, points });
 }
 
 async function toggleSuspend(v) {

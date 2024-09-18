@@ -105,6 +105,11 @@ export class MiUserProfile {
 	})
 	public followersVisibility: typeof followersVisibilities[number];
 
+	@Column('boolean', {
+		default: true,
+	})
+	public loginBonusIsVisible: boolean;
+
 	@Column('varchar', {
 		length: 128, nullable: true,
 	})
@@ -259,7 +264,7 @@ export class MiUserProfile {
 		} | {
 			type: 'list';
 			userListId: MiUserList['id'];
-		};
+		}
 	};
 
 	@Column('varchar', {

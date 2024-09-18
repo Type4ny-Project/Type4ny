@@ -143,9 +143,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<b>{{ number(user.followersCount) }}</b>
 							<span>{{ i18n.ts.followers }}</span>
 						</MkA>
-						<MkA v-if="!user.host">
+						<MkA v-if="!user.host && user?.loginBonusIsVisible">
 							<b> {{ number(user.getPoints) }}</b>
-							<span>{{ instance.pointName ? instance.pointName : i18n.ts.points }}</span>
+							<span>{{ instance.pointName ? instance.pointName : i18n.ts.point }}</span>
 						</MkA>
 					</div>
 				</div>

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <MkStickyContainer>
-	<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
+	<template #header><MkPageHeader v-model:tab="tab" :hide="true" :actions="headerActions" :tabs="headerTabs"/></template>
 	<MkSpacer v-if="tab === 'emojis'" :contentMax="1000" :marginMin="20">
 		<MkButton v-if="$i && ($i.isModerator || $i.policies.canManageCustomEmojis)" primary link to="/custom-emojis-manager">{{ i18n.ts.manageCustomEmojis }}</MkButton>
 		<MkButton v-if="$i && (!$i.isModerator || $i.policies.canRequestCustomEmojis)" primary @click="edit">{{ i18n.ts.requestCustomEmojis }}</MkButton>
@@ -68,8 +68,6 @@ const headerTabs = computed(() => [{
 	title: i18n.ts.requestingEmojis,
 }]);
 
-definePageMetadata(ref({}));
-
 let q = ref('');
 let searchEmojis = ref<Misskey.entities.CustomEmoji[]>(null);
 let selectedTags = ref(new Set());
@@ -114,10 +112,6 @@ watch((selectedTags), () => {
 	search();
 }, { deep: true });
 
-definePageMetadata({
-	title: i18n.ts.customEmojis,
-	icon: null,
-});
 </script>
 
 <style lang="scss" module>

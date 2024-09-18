@@ -68,6 +68,7 @@ export const notificationTypes = [
 	'roleAssigned',
 	'achievementEarned',
 	'app',
+	'loginBonus',
 ] as const;
 export const obsoleteNotificationTypes = ['pollVote', 'groupInvited'] as const;
 
@@ -104,6 +105,7 @@ export const ROLE_POLICIES = [
 	'emojiPickerProfileLimit',
 	'listPinnedLimit',
 	'localTimelineAnyLimit',
+	'loginBonusGrantEnabled',
 ] as const;
 
 // なんか動かない
