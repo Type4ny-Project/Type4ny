@@ -184,6 +184,8 @@ import * as ep___drive_folders_show from './endpoints/drive/folders/show.js';
 import * as ep___drive_folders_update from './endpoints/drive/folders/update.js';
 import * as ep___drive_stream from './endpoints/drive/stream.js';
 import * as ep___emailAddress_available from './endpoints/email-address/available.js';
+import * as ep___emoji_addRequest from './endpoints/emoji/add-request.js';
+import * as ep___emoji_updateRequest from './endpoints/emoji/update-request.js';
 import * as ep___endpoint from './endpoints/endpoint.js';
 import * as ep___endpoints from './endpoints/endpoints.js';
 import * as ep___exportCustomEmojis from './endpoints/export-custom-emojis.js';
@@ -582,6 +584,8 @@ const eps = [
 	['drive/folders/update', ep___drive_folders_update],
 	['drive/stream', ep___drive_stream],
 	['email-address/available', ep___emailAddress_available],
+	['emoji/add-request', ep___emoji_addRequest],
+	['emoji/update-request', ep___emoji_updateRequest],
 	['endpoint', ep___endpoint],
 	['endpoints', ep___endpoints],
 	['export-custom-emojis', ep___exportCustomEmojis],
