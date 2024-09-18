@@ -235,10 +235,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					set.useObjectStorage = ps.useObjectStorage;
 				}
 
-				if (ps.pointName !== undefined) {
-					set.pointName = ps.pointName;
-				}
-
 				if (ps.objectStorageBaseUrl !== undefined) {
 					set.objectStorageBaseUrl = ps.objectStorageBaseUrl;
 				}
@@ -308,6 +304,38 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						ps.enableFanoutTimelineDbFallback;
 				}
 
+				if (typeof ps.urlPreviewEnabled === 'boolean') {
+					set.urlPreviewEnabled = ps.urlPreviewEnabled;
+				}
+
+				if (typeof ps.urlPreviewTimeout === 'number') {
+					set.urlPreviewTimeout = ps.urlPreviewTimeout;
+				}
+
+				if (typeof ps.urlPreviewMaximumContentLength === 'number') {
+					set.urlPreviewMaximumContentLength = ps.urlPreviewMaximumContentLength;
+				}
+
+				if (ps.urlPreviewRequireContentLength !== undefined) {
+					set.urlPreviewRequireContentLength = ps.urlPreviewRequireContentLength ?? undefined;
+				}
+
+				if (ps.urlPreviewUserAgent !== undefined) {
+					const value = (ps.urlPreviewUserAgent ?? '').trim();
+					set.urlPreviewUserAgent = value === '' ? null : ps.urlPreviewUserAgent;
+				}
+				if (
+					ps.summalyProxy !== undefined ||
+					ps.urlPreviewSummaryProxyUrl !== undefined
+				) {
+					const value = (
+						ps.urlPreviewSummaryProxyUrl ??
+						ps.summalyProxy ??
+						''
+					).trim();
+					set.urlPreviewSummaryProxyUrl = value === '' ? null : value;
+				}
+
 				if (ps.perLocalUserUserTimelineCacheMax !== undefined) {
 					set.perLocalUserUserTimelineCacheMax =
 						ps.perLocalUserUserTimelineCacheMax;
@@ -333,6 +361,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (Array.isArray(ps.hiddenTags)) {
 				set.hiddenTags = ps.hiddenTags.filter(Boolean);
+			}
+
+			if (ps.pointName !== undefined) {
+				set.pointName = ps.pointName;
 			}
 
 			if (Array.isArray(ps.blockedHosts)) {
@@ -700,38 +732,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.bannedEmailDomains = ps.bannedEmailDomains;
 			}
 
-			if (typeof ps.urlPreviewEnabled === 'boolean') {
-				set.urlPreviewEnabled = ps.urlPreviewEnabled;
-			}
-
-			if (typeof ps.urlPreviewTimeout === 'number') {
-				set.urlPreviewTimeout = ps.urlPreviewTimeout;
-			}
-
-			if (typeof ps.urlPreviewMaximumContentLength === 'number') {
-				set.urlPreviewMaximumContentLength = ps.urlPreviewMaximumContentLength;
-			}
-
-			if (ps.urlPreviewRequireContentLength !== undefined) {
-				set.urlPreviewRequireContentLength = ps.urlPreviewRequireContentLength ?? undefined;
-			}
-
-			if (ps.urlPreviewUserAgent !== undefined) {
-				const value = (ps.urlPreviewUserAgent ?? '').trim();
-				set.urlPreviewUserAgent = value === '' ? null : ps.urlPreviewUserAgent;
-			}
-
-			if (
-				ps.summalyProxy !== undefined ||
-				ps.urlPreviewSummaryProxyUrl !== undefined
-			) {
-				const value = (
-					ps.urlPreviewSummaryProxyUrl ??
-					ps.summalyProxy ??
-					''
-				).trim();
-				set.urlPreviewSummaryProxyUrl = value === '' ? null : value;
-			}
 			if (ps.bannerDark !== undefined) {
 				set.bannerDark = ps.bannerDark;
 			}
