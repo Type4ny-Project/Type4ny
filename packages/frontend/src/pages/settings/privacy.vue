@@ -13,6 +13,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<template #caption>{{ i18n.ts.makeReactionsPublicDescription }}</template>
 	</MkSwitch>
 
+	<MkSwitch v-model="loginBonusIsVisible" @update:modelValue="save()">
+		{{ i18n.ts.loginBonusIsVisible }}
+		<template #caption>{{ i18n.ts.loginBonusIsVisibleDescription }}</template>
+	</MkSwitch>
+
 	<MkSelect v-model="followingVisibility" @update:modelValue="save()">
 		<template #label>{{ i18n.ts.followingVisibility }}</template>
 		<option value="public">{{ i18n.ts._ffVisibility.public }}</option>
@@ -91,6 +96,7 @@ const preventAiLearning = ref($i.preventAiLearning);
 const isExplorable = ref($i.isExplorable);
 const hideOnlineStatus = ref($i.hideOnlineStatus);
 const publicReactions = ref($i.publicReactions);
+const loginBonusIsVisible = ref($i.loginBonusIsVisible);
 const followingVisibility = ref($i.followingVisibility);
 const followersVisibility = ref($i.followersVisibility);
 
@@ -109,6 +115,7 @@ function save() {
 		publicReactions: !!publicReactions.value,
 		followingVisibility: followingVisibility.value,
 		followersVisibility: followersVisibility.value,
+		loginBonusIsVisible: !!loginBonusIsVisible.value,
 	});
 }
 

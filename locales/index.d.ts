@@ -3859,6 +3859,14 @@ export interface Locale extends ILocale {
      */
     "enableLoginBonus": string;
     /**
+     * ログインボーナスのポイントを公開にする
+     */
+    "loginBonusIsVisible": string;
+    /**
+     * あなたがもらったログインボーナスのポイントを他のユーザーから見れるようにします。
+     */
+    "loginBonusIsVisibleDescription": string;
+    /**
      * 未読
      */
     "unread": string;
