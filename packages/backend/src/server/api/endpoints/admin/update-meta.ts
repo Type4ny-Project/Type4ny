@@ -227,7 +227,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		super(meta, paramDef, async (ps, me) => {
 			const set = {} as Partial<MiMeta>;
 			if (!envOption.managed || this.config.rootUserName === me.username) {
-				// マネージドサービスだったら　
+				// マネージドサービスだったら
 				// rootUserName が me.username と一致する場合にしか設定を変えられないように
 
 				if (typeof ps.disableRegistration === 'boolean') {
