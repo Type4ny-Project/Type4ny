@@ -9,6 +9,7 @@ import type { DriveFilesRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { CustomEmojiService } from '@/core/CustomEmojiService.js';
 import { EmojiEntityService } from '@/core/entities/EmojiEntityService.js';
+import { DriveService } from '@/core/DriveService.js';
 import { ApiError } from '../../../error.js';
 
 export const meta = {
@@ -72,12 +73,21 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		@Inject(DI.driveFilesRepository)
 		private driveFilesRepository: DriveFilesRepository,
 		private customEmojiService: CustomEmojiService,
+		private driveService: DriveService,
 		private emojiEntityService: EmojiEntityService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const driveFile = await this.driveFilesRepository.findOneBy({ id: ps.fileId });
+			let driveFile;
+			const tmp = await this.driveFilesRepository.findOneBy({ id: ps.fileId });
+			if (tmp == null) throw new ApiError(meta.errors.noSuchFile);
 
+			try {
+				driveFile = await this.driveService.uploadFromUrl({ url: tmp.url, user: null, force: true });
+			} catch (e) {
+				throw new ApiError();
+			}
 			if (driveFile == null) throw new ApiError(meta.errors.noSuchFile);
+
 			const isDuplicate = await this.customEmojiService.checkDuplicate(ps.name);
 			if (isDuplicate) throw new ApiError(meta.errors.duplicateName);
 
