@@ -199,9 +199,7 @@ cacheRemoteSensitiveFilesDescription: "この設定を無効にすると、リ�
 flagAsBot: "Botとして設定"
 flagAsBotDescription: "このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、Type4nyのシステム上での扱いがBotに合ったものになります。"
 flagAsCat: "にゃああああああああああああああ！！！！！！！！！！！！"
-flagAsGorilla: "ウホウホウホホウホウホウホウホホホ！！！！！！！！！！！"
 flagAsCatDescription: "にゃにゃにゃ？？"
-flagAsGorillaDescription: "ウホウホウホ？？"
 flagShowTimelineReplies: "タイムラインにノートへの返信を表示する"
 showMediaTimeline: "メディアタイムラインを表示する"
 showMediaTimelineInfo: "オンにするとメディアタイムラインを上のバーに表示します。 オフにすると表示しなくなります。"
@@ -1772,9 +1770,6 @@ _achievements:
       title: "ダブル🤯"
       description: "バブルゲームで最も大きいモノを2つ同時に出した"
       flavor: "これくらいの　おべんとばこに　🤯　🤯　ちょっとつめて"
-    _markedAsGorilla:
-      title: "うほうほうほうほほ！？？！？！"
-      description: "アカウントをGorillaとして設定した"
 
 _inboxRule:
   add: "ルールを追加"

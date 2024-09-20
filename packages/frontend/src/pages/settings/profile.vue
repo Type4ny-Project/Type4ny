@@ -144,7 +144,6 @@ const profile = reactive({
 	lang: $i.lang,
 	isBot: $i.isBot ?? false,
 	isCat: $i.isCat ?? false,
-	isGorilla: $i.isGorilla,
 });
 
 watch(() => profile, () => {
@@ -194,7 +193,6 @@ function save() {
 		lang: profile.lang || null,
 		isBot: !!profile.isBot,
 		isCat: !!profile.isCat,
-		isGorilla: !!profile.isGorilla,
 	});
 	globalEvents.emit('requestClearPageCache');
 	claimAchievement('profileFilled');
@@ -203,9 +201,6 @@ function save() {
 	}
 	if (profile.isCat) {
 		claimAchievement('markedAsCat');
-	}
-	if (profile.isGorilla) {
-		claimAchievement('markedAsGorilla');
 	}
 }
 

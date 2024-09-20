@@ -3880,7 +3880,6 @@ export type components = {
       emojis: {
         [key: string]: string;
       };
-      isGorilla?: boolean;
       /**
        * Format: url
        * @enum {string|null}
@@ -20450,7 +20449,6 @@ export type operations = {
           preventAiLearning?: boolean;
           isBot?: boolean;
           isCat?: boolean;
-          isGorilla?: boolean;
           injectFeaturedNote?: boolean;
           receiveAnnouncementEmail?: boolean;
           alwaysMarkNsfw?: boolean;

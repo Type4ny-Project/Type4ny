@@ -21,7 +21,6 @@ import MkA, { MkABehavior } from '@/components/global/MkA.vue';
 import { host } from '@/config.js';
 import { defaultStore } from '@/store.js';
 import { nyaize as doNyaize } from '@/scripts/nyaize.js';
-import { uhoize as doUhoize } from '@/scripts/uhoize.js';
 import { safeParseFloat } from '@/scripts/safe-parse.js';
 
 const QUOTE_STYLE = `
@@ -64,7 +63,6 @@ type MfmProps = {
 			faviconUrl: Instance['faviconUrl'];
 			themeColor: Instance['themeColor'];
 		};
-		isGorilla?: boolean;
 		isCat?: boolean;
 		isBot?: boolean;};
 	i?: Misskey.entities.UserLite | null;
@@ -72,7 +70,6 @@ type MfmProps = {
 	emojiUrls?: Record<string, string>;
 	rootScale?: number;
 	nyaize?: boolean | 'respect';
-	uhoize?: boolean | 'respect';
 	parsedNodes?: mfm.MfmNode[] | null;
 	enableEmojiMenu?: boolean;
 	enableEmojiMenuReaction?: boolean;
@@ -89,7 +86,6 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 
 	const isNote = props.isNote ?? true;
 	const shouldNyaize = props.nyaize ? props.nyaize === 'respect' ? props.author?.isCat : false : false;
-	const shouldUhoize = props.nyaize ? props.nyaize === 'respect' ? props.author?.isGorilla : false : false;
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (props.text == null || props.text === '') return;
 
@@ -113,17 +109,13 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 	 * @param ast MFM AST
 	 * @param scale How times large the text is
 	 * @param disableNyaize Whether nyaize is disabled or not
-	 * @param disableUhoize
 	 */
-	const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false, disableUhoize = false) => ast.map((token): VNode | string | (VNode | string)[] => {
+	const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) => ast.map((token): VNode | string | (VNode | string)[] => {
 		switch (token.type) {
 			case 'text': {
 				let text = token.props.text.replace(/(\r\n|\n|\r)/g, '\n');
 				if (!disableNyaize && shouldNyaize) {
 					text = doNyaize(text);
-				}
-				if (!disableUhoize && shouldUhoize) {
-					text = doUhoize(text);
 				}
 				if (!props.plain) {
 					const res: (VNode | string)[] = [];

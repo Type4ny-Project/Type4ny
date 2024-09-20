@@ -160,10 +160,6 @@ export const packedUserLiteSchema = {
 				type: 'string',
 			},
 		},
-		isGorilla: {
-			type: 'boolean',
-			nullable: false, optional: true,
-		},
 		onlineStatus: {
 			type: 'string',
 			format: 'url',

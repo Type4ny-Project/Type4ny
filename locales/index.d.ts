@@ -813,17 +813,9 @@ export interface Locale extends ILocale {
      */
     "flagAsCat": string;
     /**
-     * ウホウホウホホウホウホウホウホホホ！！！！！！！！！！！
-     */
-    "flagAsGorilla": string;
-    /**
      * にゃにゃにゃ？？
      */
     "flagAsCatDescription": string;
-    /**
-     * ウホウホウホ？？
-     */
-    "flagAsGorillaDescription": string;
     /**
      * タイムラインにノートへの返信を表示する
      */
@@ -6867,16 +6859,6 @@ export interface Locale extends ILocale {
                  * これくらいの　おべんとばこに　🤯　🤯　ちょっとつめて
                  */
                 "flavor": string;
-            };
-            "_markedAsGorilla": {
-                /**
-                 * うほうほうほうほほ！？？！？！
-                 */
-                "title": string;
-                /**
-                 * アカウントをGorillaとして設定した
-                 */
-                "description": string;
             };
         };
     };

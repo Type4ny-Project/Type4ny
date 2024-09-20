@@ -85,7 +85,6 @@ export const ACHIEVEMENT_TYPES = [
 	'tutorialCompleted',
 	'bubbleGameExplodingHead',
 	'bubbleGameDoubleExplodingHead',
-	'markedAsGorilla',
 ] as const;
 
 export const ACHIEVEMENT_BADGES = {
@@ -267,11 +266,6 @@ export const ACHIEVEMENT_BADGES = {
 	'markedAsCat': {
 		img: '/fluent-emoji/1f408.png',
 		bg: 'linear-gradient(0deg, rgb(187 183 59), rgb(255 143 77))',
-		frame: 'bronze',
-	},
-	'markedAsGorilla': {
-		img: '/fluent-emoji/1f98D.png',
-		bg: 'linear-gradient(0deg, rgba(55,0,0,1) 0%, rgba(107,5,5,1) 59%, rgba(158,6,6,1) 100%)',
 		frame: 'bronze',
 	},
 	'following1': {
@@ -493,7 +487,7 @@ export const ACHIEVEMENT_BADGES = {
  */
 } as const;
 
-export const claimedAchievements: typeof ACHIEVEMENT_TYPES[number][] = ($i && $i.achievements) ? $i.achievements.map(x => x.name) : [];
+export const claimedAchievements: typeof ACHIEVEMENT_TYPES[number][] = ($i && $i.achievements) ? $i.achievements.map(x => x.name as typeof ACHIEVEMENT_TYPES[number]) : [];
 
 const claimingQueue = new Set<string>();
 
