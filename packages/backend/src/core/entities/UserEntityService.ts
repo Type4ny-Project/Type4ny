@@ -508,10 +508,9 @@ export class UserEntityService implements OnModuleInit {
 					displayOrder: r.displayOrder,
 				})),
 			) : undefined,
-			...(user.host == null ? {
-				getPoints: profile?.loginBonusIsVisible || isMe ? user.getPoints : null,
-				loginBonusIsVisible: profile?.loginBonusIsVisible || isMe,
-			} : {}),
+			getPoints: user.host === null && (profile?.loginBonusIsVisible || isMe || isModerator) ? user.getPoints : null,
+			loginBonusIsVisible: user.host === null ? profile?.loginBonusIsVisible : null,
+
 			...(isDetailed ? {
 				url: profile!.url,
 				uri: user.uri,

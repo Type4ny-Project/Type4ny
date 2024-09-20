@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 	<MkFolder>
 		<template #icon><i class="ti ti-message-off"></i></template>
-		<template #label>{{ i18n.ts.mutedReactions }}</template>
+		<template #label>{{ i18n.ts.mutedReactions }}<span class="_beta">Preview</span></template>
 
 		<XWordMute :notCaption="true" :muted="$i.mutedReactions" @save="saveMutedReactions"/>
 	</MkFolder>

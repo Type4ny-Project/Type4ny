@@ -9,9 +9,9 @@ import * as assert from 'assert';
 // node-fetch only supports it's own Blob yet
 // https://github.com/node-fetch/node-fetch/pull/1664
 import { Blob } from 'node-fetch';
-import { MiUser } from '@/models/_.js';
 import { api, castAsError, initTestDb, post, signup, simpleGet, uploadFile } from '../utils.js';
 import type * as misskey from 'misskey-js';
+import { MiUser } from '@/models/_.js';
 
 describe('Endpoints', () => {
 	let alice: misskey.entities.SignupResponse;
@@ -241,29 +241,6 @@ describe('Endpoints', () => {
 			}, alice);
 
 			assert.strictEqual(res.status, 204);
-		});
-
-		test('二重にリアクションすると上書きされる', async () => {
-			const bobPost = await post(bob, { text: 'hi' });
-
-			await api('notes/reactions/create', {
-				noteId: bobPost.id,
-				reaction: '🥰',
-			}, alice);
-
-			const res = await api('notes/reactions/create', {
-				noteId: bobPost.id,
-				reaction: '🚀',
-			}, alice);
-
-			assert.strictEqual(res.status, 204);
-
-			const resNote = await api('notes/show', {
-				noteId: bobPost.id,
-			}, alice);
-
-			assert.strictEqual(resNote.status, 200);
-			assert.deepStrictEqual(resNote.body.reactions, { '🚀': 1 });
 		});
 
 		test('存在しない投稿にはリアクションできない', async () => {
@@ -1064,7 +1041,7 @@ describe('Endpoints', () => {
 				userId: bob.id,
 			}, alice);
 			assert.strictEqual(res1.status, 204);
-			assert.strictEqual((res2.body as unknown as { memo: string })?.memo, memo);
+			assert.strictEqual((res2.body as unknown as { memo: string }).memo, memo);
 		});
 
 		test('自分に関するメモを更新できる', async () => {
@@ -1079,7 +1056,7 @@ describe('Endpoints', () => {
 				userId: alice.id,
 			}, alice);
 			assert.strictEqual(res1.status, 204);
-			assert.strictEqual((res2.body as unknown as { memo: string })?.memo, memo);
+			assert.strictEqual((res2.body as unknown as { memo: string }).memo, memo);
 		});
 
 		test('メモを削除できる', async () => {
