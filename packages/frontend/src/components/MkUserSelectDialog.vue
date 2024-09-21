@@ -125,7 +125,7 @@ function ok() {
 	if (multipleSelected.value.length < 0) return;
 	let recents = defaultStore.state.recentlyUsedUsers;
 	recents = recents.filter(x => x !== selected.value?.id);
-	recents.unshift(selected.value.id);
+	recents.unshift(selected.value?.id);
 	defaultStore.set('recentlyUsedUsers', recents.splice(0, 16));
 }
 
