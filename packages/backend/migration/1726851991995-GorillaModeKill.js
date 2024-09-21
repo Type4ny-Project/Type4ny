@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText:  Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 export class GorillaModeKill1726851991995 {
 	name = 'GorillaModeKill1726851991995';
 
