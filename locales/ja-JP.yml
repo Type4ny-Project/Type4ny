@@ -2046,6 +2046,11 @@ _wordMute:
   muteWordsDescription2: "キーワードをスラッシュで囲むと正規表現になります。"
   hideMutedNotes: "ミュートされた単語を含むノートを非表示にする"
 
+_reactionMute:
+    muteReactions: "ミュートするリアクション"
+    muteReactionsDescription: "改行で区切って設定します"
+    muteReactionsDescription2: "リアクションの名前をスラッシュで囲むと正規表現になります。"
+
 _instanceMute:
   instanceMuteDescription: "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとRenoteをミュートします。"
   instanceMuteDescription2: "改行で区切って設定します"

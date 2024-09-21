@@ -7824,6 +7824,20 @@ export interface Locale extends ILocale {
          */
         "hideMutedNotes": string;
     };
+    "_reactionMute": {
+        /**
+         * ミュートするリアクション
+         */
+        "muteReactions": string;
+        /**
+         * 改行で区切って設定します
+         */
+        "muteReactionsDescription": string;
+        /**
+         * リアクションの名前をスラッシュで囲むと正規表現になります。
+         */
+        "muteReactionsDescription2": string;
+    };
     "_instanceMute": {
         /**
          * ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとRenoteをミュートします。
