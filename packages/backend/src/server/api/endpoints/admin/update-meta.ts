@@ -75,10 +75,7 @@ export const paramDef = {
 		app512IconUrl: { type: 'string', nullable: true },
 		backgroundImageUrl: { type: 'string', nullable: true },
 		backgroundImageUrls: {
-			type: 'array',
-			items: {
-				type: 'string',
-			},
+			type: 'array', nullable: true,
 		},
 		logoImageUrl: { type: 'string', nullable: true },
 		name: { type: 'string', nullable: true },
@@ -473,7 +470,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.backgroundImageUrl = ps.backgroundImageUrl;
 			}
 			if (ps.backgroundImageUrls !== undefined) {
-				set.backgroundImageUrls = ps.backgroundImageUrls.map(url => ({ url }));
+				set.backgroundImageUrls = ps.backgroundImageUrls;
 			}
 
 			if (ps.logoImageUrl !== undefined) {

@@ -37,7 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 								{{ i18n.ts.add }}
 							</MkButton>
 							<div v-for="(url,i) in backgroundImageUrls">
-								<MkInput v-model="backgroundImageUrls[0]">
+								<MkInput v-model="backgroundImageUrls[0].url">
 									<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
 								</MkInput>
 								<MkButton danger @click="()=>backgroundImageUrls.splice(i,1)">
