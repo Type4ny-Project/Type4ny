@@ -29,17 +29,33 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</template>
 					</MkInput>
 
-					<MkButton @click="addBackgroundImages">
-						{{ i18n.ts.add }}
-					</MkButton>
-
-					<div v-if="backgroundImageUrls && backgroundImageUrls.length > 0 ">
-						<div v-for="(url,index) in backgroundImageUrls" :key="url">
-							<MkInput v-model="backgroundImageUrls[index]" type="url">
-								<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
-							</MkInput>
+					<MkFolder>
+						<template #icon><i class="ti ti-image"></i></template>
+						<template #label>{{ i18n.ts.backgroundImages }}</template>
+						<div class="_gaps">
+							<MkButton @click="()=>backgroundImageUrls.push('')">
+								{{ i18n.ts.add }}
+							</MkButton>
+							<div v-for="(url,i) in backgroundImageUrls">
+								<MkInput v-model="backgroundImageUrls[0]">
+									<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
+								</MkInput>
+								<MkButton danger @click="()=>backgroundImageUrls.splice(i,1)">
+									<template #default>
+										<i class="ti ti-trash"></i>
+										<span>{{ i18n.ts.remove }}</span>
+									</template>
+								</MkButton>
+							</div>
 						</div>
-					</div>
+					</MkFolder>
+
+					<MkInput v-model="backgroundImageUrl" type="url">
+						<template #prefix><i class="ti ti-link"></i></template>
+						<template #label>
+							{{ i18n.ts.backgroundImageUrl }} (deprecated)
+						</template>
+					</MkInput>
 
 					<MkInput v-model="app192IconUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
@@ -106,11 +122,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkInput v-model="bannerLight" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
 						<template #label>{{ i18n.ts.bannerUrl }} (Light)</template>
-					</MkInput>
-
-					<MkInput v-model="backgroundImageUrl" type="url">
-						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
 					</MkInput>
 
 					<MkInput v-model="notFoundImageUrl" type="url">
@@ -199,6 +210,7 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import MkButton from '@/components/MkButton.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
 import { host } from '@/config.js';
+import MkFolder from '@/components/MkFolder.vue';
 
 const iconUrl = ref<string | null>(null);
 const app192IconUrl = ref<string | null>(null);
@@ -285,10 +297,6 @@ function save() {
 	}).then(() => {
 		fetchInstance(true);
 	});
-}
-
-function addBackgroundImages() {
-	backgroundImageUrls.value.push('');
 }
 
 const headerTabs = computed(() => []);
