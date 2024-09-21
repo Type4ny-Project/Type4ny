@@ -31,7 +31,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 					<MkFolder>
 						<template #icon><i class="ti ti-image"></i></template>
-						<template #label>{{ i18n.ts.backgroundImages }}</template>
+						<template #label>{{ i18n.ts.backgroundImageUrls }}</template>
 						<div class="_gaps">
 							<MkButton @click="()=>backgroundImageUrls.push('')">
 								{{ i18n.ts.add }}
