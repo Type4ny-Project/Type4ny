@@ -209,11 +209,13 @@ function addUser() {
 				user,
 			];
 		}
+		save();
 	});
 }
 
 function collaboratorUserDelete (i:number) {
 	collaboratorUsers.value.splice( i, 1 );
+	save();
 }
 
 fetchChannel();
