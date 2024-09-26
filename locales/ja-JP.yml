@@ -1357,6 +1357,7 @@ addToDefaultEmojiPicker: "デフォルトのプロファイルに追加する"
 clipNoteLimitExceeded: "これ以上このクリップにノートを追加できません。"
 inboxModeration: "Inboxのモデレーション"
 pointsMustBePositive: "ポイントは正の値である必要があります。"
+backgroundImageUrls: "背景画像URL"
 
 _delivery:
   status: "配信状態"

@@ -82,15 +82,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkFolder v-if="isRoot">
 				<template #label>{{ i18n.ts._channel.dangerSettings }}</template>
 
-				<MkButton danger @click="transferAdmin()">
+				<MkButton style="margin: 16px" danger @click="transferAdmin()">
 					{{ i18n.ts._channel.transferAdminConfirmTitle }}
 				</MkButton>
+				<MkButton v-if="channelId" style="margin: 16px" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 			</MkFolder>
 
 			<div>
 				<div class="_buttons">
 					<MkButton primary @click="save()"><i class="ti ti-device-floppy"></i> {{ channelId ? i18n.ts.save : i18n.ts.create }}</MkButton>
-					<MkButton v-if="channelId" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 				</div>
 			</div>
 		</div>
@@ -209,11 +209,13 @@ function addUser() {
 				user,
 			];
 		}
+		save();
 	});
 }
 
 function collaboratorUserDelete (i:number) {
 	collaboratorUsers.value.splice( i, 1 );
+	save();
 }
 
 fetchChannel();
