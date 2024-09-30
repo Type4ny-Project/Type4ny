@@ -566,11 +566,11 @@ $widgets-hide-threshold: 1090px;
   color: var(--fgOnAccent);
 
   &:hover {
-    background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5%)), hsl(from var(--accent) h s calc(l + 5%)));
+    background: linear-gradient(90deg, hsl(from var(--accent) h s 60%), hsl(from var(--accent) h s 60%));
   }
 
   &:active {
-    background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5%)), hsl(from var(--accent) h s calc(l + 5%)));
+    background: linear-gradient(90deg, hsl(from var(--accent) h s 60%), hsl(from var(--accent) h s 60%));
   }
 }
 
