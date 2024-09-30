@@ -1352,13 +1352,13 @@ defineExpose({
 
   &:not(:disabled):hover {
     > .inner {
-      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
+      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5%)), hsl(from var(--accent) h s calc(l + 5%)));
     }
   }
 
   &:not(:disabled):active {
     > .inner {
-      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
+      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5%)), hsl(from var(--accent) h s calc(l + 5%)));
     }
   }
 }

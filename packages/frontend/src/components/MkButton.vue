@@ -265,11 +265,11 @@ function onMousedown(evt: MouseEvent): void {
         }
       }
 		&:not(:disabled):hover {
-			background: hsl(from var(--accent) h s calc(l + 5));
+			background: hsl(from var(--accent) h s calc(l + 5%));
 		}
 
 		&:not(:disabled):active {
-			background: hsl(from var(--accent) h s calc(l + 5));
+			background: hsl(from var(--accent) h s calc(l + 5%));
 		}
 	}
 
@@ -324,7 +324,7 @@ function onMousedown(evt: MouseEvent): void {
 			z-index: -1;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
+			background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5%)), hsl(from var(--accent) h s calc(l + 5%)));
 			opacity: 0;
 			transition: opacity 0.1s ease;
 
