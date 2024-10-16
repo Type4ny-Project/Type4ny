@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { Inject, Injectable } from '@nestjs/common';
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
-import { FastifyAdapter } from '@bull-board/fastify';
+import { FastifyAdapter as BullBoardFastifyAdapter } from '@bull-board/fastify';
 import ms from 'ms';
 import sharp from 'sharp';
 import pug from 'pug';
@@ -24,7 +24,6 @@ import type { Config } from '@/config.js';
 import { getNoteSummary } from '@/misc/get-note-summary.js';
 import { DI } from '@/di-symbols.js';
 import * as Acct from '@/misc/acct.js';
-import { MetaService } from '@/core/MetaService.js';
 import type {
 	DbQueue,
 	DeliverQueue,
@@ -73,7 +72,8 @@ const staticAssets = `${_dirname}/../../../assets/`;
 const clientAssets = `${_dirname}/../../../../frontend/assets/`;
 const assets = `${_dirname}/../../../../../built/_frontend_dist_/`;
 const swAssets = `${_dirname}/../../../../../built/_sw_dist_/`;
-const viteOut = `${_dirname}/../../../../../built/_vite_/`;
+const frontendViteOut = `${_dirname}/../../../../../built/_frontend_vite_/`;
+const frontendEmbedViteOut = `${_dirname}/../../../../../built/_frontend_embed_vite_/`;
 
 @Injectable()
 export class ClientServerService {
@@ -82,6 +82,10 @@ export class ClientServerService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+
+		@Inject(DI.meta)
+		private meta: MiMeta,
+
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
 		@Inject(DI.userProfilesRepository)
@@ -109,7 +113,6 @@ export class ClientServerService {
 		private clipEntityService: ClipEntityService,
 		private channelEntityService: ChannelEntityService,
 		private reversiGameEntityService: ReversiGameEntityService,
-		private metaService: MetaService,
 		private urlPreviewService: UrlPreviewService,
 		private feedService: FeedService,
 		private roleService: RoleService,
@@ -134,26 +137,24 @@ export class ClientServerService {
 
 	@bindThis
 	private async manifestHandler(reply: FastifyReply) {
-		const instance = await this.metaService.fetch(true);
-
 		let manifest = {
 			// 空文字列の場合右辺を使いたいため
 			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-			short_name: instance.shortName || instance.name || this.config.host,
+			short_name: this.meta.shortName || this.meta.name || this.config.host,
 			// 空文字列の場合右辺を使いたいため
 			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-			name: instance.name || this.config.host,
+			name: this.meta.name || this.config.host,
 			start_url: '/',
 			display: 'standalone',
 			background_color: '#313a42',
 			// 空文字列の場合右辺を使いたいため
 			// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-			theme_color: instance.themeColor || '#2ECC71',
+			theme_color: this.meta.themeColor || '#2ECC71',
 			icons: [
 				{
 					// 空文字列の場合右辺を使いたいため
 					// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-					src: instance.app192IconUrl || '/static-assets/icons/192.png',
+					src: this.meta.app192IconUrl || '/static-assets/icons/192.png',
 					sizes: '192x192',
 					type: 'image/png',
 					purpose: 'maskable',
@@ -161,7 +162,7 @@ export class ClientServerService {
 				{
 					// 空文字列の場合右辺を使いたいため
 					// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-					src: instance.app512IconUrl || '/static-assets/icons/512.png',
+					src: this.meta.app512IconUrl || '/static-assets/icons/512.png',
 					sizes: '512x512',
 					type: 'image/png',
 					purpose: 'maskable',
@@ -188,9 +189,9 @@ export class ClientServerService {
 		manifest = {
 			...manifest,
 			...JSON.parse(
-				instance.manifestJsonOverride === ''
+				this.meta.manifestJsonOverride === ''
 					? '{}'
-					: instance.manifestJsonOverride,
+					: this.meta.manifestJsonOverride,
 			),
 		};
 
@@ -262,7 +263,7 @@ export class ClientServerService {
 			}
 		});
 
-		const serverAdapter = new FastifyAdapter();
+		const bullBoardServerAdapter = new BullBoardFastifyAdapter();
 
 		createBullBoard({
 			queues: [
@@ -276,11 +277,11 @@ export class ClientServerService {
 				this.userWebhookDeliverQueue,
 				this.systemWebhookDeliverQueue,
 			].map((q) => new BullMQAdapter(q)),
-			serverAdapter,
+			serverAdapter: bullBoardServerAdapter,
 		});
 
-		serverAdapter.setBasePath(bullBoardPath);
-		(fastify.register as any)(serverAdapter.registerPlugin(), {
+		bullBoardServerAdapter.setBasePath(bullBoardPath);
+		(fastify.register as any)(bullBoardServerAdapter.registerPlugin(), {
 			prefix: bullBoardPath,
 		});
 		//#endregion
@@ -303,11 +304,18 @@ export class ClientServerService {
 		});
 
 		//#region vite assets
-		if (this.config.clientManifestExists) {
+		if (this.config.frontendEmbedManifestExists) {
 			fastify.register((fastify, options, done) => {
 				fastify.register(fastifyStatic, {
-					root: viteOut,
+					root: frontendViteOut,
 					prefix: '/vite/',
+					maxAge: ms('30 days'),
+					immutable: true,
+					decorateReply: false,
+				});
+				fastify.register(fastifyStatic, {
+					root: frontendEmbedViteOut,
+					prefix: '/embed_vite/',
 					maxAge: ms('30 days'),
 					immutable: true,
 					decorateReply: false,
@@ -321,6 +329,13 @@ export class ClientServerService {
 				upstream: 'http://localhost:' + port,
 				prefix: '/vite',
 				rewritePrefix: '/vite',
+			});
+
+			const embedPort = (process.env.EMBED_VITE_PORT ?? '5174');
+			fastify.register(fastifyProxy, {
+				upstream: 'http://localhost:' + embedPort,
+				prefix: '/embed_vite',
+				rewritePrefix: '/embed_vite',
 			});
 		}
 		//#endregion
@@ -473,15 +488,20 @@ export class ClientServerService {
 			async (request, reply) => await this.manifestHandler(reply),
 		);
 
+		// Embed Javascript
+		fastify.get('/embed.js', async (request, reply) => {
+			return await reply.sendFile('/embed.js', staticAssets, {
+				maxAge: ms('1 day'),
+			});
+		});
+
 		fastify.get('/robots.txt', async (request, reply) => {
 			return await reply.sendFile('/robots.txt', staticAssets);
 		});
 
 		// OpenSearch XML
 		fastify.get('/opensearch.xml', async (request, reply) => {
-			const meta = await this.metaService.fetch();
-
-			const name = meta.name ?? 'Type4ny';
+			const name = this.meta.name ?? 'Type4ny';
 			let content = '';
 			content +=
 				'<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">';
@@ -502,14 +522,13 @@ export class ClientServerService {
 			reply: FastifyReply,
 			data: { [key: string]: any } = {},
 		) => {
-			const meta = await this.metaService.fetch();
 			reply.header('Cache-Control', 'public, max-age=30');
 			return await reply.view('base', {
-				img: meta.bannerUrl,
+				img: this.meta.bannerUrl,
 				url: this.config.url,
-				title: meta.name ?? 'Type4ny',
-				desc: meta.description,
-				...(await this.generateCommonPugData(meta)),
+				title: this.meta.name ?? 'Type4ny',
+				desc: this.meta.description,
+				...(await this.generateCommonPugData(this.meta)),
 				...data,
 			});
 		};
@@ -604,8 +623,7 @@ export class ClientServerService {
 					const profile = await this.userProfilesRepository.findOneByOrFail({
 						userId: user.id,
 					});
-					const meta = await this.metaService.fetch();
-					const me = profile.fields
+					const  me = profile.fields
 						? profile.fields
 							.filter(
 								(filed) =>
@@ -626,7 +644,7 @@ export class ClientServerService {
 						avatarUrl:
 							user.avatarUrl ?? this.userEntityService.getIdenticonUrl(user),
 						sub: request.params.sub,
-						...(await this.generateCommonPugData(meta)),
+						...(await this.generateCommonPugData(this.meta)),
 					});
 				} else {
 					// リモートユーザーなので
@@ -669,30 +687,26 @@ export class ClientServerService {
 					visibility: In(['public', 'home']),
 				});
 
-				if (note) {
-					const _note = await this.noteEntityService.pack(note);
-					const profile = await this.userProfilesRepository.findOneByOrFail({
-						userId: note.userId,
-					});
-					const meta = await this.metaService.fetch();
-					reply.header('Cache-Control', 'public, max-age=15');
-					if (profile.preventAiLearning) {
-						reply.header('X-Robots-Tag', 'noimageai');
-						reply.header('X-Robots-Tag', 'noai');
-					}
-					return await reply.view('note', {
-						note: _note,
-						profile,
-						avatarUrl: _note.user.avatarUrl,
-						// TODO: Let locale changeable by instance setting
-						summary: getNoteSummary(_note),
-						...(await this.generateCommonPugData(meta)),
-					});
-				} else {
-					return await renderBase(reply);
+			if (note) {
+				const _note = await this.noteEntityService.pack(note);
+				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: note.userId });
+				reply.header('Cache-Control', 'public, max-age=15');
+				if (profile.preventAiLearning) {
+					reply.header('X-Robots-Tag', 'noimageai');
+					reply.header('X-Robots-Tag', 'noai');
 				}
-			},
-		);
+				return await reply.view('note', {
+					note: _note,
+					profile,
+					avatarUrl: _note.user.avatarUrl,
+					// TODO: Let locale changeable by instance setting
+					summary: getNoteSummary(_note),
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 
 		// Page
 		fastify.get<{ Params: { user: string; page: string } }>(
@@ -711,35 +725,28 @@ export class ClientServerService {
 					userId: user.id,
 				});
 
-				if (page) {
-					const _page = await this.pageEntityService.pack(page);
-					const profile = await this.userProfilesRepository.findOneByOrFail({
-						userId: page.userId,
-					});
-					const meta = await this.metaService.fetch();
-					if (['public'].includes(page.visibility)) {
-						reply.header('Cache-Control', 'public, max-age=15');
-					} else {
-						reply.header(
-							'Cache-Control',
-							'private, max-age=0, must-revalidate',
-						);
-					}
-					if (profile.preventAiLearning) {
-						reply.header('X-Robots-Tag', 'noimageai');
-						reply.header('X-Robots-Tag', 'noai');
-					}
-					return await reply.view('page', {
-						page: _page,
-						profile,
-						avatarUrl: _page.user.avatarUrl,
-						...(await this.generateCommonPugData(meta)),
-					});
+			if (page) {
+				const _page = await this.pageEntityService.pack(page);
+				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: page.userId });
+				if (['public'].includes(page.visibility)) {
+					reply.header('Cache-Control', 'public, max-age=15');
 				} else {
-					return await renderBase(reply);
+					reply.header('Cache-Control', 'private, max-age=0, must-revalidate');
 				}
-			},
-		);
+				if (profile.preventAiLearning) {
+					reply.header('X-Robots-Tag', 'noimageai');
+					reply.header('X-Robots-Tag', 'noai');
+				}
+				return await reply.view('page', {
+					page: _page,
+					profile,
+					avatarUrl: _page.user.avatarUrl,
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 
 		// Flash
 		fastify.get<{ Params: { id: string } }>(
@@ -749,28 +756,24 @@ export class ClientServerService {
 					id: request.params.id,
 				});
 
-				if (flash) {
-					const _flash = await this.flashEntityService.pack(flash);
-					const profile = await this.userProfilesRepository.findOneByOrFail({
-						userId: flash.userId,
-					});
-					const meta = await this.metaService.fetch();
-					reply.header('Cache-Control', 'public, max-age=15');
-					if (profile.preventAiLearning) {
-						reply.header('X-Robots-Tag', 'noimageai');
-						reply.header('X-Robots-Tag', 'noai');
-					}
-					return await reply.view('flash', {
-						flash: _flash,
-						profile,
-						avatarUrl: _flash.user.avatarUrl,
-						...(await this.generateCommonPugData(meta)),
-					});
-				} else {
-					return await renderBase(reply);
+			if (flash) {
+				const _flash = await this.flashEntityService.pack(flash);
+				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: flash.userId });
+				reply.header('Cache-Control', 'public, max-age=15');
+				if (profile.preventAiLearning) {
+					reply.header('X-Robots-Tag', 'noimageai');
+					reply.header('X-Robots-Tag', 'noai');
 				}
-			},
-		);
+				return await reply.view('flash', {
+					flash: _flash,
+					profile,
+					avatarUrl: _flash.user.avatarUrl,
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 
 		// Clip
 		fastify.get<{ Params: { clip: string } }>(
@@ -780,28 +783,24 @@ export class ClientServerService {
 					id: request.params.clip,
 				});
 
-				if (clip && clip.isPublic) {
-					const _clip = await this.clipEntityService.pack(clip);
-					const profile = await this.userProfilesRepository.findOneByOrFail({
-						userId: clip.userId,
-					});
-					const meta = await this.metaService.fetch();
-					reply.header('Cache-Control', 'public, max-age=15');
-					if (profile.preventAiLearning) {
-						reply.header('X-Robots-Tag', 'noimageai');
-						reply.header('X-Robots-Tag', 'noai');
-					}
-					return await reply.view('clip', {
-						clip: _clip,
-						profile,
-						avatarUrl: _clip.user.avatarUrl,
-						...(await this.generateCommonPugData(meta)),
-					});
-				} else {
-					return await renderBase(reply);
+			if (clip && clip.isPublic) {
+				const _clip = await this.clipEntityService.pack(clip);
+				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: clip.userId });
+				reply.header('Cache-Control', 'public, max-age=15');
+				if (profile.preventAiLearning) {
+					reply.header('X-Robots-Tag', 'noimageai');
+					reply.header('X-Robots-Tag', 'noai');
 				}
-			},
-		);
+				return await reply.view('clip', {
+					clip: _clip,
+					profile,
+					avatarUrl: _clip.user.avatarUrl,
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 
 		// Gallery post
 		fastify.get<{ Params: { post: string } }>(
@@ -811,28 +810,24 @@ export class ClientServerService {
 					id: request.params.post,
 				});
 
-				if (post) {
-					const _post = await this.galleryPostEntityService.pack(post);
-					const profile = await this.userProfilesRepository.findOneByOrFail({
-						userId: post.userId,
-					});
-					const meta = await this.metaService.fetch();
-					reply.header('Cache-Control', 'public, max-age=15');
-					if (profile.preventAiLearning) {
-						reply.header('X-Robots-Tag', 'noimageai');
-						reply.header('X-Robots-Tag', 'noai');
-					}
-					return await reply.view('gallery-post', {
-						post: _post,
-						profile,
-						avatarUrl: _post.user.avatarUrl,
-						...(await this.generateCommonPugData(meta)),
-					});
-				} else {
-					return await renderBase(reply);
+			if (post) {
+				const _post = await this.galleryPostEntityService.pack(post);
+				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: post.userId });
+				reply.header('Cache-Control', 'public, max-age=15');
+				if (profile.preventAiLearning) {
+					reply.header('X-Robots-Tag', 'noimageai');
+					reply.header('X-Robots-Tag', 'noai');
 				}
-			},
-		);
+				return await reply.view('gallery-post', {
+					post: _post,
+					profile,
+					avatarUrl: _post.user.avatarUrl,
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 
 		// Channel
 		fastify.get<{ Params: { channel: string } }>(
@@ -844,11 +839,11 @@ export class ClientServerService {
 
 				if (channel) {
 					const _channel = await this.channelEntityService.pack(channel);
-					const meta = await this.metaService.fetch();
+
 					reply.header('Cache-Control', 'public, max-age=15');
 					return await reply.view('channel', {
 						channel: _channel,
-						...(await this.generateCommonPugData(meta)),
+						...(await this.generateCommonPugData(this.meta)),
 					});
 				} else {
 					return await renderBase(reply);
@@ -866,11 +861,11 @@ export class ClientServerService {
 
 				if (game) {
 					const _game = await this.reversiGameEntityService.packDetail(game);
-					const meta = await this.metaService.fetch();
+
 					reply.header('Cache-Control', 'public, max-age=3600');
 					return await reply.view('reversi-game', {
 						game: _game,
-						...(await this.generateCommonPugData(meta)),
+						...(await this.generateCommonPugData(this.meta)),
 					});
 				} else {
 					return await renderBase(reply);
@@ -879,7 +874,7 @@ export class ClientServerService {
 		);
 		//#endregion
 
-		//region noindex pages
+		//#region noindex pages
 		// Tags
 		fastify.get<{ Params: { clip: string } }>(
 			'/tags/:tag',
@@ -895,17 +890,92 @@ export class ClientServerService {
 				return await renderBase(reply, { noindex: true });
 			},
 		);
-		//endregion
+		//#endregion
+
+		//#region embed pages
+		fastify.get<{ Params: { user: string; } }>('/embed/user-timeline/:user', async (request, reply) => {
+			reply.removeHeader('X-Frame-Options');
+
+			const user = await this.usersRepository.findOneBy({
+				id: request.params.user,
+			});
+
+			if (user == null) return;
+			if (user.host != null) return;
+
+			const _user = await this.userEntityService.pack(user);
+
+			reply.header('Cache-Control', 'public, max-age=3600');
+			return await reply.view('base-embed', {
+				title: this.meta.name ?? 'Misskey',
+				...await this.generateCommonPugData(this.meta),
+				embedCtx: htmlSafeJsonStringify({
+					user: _user,
+				}),
+			});
+		});
+
+		fastify.get<{ Params: { note: string; } }>('/embed/notes/:note', async (request, reply) => {
+			reply.removeHeader('X-Frame-Options');
+
+			const note = await this.notesRepository.findOneBy({
+				id: request.params.note,
+			});
+
+			if (note == null) return;
+			if (note.visibility !== 'public') return;
+			if (note.userHost != null) return;
+
+			const _note = await this.noteEntityService.pack(note, null, { detail: true });
+
+			reply.header('Cache-Control', 'public, max-age=3600');
+			return await reply.view('base-embed', {
+				title: this.meta.name ?? 'Misskey',
+				...await this.generateCommonPugData(this.meta),
+				embedCtx: htmlSafeJsonStringify({
+					note: _note,
+				}),
+			});
+		});
+
+		fastify.get<{ Params: { clip: string; } }>('/embed/clips/:clip', async (request, reply) => {
+			reply.removeHeader('X-Frame-Options');
+
+			const clip = await this.clipsRepository.findOneBy({
+				id: request.params.clip,
+			});
+
+			if (clip == null) return;
+
+			const _clip = await this.clipEntityService.pack(clip);
+
+			reply.header('Cache-Control', 'public, max-age=3600');
+			return await reply.view('base-embed', {
+				title: this.meta.name ?? 'Misskey',
+				...await this.generateCommonPugData(this.meta),
+				embedCtx: htmlSafeJsonStringify({
+					clip: _clip,
+				}),
+			});
+		});
+
+		fastify.get('/embed/*', async (request, reply) => {
+			reply.removeHeader('X-Frame-Options');
+
+			reply.header('Cache-Control', 'public, max-age=3600');
+			return await reply.view('base-embed', {
+				title: this.meta.name ?? 'Misskey',
+				...await this.generateCommonPugData(this.meta),
+			});
+		});
 
 		fastify.get('/_info_card_', async (request, reply) => {
-			const meta = await this.metaService.fetch(true);
-
 			reply.removeHeader('X-Frame-Options');
 
 			return await reply.view('info-card', {
 				version: this.config.version,
 				host: this.config.host,
-				meta: meta,
+				meta: this.meta,
 				originalUsersCount: await this.usersRepository.countBy({
 					host: IsNull(),
 				}),
@@ -914,6 +984,7 @@ export class ClientServerService {
 				}),
 			});
 		});
+		//#endregion
 
 		fastify.get('/bios', async (request, reply) => {
 			return await reply.view('bios', {

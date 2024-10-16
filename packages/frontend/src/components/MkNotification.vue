@@ -6,42 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <div :class="$style.root">
 	<div :class="$style.head">
-		<MkAvatar
-			v-if="
-				['pollEnded', 'note'].includes(notification.type) &&
-					'note' in notification
-			"
-			:class="$style.icon"
-			:user="notification.note.user"
-			link
-			preview
-		/>
-		<MkAvatar
-			v-else-if="
-				['roleAssigned', 'achievementEarned', 'loginBonus'].includes(
-					notification.type,
-				)
-			"
-			:class="$style.icon"
-			:user="$i"
-			link
-			preview
-		/>
-		<div
-			v-else-if="
-				notification.type === 'reaction:grouped' &&
-					notification.note.reactionAcceptance === 'likeOnly'
-			"
-			:class="[$style.icon, $style.icon_reactionGroupHeart]"
-		>
-			<i class="ti ti-heart" style="line-height: 1"></i>
-		</div>
-		<div
-			v-else-if="notification.type === 'reaction:grouped'"
-			:class="[$style.icon, $style.icon_reactionGroup]"
-		>
-			<i class="ti ti-plus" style="line-height: 1"></i>
-		</div>
+		<MkAvatar v-if="['pollEnded', 'note'].includes(notification.type) && 'note' in notification" :class="$style.icon" :user="notification.note.user" link preview/>
+		<MkAvatar v-else-if="['roleAssigned', 'achievementEarned', 'exportCompleted', 'login'].includes(notification.type)" :class="$style.icon" :user="$i" link preview/>
+		<div v-else-if="notification.type === 'reaction:grouped' && notification.note.reactionAcceptance === 'likeOnly'" :class="[$style.icon, $style.icon_reactionGroupHeart]"><i class="ti ti-heart" style="line-height: 1;"></i></div>
+		<div v-else-if="notification.type === 'reaction:grouped'" :class="[$style.icon, $style.icon_reactionGroup]"><i class="ti ti-plus" style="line-height: 1;"></i></div>
+		<div v-else-if="notification.type === 'renote:grouped'" :class="[$style.icon, $style.icon_renoteGroup]"><i class="ti ti-repeat" style="line-height: 1;"></i></div>
+		<img v-else-if="notification.type === 'test'" :class="$style.icon" :src="infoImageUrl"/>
+		<MkAvatar v-else-if="'user' in notification" :class="$style.icon" :user="notification.user" link preview/>
+		<img v-else-if="'icon' in notification && notification.icon != null" :class="[$style.icon, $style.icon_app]" :src="notification.icon" alt=""/>
 		<div
 			v-else-if="notification.type === 'renote:grouped'"
 			:class="[$style.icon, $style.icon_renoteGroup]"
@@ -83,7 +55,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 					[$style.t_achievementEarned]:
 						notification.type === 'achievementEarned',
 					[$style.t_achievementEarned]: notification.type === 'loginBonus',
-					[$style.t_roleAssigned]:
+					[$style.t_exportCompleted]: notification.type === 'exportCompleted',
+				[$style.t_login]: notification.type === 'login',
+				[$style.t_roleAssigned]:
 						notification.type === 'roleAssigned' &&
 						notification.role.iconUrl == null,
 				},
@@ -117,7 +91,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-else-if="notification.type === 'loginBonus'"
 				class="ti ti-medal"
 			></i>
-
+<i v-else-if="notification.type === 'exportCompleted'" class="ti ti-archive"></i>
+			<i v-else-if="notification.type === 'login'" class="ti ti-login-2"></i>
 			<template v-else-if="notification.type === 'roleAssigned'">
 				<img
 					v-if="notification.role.iconUrl"
@@ -132,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:withTooltip="true"
 				:reaction="notification.reaction.replace(/^:(\w+):$/, ':$1@.:')"
 				:noStyle="true"
-				style="width: 100%; height: 100%"
+				style="width: 100%; height: 100% !important; object-fit: contain;"
 			/>
 		</div>
 	</div>
@@ -152,9 +127,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<span v-else-if="notification.type === 'loginBonus'">{{
 				i18n.ts._notification.loginbonus
 			}}</span>
+			<span v-else-if="notification.type === 'login'">{{ i18n.ts._notification.login }}</span>
 			<span v-else-if="notification.type === 'test'">{{
 				i18n.ts._notification.testNotification
 			}}</span>
+			<span v-else-if="notification.type === 'exportCompleted'">{{ i18n.tsx._notification.exportOfXCompleted({ x: exportEntityName[notification.exportedEntity] }) }}</span>
 			<MkA
 				v-else-if="
 					notification.type === 'follow' ||
@@ -331,17 +308,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 					i18n.ts._achievements._types["_" + notification.achievement].title
 				}}
 			</MkA>
+			<MkA v-else-if="notification.type === 'exportCompleted'" :class="$style.text" :to="`/my/drive/file/${notification.fileId}`">
+				{{ i18n.ts.showFile }}
+			</MkA>
 
 			<template v-else-if="notification.type === 'follow'">
 				<span :class="$style.text" style="opacity: 0.6">{{
 					i18n.ts.youGotNewFollower
 				}}</span>
 			</template>
-			<span
+			<template
 				v-else-if="notification.type === 'followRequestAccepted'"
-				:class="$style.text"
+				>
+				<div:class="$style.text"
 				style="opacity: 0.6"
-			>{{ i18n.ts.followRequestAccepted }}</span>
+			>{{ i18n.ts.followRequestAccepted }}</div>
+				<div v-if="notification.message" :class="$style.text" style="opacity: 0.6; font-style: oblique;">
+					<i class="ti ti-quote" :class="$style.quote"></i>
+					<span>{{ notification.message }}</span>
+					<i class="ti ti-quote" :class="$style.quote"></i>
+				</div>
+			</template>
 			<template v-else-if="notification.type === 'receiveFollowRequest'">
 				<span :class="$style.text" style="opacity: 0.6">{{
 					i18n.ts.receiveFollowRequest
@@ -392,7 +379,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							:withTooltip="true"
 							:reaction="reaction.reaction.replace(/^:(\w+):$/, ':$1@.:')"
 							:noStyle="true"
-							style="width: 100%; height: 100%"
+							style="width: 100%; height: 100% !important; object-fit: contain;"
 						/>
 					</div>
 				</div>
@@ -443,6 +430,20 @@ const props = withDefaults(
 	},
 );
 
+type ExportCompletedNotification = Misskey.entities.Notification & { type: 'exportCompleted' };
+
+const exportEntityName = {
+	antenna: i18n.ts.antennas,
+	blocking: i18n.ts.blockedUsers,
+	clip: i18n.ts.clips,
+	customEmoji: i18n.ts.customEmojis,
+	favorite: i18n.ts.favorites,
+	following: i18n.ts.following,
+	muting: i18n.ts.mutedUsers,
+	note: i18n.ts.notes,
+	userList: i18n.ts.lists,
+} as const satisfies Record<ExportCompletedNotification['exportedEntity'], string>;
+
 const followRequestDone = ref(false);
 
 const acceptFollowRequest = () => {
@@ -479,6 +480,17 @@ function getActualReactedUsersCount(
 	overflow-wrap: break-word;
 	display: flex;
 	contain: content;
+	content-visibility: auto;
+	contain-intrinsic-size: 0 100px;
+
+	--eventFollow: #36aed2;
+	--eventRenote: #36d298;
+	--eventReply: #007aff;
+	--eventReactionHeart: var(--MI_THEME-love);
+	--eventReaction: #e99a0b;
+	--eventAchievement: #cb9a11;
+	--eventLogin: #007aff;
+	--eventOther: #88a6b7;
 }
 
 .head {
@@ -534,8 +546,8 @@ function getActualReactedUsersCount(
 	height: 20px;
 	box-sizing: border-box;
 	border-radius: 100%;
-	background: var(--panel);
-	box-shadow: 0 0 0 3px var(--panel);
+	background: var(--MI_THEME-panel);
+	box-shadow: 0 0 0 3px var(--MI_THEME-panel);
 	font-size: 11px;
 	text-align: center;
 	color: #fff;
@@ -589,9 +601,21 @@ function getActualReactedUsersCount(
 	pointer-events: none;
 }
 
+.t_exportCompleted {
+	padding: 3px;
+	background: var(--eventOther);
+	pointer-events: none;
+}
+
 .t_roleAssigned {
 	padding: 3px;
 	background: var(--eventOther);
+	pointer-events: none;
+}
+
+.t_login {
+	padding: 3px;
+	background: var(--eventLogin);
 	pointer-events: none;
 }
 
@@ -678,8 +702,8 @@ function getActualReactedUsersCount(
 	height: 20px;
 	box-sizing: border-box;
 	border-radius: 100%;
-	background: var(--panel);
-	box-shadow: 0 0 0 3px var(--panel);
+	background: var(--MI_THEME-panel);
+	box-shadow: 0 0 0 3px var(--MI_THEME-panel);
 	font-size: 11px;
 	text-align: center;
 	color: #fff;

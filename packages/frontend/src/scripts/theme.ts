@@ -5,11 +5,11 @@
 
 import { ref } from 'vue';
 import tinycolor from 'tinycolor2';
+import lightTheme from '@@/themes/_light.json5';
+import darkTheme from '@@/themes/_dark.json5';
 import { deepClone } from './clone.js';
 import type { BundledTheme } from 'shiki/themes';
 import { globalEvents } from '@/events.js';
-import lightTheme from '@/themes/_light.json5';
-import darkTheme from '@/themes/_dark.json5';
 import { miLocalStorage } from '@/local-storage.js';
 import lTypeLightEmerald from '@/themes/l-TypeLightEmerald.json5';
 import lCoffee from '@/themes/l-coffee.json5';
@@ -48,27 +48,30 @@ export type Theme = {
 
 export const themeProps = Object.keys(lightTheme.props).filter(key => !key.startsWith('X'));
 
-export const getBuiltinThemes = () => Promise.resolve([
-	lTypeLightEmerald,
-	lCoffee,
-	lApricot,
-	lRainy,
-	lBotanical,
-	lVivid,
-	lCherry,
-	lSushi,
-	lU0,
-	dDark,
-	dPersimmon,
-	dAstro,
-	dFuture,
-	dBotanical,
-	dTypeDarkEmerald,
-	dGreenOrange,
-	dCherry,
-	dIce,
-	dU0,
-]);
+export const getBuiltinThemes = () => Promise.all(
+	[
+		'l-light',
+		'l-coffee',
+		'l-apricot',
+		'l-rainy',
+		'l-botanical',
+		'l-vivid',
+		'l-cherry',
+		'l-sushi',
+		'l-u0',
+
+		'd-dark',
+		'd-persimmon',
+		'd-astro',
+		'd-future',
+		'd-botanical',
+		'd-green-lime',
+		'd-green-orange',
+		'd-cherry',
+		'd-ice',
+		'd-u0',
+	].map(name => import(`@@/themes/${name}.json5`).then(({ default: _default }): Theme => _default)),
+);
 
 export const getBuiltinThemesRef = () => {
 	const builtinThemes = ref<Theme[]>([]);
@@ -89,6 +92,8 @@ export function applyTheme(theme: Theme, persist = true) {
 
 	const colorScheme = theme.base === 'dark' ? 'dark' : 'light';
 
+	document.documentElement.dataset.colorScheme = colorScheme;
+
 	// Deep copy
 	const _theme = deepClone(theme);
 
@@ -107,7 +112,7 @@ export function applyTheme(theme: Theme, persist = true) {
 	}
 
 	for (const [k, v] of Object.entries(props)) {
-		document.documentElement.style.setProperty(`--${k}`, v.toString());
+		document.documentElement.style.setProperty(`--MI_THEME-${k}`, v.toString());
 	}
 
 	document.documentElement.style.setProperty('color-scheme', colorScheme);

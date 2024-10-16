@@ -62,10 +62,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts">
 import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, ref, shallowRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-
+import { useDocumentVisibility } from '@@/js/use-document-visibility.js';
+import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@@/js/scroll.js';
+import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import { onScrollTop, isTopVisible, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
-import { useDocumentVisibility } from '@/scripts/use-document-visibility.js';
+import { defaultStore } from '@/store.js';
 import { MisskeyEntity } from '@/types/date-separated-list.js';
 import { i18n } from '@/i18n.js';
 
@@ -147,8 +148,6 @@ const items = ref<MisskeyEntityMap>(new Map());
  */
 const queue = ref<MisskeyEntityMap>(new Map());
 
-const offset = ref(0);
-
 /**
  * 初期化中かどうか（trueならMkLoadingで全て隠す）
  */
@@ -199,7 +198,9 @@ watch([backed, contentEl], () => {
 	if (!backed.value) {
 		if (!contentEl.value) return;
 
-		scrollRemove.value = (props.pagination.reversed ? onScrollBottom : onScrollTop)(contentEl.value, executeQueue, TOLERANCE);
+		scrollRemove.value = props.pagination.reversed
+			? onScrollBottom(contentEl.value, executeQueue, TOLERANCE)
+			: onScrollTop(contentEl.value, (topVisible) => { if (topVisible) executeQueue(); }, TOLERANCE);
 	} else {
 		if (scrollRemove.value) scrollRemove.value();
 		scrollRemove.value = null;
@@ -241,7 +242,7 @@ async function init(): Promise<void> {
 			concatItems(res);
 			more.value = true;
 		}
-		offset.value = res.length;
+
 		error.value = false;
 		fetching.value = false;
 	}, err => {
@@ -258,13 +259,20 @@ async function fetchMore(): Promise<void> {
 	if (!more.value || fetching.value || moreFetching.value || items.value.size === 0) return;
 
 	moreFetching.value = true;
-	try {
-		const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
-		const response = await misskeyApi<MisskeyEntity[]>(props.pagination.endpoint, {
-			...params,
-			limit: SECOND_FETCH_LIMIT,
-			...(props.pagination.offsetMode ? { offset: offset.value } : { untilId: Array.from(items.value.keys()).pop() }),
-		});
+	const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
+	await misskeyApi<MisskeyEntity[]>(props.pagination.endpoint, {
+		...params,
+		limit: SECOND_FETCH_LIMIT,
+		...(props.pagination.offsetMode ? {
+			offset: items.value.size,
+		} : {
+			untilId: Array.from(items.value.keys()).at(-1),
+		}),
+	}).then(res => {
+		for (let i = 0; i < res.length; i++) {
+			const item = res[i];
+			if (i === 10) item._shouldInsertAd_ = true;
+		}
 
 		const isReversed = props.pagination.reversed;
 		if (isReversed) {
@@ -284,10 +292,34 @@ async function fetchMore(): Promise<void> {
 			items.value = concatMapWithArray(items.value, response);
 		}
 
-		more.value = response.length > 0;
-	} catch (error) {
-		console.error(error);
-	} finally {
+				return nextTick();
+			});
+		};
+
+		if (res.length === 0) {
+			if (props.pagination.reversed) {
+				reverseConcat(res).then(() => {
+					more.value = false;
+					moreFetching.value = false;
+				});
+			} else {
+				items.value = concatMapWithArray(items.value, res);
+				more.value = false;
+				moreFetching.value = false;
+			}
+		} else {
+			if (props.pagination.reversed) {
+				reverseConcat(res).then(() => {
+					more.value = true;
+					moreFetching.value = false;
+				});
+			} else {
+				items.value = concatMapWithArray(items.value, res);
+				more.value = true;
+				moreFetching.value = false;
+			}
+		}
+	}, err => {
 		moreFetching.value = false;
 	}
 }
@@ -300,7 +332,7 @@ const fetchMoreAhead = async (): Promise<void> => {
 		...params,
 		limit: SECOND_FETCH_LIMIT,
 		...(props.pagination.offsetMode ? {
-			offset: offset.value,
+			offset: items.value.size,
 		} : {
 			sinceId: Array.from(items.value.keys()).at(-1),
 		}),
@@ -312,7 +344,6 @@ const fetchMoreAhead = async (): Promise<void> => {
 			items.value = concatMapWithArray(items.value, res);
 			more.value = true;
 		}
-		offset.value += res.length;
 		moreFetching.value = false;
 	}, err => {
 		moreFetching.value = false;

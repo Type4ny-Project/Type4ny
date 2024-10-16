@@ -46,7 +46,7 @@ defineProps<{
 		& + .group {
 			margin-top: 16px;
 			padding-top: 16px;
-			border-top: solid 0.5px var(--divider);
+			border-top: solid 0.5px var(--MI_THEME-divider);
 		}
 
 		> .title {
@@ -67,7 +67,7 @@ defineProps<{
 
 				&:hover {
 					text-decoration: none;
-					background: var(--panelHighlight);
+					background: var(--MI_THEME-panelHighlight);
 				}
 
 				&:focus-visible {
@@ -75,8 +75,8 @@ defineProps<{
 				}
 
 				&.active {
-					color: var(--accent);
-					background: var(--accentedBg);
+					color: var(--MI_THEME-accent);
+					background: var(--MI_THEME-accentedBg);
           &.gamingDark{
             color: black !important;
             background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);            background-size: 1800% 1800%;
@@ -95,7 +95,7 @@ defineProps<{
 				}
 
 				&.danger {
-					color: var(--error);
+					color: var(--MI_THEME-error);
 				}
 
 				> .icon {
@@ -118,6 +118,9 @@ defineProps<{
 
 	&.grid {
 		> .group {
+			margin-left: 0;
+			margin-right: 0;
+
 			& + .group {
 				padding-top: 0;
 				border-top: none;
@@ -143,10 +146,10 @@ defineProps<{
 					&:hover {
 						text-decoration: none;
 						background: none;
-						color: var(--accent);
+						color: var(--MI_THEME-accent);
 
 						> .icon {
-							background: var(--accentedBg);
+							background: var(--MI_THEME-accentedBg);
 						}
 					}
 
@@ -159,7 +162,7 @@ defineProps<{
 						width: 60px;
 						height: 60px;
 						aspect-ratio: 1;
-						background: var(--panel);
+						background: var(--MI_THEME-panel);
 						border-radius: 100%;
 					}
 

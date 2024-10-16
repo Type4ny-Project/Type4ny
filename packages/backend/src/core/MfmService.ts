@@ -243,7 +243,7 @@ export class MfmService {
 			return null;
 		}
 
-		const fragment = JSDOM.fragment('');
+		const { happyDOM, window } = new Window();
 
 		const doc = fragment.ownerDocument;
 
@@ -461,6 +461,10 @@ export class MfmService {
 
 		appendChildren(nodes, body);
 
-		return body.outerHTML;
+		const serialized = new XMLSerializer().serializeToString(body);
+
+		happyDOM.close().catch(err => {});
+
+		return serialized;
 	}
 }

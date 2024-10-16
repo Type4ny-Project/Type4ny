@@ -83,6 +83,10 @@ export const meta = {
 				optional: false,
 				nullable: true,
 			},
+			enableTestcaptcha: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			swPublickey: {
 				type: 'string',
 				optional: false,
@@ -200,6 +204,13 @@ export const meta = {
 				type: 'array',
 				optional: false,
 				nullable: false,
+				items: {
+					type: 'string',
+				},
+			},
+			prohibitedWordsForNameOfUser: {
+				type: 'array',
+				optional: false, nullable: false,
 				items: {
 					type: 'string',
 				},
@@ -408,6 +419,10 @@ export const meta = {
 				optional: false,
 				nullable: false,
 			},
+			enableStatsForFederatedInstances: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableServerMachineStats: {
 				type: 'boolean',
 				optional: false,
@@ -457,6 +472,10 @@ export const meta = {
 				type: 'number',
 				optional: false,
 				nullable: false,
+			},
+			enableReactionsBuffering: {
+				type: 'boolean',
+				optional: false, nullable: false,
 			},
 			notesPerOneAd: {
 				type: 'number',
@@ -629,6 +648,18 @@ export const meta = {
 			iconDark: { type: 'string', nullable: true },
 			bannerLight: { type: 'string', nullable: true },
 			bannerDark: { type: 'string', nullable: true },
+			federation: {
+				type: 'string',
+				optional: false, nullable: false,
+			},
+			federationHosts: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+					optional: false, nullable: false,
+				},
+			},
 		},
 	},
 } as const;
@@ -674,6 +705,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				recaptchaSiteKey: instance.recaptchaSiteKey,
 				enableTurnstile: instance.enableTurnstile,
 				turnstileSiteKey: instance.turnstileSiteKey,
+				enableTestcaptcha: instance.enableTestcaptcha,
 				swPublickey: instance.swPublicKey,
 				themeColor: instance.themeColor,
 				requestEmojiAllOk: instance.requestEmojiAllOk,
@@ -702,6 +734,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				mediaSilencedHosts: instance.mediaSilencedHosts || [],
 				sensitiveWords: instance.sensitiveWords,
 				prohibitedWords: instance.prohibitedWords,
+				prohibitedWordsForNameOfUser: instance.prohibitedWordsForNameOfUser,
 				preservedUsernames: instance.preservedUsernames,
 				hcaptchaSecretKey: instance.hcaptchaSecretKey,
 				mcaptchaSecretKey: instance.mcaptchaSecretKey,
@@ -743,6 +776,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				truemailAuthKey: instance.truemailAuthKey,
 				enableChartsForRemoteUser: instance.enableChartsForRemoteUser,
 				enableChartsForFederatedInstances: instance.enableChartsForFederatedInstances,
+				enableStatsForFederatedInstances: instance.enableStatsForFederatedInstances,
 				enableServerMachineStats: instance.enableServerMachineStats,
 				enableIdenticonGeneration: instance.enableIdenticonGeneration,
 				bannedEmailDomains: instance.bannedEmailDomains,
@@ -754,6 +788,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				perRemoteUserUserTimelineCacheMax: instance.perRemoteUserUserTimelineCacheMax,
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
+				enableReactionsBuffering: instance.enableReactionsBuffering,
 				notesPerOneAd: instance.notesPerOneAd,
 				DiscordWebhookUrl: instance.DiscordWebhookUrl,
 				DiscordWebhookUrlWordBlock: instance.DiscordWebhookUrlWordBlock,
@@ -769,13 +804,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
-				iconLight: instance.iconLight,
-				iconDark: instance.iconDark,
-				bannerLight: instance.bannerLight,
-				bannerDark: instance.bannerDark,
-				isManaged: false,
-				pointName: instance.pointName,
-				googleAnalyticsId: instance.googleAnalyticsId,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {

@@ -56,7 +56,7 @@ import XSignupDialog from '@/components/MkSignupDialog.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
 import MkInfo from '@/components/MkInfo.vue';
-import { instanceName } from '@/config.js';
+import { instanceName } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
@@ -104,10 +104,10 @@ function showMenu(ev: MouseEvent) {
 
 .panel {
 	position: relative;
-	background: var(--acrylicPanel);
+	background: var(--MI_THEME-panel);
+	border-radius: var(--MI-radius);
 	-webkit-backdrop-filter: var(--blur, blur(15px));
 	backdrop-filter: var(--blur, blur(15px));
-	border-radius: var(--radius);
 	box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
 }
 
@@ -195,14 +195,14 @@ function showMenu(ev: MouseEvent) {
 }
 
 .statsItemLabel {
-	color: var(--fgTransparentWeak);
+	color: var(--MI_THEME-fgTransparentWeak);
 	font-size: 0.9em;
 }
 
 .statsItemCount {
 	font-weight: bold;
 	font-size: 1.2em;
-	color: var(--accent);
+	color: var(--MI_THEME-accent);
 }
 
 .tl {
@@ -211,7 +211,7 @@ function showMenu(ev: MouseEvent) {
 
 .tlHeader {
 	padding: 12px 16px;
-	border-bottom: solid 1px var(--divider);
+	border-bottom: solid 1px var(--MI_THEME-divider);
 }
 
 .tlBody {

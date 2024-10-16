@@ -3,7 +3,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div ref="thumbnail" :class="$style.root">
+<div
+	ref="thumbnail"
+	:class="[
+		$style.root,
+		{ [$style.sensitiveHighlight]: highlightWhenSensitive && file.isSensitive },
+	]"
+>
 	<ImgWithBlurhash v-if="isThumbnailAvailable" :hash="file.blurhash" :src="file.thumbnailUrl" :alt="file.name" :title="file.name" :cover="fit !== 'contain'"/>
 	<i v-else-if="is === 'image'" class="ti ti-photo" :class="$style.icon"></i>
 	<i v-else-if="is === 'video'" class="ti ti-video" :class="$style.icon"></i>
@@ -26,6 +32,7 @@ import ImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
 const props = defineProps<{
 	file: Misskey.entities.DriveFile;
 	fit: 'cover' | 'contain';
+	highlightWhenSensitive?: boolean;
 }>();
 
 const is = computed(() => {
@@ -61,9 +68,21 @@ const isThumbnailAvailable = computed(() => {
 .root {
 	position: relative;
 	display: flex;
-	background: var(--panel);
+	background: var(--MI_THEME-panel);
 	border-radius: 8px;
 	overflow: clip;
+}
+
+.sensitiveHighlight::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	border-radius: inherit;
+	box-shadow: inset 0 0 0 4px var(--MI_THEME-warn);
 }
 
 .iconSub {

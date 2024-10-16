@@ -5,7 +5,7 @@
 
 import { App } from 'vue';
 
-import Mfm from './global/MkMisskeyFlavoredMarkdown.ts';
+import Mfm from './global/MkMfm.ts';
 import MkA from './global/MkA.vue';
 import MkAcct from './global/MkAcct.vue';
 import MkAvatar from './global/MkAvatar.vue';

@@ -4,19 +4,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div role="menu" @focusin.passive.stop="() => {}">
+<div
+	role="menu"
+	:class="{
+		[$style.root]: true,
+		[$style.center]: align === 'center',
+		[$style.big]: big,
+		[$style.asDrawer]: asDrawer,
+					[$style.gamingDark]: gamingType === 'dark',
+			[$style.gamingLight]: gamingType === 'light'
+	}"
+	@focusin.passive.stop="() => {}"
+>
 	<div
 		ref="itemsEl"
 		v-hotkey="keymap"
 		tabindex="0"
 		class="_popup _shadow"
-		:class="{
-			[$style.root]: true,
-			[$style.center]: align === 'center',
-			[$style.asDrawer]: asDrawer,
-			[$style.gamingDark]: gamingType === 'dark',
-			[$style.gamingLight]: gamingType === 'light'
-		}"
+		:class="$style.menu"
 		:style="{
 			width: (width && !asDrawer) ? `${width}px` : '',
 			maxHeight: maxHeight ? `min(${maxHeight}px, calc(100dvh - 32px))` : 'calc(100dvh - 32px)',
@@ -46,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkAvatar v-if="item.avatar" :user="item.avatar" :class="$style.avatar"/>
 				<div :class="$style.item_content">
 					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</MkA>
 			<a
@@ -65,7 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]"></i>
 				<div :class="$style.item_content">
 					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</a>
 			<button
@@ -79,7 +84,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<MkAvatar :user="item.user" :class="$style.avatar"/><MkUserName :user="item.user"/>
 				<div v-if="item.indicate" :class="$style.item_content">
-					<span :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<span :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</button>
 			<button
@@ -158,7 +163,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkAvatar v-if="item.avatar" :user="item.avatar" :class="$style.avatar"/>
 				<div :class="$style.item_content">
 					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</button>
 		</template>
@@ -206,6 +211,8 @@ const emit = defineEmits<{
 }>();
 
 const gamingType = defaultStore.state.gamingType;
+
+const big = isTouchUsing;
 
 const isNestingMenu = inject<boolean>('isNestingMenu', false);
 
@@ -304,6 +311,8 @@ async function showRadioOptions(item: MenuRadio, ev: Event) {
 }
 
 async function showChildren(item: MenuParent, ev: Event) {
+	ev.stopPropagation();
+
 	const children: MenuItem[] = await (async () => {
 		if (childrenCache.has(item)) {
 			return childrenCache.get(item)!;
@@ -425,6 +434,60 @@ onBeforeUnmount(() => {
 
 <style lang="scss" module>
 .root {
+	&.center {
+		> .menu {
+			> .item {
+				text-align: center;
+			}
+		}
+	}
+
+	&.big:not(.asDrawer) {
+		> .menu {
+			min-width: 230px;
+
+			> .item {
+				padding: 6px 20px;
+				font-size: 0.95em;
+				line-height: 24px;
+			}
+		}
+	}
+
+	&.asDrawer {
+		max-width: 600px;
+		margin: auto;
+
+		> .menu {
+			padding: 12px 0 max(env(safe-area-inset-bottom, 0px), 12px) 0;
+			width: 100%;
+			border-radius: 24px;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+
+			> .item {
+				font-size: 1em;
+				padding: 12px 24px;
+
+				&::before {
+					width: calc(100% - 24px);
+					border-radius: 12px;
+				}
+
+				> .icon {
+					margin-right: 14px;
+					width: 24px;
+				}
+			}
+
+			> .divider {
+				margin: 12px 0;
+			}
+		}
+	}
+}
+
+.menu {
 	padding: 8px 0;
 	box-sizing: border-box;
 	max-width: 100vw;
@@ -434,39 +497,6 @@ onBeforeUnmount(() => {
 
 	&:focus-visible {
 		outline: none;
-	}
-
-	&.center {
-		> .item {
-			text-align: center;
-		}
-	}
-
-	&.asDrawer {
-		padding: 12px 0 max(env(safe-area-inset-bottom, 0px), 12px) 0;
-		width: 100%;
-		border-radius: 24px;
-		border-bottom-right-radius: 0;
-		border-bottom-left-radius: 0;
-
-		> .item {
-			font-size: 1em;
-			padding: 12px 24px;
-
-			&::before {
-				width: calc(100% - 24px);
-				border-radius: 12px;
-			}
-
-			> .icon {
-				margin-right: 14px;
-				width: 24px;
-			}
-		}
-
-		> .divider {
-			margin: 12px 0;
-		}
 	}
 }
 
@@ -484,7 +514,7 @@ onBeforeUnmount(() => {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-decoration: none !important;
-	color: var(--menuFg, var(--fg));
+	color: var(--menuFg, var(--MI_THEME-fg));
 
 	&::before {
 		content: "";
@@ -504,7 +534,7 @@ onBeforeUnmount(() => {
 		outline: none;
 
 		&:not(:hover):not(:active)::before {
-			outline: var(--focus) solid 2px;
+			outline: var(--MI_THEME-focus) solid 2px;
 			outline-offset: -2px;
 		}
 	}
@@ -513,7 +543,7 @@ onBeforeUnmount(() => {
 		&:hover,
 		&:focus-visible:active,
 		&:focus-visible.active {
-			color: var(--menuHoverFg, var(--accent));
+			color: var(--menuHoverFg, var(--MI_THEME-accent));
 			&.gamingDark{
 				color:black !important;
 			}
@@ -537,16 +567,16 @@ onBeforeUnmount(() => {
 			}
 
 			&::before {
-				background-color: var(--menuHoverBg, var(--accentedBg));
+				background-color: var(--menuHoverBg, var(--MI_THEME-accentedBg));
 			}
 		}
 
 		&:not(:focus-visible):active,
 		&:not(:focus-visible).active {
-			color: var(--menuActiveFg, var(--fgOnAccent));
+			color: var(--menuActiveFg, var(--MI_THEME-fgOnAccent));
 
 			&::before {
-				background-color: var(--menuActiveBg, var(--accent));
+				background-color: var(--menuActiveBg, var(--MI_THEME-accent));
 			}
 		}
 	}
@@ -567,15 +597,19 @@ onBeforeUnmount(() => {
 	&.active {
 		color: var(--fgOnAccent);
 		opacity: 1;
+
     &.gamingDark{
       color:black !important;
     }
+
     &.gamingLight{
       color:white !important;
     }
+
 		&:before {
 			background: var(--accent);
 		}
+
     &.gamingDark:before{
       color:black !important;
       background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);      background-size: 1800% 1800%;
@@ -593,9 +627,14 @@ onBeforeUnmount(() => {
     }
 	}
 
+	&.radio {
+		--menuActiveFg: var(--MI_THEME-accent);
+		--menuActiveBg: var(--MI_THEME-accentedBg);
+	}
+
 	&.parent {
-		--menuActiveFg: var(--accent);
-		--menuActiveBg: var(--accentedBg);
+		--menuActiveFg: var(--MI_THEME-accent);
+		--menuActiveBg: var(--MI_THEME-accentedBg);
 	}
 
 	&.label {
@@ -660,14 +699,13 @@ onBeforeUnmount(() => {
 .indicator {
 	display: flex;
 	align-items: center;
-	color: var(--indicator);
+	color: var(--MI_THEME-indicator);
 	font-size: 12px;
-	animation: global-blink 1s infinite;
 }
 
 .divider {
 	margin: 8px 0;
-	border-top: solid 0.5px var(--divider);
+	border-top: solid 0.5px var(--MI_THEME-divider);
 }
 
 .radioIcon {
@@ -677,11 +715,11 @@ onBeforeUnmount(() => {
 	height: 1em;
 	vertical-align: -0.125em;
 	border-radius: 50%;
-	border: solid 2px var(--divider);
-	background-color: var(--panel);
+	border: solid 2px var(--MI_THEME-divider);
+	background-color: var(--MI_THEME-panel);
 
 	&.radioChecked {
-		border-color: var(--accent);
+		border-color: var(--MI_THEME-accent);
 
 		&::after {
 			content: "";
@@ -693,7 +731,7 @@ onBeforeUnmount(() => {
 			width: 50%;
 			height: 50%;
 			border-radius: 50%;
-			background-color: var(--accent);
+			background-color: var(--MI_THEME-accent);
 		}
 	}
 }

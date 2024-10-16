@@ -59,7 +59,6 @@ export class NotificationEntityService implements OnModuleInit {
 	async #packInternal <T extends MiNotification | MiGroupedNotification> (
 		src: T,
 		meId: MiUser['id'],
-
 		options: {
 			checkValidNotifier?: boolean;
 		},
@@ -159,8 +158,15 @@ export class NotificationEntityService implements OnModuleInit {
 			...(notification.type === 'roleAssigned' ? {
 				role: role,
 			} : {}),
+			...(notification.type === 'followRequestAccepted' ? {
+				message: notification.message,
+			} : {}),
 			...(notification.type === 'achievementEarned' ? {
 				achievement: notification.achievement,
+			} : {}),
+			...(notification.type === 'exportCompleted' ? {
+				exportedEntity: notification.exportedEntity,
+				fileId: notification.fileId,
 			} : {}),
 			...(notification.type === 'loginBonus' ? {
 				loginBonus: notification.loginBonus,
@@ -232,7 +238,6 @@ export class NotificationEntityService implements OnModuleInit {
 	public async pack(
 		src: MiNotification | MiGroupedNotification,
 		meId: MiUser['id'],
-
 		options: {
 			checkValidNotifier?: boolean;
 		},

@@ -8,7 +8,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
 import { DataSource, In, IsNull, Not } from 'typeorm';
 import { DI } from '@/di-symbols.js';
-import type { UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
+import type { MiMeta, UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
 import { MiUser } from '@/models/User.js';
 import { MiUserProfile } from '@/models/UserProfile.js';
 import { IdService } from '@/core/IdService.js';
@@ -40,7 +40,6 @@ export class SignupService {
 		private userService: UserService,
 		private userEntityService: UserEntityService,
 		private idService: IdService,
-		private metaService: MetaService,
 		private instanceActorService: InstanceActorService,
 		private usersChart: UsersChart,
 	) {}
@@ -105,8 +104,7 @@ export class SignupService {
 			!(await this.instanceActorService.realLocalUsersPresent());
 
 		if (!opts.ignorePreservedUsernames && !isTheFirstUser) {
-			const instance = await this.metaService.fetch(true);
-			const isPreserved = instance.preservedUsernames
+			const isPreserved = this.meta.preservedUsernames
 				.map((x) => x.toLowerCase())
 				.includes(username.toLowerCase());
 			if (isPreserved) {
@@ -181,8 +179,8 @@ export class SignupService {
 			);
 		});
 
-		this.usersChart.update(account, true).then();
-		this.userService.notifySystemWebhook(account, 'userCreated').then();
+		this.usersChart.update(account, true);
+		this.userService.notifySystemWebhook(account, 'userCreated');
 
 		return { account, secret };
 	}

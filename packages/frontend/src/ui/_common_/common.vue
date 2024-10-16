@@ -38,9 +38,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <div v-if="pendingApiRequestsCount > 0" id="wait"></div>
 
-<div v-if="dev" id="devTicker"><span>DEV BUILD</span></div>
+<div v-if="dev" id="devTicker"><span style="animation: dev-ticker-blink 2s infinite;">DEV BUILD</span></div>
 
-<div v-if="$i && $i.isBot" id="botWarn"><span>{{ i18n.ts.loggedInAsBot }}</span></div>
+<div v-if="$i && $i.isBot" id="botWarn"><span style="animation: dev-ticker-blink 2s infinite;">{{ i18n.ts.loggedInAsBot }}</span></div>
 </template>
 
 <script lang="ts" setup>
@@ -115,27 +115,27 @@ if ($i) {
 .notifications {
 	position: fixed;
 	z-index: 3900000;
-	padding: 0 var(--margin);
+	padding: 0 var(--MI-margin);
 	pointer-events: none;
 	display: flex;
 
 	&.notificationsPosition_leftTop {
-		top: var(--margin);
+		top: var(--MI-margin);
 		left: 0;
 	}
 
 	&.notificationsPosition_rightTop {
-		top: var(--margin);
+		top: var(--MI-margin);
 		right: 0;
 	}
 
 	&.notificationsPosition_leftBottom {
-		bottom: calc(var(--minBottomSpacing) + var(--margin));
+		bottom: calc(var(--MI-minBottomSpacing) + var(--MI-margin));
 		left: 0;
 	}
 
 	&.notificationsPosition_rightBottom {
-		bottom: calc(var(--minBottomSpacing) + var(--margin));
+		bottom: calc(var(--MI-minBottomSpacing) + var(--MI-margin));
 		right: 0;
 	}
 
@@ -233,8 +233,8 @@ if ($i) {
 		height: 18px;
 		box-sizing: border-box;
 		border: solid 2px transparent;
-		border-top-color: var(--accent);
-		border-left-color: var(--accent);
+		border-top-color: var(--MI_THEME-accent);
+		border-left-color: var(--MI_THEME-accent);
 		border-radius: 50%;
 		animation: progress-spinner 400ms linear infinite;
 	}
@@ -257,10 +257,6 @@ if ($i) {
 	font-size: 14px;
 	pointer-events: none;
 	user-select: none;
-
-	> span {
-		animation: dev-ticker-blink 2s infinite;
-	}
 }
 
 #devTicker {
@@ -274,9 +270,5 @@ if ($i) {
 	font-size: 14px;
 	pointer-events: none;
 	user-select: none;
-
-	> span {
-		animation: dev-ticker-blink 2s infinite;
-	}
 }
 </style>

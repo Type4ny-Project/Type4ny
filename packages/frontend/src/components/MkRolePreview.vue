@@ -5,8 +5,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <MkA :to="forModeration ? `/admin/roles/${role.id}` : `/roles/${role.id}`" :class="$style.root" tabindex="-1" :style="{ '--color': role.color }">
 	<template v-if="forModeration">
-		<i v-if="role.isPublic" class="ti ti-world" :class="$style.icon" style="color: var(--success)"></i>
-		<i v-else class="ti ti-lock" :class="$style.icon" style="color: var(--warn)"></i>
+		<i v-if="role.isPublic" class="ti ti-world" :class="$style.icon" style="color: var(--MI_THEME-success)"></i>
+		<i v-else class="ti ti-lock" :class="$style.icon" style="color: var(--MI_THEME-warn)"></i>
 	</template>
 
 	<div v-adaptive-bg class="_panel" :class="$style.body">
@@ -16,8 +16,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 					<img :class="$style.bodyBadge" :src="role.iconUrl"/>
 				</template>
 				<template v-else>
-					<i v-if="role.isAdministrator" class="ti ti-crown" style="color: var(--accent);"></i>
-					<i v-else-if="role.isModerator" class="ti ti-shield" style="color: var(--accent);"></i>
+					<i v-if="role.isAdministrator" class="ti ti-crown" style="color: var(--MI_THEME-accent);"></i>
+					<i v-else-if="role.isModerator" class="ti ti-shield" style="color: var(--MI_THEME-accent);"></i>
 					<i v-else class="ti ti-user" style="opacity: 0.7;"></i>
 				</template>
 			</span>

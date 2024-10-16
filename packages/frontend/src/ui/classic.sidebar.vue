@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -20,7 +21,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<div v-if="item === '-'" class="divider"></div>
 		<component :is="navbarItemDef[item].to ? 'MkA' : 'button'" v-else-if="navbarItemDef[item] && (navbarItemDef[item].show !== false)" v-click-anime class="item _button" :class="item" activeClass="active" :to="navbarItemDef[item].to" v-on="navbarItemDef[item].action ? { click: navbarItemDef[item].action } : {}">
 			<i class="ti-fw" :class="navbarItemDef[item].icon"></i><span class="text">{{ navbarItemDef[item].title }}</span>
-			<span v-if="navbarItemDef[item].indicated" class="indicator">
+			<span v-if="navbarItemDef[item].indicated" class="indicator _blink">
 				<span v-if="navbarItemDef[item].indicateValue && indicatorCounterToggle" class="_indicateCounter itemIndicateValueIcon">{{ navbarItemDef[item].indicateValue }}</span>
 				<i v-else class="_indicatorCircle"></i>
 			</span>
@@ -32,7 +33,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	</MkA>
 	<button v-click-anime class="item _button" @click="more">
 		<i class="ti ti-dots ti-fw"></i><span class="text">{{ i18n.ts.more }}</span>
-		<span v-if="otherNavItemIndicated" class="indicator"><i class="_indicatorCircle"></i></span>
+		<span v-if="otherNavItemIndicated" class="indicator _blink"><i class="_indicatorCircle"></i></span>
 	</button>
 	<MkA v-click-anime class="item" activeClass="active" to="/settings" :behavior="settingsWindowed ? 'window' : null">
 		<i class="ti ti-settings ti-fw"></i><span class="text">{{ i18n.ts.settings }}</span>
@@ -50,7 +51,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { defineAsyncComponent, computed, watch, ref, shallowRef } from 'vue';
 import { openInstanceMenu } from './_common_/common.js';
-// import { host } from '@/config.js';
+// import { host } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { navbarItemDef } from '@/navbar.js';
 import { openAccountMenu as openAccountMenu_, $i } from '@/account.js';
@@ -157,7 +158,7 @@ watch(defaultStore.reactiveState.menuDisplay, () => {
 
 	> .divider {
 		margin: 10px 0;
-		border-top: solid 0.5px var(--divider);
+		border-top: solid 0.5px var(--MI_THEME-divider);
 	}
 
 	> .post {
@@ -165,7 +166,7 @@ watch(defaultStore.reactiveState.menuDisplay, () => {
 		top: 0;
 		z-index: 1;
 		padding: 16px 0;
-		background: var(--bg);
+		background: var(--MI_THEME-bg);
 
 		> .button {
 			min-width: 0;
@@ -220,9 +221,8 @@ watch(defaultStore.reactiveState.menuDisplay, () => {
 			position: absolute;
 			top: 0;
 			left: 0;
-			color: var(--navIndicator);
+			color: var(--MI_THEME-navIndicator);
 			font-size: 8px;
-			animation: global-blink 1s infinite;
 
 			&:has(.itemIndicateValueIcon) {
 				animation: none;
@@ -233,11 +233,11 @@ watch(defaultStore.reactiveState.menuDisplay, () => {
 
 		&:hover {
 			text-decoration: none;
-			color: var(--navHoverFg);
+			color: var(--MI_THEME-navHoverFg);
 		}
 
 		&.active {
-			color: var(--navActive);
+			color: var(--MI_THEME-navActive);
 		}
 	}
 }
