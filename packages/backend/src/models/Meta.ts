@@ -616,11 +616,6 @@ export class MiMeta {
 	public enableChartsForFederatedInstances: boolean;
 
 	@Column('boolean', {
-		default: true,
-	})
-	public enableStatsForFederatedInstances: boolean;
-
-	@Column('boolean', {
 		default: false,
 	})
 	public enableServerMachineStats: boolean;

@@ -4641,10 +4641,6 @@ export interface Locale extends ILocale {
      */
     "enableChartsForFederatedInstances": string;
     /**
-     * リモートサーバーの情報を取得
-     */
-    "enableStatsForFederatedInstances": string;
-    /**
      * ノートのアクションにクリップを追加
      */
     "showClipButtonInNoteFooter": string;
