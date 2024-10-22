@@ -58,16 +58,7 @@ function onMockToggleReaction(emoji: string, count: number) {
 
 if ($i && reactions.value) {
 	reactions.value = reactions.value.map(([reactionType, count]) => {
-		const isMuted = $i.mutedReactions.flat().some(mutedReaction => {
-			if (mutedReaction.startsWith('/') && mutedReaction.endsWith('/')) {
-				const regex = new RegExp(mutedReaction.slice(1, -1));
-				return regex.test(reactionType);
-			} else {
-				return reactionType.includes(mutedReaction);
-			}
-		});
-
-		if (reactionType === props.note.myReaction || !isMuted) {
+		if (reactionType === props.note.myReaction || !($i.mutedReactions.flat()).includes(reactionType)) {
 			return [reactionType, count];
 		} else {
 			return ['🚮', count];
@@ -99,18 +90,10 @@ watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumbe
 	}
 	if ($i) {
 		reactions.value = newReactions.map(([reactionType, count]) => {
-			const isMuted = $i.mutedReactions.flat().some(mutedReaction => {
-				if (mutedReaction.startsWith('/') && mutedReaction.endsWith('/')) {
-					const regex = new RegExp(mutedReaction.slice(1, -1));
-					return regex.test(reactionType);
-				} else {
-					return reactionType.includes(mutedReaction);
-				}
-			});
-			if (reactionType === props.note.myReaction || !isMuted) {
+			if (reactionType === props.note.myReaction || !($i.mutedReactions.flat()).includes(reactionType)) {
 				return [reactionType, count];
 			} else {
-				return ['🚮', count];
+				return ['🚮️', count];
 			}
 		});
 	} else {

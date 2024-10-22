@@ -9,7 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkTextarea v-model="mutedWords">
 			<span>{{ i18n.ts._wordMute.muteWords }}</span>
 			<template v-if="!notCaption" #caption>{{ i18n.ts._wordMute.muteWordsDescription }}<br>{{ i18n.ts._wordMute.muteWordsDescription2 }}</template>
-			<template v-if="notCaption" #caption>{{ i18n.ts._reactionMute.muteReactionsDescription }}<br>{{ i18n.ts._reactionMute.muteReactionsDescription2 }}</template>
 		</MkTextarea>
 	</div>
 	<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
