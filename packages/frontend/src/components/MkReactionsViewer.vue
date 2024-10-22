@@ -47,6 +47,7 @@ if (props.note.myReaction && !Object.keys(reactions.value).includes(props.note.m
 	reactions.value[props.note.myReaction] = props.note.reactions[props.note.myReaction];
 }
 
+
 function onMockToggleReaction(emoji: string, count: number) {
 	if (!mock) return;
 
@@ -55,15 +56,12 @@ function onMockToggleReaction(emoji: string, count: number) {
 
 	emit('mockUpdateMyReaction', emoji, (count - reactions.value[i][1]));
 }
+if ($i && reactions.value){
 
-if ($i && reactions.value) {
-	reactions.value = reactions.value.map(([reactionType, count]) => {
-		if (reactionType === props.note.myReaction || !($i.mutedReactions.flat()).includes(reactionType)) {
-			return [reactionType, count];
-		} else {
-			return ['🚮', count];
-		}
-	});
+	reactions.value = reactions.value.filter(([reactionType]) =>{
+		if (reactionType === props.note.myReaction) return true;
+		if (!($i.mutedReactions.flat()).includes(reactionType)) return true;
+	} );
 }
 watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumber]) => {
 	let newReactions: [string, number][] = [];
@@ -88,14 +86,11 @@ watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumbe
 	if (props.note.myReaction && !newReactions.map(([x]) => x).includes(props.note.myReaction)) {
 		newReactions.push([props.note.myReaction, newSource[props.note.myReaction]]);
 	}
-	if ($i) {
-		reactions.value = newReactions.map(([reactionType, count]) => {
-			if (reactionType === props.note.myReaction || !($i.mutedReactions.flat()).includes(reactionType)) {
-				return [reactionType, count];
-			} else {
-				return ['🚮️', count];
-			}
-		});
+	if ($i){
+		reactions.value = newReactions.filter(([reactionType]) =>{
+			if (reactionType === props.note.myReaction) return true;
+			if (!($i.mutedReactions.flat()).includes(reactionType)) return true;
+		} );
 	} else {
 		reactions.value = newReactions;
 	}

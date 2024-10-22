@@ -114,8 +114,8 @@ function getReactionName(reaction: string, formated = false) {
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	const oldReaction = props.note.myReactions?.includes(props.reaction)
+
+	const oldReaction = props.note.myReactions.includes(props.reaction)
 		? props.reaction
 		: null;
 	if (oldReaction) {
@@ -147,9 +147,7 @@ async function toggleReaction() {
 			reaction: oldReaction,
 		}).then(() => {
 			if (
-				oldReaction !== props.reaction &&
-				oldReaction !== '🚮' &&
-				props.reaction !== '🚮'
+				oldReaction !== props.reaction
 			) {
 				misskeyApi('notes/reactions/create', {
 					noteId: props.note.id,
