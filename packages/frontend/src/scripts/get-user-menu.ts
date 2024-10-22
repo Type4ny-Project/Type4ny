@@ -442,7 +442,7 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 			},
 		});
 	}
-
+/*
 	if ($i && meId === user.id) {
 		menuItems.push({ type: 'divider' }, {
 			icon: 'ti ti-pencil',
@@ -455,7 +455,7 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 			},
 		});
 	}
-
+*/
 	if (userActions.length > 0) {
 		menuItems.push({ type: 'divider' }, ...userActions.map(action => ({
 			icon: 'ti ti-plug',
