@@ -695,10 +695,6 @@ export interface Locale extends ILocale {
      */
     "renoteUnmute": string;
     /**
-     * リアクションのミュート
-     */
-    "mutedReactions": string;
-    /**
      * ブロック
      */
     "block": string;
