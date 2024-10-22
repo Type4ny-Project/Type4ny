@@ -295,6 +295,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					set.enableServerMachineStats = ps.enableServerMachineStats;
 				}
 
+				if (ps.enableStatsForFederatedInstances !== undefined) {
+					set.enableStatsForFederatedInstances = ps.enableStatsForFederatedInstances;
+				}
+
 				if (ps.cacheRemoteFiles !== undefined) {
 					set.cacheRemoteFiles = ps.cacheRemoteFiles;
 				}
