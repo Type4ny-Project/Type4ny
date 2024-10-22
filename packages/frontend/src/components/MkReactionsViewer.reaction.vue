@@ -115,7 +115,8 @@ function getReactionName(reaction: string, formated = false) {
 async function toggleReaction() {
 	if (!canToggle.value) return;
 
-	const oldReaction = props.note.myReactions.includes(props.reaction)
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	const oldReaction = props.note.myReactions?.includes(props.reaction)
 		? props.reaction
 		: null;
 	if (oldReaction) {
