@@ -20,7 +20,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkSwitch v-model="enablehanntenn">{{ i18n.ts.hanntenn }}<template #caption>{{ i18n.ts.hanntennInfo }} </template></MkSwitch>
 		<MkSwitch v-model="enableSeasonalScreenEffect">{{ i18n.ts.seasonalScreenEffect }}</MkSwitch>
 		<MkSwitch v-model="useNativeUIForVideoAudioPlayer">{{ i18n.ts.useNativeUIForVideoAudioPlayer }}</MkSwitch>
-		<MkSwitch v-model="virtualScrollOn">{{ i18n.ts.virtualScrollOn }}</MkSwitch>
 	</div>
 	<div>
 		<MkRadios v-model="emojiStyle">
@@ -80,7 +79,6 @@ const enableonlyAndWithSave = computed(defaultStore.makeGetterSetter('onlyAndWit
 const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'));
 const enableSeasonalScreenEffect = computed(defaultStore.makeGetterSetter('enableSeasonalScreenEffect'));
 const useNativeUIForVideoAudioPlayer = computed(defaultStore.makeGetterSetter('useNativeUIForVideoAudioPlayer'));
-const virtualScrollOn = computed(defaultStore.makeGetterSetter('virtualScrollOn'));
 const emojiStyle = computed(defaultStore.makeGetterSetter('emojiStyle'));
 
 watch(fontSize, () => {
