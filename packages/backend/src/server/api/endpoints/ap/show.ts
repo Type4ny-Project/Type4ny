@@ -19,6 +19,8 @@ import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { UtilityService } from '@/core/UtilityService.js';
 import { bindThis } from '@/decorators.js';
 import { ApiError } from '../../error.js';
+import { MiMeta } from '@/models/_.js';
+import { DI } from '@/di-symbols.js';
 
 export const meta = {
 	tags: ['federation'],
@@ -87,6 +89,9 @@ export const paramDef = {
 @Injectable()
 export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
 	constructor(
+		@Inject(DI.meta)
+		private serverSettings: MiMeta,
+
 		private utilityService: UtilityService,
 		private userEntityService: UserEntityService,
 		private noteEntityService: NoteEntityService,
@@ -110,7 +115,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 	 */
 	@bindThis
 	private async fetchAny(uri: string, me: MiLocalUser | null | undefined): Promise<SchemaType<typeof meta['res']> | null> {
-		if (!this.utilityService.isFederationAllowedUri(uri)) return null;
+		// ブロックしてたら中断
+		if (this.utilityService.isBlockedHost(this.serverSettings.blockedHosts, this.utilityService.extractDbHost(uri))) return null;
 
 		let local = await this.mergePack(me, ...await Promise.all([
 			this.apDbResolverService.getUserFromApId(uri),

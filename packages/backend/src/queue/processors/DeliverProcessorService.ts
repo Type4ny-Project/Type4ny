@@ -53,7 +53,8 @@ export class DeliverProcessorService {
 	public async process(job: Bull.Job<DeliverJobData>): Promise<string> {
 		const { host } = new URL(job.data.to);
 
-		if (!this.utilityService.isFederationAllowedUri(job.data.to)) {
+		// ブロックしてたら中断
+		if (this.utilityService.isBlockedHost(this.meta.blockedHosts, this.utilityService.toPuny(host))) {
 			return 'skip (blocked)';
 		}
 

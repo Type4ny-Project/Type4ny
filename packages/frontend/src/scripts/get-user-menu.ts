@@ -6,9 +6,10 @@
 import { toUnicode } from 'punycode';
 import { defineAsyncComponent, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
+import { host, url } from '@@/js/config.js';
+import type { MenuItem } from '@/types/menu.js';
 import { i18n } from '@/i18n.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
-import { host, url } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { defaultStore, userActions } from '@/store.js';
@@ -18,7 +19,6 @@ import { IRouter } from '@/nirax.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
 import { mainRouter } from '@/router/main.js';
 import { genEmbedCode } from '@/scripts/get-embed-code.js';
-import type { MenuItem } from '@/types/menu.js';
 
 export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter = mainRouter) {
 	const meId = $i ? $i.id : null;
@@ -272,7 +272,7 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 								listId: list.id,
 								userId: user.id,
 							}).then(() => {
-								list.userIds?.splice(list.userIds?.indexOf(user.id), 1);
+								list.userIds?.splice(list.userIds.indexOf(user.id), 1);
 							});
 						}
 					}));
@@ -439,6 +439,19 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 			text: i18n.ts.editProfile,
 			action: () => {
 				router.push('/settings/profile');
+			},
+		});
+	}
+
+	if ($i && meId === user.id) {
+		menuItems.push({ type: 'divider' }, {
+			icon: 'ti ti-pencil',
+			text: i18n.ts.profileCardView,
+			action: () => {
+				const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkProfileCard.vue')), {
+				}, {
+					closed: () => dispose(),
+				});
 			},
 		});
 	}

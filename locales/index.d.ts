@@ -1091,14 +1091,6 @@ export interface Locale extends ILocale {
      */
     "mediaSilencedInstancesDescription": string;
     /**
-     * 連合を許可するサーバー
-     */
-    "federationAllowedHosts": string;
-    /**
-     * 連合を許可するサーバーのホストを改行で区切って設定します。
-     */
-    "federationAllowedHostsDescription": string;
-    /**
      * ミュートとブロック
      */
     "muteAndBlock": string;

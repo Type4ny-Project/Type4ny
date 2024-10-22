@@ -217,16 +217,6 @@ export const paramDef = {
 		bannerLight: { type: 'string', nullable: true },
 		bannerDark: { type: 'string', nullable: true },
 		pointName: { type: 'string', nullable: true },
-		federation: {
-			type: 'string',
-			enum: ['all', 'none', 'specified'],
-		},
-		federationHosts: {
-			type: 'array',
-			items: {
-				type: 'string',
-			},
-		},
 	},
 	required: [],
 } as const;
@@ -775,15 +765,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.iconLight !== undefined) {
 				set.iconLight = ps.iconLight;
 			}
-
-			if (ps.federation !== undefined) {
-				set.federation = ps.federation;
-			}
-
-			if (Array.isArray(ps.federationHosts)) {
-				set.blockedHosts = ps.federationHosts.filter(Boolean).map(x => x.toLowerCase());
-			}
-
 
 			const before = await this.metaService.fetch(true);
 
