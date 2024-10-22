@@ -246,7 +246,7 @@ export class MfmService {
 
 		const { happyDOM, window } = new Window();
 
-		const doc = fragment.ownerDocument;
+		const doc = window.document;
 
 		const body = doc.createElement('p');
 
