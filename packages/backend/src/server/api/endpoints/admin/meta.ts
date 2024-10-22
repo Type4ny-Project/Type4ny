@@ -804,6 +804,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
+				federation: instance.federation,
+				federationHosts: instance.federationHosts,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {

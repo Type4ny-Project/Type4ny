@@ -120,6 +120,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		// リモートから一旦オブジェクトフェッチ
 		const resolver = this.apResolverService.createResolver();
+		console.log(uri);
 		const object = await resolver.resolve(uri) as any;
 
 		// /@user のような正規id以外で取得できるURIが指定されていた場合、ここで初めて正規URIが確定する

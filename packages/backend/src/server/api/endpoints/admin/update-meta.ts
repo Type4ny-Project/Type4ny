@@ -395,7 +395,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.silencedHosts = ps.silencedHosts.sort().filter((h) => {
 					const lv = lastValue;
 					lastValue = h;
-					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
+					return h !== '' && h !== lv && !set.silencedHosts?.includes(h);
 				});
 			}
 
@@ -404,7 +404,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.mediaSilencedHosts = ps.mediaSilencedHosts.sort().filter((h) => {
 					const lv = lastValue;
 					lastValue = h;
-					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
+					return h !== '' && h !== lv && !set.mediaSilencedHosts?.includes(h);
 				});
 			}
 			if (ps.themeColor !== undefined) {
