@@ -82,6 +82,9 @@ type AdminAccountsFindByEmailRequest = operations['admin___accounts___find-by-em
 type AdminAccountsFindByEmailResponse = operations['admin___accounts___find-by-email']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type AdminAccountsPresentPointsRequest = operations['admin___accounts___present-points']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminAdCreateRequest = operations['admin___ad___create']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -157,6 +160,9 @@ type AdminEmojiAddAliasesBulkRequest = operations['admin___emoji___add-aliases-b
 type AdminEmojiAddRequest = operations['admin___emoji___add']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiAddRequestRequest = operations['admin___emoji___add-request']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiAddResponse = operations['admin___emoji___add']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
@@ -184,6 +190,12 @@ type AdminEmojiListRemoteResponse = operations['admin___emoji___list-remote']['r
 type AdminEmojiListRequest = operations['admin___emoji___list']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiListRequestRequest = operations['admin___emoji___list-request']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminEmojiListRequestResponse = operations['admin___emoji___list-request']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiListResponse = operations['admin___emoji___list']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
@@ -196,10 +208,19 @@ type AdminEmojiSetAliasesBulkRequest = operations['admin___emoji___set-aliases-b
 type AdminEmojiSetCategoryBulkRequest = operations['admin___emoji___set-category-bulk']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiSetIssensitiveBulkRequest = operations['admin___emoji___set-issensitive-bulk']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiSetLicenseBulkRequest = operations['admin___emoji___set-license-bulk']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiSetLocalonlyBulkRequest = operations['admin___emoji___set-localonly-bulk']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiUpdateRequest = operations['admin___emoji___update']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminEmojiUpdateRequestRequest = operations['admin___emoji___update-request']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type AdminFederationDeleteAllFilesRequest = operations['admin___federation___delete-all-files']['requestBody']['content']['application/json'];
@@ -227,6 +248,27 @@ type AdminGetUserIpsRequest = operations['admin___get-user-ips']['requestBody'][
 
 // @public (undocumented)
 type AdminGetUserIpsResponse = operations['admin___get-user-ips']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleDeleteRequest = operations['admin___inbox-rule___delete']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleDeleteResponse = operations['admin___inbox-rule___delete']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleEditRequest = operations['admin___inbox-rule___edit']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleEditResponse = operations['admin___inbox-rule___edit']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleListResponse = operations['admin___inbox-rule___list']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleSetRequest = operations['admin___inbox-rule___set']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleSetResponse = operations['admin___inbox-rule___set']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type AdminInviteCreateRequest = operations['admin___invite___create']['requestBody']['content']['application/json'];
@@ -1110,10 +1152,22 @@ type EmojiDetailed = components['schemas']['EmojiDetailed'];
 type EmojiRequest = operations['emoji']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type EmojiRequestDetailed = components['schemas']['EmojiRequestDetailed'];
+
+// @public (undocumented)
+type EmojiRequestSimple = components['schemas']['EmojiRequestSimple'];
+
+// @public (undocumented)
+type EmojiRequestsResponse = operations['emoji-requests']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type EmojiResponse = operations['emoji']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type EmojiSimple = components['schemas']['EmojiSimple'];
+
+// @public (undocumented)
+type EmojiSpeedtestRequest = operations['emoji___speedtest']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type EmojisResponse = operations['emojis']['responses']['200']['content']['application/json'];
@@ -1239,12 +1293,20 @@ declare namespace entities {
         AdminAccountsDeleteRequest,
         AdminAccountsFindByEmailRequest,
         AdminAccountsFindByEmailResponse,
+        AdminAccountsPresentPointsRequest,
         AdminAdCreateRequest,
         AdminAdCreateResponse,
         AdminAdDeleteRequest,
         AdminAdListRequest,
         AdminAdListResponse,
         AdminAdUpdateRequest,
+        AdminInboxRuleListResponse,
+        AdminInboxRuleSetRequest,
+        AdminInboxRuleSetResponse,
+        AdminInboxRuleEditRequest,
+        AdminInboxRuleEditResponse,
+        AdminInboxRuleDeleteRequest,
+        AdminInboxRuleDeleteResponse,
         AdminAnnouncementsCreateRequest,
         AdminAnnouncementsCreateResponse,
         AdminAnnouncementsDeleteRequest,
@@ -1266,6 +1328,7 @@ declare namespace entities {
         AdminEmojiAddAliasesBulkRequest,
         AdminEmojiAddRequest,
         AdminEmojiAddResponse,
+        AdminEmojiAddRequestRequest,
         AdminEmojiCopyRequest,
         AdminEmojiCopyResponse,
         AdminEmojiDeleteBulkRequest,
@@ -1275,11 +1338,17 @@ declare namespace entities {
         AdminEmojiListRemoteResponse,
         AdminEmojiListRequest,
         AdminEmojiListResponse,
+        AdminEmojiListRequestRequest,
+        AdminEmojiListRequestResponse,
         AdminEmojiRemoveAliasesBulkRequest,
         AdminEmojiSetAliasesBulkRequest,
         AdminEmojiSetCategoryBulkRequest,
+        AdminEmojiSetLocalonlyBulkRequest,
+        AdminEmojiSetIssensitiveBulkRequest,
         AdminEmojiSetLicenseBulkRequest,
         AdminEmojiUpdateRequest,
+        AdminEmojiUpdateRequestRequest,
+        EmojiSpeedtestRequest,
         AdminFederationDeleteAllFilesRequest,
         AdminFederationRefreshRemoteInstanceMetadataRequest,
         AdminFederationRemoveAllFollowingRequest,
@@ -1600,6 +1669,8 @@ declare namespace entities {
         IWebhooksShowResponse,
         IWebhooksUpdateRequest,
         IWebhooksDeleteRequest,
+        IStatsRequest,
+        IStatsResponse,
         IWebhooksTestRequest,
         InviteCreateResponse,
         InviteDeleteRequest,
@@ -1609,6 +1680,7 @@ declare namespace entities {
         MetaRequest,
         MetaResponse,
         EmojisResponse,
+        EmojiRequestsResponse,
         EmojiRequest,
         EmojiResponse,
         MiauthGenTokenRequest,
@@ -1633,7 +1705,11 @@ declare namespace entities {
         NotesConversationResponse,
         NotesCreateRequest,
         NotesCreateResponse,
+        NotesScheduleDeleteRequest,
+        NotesScheduleListRequest,
+        NotesScheduleListResponse,
         NotesDeleteRequest,
+        NotesUpdateRequest,
         NotesFavoritesCreateRequest,
         NotesFavoritesDeleteRequest,
         NotesFeaturedRequest,
@@ -1644,6 +1720,8 @@ declare namespace entities {
         NotesHybridTimelineResponse,
         NotesLocalTimelineRequest,
         NotesLocalTimelineResponse,
+        NotesAnyLocalTimelineRequest,
+        NotesAnyLocalTimelineResponse,
         NotesMentionsRequest,
         NotesMentionsResponse,
         NotesPollsRecommendationRequest,
@@ -1743,6 +1821,8 @@ declare namespace entities {
         UsersListsDeleteRequest,
         UsersListsListRequest,
         UsersListsListResponse,
+        UsersListsListFavoriteRequest,
+        UsersListsListFavoriteResponse,
         UsersListsPullRequest,
         UsersListsPushRequest,
         UsersListsShowRequest,
@@ -1830,7 +1910,9 @@ declare namespace entities {
         FederationInstance,
         GalleryPost,
         EmojiSimple,
+        EmojiRequestSimple,
         EmojiDetailed,
+        EmojiRequestDetailed,
         Flash,
         Signin,
         RoleCondFormulaLogics,
@@ -2338,6 +2420,12 @@ type ISigninHistoryResponse = operations['i___signin-history']['responses']['200
 function isPureRenote(note: Note): note is PureRenote;
 
 // @public (undocumented)
+type IStatsRequest = operations['i___stats']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type IStatsResponse = operations['i___stats']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 export interface IStream extends EventEmitter<StreamEvents> {
     // (undocumented)
     close(): void;
@@ -2582,6 +2670,9 @@ type ModerationLog = {
     type: 'updateAbuseReportNotificationRecipient';
     info: ModerationLogPayloads['updateAbuseReportNotificationRecipient'];
 } | {
+    type: 'inboxRejected';
+    info: ModerationLogPayloads['inboxRejected'];
+} | {
     type: 'deleteAbuseReportNotificationRecipient';
     info: ModerationLogPayloads['deleteAbuseReportNotificationRecipient'];
 } | {
@@ -2599,7 +2690,7 @@ type ModerationLog = {
 });
 
 // @public (undocumented)
-export const moderationLogTypes: readonly ["updateServerSettings", "suspend", "unsuspend", "updateUserNote", "addCustomEmoji", "updateCustomEmoji", "deleteCustomEmoji", "assignRole", "unassignRole", "createRole", "updateRole", "deleteRole", "clearQueue", "promoteQueue", "deleteDriveFile", "deleteNote", "createGlobalAnnouncement", "createUserAnnouncement", "updateGlobalAnnouncement", "updateUserAnnouncement", "deleteGlobalAnnouncement", "deleteUserAnnouncement", "resetPassword", "suspendRemoteInstance", "unsuspendRemoteInstance", "updateRemoteInstanceNote", "markSensitiveDriveFile", "unmarkSensitiveDriveFile", "resolveAbuseReport", "forwardAbuseReport", "updateAbuseReportNote", "createInvitation", "createAd", "updateAd", "deleteAd", "createAvatarDecoration", "updateAvatarDecoration", "deleteAvatarDecoration", "unsetUserAvatar", "unsetUserBanner", "createSystemWebhook", "updateSystemWebhook", "deleteSystemWebhook", "createAbuseReportNotificationRecipient", "updateAbuseReportNotificationRecipient", "deleteAbuseReportNotificationRecipient", "deleteAccount", "deletePage", "deleteFlash", "deleteGalleryPost"];
+export const moderationLogTypes: readonly ["updateServerSettings", "suspend", "unsuspend", "updateUserNote", "addCustomEmoji", "updateCustomEmoji", "deleteCustomEmoji", "assignRole", "unassignRole", "createRole", "updateRole", "deleteRole", "clearQueue", "promoteQueue", "deleteDriveFile", "deleteNote", "createGlobalAnnouncement", "createUserAnnouncement", "updateGlobalAnnouncement", "updateUserAnnouncement", "deleteGlobalAnnouncement", "deleteUserAnnouncement", "resetPassword", "suspendRemoteInstance", "unsuspendRemoteInstance", "updateRemoteInstanceNote", "markSensitiveDriveFile", "unmarkSensitiveDriveFile", "resolveAbuseReport", "forwardAbuseReport", "updateAbuseReportNote", "createInvitation", "createAd", "updateAd", "deleteAd", "createAvatarDecoration", "updateAvatarDecoration", "deleteAvatarDecoration", "unsetUserAvatar", "unsetUserBanner", "createSystemWebhook", "updateSystemWebhook", "deleteSystemWebhook", "createAbuseReportNotificationRecipient", "updateAbuseReportNotificationRecipient", "deleteAbuseReportNotificationRecipient", "deleteAccount", "deletePage", "deleteFlash", "deleteGalleryPost", "inboxRejected"];
 
 // @public (undocumented)
 type MuteCreateRequest = operations['mute___create']['requestBody']['content']['application/json'];
@@ -2640,6 +2731,12 @@ type NoteFavorite = components['schemas']['NoteFavorite'];
 
 // @public (undocumented)
 type NoteReaction = components['schemas']['NoteReaction'];
+
+// @public (undocumented)
+type NotesAnyLocalTimelineRequest = operations['notes___any-local-timeline']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesAnyLocalTimelineResponse = operations['notes___any-local-timeline']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type NotesChildrenRequest = operations['notes___children']['requestBody']['content']['application/json'];
@@ -2744,6 +2841,15 @@ type NotesRequest = operations['notes']['requestBody']['content']['application/j
 type NotesResponse = operations['notes']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type NotesScheduleDeleteRequest = operations['notes___schedule___delete']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesScheduleListRequest = operations['notes___schedule___list']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesScheduleListResponse = operations['notes___schedule___list']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type NotesSearchByTagRequest = operations['notes___search-by-tag']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -2787,6 +2893,9 @@ type NotesTranslateResponse = operations['notes___translate']['responses']['200'
 
 // @public (undocumented)
 type NotesUnrenoteRequest = operations['notes___unrenote']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesUpdateRequest = operations['notes___update']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type NotesUserListTimelineRequest = operations['notes___user-list-timeline']['requestBody']['content']['application/json'];
@@ -2867,7 +2976,7 @@ type PartialRolePolicyOverride = Partial<{
 }>;
 
 // @public (undocumented)
-export const permissions: readonly ["read:account", "write:account", "read:blocks", "write:blocks", "read:drive", "write:drive", "read:favorites", "write:favorites", "read:following", "write:following", "read:messaging", "write:messaging", "read:mutes", "write:mutes", "write:notes", "read:notifications", "write:notifications", "read:reactions", "write:reactions", "write:votes", "read:pages", "write:pages", "write:page-likes", "read:page-likes", "read:user-groups", "write:user-groups", "read:channels", "write:channels", "read:gallery", "write:gallery", "read:gallery-likes", "write:gallery-likes", "read:flash", "write:flash", "read:flash-likes", "write:flash-likes", "read:admin:abuse-user-reports", "write:admin:delete-account", "write:admin:delete-all-files-of-a-user", "read:admin:index-stats", "read:admin:table-stats", "read:admin:user-ips", "read:admin:meta", "write:admin:reset-password", "write:admin:resolve-abuse-user-report", "write:admin:send-email", "read:admin:server-info", "read:admin:show-moderation-log", "read:admin:show-user", "write:admin:suspend-user", "write:admin:unset-user-avatar", "write:admin:unset-user-banner", "write:admin:unsuspend-user", "write:admin:meta", "write:admin:user-note", "write:admin:roles", "read:admin:roles", "write:admin:relays", "read:admin:relays", "write:admin:invite-codes", "read:admin:invite-codes", "write:admin:announcements", "read:admin:announcements", "write:admin:avatar-decorations", "read:admin:avatar-decorations", "write:admin:federation", "write:admin:account", "read:admin:account", "write:admin:emoji", "read:admin:emoji", "write:admin:queue", "read:admin:queue", "write:admin:promo", "write:admin:drive", "read:admin:drive", "write:admin:ad", "read:admin:ad", "write:invite-codes", "read:invite-codes", "write:clip-favorite", "read:clip-favorite", "read:federation", "write:report-abuse"];
+export const permissions: readonly ["read:account", "write:account", "read:blocks", "write:blocks", "read:drive", "write:drive", "read:favorites", "write:favorites", "read:following", "write:following", "read:messaging", "write:messaging", "read:mutes", "write:mutes", "write:notes", "read:notifications", "write:notifications", "read:reactions", "write:reactions", "write:votes", "read:pages", "write:pages", "write:page-likes", "read:page-likes", "read:user-groups", "write:user-groups", "read:channels", "write:channels", "read:gallery", "write:gallery", "read:gallery-likes", "write:gallery-likes", "read:flash", "write:flash", "read:flash-likes", "write:flash-likes", "read:admin:abuse-user-reports", "write:admin:delete-account", "write:admin:delete-all-files-of-a-user", "read:admin:index-stats", "read:admin:table-stats", "read:admin:user-ips", "read:admin:meta", "write:admin:reset-password", "write:admin:resolve-abuse-user-report", "write:admin:send-email", "read:admin:server-info", "read:admin:show-moderation-log", "read:admin:show-user", "write:admin:suspend-user", "write:admin:unset-user-avatar", "write:admin:unset-user-banner", "write:admin:unsuspend-user", "write:admin:meta", "write:admin:user-note", "write:admin:roles", "read:admin:roles", "write:admin:relays", "read:admin:relays", "write:admin:invite-codes", "read:admin:invite-codes", "write:admin:inbox-rule", "read:admin:inbox-rule", "write:admin:announcements", "read:admin:announcements", "write:admin:avatar-decorations", "read:admin:avatar-decorations", "write:admin:federation", "write:admin:account", "read:admin:account", "write:admin:emoji", "read:admin:emoji", "write:admin:queue", "read:admin:queue", "write:admin:promo", "write:admin:drive", "read:admin:drive", "write:admin:ad", "read:admin:ad", "write:invite-codes", "read:invite-codes", "write:clip-favorite", "read:clip-favorite", "read:federation", "write:report-abuse"];
 
 // @public (undocumented)
 type PingResponse = operations['ping']['responses']['200']['content']['application/json'];
@@ -3306,6 +3415,12 @@ type UsersListsGetMembershipsRequest = operations['users___lists___get-membershi
 
 // @public (undocumented)
 type UsersListsGetMembershipsResponse = operations['users___lists___get-memberships']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type UsersListsListFavoriteRequest = operations['users___lists___list-favorite']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type UsersListsListFavoriteResponse = operations['users___lists___list-favorite']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type UsersListsListRequest = operations['users___lists___list']['requestBody']['content']['application/json'];

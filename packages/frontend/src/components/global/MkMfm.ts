@@ -243,7 +243,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 						const radius = parseFloat(<string>token.props.args.rad ?? '6');
 						return h('span', {
 							class: '_mfm_blur_',
-							style: `--blur-px: ${radius}px;`,
+							style: `--MI-blur-px: ${radius}px;`,
 						}, genEl(token.children, scale));
 					}
 					case 'rainbow': {
@@ -472,7 +472,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 							name: token.props.name,
 							url: props.emojiUrls && props.emojiUrls[token.props.name],
 							normal: props.plain,
-							host: props.author?.host ? props.author.host : null,
+							host: props.author.host ? props.author.host : null,
 							useOriginalSize: scale >= 2.5,
 						})];
 					}

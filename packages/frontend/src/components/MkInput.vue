@@ -45,8 +45,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { onMounted, onUnmounted, nextTick, ref, shallowRef, watch, computed, toRefs } from 'vue';
 import { debounce } from 'throttle-debounce';
-import MkButton from '@/components/MkButton.vue';
 import { useInterval } from '@@/js/use-interval.js';
+import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 import { Autocomplete, SuggestionType } from '@/scripts/autocomplete.js';
 
@@ -244,7 +244,7 @@ defineExpose({
 	color: var(--MI_THEME-fg);
 	background: var(--MI_THEME-panel);
 	border: solid 1px var(--MI_THEME-panel);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	outline: none;
 	box-shadow: none;
 	box-sizing: border-box;

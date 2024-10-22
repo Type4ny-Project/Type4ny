@@ -101,6 +101,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
+			<MkFolder>
 				<template #label>Log IP address</template>
 				<template v-if="ipLoggingForm.savedState.enableIpLogging" #suffix>Enabled</template>
 				<template v-else #suffix>Disabled</template>

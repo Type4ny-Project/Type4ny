@@ -30,7 +30,6 @@ import { showMovedDialog } from '@/scripts/show-moved-dialog.js';
 import { getHTMLElementOrNull } from '@/scripts/get-dom-node-or-null.js';
 import { focusParent } from '@/scripts/focus.js';
 import MkSwitch from '@/components/MkSwitch.vue';
-import { ui } from '@/config.js';
 export const openingWindowsCount = ref(0);
 
 export const apiWithDialog = (<E extends keyof Misskey.Endpoints = keyof Misskey.Endpoints, P extends Misskey.Endpoints[E]['req'] = Misskey.Endpoints[E]['req']>(
@@ -731,21 +730,12 @@ export function post(props: Record<string, any> = {}): Promise<void> {
 		//       Vueが渡されたコンポーネントに内部的に__propsというプロパティを生やす影響で、
 		//       複数のpost formを開いたときに場合によってはエラーになる
 		//       もちろん複数のpost formを開けること自体Misskeyサイドのバグなのだが
-		if (ui !== 'twilike') {
-			const { dispose } = popup(MkPostFormDialog, props, {
-				closed: () => {
-					resolve();
-					dispose();
-				},
-			});
-		} else {
-			const { dispose } = popup(XPostFormDialog, props, {
-				closed: () => {
-					resolve();
-					dispose();
-				},
-			});
-		}
+		const { dispose } = popup(MkPostFormDialog, props, {
+			closed: () => {
+				resolve();
+				dispose();
+			},
+		});
 	});
 }
 

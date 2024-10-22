@@ -77,19 +77,19 @@ function onDeleteClick() {
 	width: 100%;
 	box-sizing: border-box;
 	padding: 10px 14px;
-	background: var(--buttonBg);
+	background: var(--MI_THEME-buttonBg);
 	border: none;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	font-size: 0.9em;
 
 	&:hover {
 		text-decoration: none;
-		background: var(--buttonHoverBg);
+		background: var(--MI_THEME-buttonHoverBg);
 	}
 
 	&.active {
-		color: var(--accent);
-		background: var(--buttonHoverBg);
+		color: var(--MI_THEME-accent);
+		background: var(--MI_THEME-buttonHoverBg);
 	}
 }
 

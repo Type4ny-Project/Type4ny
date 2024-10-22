@@ -166,7 +166,7 @@ function onMousedown(evt: MouseEvent): void {
 	box-shadow: none;
 	text-decoration: none;
 	background: var(--MI_THEME-buttonBg);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 	box-sizing: border-box;
 	transition: background 0.1s ease;
@@ -220,7 +220,6 @@ function onMousedown(evt: MouseEvent): void {
         -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
         animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
 
-
 				&:not(:disabled):hover {
 					background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
 					background-size: 1800% 1800%;
@@ -238,7 +237,7 @@ function onMousedown(evt: MouseEvent): void {
           animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite ;
         }
 				&:hover{
-					background: var(--accent);
+					background: var(--MI_THEME-accent);
 				}
       }
 
@@ -269,7 +268,7 @@ function onMousedown(evt: MouseEvent): void {
         }
       }
 		&:not(:disabled):hover {
-			background: hsl(from var(--accent) h s 60%);
+			background: hsl(from var(--MI_THEME-accent) h s 60%);
 		}
 
 		&:not(:disabled):active {
@@ -328,7 +327,7 @@ function onMousedown(evt: MouseEvent): void {
 			z-index: -1;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(90deg, hsl(from var(--accent) h s 60%), hsl(from var(--accent) h s 60%));
+			background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
 			opacity: 0;
 			transition: opacity 0.1s ease;
 
@@ -446,7 +445,7 @@ function onMousedown(evt: MouseEvent): void {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 	pointer-events: none;
 }

@@ -12,24 +12,7 @@ import type { BundledTheme } from 'shiki/themes';
 import { globalEvents } from '@/events.js';
 import { miLocalStorage } from '@/local-storage.js';
 import lTypeLightEmerald from '@/themes/l-TypeLightEmerald.json5';
-import lCoffee from '@/themes/l-coffee.json5';
-import lApricot from '@/themes/l-apricot.json5';
-import lRainy from '@/themes/l-rainy.json5';
-import lBotanical from '@/themes/l-botanical.json5';
-import lVivid from '@/themes/l-vivid.json5';
-import lCherry from '@/themes/l-cherry.json5';
-import lSushi from '@/themes/l-sushi.json5';
-import lU0 from '@/themes/l-u0.json5';
-import dDark from '@/themes/d-dark.json5';
-import dPersimmon from '@/themes/d-persimmon.json5';
-import dAstro from '@/themes/d-astro.json5';
-import dFuture from '@/themes/d-future.json5';
-import dBotanical from '@/themes/d-botanical.json5';
 import dTypeDarkEmerald from '@/themes/d-TypeDarkEmerald.json5';
-import dGreenOrange from '@/themes/d-green-orange.json5';
-import dCherry from '@/themes/d-cherry.json5';
-import dIce from '@/themes/d-ice.json5';
-import dU0 from '@/themes/d-u0.json5';
 export type Theme = {
 	id: string;
 	name: string;
@@ -65,8 +48,8 @@ export const getBuiltinThemes = () => Promise.all(
 		'd-astro',
 		'd-future',
 		'd-botanical',
-		'd-green-lime',
-		'd-green-orange',
+		'd-TypeDarkEmerald',
+		'l-TypeLightEmerald',
 		'd-cherry',
 		'd-ice',
 		'd-u0',

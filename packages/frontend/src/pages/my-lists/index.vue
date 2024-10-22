@@ -134,7 +134,7 @@ onActivated(() => {
 	display: block;
 	padding: 16px;
 	border: solid 1px var(--MI_THEME-divider);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	margin-bottom: 8px;
 
 	&:hover {

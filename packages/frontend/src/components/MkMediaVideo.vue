@@ -524,7 +524,7 @@ onDeactivated(() => {
 .indicator {
 	/* Hardcode to black because either --MI_THEME-bg or --MI_THEME-fg makes it hard to read in dark/light mode */
 	background-color: black;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	color: var(--MI_THEME-accentLighten);
 	display: inline-block;
 	font-weight: bold;
@@ -535,7 +535,7 @@ onDeactivated(() => {
 .hide {
 	display: block;
 	position: absolute;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	background-color: var(--MI_THEME-fg);
 	color: var(--MI_THEME-accentLighten);
 	font-size: 12px;

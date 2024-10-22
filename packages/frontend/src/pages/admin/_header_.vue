@@ -35,8 +35,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch, nextTick } from 'vue';
 import tinycolor from 'tinycolor2';
-import { popupMenu } from '@/os.js';
 import { scrollToTop } from '@@/js/scroll.js';
+import { popupMenu } from '@/os.js';
 import MkButton from '@/components/MkButton.vue';
 import { globalEvents } from '@/events.js';
 import { injectReactiveMetadata } from '@/scripts/page-metadata.js';
@@ -160,11 +160,11 @@ onUnmounted(() => {
 	backdrop-filter: var(--MI-blur, blur(15px));
 
 	> .buttons {
-		--margin: 8px;
+		--MI-margin: 8px;
 		display: flex;
     align-items: center;
 		height: var(--height);
-		margin: 0 var(--margin);
+		margin: 0 var(--MI-margin);
 
 		&.right {
 			margin-left: auto;
@@ -178,11 +178,11 @@ onUnmounted(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			height: calc(var(--height) - (var(--margin) * 2));
-			width: calc(var(--height) - (var(--margin) * 2));
+			height: calc(var(--height) - (var(--MI-margin) * 2));
+			width: calc(var(--height) - (var(--MI-margin) * 2));
 			box-sizing: border-box;
 			position: relative;
-			border-radius: var(--radius);
+			border-radius: var(--MI-radius);
 
 			&:hover {
 				background: rgba(0, 0, 0, 0.05);

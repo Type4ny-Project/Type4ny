@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<div v-if="steps && showTicks" class="ticks">
 				<div v-for="i in (steps + 1)" class="tick" :style="{ left: (((i - 1) / steps) * 100) + '%' }"></div>
 			</div>
-			<div ref="thumbEl" @mouseenter.passive="onMouseenter" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mousedown="onMousedown" @touchstart="onMousedown"></div>
+			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mouseenter.passive="onMouseenter" @mousedown="onMousedown" @touchstart="onMousedown"></div>
 		</div>
 	</div>
 	<div class="caption">
@@ -220,7 +220,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 		padding: 7px 12px;
 		background: var(--MI_THEME-panel);
 		border: solid 1px var(--MI_THEME-panel);
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 
 		> .container {
 			position: relative;

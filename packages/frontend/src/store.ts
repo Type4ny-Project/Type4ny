@@ -6,12 +6,13 @@
 import { markRaw, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import { hemisphere } from '@@/js/intl-const.js';
-import lightTheme from '@@/themes/l-light.json5';
-import darkTheme from '@@/themes/d-green-lime.json5';
+import lightTheme from '@@/themes/l-TypeLightEmerald.json5';
+import darkTheme from '@@/themes/d-TypeDarkEmerald.json5';
 import { miLocalStorage } from './local-storage.js';
 import type { SoundType } from '@/scripts/sound.js';
 import { Storage } from '@/pizzax.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
+import { instance } from '@/instance.js';
 
 interface PostFormAction {
 	title: string;
@@ -83,9 +84,9 @@ export const defaultStore = markRaw(
 			},
 		},
 		abusesTutorial: {
-		where: 'account',
-		default: false,
-	},keepCw: {
+			where: 'account',
+			default: false,
+		}, keepCw: {
 			where: 'account',
 			default: true,
 		},
@@ -696,10 +697,10 @@ export const defaultStore = markRaw(
 		contextMenu: {
 			where: 'device',
 			default: 'app' as 'app' | 'appWithShift' | 'native',
-		},skipNoteRender: {
-		where: 'device',
-		default: true,
-	},
+		}, skipNoteRender: {
+			where: 'device',
+			default: true,
+		},
 
 		sound_masterVolume: {
 			where: 'device',

@@ -308,7 +308,7 @@ definePageMetadata(() => ({
 	align-items: center;
 	padding: 12px;
 	background: var(--MI_THEME-buttonBg);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 
 	&:hover {
 		text-decoration: none;
@@ -341,7 +341,7 @@ definePageMetadata(() => ({
 	align-items: center;
 	padding: 12px;
 	background: var(--MI_THEME-buttonBg);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 }
 
 .patronIcon {

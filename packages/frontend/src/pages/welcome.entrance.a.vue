@@ -22,10 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<div class="contents">
 		<MkVisitorDashboard/>
-		<br>
-		<br>
 	</div>
-
 </div>
 </template>
 
@@ -42,13 +39,6 @@ import { getProxiedImageUrl } from '@/scripts/media-proxy.js';
 import { instance as meta } from '@/instance.js';
 
 const instances = ref<Misskey.entities.FederationInstance[]>();
-
-function getInstanceIcon(instance: Misskey.entities.FederationInstance): string {
-	if (!instance.iconUrl) {
-		return '';
-	}
-	return getProxiedImageUrl(instance.iconUrl, 'preview');
-}
 
 misskeyApiGet('federation/instances', {
 	sort: '+pubSub',
@@ -93,7 +83,7 @@ misskeyApiGet('federation/instances', {
 		right: 0;
 		width: 100vw;
 		height: 100vh;
-		background: linear-gradient(270deg, var(--buttonGradateA), var(--buttonGradateB));
+		background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 		background-size: 2000% 2000%;
 		-webkit-animation: AnimationLight 11s ease infinite;
 		-moz-animation: AnimationLight 11s ease infinite;
@@ -107,7 +97,7 @@ misskeyApiGet('federation/instances', {
 
 		width: 100vw;
 		height: 100vh;
-    background: linear-gradient(270deg, var(--buttonGradateA), var(--buttonGradateB));
+    background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 		background-size: 2000% 2000%;
     -webkit-animation: AnimationLight 11s ease infinite;
     -moz-animation: AnimationLight 11s ease infinite;

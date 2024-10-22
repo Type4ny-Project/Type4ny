@@ -320,7 +320,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<template
 				v-else-if="notification.type === 'followRequestAccepted'"
 				>
-				<div:class="$style.text"
+				<div :class="$style.text"
 				style="opacity: 0.6"
 			>{{ i18n.ts.followRequestAccepted }}</div>
 				<div v-if="notification.message" :class="$style.text" style="opacity: 0.6; font-style: oblique;">

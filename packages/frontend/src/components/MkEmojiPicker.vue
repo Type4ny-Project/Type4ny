@@ -790,11 +790,11 @@ left: 0;*/
 	font-size: 12px;
 	line-height: 32px;
 	text-align: center;
-	color: var(--fg);
+	color: var(--MI_THEME-fg);
 	cursor: pointer;
 	width: 100%;
 	transition: transform 0.3s ease;
-	box-shadow: 0 1.5px 0 var(--divider);
+	box-shadow: 0 1.5px 0 var(--MI_THEME-divider);
 	height: 32px;
 	overflow: hidden;
 	&:hover {

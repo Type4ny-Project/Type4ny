@@ -1426,7 +1426,7 @@ defineExpose({
   }
 
   &.headerRightButtonActive {
-    color: var(--accent);
+    color: var(--MI_THEME-accent);
   }
 
 	&.danger {
@@ -1456,14 +1456,6 @@ defineExpose({
   min-height: 75px;max-height: 150px;
   overflow: auto;
 	background-size: auto auto;
-}
-
-html[data-color-scheme=dark] .preview {
-	background-image: repeating-linear-gradient(135deg, transparent, transparent 5px, #0004 5px, #0004 10px);
-}
-
-html[data-color-scheme=light] .preview {
-	background-image: repeating-linear-gradient(135deg, transparent, transparent 5px, #00000005 5px, #00000005 10px);
 }
 
 .targetNote {
@@ -1526,7 +1518,7 @@ html[data-color-scheme=light] .preview {
 .cw {
   z-index: 1;
   padding-bottom: 8px;
-  border-bottom: solid 1px var(--divider);
+  border-bottom: solid 1px var(--MI_THEME-divider);
 }
 
 .postOptionsRoot {

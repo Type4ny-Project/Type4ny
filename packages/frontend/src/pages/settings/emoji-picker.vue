@@ -19,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<div class="_gaps">
 			<div>
-				<div v-panel style="border-radius: var(--radius);">
+				<div v-panel style="border-radius: var(--MI-radius);">
 					<Sortable
 						v-model="pinnedEmojisForReaction"
 						:class="$style.emojis"
@@ -59,7 +59,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<div class="_gaps">
 			<div>
-				<div v-panel style="border-radius: var(--radius);">
+				<div v-panel style="border-radius: var(--MI-radius);">
 					<Sortable
 						v-model="pinnedEmojis"
 						:class="$style.emojis"
@@ -149,7 +149,6 @@ import { emojiPicker } from '@/scripts/emoji-picker.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
 import MkFolder from '@/components/MkFolder.vue';
-import MkSelect from '@/components/MkSelect.vue';
 import { signinRequired } from '@/account.js';
 import MkInput from '@/components/MkInput.vue';
 

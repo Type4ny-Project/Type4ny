@@ -103,7 +103,7 @@ function close() {
 			justify-content: center;
 			vertical-align: bottom;
 			height: 100px;
-			border-radius: var(--radius);
+			border-radius: var(--MI-radius);
 			padding: 10px;
 			box-sizing: border-box;
 

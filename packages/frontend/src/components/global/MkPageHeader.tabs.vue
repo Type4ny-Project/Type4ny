@@ -54,8 +54,8 @@ export type Tab = {
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, watch, nextTick, shallowRef, ref, computed } from 'vue';
+import { ui } from '@@/js/config.js';
 import { defaultStore } from '@/store.js';
-import { ui } from '@/config.js';
 
 const gamingType = defaultStore.state.gamingType;
 

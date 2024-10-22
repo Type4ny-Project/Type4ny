@@ -84,7 +84,7 @@ const props = withDefaults(defineProps<{
 	margin: 0 auto;
 }
 .text{
-	color: var(--fg);
+	color: var(--MI_THEME-fg);
 }
 .spinner {
 	position: absolute;

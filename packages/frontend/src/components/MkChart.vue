@@ -44,11 +44,7 @@ export type ChartSrc =
 </script>
 
 <script lang="ts" setup>
-/* eslint-disable id-denylist --
-  Chart.js has a `data` attribute in most chart definitions, which triggers the
-  id-denylist violation when setting it. This is causing about 60+ lint issues.
-  As this is part of Chart.js's API it makes sense to disable the check here.
-*/
+
 import { onMounted, ref, shallowRef, watch } from 'vue';
 import { Chart } from 'chart.js';
 import * as Misskey from 'misskey-js';
@@ -862,8 +858,8 @@ onMounted(() => {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	-webkit-backdrop-filter: var(--MI-blur, blur(12px));
-	backdrop-filter: var(--MI-blur, blur(12px));
+	-webkit-backdrop-filter: var(--MI-blur, blur(8px));
+	backdrop-filter: var(--MI-blur, blur(8px));
 	display: flex;
 	justify-content: center;
 	align-items: center;

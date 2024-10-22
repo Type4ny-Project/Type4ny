@@ -204,7 +204,7 @@ definePageMetadata(() => ({
 
 <style lang="scss" scoped>
 .rfqxtzch {
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 
 	> .toggle {
 		position: relative;

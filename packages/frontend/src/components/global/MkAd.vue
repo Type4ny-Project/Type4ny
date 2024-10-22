@@ -174,7 +174,7 @@ function reduceFrequency(): void {
 	display: block;
 	object-fit: contain;
 	margin: auto;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 
 }
 

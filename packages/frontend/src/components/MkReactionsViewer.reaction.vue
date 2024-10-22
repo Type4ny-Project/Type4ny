@@ -298,7 +298,7 @@ if (!mock) {
 	margin: 2px;
 	padding: 0 6px;
 	font-size: 1.5em;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s ease;

@@ -69,13 +69,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 		</MkFolder>
 
-			<MkFolder v-if="report.notes.length !== 0" :class="$style.notes">
-				<template #label>{{ i18n.ts.reportedNote }}</template>
-				<div v-for="note in report.notes" :class="$style.notes">
-					<MkNoteSimple v-if="note !== 'deleted'" :note="note"/>
-					<div v-else> note is deleted </div>
-				</div>
-			</MkFolder>
+		<MkFolder v-if="report.notes.length !== 0" :class="$style.notes">
+			<template #label>{{ i18n.ts.reportedNote }}</template>
+			<div v-for="note in report.notes" :class="$style.notes">
+				<MkNoteSimple v-if="note !== 'deleted'" :note="note"/>
+				<div v-else> note is deleted </div>
+			</div>
+		</MkFolder>
 
 		<div v-if="report.assignee">
 			{{ i18n.ts.moderator }}:
@@ -161,14 +161,14 @@ function showMenu(ev: MouseEvent) {
 <style lang="scss" module>
 .root {
 	display: flex;
-	margin: var(--margin) 0;
+	margin: var(--MI-margin) 0;
 	background: var(--panel);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 }
 
 .notes {
-	margin: var(--margin) 0;
+	margin: var(--MI-margin) 0;
 	padding: 0;
 }
 
@@ -177,7 +177,7 @@ function showMenu(ev: MouseEvent) {
 	box-sizing: border-box;
 	text-align: left;
 	padding: 24px;
-	border-right: solid 1px var(--divider);
+	border-right: solid 1px var(--MI_THEME-divider);
 }
 
 .info {

@@ -59,7 +59,7 @@ function toggle(): void {
 	background-color: var(--MI_THEME-panel);
 	background-clip: padding-box !important;
 	border: solid 1px var(--MI_THEME-panel);
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	font-size: 90%;
 	transition: all 0.2s;
 	user-select: none;

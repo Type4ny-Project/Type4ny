@@ -18,10 +18,10 @@ import type {
 	ChannelsRepository,
 	FollowingsRepository,
 	InstancesRepository,
-	MiApp, MiChannel,
+	MiApp,
 	MiDriveFile,
 	MiFollowing,
-	MiMeta,MutingsRepository,
+	MiMeta, MutingsRepository,
 	NotesRepository,
 	NoteThreadMutingsRepository,
 	UserListMembershipsRepository,
@@ -277,35 +277,6 @@ export class NoteCreateService implements OnApplicationShutdown {
 			} else if ((await this.roleService.getUserPolicies(user.id)).canPublicNote === false) {
 				data.visibility = 'home';
 			}
-		}
-
-		const hasProhibitedWords = this.checkProhibitedWordsContain({
-			cw: data.cw,
-			text: data.text,
-			pollChoices: data.poll?.choices,
-		}, this.meta.prohibitedWords);
-
-			if (DiscordWebhookUrlWordBlock) {
-				const data_disc = { 'username': 'ノートブロックお知らせ',
-																								'content':
-						'ユーザー名 :' + user.username + '\n' +
-						'url : ' + user.host + '\n' +
-						'contents : ' + data.text + '\n' +
-						'引っかかったワード :' + matchedString,
-																								'allowed_mentions': {
-																									'parse': [],
-																								},
-				};
-
-				await fetch(DiscordWebhookUrlWordBlock, {
-					'method': 'post',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(data_disc),
-				});
-			}
-			throw new IdentifiableError('689ee33f-f97c-479a-ac49-1b9f8140af99', 'Note contains prohibited words');
 		}
 
 		const inSilencedInstance = this.utilityService.isSilencedHost(this.meta.silencedHosts, user.host);

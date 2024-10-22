@@ -43,8 +43,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, inject, shallowRef, computed } from 'vue';
 import tinycolor from 'tinycolor2';
-import XTabs, { Tab } from './MkPageHeader.tabs.vue';
 import { scrollToTop } from '@@/js/scroll.js';
+import XTabs, { Tab } from './MkPageHeader.tabs.vue';
 import { globalEvents } from '@/events.js';
 import { injectReactiveMetadata } from '@/scripts/page-metadata.js';
 import { $i, openAccountMenu as openAccountMenu_ } from '@/account.js';
@@ -189,7 +189,7 @@ onUnmounted(() => {
 }
 
 .buttons {
-	--margin: 8px;
+	--MI-margin: 8px;
 	display: flex;
 	align-items: center;
 	min-width: var(--height);
@@ -201,12 +201,12 @@ onUnmounted(() => {
 
 .buttonsLeft {
 	composes: buttons;
-	margin: 0 var(--margin) 0 0;
+	margin: 0 var(--MI-margin) 0 0;
 }
 
 .buttonsRight {
 	composes: buttons;
-	margin: 0 0 0 var(--margin);
+	margin: 0 0 0 var(--MI-margin);
 }
 
 .avatar {
@@ -223,10 +223,10 @@ onUnmounted(() => {
 	align-items: center;
 	justify-content: center;
 	height: var(--height);
-	width: calc(var(--height) - (var(--margin)));
+	width: calc(var(--height) - (var(--MI-margin)));
 	box-sizing: border-box;
 	position: relative;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 
 	&:hover {
 		background: rgba(0, 0, 0, 0.05);

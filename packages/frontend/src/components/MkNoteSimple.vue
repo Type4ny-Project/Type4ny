@@ -95,8 +95,8 @@ const showContent = ref(false);
 
 }
 .button{
-  margin-right: var(--margin);
-  margin-bottom: var(--margin);
+  margin-right: var(--MI-margin);
+  margin-bottom: var(--MI-margin);
 }
 .avatar {
 	flex-shrink: 0;

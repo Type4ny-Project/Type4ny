@@ -39,7 +39,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				>
 					<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span :class="$style.itemText">{{ navbarItemDef[item].title }}</span>
 					<span v-if="navbarItemDef[item].indicated" :class="$style.itemIndicator" class="_blink">
-						<span v-if="navbarItemDef[item].indicateValue" class="_indicateCounter" 						:class="[$style.itemIndicator ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{ navbarItemDef[item].indicateValue }}</span>
+						<span v-if="navbarItemDef[item].indicateValue" class="_indicateCounter" :class="[$style.itemIndicator ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{ navbarItemDef[item].indicateValue }}</span>
 						<i v-else class="_indicatorCircle"></i>
 					</span>
 				</component>
@@ -54,9 +54,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:class="$style.itemText"
 				>{{ i18n.ts.controlPanel }}</span>
 			</MkA>
-			<button class="_button"
-							:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
-							@click="more">
+			<button
+				class="_button"
+				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
+				@click="more"
+			>
 				<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{ i18n.ts.more }}</span>
 				<span v-if="otherMenuItemIndicated" :class="$style.itemIndicator" class="_blink"><i class="_indicatorCircle"></i></span>
 			</button>
@@ -509,7 +511,7 @@ function more(ev: MouseEvent) {
 			bottom: 0;
 			opacity: 0;
 			border-radius: 999px;
-			background: var(--accentedBg);
+			background: var(--MI_THEME-accentedBg);
 			transition: opacity 0.1s ease;
 
 		}
@@ -626,7 +628,7 @@ function more(ev: MouseEvent) {
     position: absolute;
     top: 0;
     left: 20px;
-    color: var(--navIndicator);
+    color: var(--MI_THEME-navIndicator);
     font-size: 8px;
     animation: blink 1s infinite;
 
@@ -861,7 +863,7 @@ function more(ev: MouseEvent) {
 		transition: all 0.1s ease;
 
     &.gamingLight {
-      color: var(--fg);
+      color: var(--MI_THEME-fg);
     }
 
     &:focus-visible {
@@ -900,7 +902,7 @@ function more(ev: MouseEvent) {
       }
 
       &.gamingLight {
-        color: var(--fg);
+        color: var(--MI_THEME-fg);
       }
 
       &::before {
@@ -992,7 +994,7 @@ function more(ev: MouseEvent) {
     position: absolute;
     top: 6px;
     left: 24px;
-    color: var(--navIndicator);
+    color: var(--MI_THEME-navIndicator);
     font-size: 8px;
     animation: blink 1s infinite;
 

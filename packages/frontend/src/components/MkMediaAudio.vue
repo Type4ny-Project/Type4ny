@@ -313,7 +313,7 @@ function init() {
 	if (onceInit) return;
 	onceInit = true;
 	const computedStyle = getComputedStyle(document.documentElement);
-	accent.value = tinycolor(computedStyle.getPropertyValue('--accent')).toHexString();
+	accent.value = tinycolor(computedStyle.getPropertyValue('--MI_THEME-accent')).toHexString();
 	stopAudioElWatch = watch(audioEl, () => {
 		if (audioEl.value) {
 			isReady.value = true;

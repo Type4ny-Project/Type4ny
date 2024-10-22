@@ -679,14 +679,14 @@ function getMenu() {
 			text: i18n.ts.renameFolder,
 			icon: 'ti ti-forms',
 			action: () => {
-			if (folder.value)renameFolder(folder.value);
-		},
+				if (folder.value)renameFolder(folder.value);
+			},
 		}, {
 			text: i18n.ts.deleteFolder,
 			icon: 'ti ti-trash',
 			action: () => {
-			deleteFolder(folder.value as Misskey.entities.DriveFolder);
-		},
+				deleteFolder(folder.value as Misskey.entities.DriveFolder);
+			},
 		});
 	}
 
@@ -840,7 +840,7 @@ onBeforeUnmount(() => {
   top: 0;
   position: sticky;
   z-index: 1000;
-  background-color: var(--bg);
+  background-color: var(--MI_THEME-bg);
   width: 100%;
   padding: 0 8px;
   box-sizing: border-box;

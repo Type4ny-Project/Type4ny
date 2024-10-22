@@ -14,10 +14,13 @@ export type UnicodeEmojiDef = {
 import _emojilist from './emojilist.json';
 
 async function loadEmojiList() {
-	if (!_emojilist) {
-		_emojilist = (await import('../emojilist.json')).default;
+	let emojilistData = _emojilist;
+
+	if (!emojilistData) {
+		emojilistData = (await import('./emojilist.json')).default;
 	}
-	return _emojilist;
+
+	return emojilistData;
 }
 
 export const emojilist: UnicodeEmojiDef[] = (await loadEmojiList()).map((x: any) => ({

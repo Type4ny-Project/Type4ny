@@ -60,7 +60,6 @@ import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import XDecoration from '@/pages/settings/avatar-decoration.decoration.vue';
-import MkButton from '@/components/MkButton.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 
 const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
@@ -164,7 +163,7 @@ definePageMetadata(() => ({
     grid-gap: 12px;
 }
 .selected{
-			border: 0.1px solid var(--accent);
+			border: 0.1px solid var(--MI_THEME-accent);
 }
 </style>
 

@@ -45,6 +45,7 @@ export default defineComponent({
 		const $style = useCssModule(); // カスタムレンダラなので使っても大丈夫
 
 		const dateTextCache = new Map<string, string>();
+		const time = Date.now();
 
 		function getDateText(dateInstance: Date) {
 			if (dateTextCache.has(time)) {
@@ -72,16 +73,17 @@ export default defineComponent({
 
 				const date =
 					new Date(item.createdAt);
-			const nextDate = props.items[i + 1] ? new Date(props.items[i + 1].createdAt) : null;
+				const nextDate = props.items[i + 1] ? new Date(props.items[i + 1].createdAt) : null;
 
-			if (
-				i !== props.items.length - 1 &&
+				if (
+					i !== props.items.length - 1 &&
 				nextDate != null && (
-					date.getFullYear() !== nextDate.getFullYear() ||
+						date.getFullYear() !== nextDate.getFullYear() ||
 					date.getMonth() !== nextDate.getMonth() ||
 					date.getDate() !== nextDate.getDate()
-				)
-				) {	const separator = h('div', {
+					)
+				) {
+					const separator = h('div', {
 						class: $style['separator'],
 						key: item.id + ':separator',
 					}, h('p', {
@@ -110,8 +112,8 @@ export default defineComponent({
 					if (props.ad && instance.ads.length > 0 && item._shouldInsertAd_) {
 						return [h('div', {
 							key: item.id + ':ad',
-						class: $style['ad-wrapper'],
-					}, [h(MkAd, {
+							class: $style['ad-wrapper'],
+						}, [h(MkAd, {
 							prefer: ['horizontal', 'horizontal-big'],
 						})]), el];
 					} else {

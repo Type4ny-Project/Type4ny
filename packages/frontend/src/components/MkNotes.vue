@@ -31,9 +31,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template v-else #default="{ item: note, index, items }">
 		<div :class="[$style.root, { [$style.noGap]: noGap },{ [$style.dateseparatedlist]: noGap}]">
 			<div :class="[$style.notes,{ [$style.dateseparatedlistnogap]: noGap}]">
-				<p :style="{margin: 0, borderBottom: 'solid 1px var(--divider)'}"></p>
+				<p :style="{margin: 0, borderBottom: 'solid 1px var(--MI_THEME-divider)'}"></p>
 				<div :class="[$style.notes, { [$style.dateseparatedlistnogap]: noGap}]">
-					<p v-if="index !== 0" :style="{margin: 0, borderBottom: 'solid 1px var(--divider)'}"></p>
+					<p v-if="index !== 0" :style="{margin: 0, borderBottom: 'solid 1px var(--MI_THEME-divider)'}"></p>
 					<MkNote v-if="props.withCw && !note.cw || !props.withCw" :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note" :withHardMute="true"/>
 					<div v-if="index !== items.length - 1 && note?.createdAt && items[index + 1]?.createdAt && (new Date(note?.createdAt).getDate()) !== ( new Date(items[index + 1]?.createdAt).getDate())" :key="note.id" :class="$style.separator">
 						<p :class="$style.date">
@@ -100,7 +100,7 @@ defineExpose({
 		}
 		.note{
 			&:not(:last-child) {
-				border-bottom: solid 0.5px var(--divider);
+				border-bottom: solid 0.5px var(--MI_THEME-divider);
 			}
 		}
 	}
@@ -137,7 +137,7 @@ defineExpose({
 	}
 
 	&:not(.date-separated-list-nogap) > *:not(:last-child) {
-		margin-bottom: var(--margin);
+		margin-bottom: var(--MI-margin);
 	}
 }
 
@@ -149,7 +149,7 @@ defineExpose({
 		box-shadow: none;
 
 		&:not(:last-child) {
-			border-bottom: solid 0.5px var(--divider);
+			border-bottom: solid 0.5px var(--MI_THEME-divider);
 		}
 	}
 }
@@ -179,7 +179,7 @@ defineExpose({
 }
 
 .separator {
-	border-bottom: solid 1px var(--divider);
+	border-bottom: solid 1px var(--MI_THEME-divider);
 	text-align: center;
 }
 

@@ -16,6 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { toUnicode } from 'punycode';
 import { computed, ref, watch } from 'vue';
 import { host as localHost } from '@@/js/config.js';
+import tinycolor from 'tinycolor2';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
@@ -39,13 +40,11 @@ const isMe = $i && (
 
 const bg = tinycolor(getComputedStyle(document.documentElement).getPropertyValue(isMe ? '--mentionMe' : '--mention'));
 bg.setAlpha(0.1);
-const bgCss = bg.toRgbString();
 
 const avatarUrl = computed(() => defaultStore.state.disableShowingAnimatedImages || defaultStore.state.dataSaver.avatar
 	? getStaticImageUrl(`/avatar/@${props.username}@${props.host}`)
 	: `/avatar/@${props.username}@${props.host}`,
 );
-const bgCss = (gamingType.value === '') ? bg.toRgbString() : '';
 //const bgCss = `background:${bg.toRgbString()}; ${result}` ;
 </script>
 
