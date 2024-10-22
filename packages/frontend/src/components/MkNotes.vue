@@ -32,35 +32,20 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { shallowRef, ref } from 'vue';
+import { shallowRef } from 'vue';
 import MkNote from '@/components/MkNote.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 import { infoImageUrl } from '@/instance.js';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
-import { defaultStore } from '@/store.js';
 const dateTextCache = new Map<string, string>();
-const props = defineProps<{
+defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
 	disableAutoLoad?: boolean;
     withCw?: boolean;
 }>();
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
-
-function getDateText(time: string) {
-	if (dateTextCache.has(time)) {
-		return dateTextCache.get(time)!;
-	}
-	const date = new Date(time).getDate();
-	const month = new Date(time).getMonth() + 1;
-	const text = i18n.tsx.monthAndDay({
-		month: month.toString(),
-		day: date.toString(),
-	});
-	dateTextCache.set(time, text);
-	return text;
-}
 
 defineExpose({
 	pagingComponent,

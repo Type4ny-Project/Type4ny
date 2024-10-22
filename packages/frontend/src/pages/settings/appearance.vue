@@ -13,7 +13,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkSwitch v-model="squareAvatars">{{ i18n.ts.squareAvatars }}</MkSwitch>
 		<MkSwitch v-model="showAvatarDecorations">{{ i18n.ts.showAvatarDecorations }}</MkSwitch>
 		<MkSwitch v-model="useSystemFont">{{ i18n.ts.useSystemFont }}</MkSwitch>
-		<MkSwitch v-model="disableDrawer">{{ i18n.ts.disableDrawer }}</MkSwitch>
+		<MkSwitch v-model="skipNoteRender">
+			<template #label>Enable note render skipping</template>
+		</MkSwitch>
 		<MkSwitch v-model="forceShowAds">{{ i18n.ts.forceShowAds }}</MkSwitch>
 		<MkSwitch v-model="enableGamingMode">{{ i18n.ts.gamingMode }} <template #caption>{{ i18n.ts.gamingModeInfo }} </template></MkSwitch>
 		<MkSwitch v-model="enableonlyAndWithSave">{{ i18n.ts.onlyAndWithSave }}<template #caption>{{ i18n.ts.onlyAndWithSaveInfo }} </template></MkSwitch>
@@ -72,7 +74,6 @@ const highlightSensitiveMedia = computed(defaultStore.makeGetterSetter('highligh
 const squareAvatars = computed(defaultStore.makeGetterSetter('squareAvatars'));
 const showAvatarDecorations = computed(defaultStore.makeGetterSetter('showAvatarDecorations'));
 const useSystemFont = ref(miLocalStorage.getItem('useSystemFont') != null);
-const disableDrawer = computed(defaultStore.makeGetterSetter('disableDrawer'));
 const forceShowAds = computed(defaultStore.makeGetterSetter('forceShowAds'));
 const enableGamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
 const enableonlyAndWithSave = computed(defaultStore.makeGetterSetter('onlyAndWithSave'));
@@ -80,6 +81,7 @@ const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'))
 const enableSeasonalScreenEffect = computed(defaultStore.makeGetterSetter('enableSeasonalScreenEffect'));
 const useNativeUIForVideoAudioPlayer = computed(defaultStore.makeGetterSetter('useNativeUIForVideoAudioPlayer'));
 const emojiStyle = computed(defaultStore.makeGetterSetter('emojiStyle'));
+const skipNoteRender = computed(defaultStore.makeGetterSetter('skipNoteRender'));
 
 watch(fontSize, () => {
 	if (fontSize.value == null) {
