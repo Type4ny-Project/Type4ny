@@ -43,14 +43,16 @@ const initialReactions = new Set(Object.keys(props.note.reactions));
 const reactions = ref<[string, number][]>([]);
 const hasMoreReactions = ref(false);
 
-if (props.note.myReaction && !Object.keys(reactions.value).includes(props.note.myReaction)) {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (props.note.myReaction && !Object.keys(reactions.value)?.includes(props.note.myReaction)) {
 	reactions.value[props.note.myReaction] = props.note.reactions[props.note.myReaction];
 }
 
 function shouldDisplayReaction([reaction]: [string, number]): boolean {
 	if (!$i) return true; // 非ログイン状態なら全部のリアクションを見れるように
 	if (reaction === props.note.myReaction) return true; // 自分がつけたリアクションなら表示する
-	if (!defaultStore.state.mutedReactions.includes(reaction.replace('@.', ''))) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (!defaultStore.state.mutedReactions?.includes(reaction.replace('@.', ''))) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
 	return false;
 }
 
@@ -79,12 +81,14 @@ watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumbe
 		...newReactions,
 		...Object.entries(newSource)
 			.sort(([, a], [, b]) => b - a)
-			.filter(([y], i) => i < maxNumber && !newReactionsNames.includes(y)),
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			.filter(([y], i) => i < maxNumber && !newReactionsNames?.includes(y)),
 	];
 
 	newReactions = newReactions.slice(0, props.maxNumber);
 
-	if (props.note. myReaction && !newReactions.map(([x]) => x).includes(props.note.myReaction)) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (props.note. myReaction && !newReactions.map(([x]) => x)?.includes(props.note.myReaction)) {
 		newReactions.push([props.note.myReaction, newSource[props.note.myReaction]]);
 	}
 
