@@ -21,6 +21,10 @@ export class InboxRuleService {
 	constructor(
 		@Inject(DI.instancesRepository)
 		private instancesRepository: InstancesRepository,
+
+		@Inject(DI.meta)
+		private meta: MiMeta,
+
 		private idService: IdService,
 		private utilityService: UtilityService,
 		private instanceEntityService: InstanceEntityService,
@@ -128,27 +132,27 @@ export class InboxRuleService {
 				}
 				// 指定されたサーバーソフトウェア
 				case 'serverSoftware': {
-					return instance.softwareName === value.value;
+					return this.meta.softwareName === value.value;
 				}
 				// サーバーサイレンスされている
 				case 'serverIsSilenced': {
-					return instance.isSilenced;
+					return this.meta.isSilenced;
 				}
 				// このサーバーのユーザーからフォローされているユーザーの数が～以下
 				case 'serverPubLessThanOrEq': {
-					return instance.followersCount <= value.value;
+					return this.meta.followersCount <= value.value;
 				}
 				// このサーバーのユーザーからフォローされているユーザーの数が～以上
 				case 'serverPubMoreThanOrEq': {
-					return instance.followersCount >= value.value;
+					return this.meta.followersCount >= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以下
 				case 'serverSubLessThanOrEq': {
-					return instance.followingCount <= value.value;
+					return this.meta.followingCount <= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以上
 				case 'serverSubMoreThanOrEq': {
-					return instance.followingCount >= value.value;
+					return this.meta.followingCount >= value.value;
 				}
 
 				default:
