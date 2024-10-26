@@ -12,10 +12,11 @@ import { UtilityService } from '@/core/UtilityService.js';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import type Logger from '@/logger.js';
-import type { MiMeta, UserProfilesRepository } from '@/models/_.js';
+import type { UserProfilesRepository } from '@/models/_.js';
 import { LoggerService } from '@/core/LoggerService.js';
 import { bindThis } from '@/decorators.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
+import { MetaService } from '@/core/MetaService.js';
 
 @Injectable()
 export class EmailService {
@@ -24,13 +25,10 @@ export class EmailService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
-
-		@Inject(DI.meta)
-		private meta: MiMeta,
-
 		@Inject(DI.userProfilesRepository)
 		private userProfilesRepository: UserProfilesRepository,
 
+		private metaService: MetaService,
 		private loggerService: LoggerService,
 		private utilityService: UtilityService,
 		private httpRequestService: HttpRequestService,
@@ -40,22 +38,23 @@ export class EmailService {
 
 	@bindThis
 	public async sendEmail(to: string, subject: string, html: string, text: string) {
-		if (!this.meta.enableEmail) return;
+		const meta = await this.metaService.fetch();
+		if (!meta.enableEmail) return;
 
 		const iconUrl = `${this.config.url}/static-assets/mi-white.png`;
 		const emailSettingUrl = `${this.config.url}/settings/email`;
 
-		const enableAuth = this.meta.smtpUser != null && this.meta.smtpUser !== '';
+		const enableAuth = meta.smtpUser != null && meta.smtpUser !== '';
 
 		const transporter = nodemailer.createTransport({
-			host: this.meta.smtpHost,
-			port: this.meta.smtpPort,
-			secure: this.meta.smtpSecure,
+			host: meta.smtpHost,
+			port: meta.smtpPort,
+			secure: meta.smtpSecure,
 			ignoreTLS: !enableAuth,
 			proxy: this.config.proxySmtp,
 			auth: enableAuth ? {
-				user: this.meta.smtpUser,
-				pass: this.meta.smtpPass,
+				user: meta.smtpUser,
+				pass: meta.smtpPass,
 			} : undefined,
 		} as any);
 
@@ -124,7 +123,7 @@ export class EmailService {
 	<body>
 		<main>
 			<header>
-				<img src="${ this.meta.logoImageUrl ?? this.meta.iconUrl ?? iconUrl }"/>
+				<img src="${ meta.logoImageUrl ?? meta.iconUrl ?? iconUrl }"/>
 			</header>
 			<article>
 				<h1>${ subject }</h1>
@@ -145,7 +144,7 @@ export class EmailService {
 		try {
 			// TODO: htmlサニタイズ
 			const info = await transporter.sendMail({
-				from: this.meta.email!,
+				from: meta.email!,
 				to: to,
 				subject: subject,
 				text: text,
@@ -169,6 +168,8 @@ export class EmailService {
 			email: emailAddress,
 		});
 
+		const meta = await this.metaService.fetch();
+
 		if (exist !== 0) {
 			return {
 				available: false,
@@ -181,11 +182,11 @@ export class EmailService {
 			reason?: string | null,
 		} = { valid: true, reason: null };
 
-		if (this.meta.enableActiveEmailValidation) {
-			if (this.meta.enableVerifymailApi && this.meta.verifymailAuthKey != null) {
-				validated = await this.verifyMail(emailAddress, this.meta.verifymailAuthKey);
-			} else if (this.meta.enableTruemailApi && this.meta.truemailInstance && this.meta.truemailAuthKey != null) {
-				validated = await this.trueMail(this.meta.truemailInstance, emailAddress, this.meta.truemailAuthKey);
+		if (meta.enableActiveEmailValidation) {
+			if (meta.enableVerifymailApi && meta.verifymailAuthKey != null) {
+				validated = await this.verifyMail(emailAddress, meta.verifymailAuthKey);
+			} else if (meta.enableTruemailApi && meta.truemailInstance && meta.truemailAuthKey != null) {
+				validated = await this.trueMail(meta.truemailInstance, emailAddress, meta.truemailAuthKey);
 			} else {
 				validated = await validateEmail({
 					email: emailAddress,
@@ -226,7 +227,7 @@ export class EmailService {
 		}
 
 		const emailDomain: string = emailAddress.split('@')[1];
-		const isBanned = this.utilityService.isBlockedHost(this.meta.bannedEmailDomains, emailDomain);
+		const isBanned = this.utilityService.isBlockedHost(meta.bannedEmailDomains, emailDomain);
 
 		if (isBanned) {
 			return {
