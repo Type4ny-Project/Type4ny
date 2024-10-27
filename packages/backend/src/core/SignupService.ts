@@ -38,6 +38,7 @@ export class SignupService {
 		private config: Config,
 		private utilityService: UtilityService,
 		private userService: UserService,
+		private metaService: MetaService,
 		private userEntityService: UserEntityService,
 		private idService: IdService,
 		private instanceActorService: InstanceActorService,
@@ -103,8 +104,9 @@ export class SignupService {
 		const isTheFirstUser =
 			!(await this.instanceActorService.realLocalUsersPresent());
 
+		const meta = await this.metaService.fetch();
 		if (!opts.ignorePreservedUsernames && !isTheFirstUser) {
-			const isPreserved = this.meta.preservedUsernames
+			const isPreserved = meta.preservedUsernames
 				.map((x) => x.toLowerCase())
 				.includes(username.toLowerCase());
 			if (isPreserved) {
