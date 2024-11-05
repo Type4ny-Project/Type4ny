@@ -106,15 +106,15 @@ export class InboxRuleService {
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
 					if (isNote(activity)) {
-						const apMentions = await this.apMentionService.extractApMentions(activity.tag as unknown as IPost, this.apResolverService.createResolver());
+						const apMentions = await this.apMentionService.extractApMentions(activity.object?.tag as unknown as IPost, this.apResolverService.createResolver());
 						return apMentions.length ? apMentions.length >= value.value : false;
 					}
 					return false;
 				}
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
-					if (isNote(activity)) {
-						return activity.attachment?.length ? activity.attachment.length >= value.value : false;
+					if (isNote(activity.object)) {
+						return activity.object?.attachment?.length ? activity.object?.attachment.length >= value.value : false;
 					}
 					return false;
 				}
@@ -123,8 +123,8 @@ export class InboxRuleService {
 				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
-					if (isNote(activity)) {
-						return this.utilityService.isKeyWordIncluded(typeof activity.content === 'string' ? activity.content : '', [value.value]);
+					if (isNote(activity.object)) {
+						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object.content : '', [value.value]);
 					}
 					return false;
 				}
