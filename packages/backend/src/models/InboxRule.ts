@@ -171,6 +171,10 @@ type CondFormulaValueServerSubMoreThanOrEq = {
 	value: number;
 }
 
+type CondFormulaThisActivityIsNote = {
+	type : 'thisActivityIsNote'
+}
+
 export type InboxRuleCondFormulaValue = { id: string } & (
 	CondFormulaValueAnd |
 	CondFormulaValueOr |
@@ -196,7 +200,8 @@ export type InboxRuleCondFormulaValue = { id: string } & (
 	CondFormulaValueServerPubLessThanOrEq |
 	CondFormulaValueServerPubMoreThanOrEq |
 	CondFormulaValueServerSubLessThanOrEq |
-	CondFormulaValueServerSubMoreThanOrEq
+	CondFormulaValueServerSubMoreThanOrEq |
+	CondFormulaThisActivityIsNote
 	);
 
 export type InboxRuleAction = {

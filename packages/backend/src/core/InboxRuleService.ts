@@ -120,6 +120,9 @@ export class InboxRuleService {
 					}
 					return false;
 				}
+				case 'thisActivityIsNote': {
+					return isCreate(activity);
+				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
 					if (isCreate(activity)) {
