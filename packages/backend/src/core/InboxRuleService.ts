@@ -44,22 +44,16 @@ export class InboxRuleService {
 		const instance = await this.instanceEntityService.pack(instanceUnpack, user);
 		try {
 			switch (value.type) {
-				// ～かつ～
 				case 'and': {
-					console.log('and');
-					console.log(value.values.every(async v => await this.evalCond(activity, user, v)));
-					console.log(value.values);
-					console.log('andEND');
-
-					return value.values.every(async v => await this.evalCond(activity, user, v));
+					const results = await Promise.all(value.values.map(v => this.evalCond(activity, user, v)));
+					return results.every(result => result);
 				}
-				// ～または～
 				case 'or': {
-					return value.values.some(async v => await this.evalCond(activity, user, v));
+					const results = await Promise.all(value.values.map(v => this.evalCond(activity, user, v)));
+					return results.some(result => result);
 				}
-				// ～ではない
 				case 'not': {
-					return !await this.evalCond(activity, user, value.value);
+					return !(await this.evalCond(activity, user, value.value));
 				}
 				// サスペンド済みユーザである
 				case 'isSuspended': {
