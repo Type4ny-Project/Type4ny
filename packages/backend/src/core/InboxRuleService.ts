@@ -108,8 +108,10 @@ export class InboxRuleService {
 				case 'maxMentionsMoreThanOrEq': {
 					if (isNote(activity)) {
 						const apMentions = await this.apMentionService.extractApMentions(activity.tag as unknown as IPost, this.apResolverService.createResolver());
+						console.log('apMentions');
 						console.log(apMentions.length);
 						console.log(value.value);
+						console.log('apMentionsEnd');
 
 						return apMentions.length ? apMentions.length >= value.value : false;
 					}
@@ -128,7 +130,9 @@ export class InboxRuleService {
 					return false;
 				}
 				case 'thisActivityIsNote': {
+					console.log('thisActivityIsNote');
 					console.log(isNote(activity));
+					console.log('thisActivityIsNoteEnd');
 					return isNote(activity);
 				}
 				// 指定されたワードが含まれている
@@ -161,8 +165,10 @@ export class InboxRuleService {
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以下
 				case 'serverSubLessThanOrEq': {
+					console.log('serverSubLessThanOrEq');
 					console.log(instance.followingCount);
 					console.log(value.value);
+					console.log('serverSubLessThanOrEqEnd');
 					return instance.followingCount <= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以上
