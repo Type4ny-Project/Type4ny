@@ -130,10 +130,10 @@ export class InboxRuleService {
 				}
 				case 'thisActivityIsNote': {
 					console.log('thisActivityIsNote');
-					console.log(isNote(activity));
-					console.log(activity);
+					console.log(isNote(activity.object));
+					console.log(activity.object);
 					console.log('thisActivityIsNoteEnd');
-					return isNote(activity);
+					return isNote(activity.object);
 				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
