@@ -31,7 +31,7 @@ import type {
 	AbuseUserReportsRepository,
 	FollowRequestsRepository,
 	InboxRuleRepository,
-	MiMeta
+	MiMeta,
 } from '@/models/_.js';
 import { bindThis } from '@/decorators.js';
 import type { MiRemoteUser } from '@/models/User.js';
@@ -148,6 +148,8 @@ export class ApInboxService {
 		const rules = await this.inboxRuleRepository.find();
 		for (const rule of rules) {
 			const result = await this.inboxRuleService.evalCond(activity, actor, rule.condFormula);
+			console.log(result);
+			console.log(rule.action.type);
 			if (result && rule.action.type === 'reject') {
 				await this.moderationLogService.log(actor, 'inboxRejected', {
 					activity,
