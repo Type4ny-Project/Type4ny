@@ -131,6 +131,7 @@ export class InboxRuleService {
 				case 'thisActivityIsNote': {
 					console.log('thisActivityIsNote');
 					console.log(isNote(activity));
+					console.log(activity);
 					console.log('thisActivityIsNoteEnd');
 					return isNote(activity);
 				}
