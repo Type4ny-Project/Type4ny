@@ -6,7 +6,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { bindThis } from '@/decorators.js';
 import type { MiRemoteUser } from '@/models/User.js';
 import { IdService } from '@/core/IdService.js';
-import { isCreate } from '@/core/activitypub/type.js';
+import { isCreate, isNote } from '@/core/activitypub/type.js';
 import type { IObject, IPost } from '@/core/activitypub/type.js';
 import type { InstancesRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
@@ -106,7 +106,7 @@ export class InboxRuleService {
 				}
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
-					if (isCreate(activity)) {
+					if (isNote(activity)) {
 						const apMentions = await this.apMentionService.extractApMentions(activity.tag as unknown as IPost, this.apResolverService.createResolver());
 
 						return apMentions.length ? apMentions.length >= value.value : false;
@@ -115,17 +115,17 @@ export class InboxRuleService {
 				}
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
-					if (isCreate(activity)) {
+					if (isNote(activity)) {
 						return activity.attachment?.length ? activity.attachment.length >= value.value : false;
 					}
 					return false;
 				}
 				case 'thisActivityIsNote': {
-					return isCreate(activity);
+					return isNote(activity);
 				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
-					if (isCreate(activity)) {
+					if (isNote(activity)) {
 						return this.utilityService.isKeyWordIncluded(typeof activity.content === 'string' ? activity.content : '', [value.value]);
 					}
 					return false;
