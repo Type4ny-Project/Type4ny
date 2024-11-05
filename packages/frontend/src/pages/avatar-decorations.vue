@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkButton @click="setCategoryBulk">Set Category</MkButton>
 		<MkButton @click="deletes">Delete</MkButton>
 		<div class="_gaps">
-			<MkFolder v-for="avatarDecoration in avatarDecorations" :key="avatarDecoration.id ?? avatarDecoration._id" :defaultOpen="avatarDecoration.id == null">
+			<MkFolder v-for="avatarDecoration in avatarDecorations" :key="avatarDecoration.id" :defaultOpen="avatarDecoration.id == null">
 				<template #label>{{ avatarDecoration.name }}</template>
 				<template #caption>{{ avatarDecoration.description }}</template>
 
@@ -59,7 +59,6 @@ import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
-import XDecoration from '@/pages/settings/avatar-decoration.decoration.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 
 const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
@@ -67,6 +66,15 @@ const select = ref(false);
 const selectItemsId = ref<string[]>([]);
 
 const $i = signinRequired();
+
+async function save(avatarDecoration) {
+	if (avatarDecoration.id == null) {
+		await os.apiWithDialog('admin/avatar-decorations/create', avatarDecoration);
+		load();
+	} else {
+		os.apiWithDialog('admin/avatar-decorations/update', avatarDecoration);
+	}
+}
 
 function add() {
 	avatarDecorations.value.unshift({
