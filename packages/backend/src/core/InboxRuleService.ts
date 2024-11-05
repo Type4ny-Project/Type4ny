@@ -15,6 +15,7 @@ import { InstanceEntityService } from '@/core/entities/InstanceEntityService.js'
 import type { InboxRuleCondFormulaValue } from '@/models/InboxRule.js';
 import { ApMentionService } from '@/core/activitypub/models/ApMentionService.js';
 import { ApResolverService } from '@/core/activitypub/ApResolverService.js';
+import type { MiMeta } from '@/models/Meta.js';
 
 @Injectable()
 export class InboxRuleService {
@@ -128,31 +129,32 @@ export class InboxRuleService {
 				}
 				// 指定されたサーバーホスト
 				case 'serverHost': {
-					return user.host === value.value;
+					// eslint-disable-next-line eqeqeq
+					return user.host == value.value;
 				}
 				// 指定されたサーバーソフトウェア
 				case 'serverSoftware': {
-					return this.meta.softwareName === value.value;
+					return instance.softwareName === value.value;
 				}
 				// サーバーサイレンスされている
 				case 'serverIsSilenced': {
-					return this.meta.isSilenced;
+					return instance.isSilenced;
 				}
 				// このサーバーのユーザーからフォローされているユーザーの数が～以下
 				case 'serverPubLessThanOrEq': {
-					return this.meta.followersCount <= value.value;
+					return instance.followersCount <= value.value;
 				}
 				// このサーバーのユーザーからフォローされているユーザーの数が～以上
 				case 'serverPubMoreThanOrEq': {
-					return this.meta.followersCount >= value.value;
+					return instance.followersCount >= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以下
 				case 'serverSubLessThanOrEq': {
-					return this.meta.followingCount <= value.value;
+					return instance.followingCount <= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以上
 				case 'serverSubMoreThanOrEq': {
-					return this.meta.followingCount >= value.value;
+					return instance.followingCount >= value.value;
 				}
 
 				default:
