@@ -46,11 +46,11 @@ export class InboxRuleService {
 			switch (value.type) {
 				// ～かつ～
 				case 'and': {
-					return value.values.every(v => this.evalCond(activity, user, v));
+					return value.values.every(async v => await this.evalCond(activity, user, v));
 				}
 				// ～または～
 				case 'or': {
-					return value.values.some(v => this.evalCond(activity, user, v));
+					return value.values.some(async v => await this.evalCond(activity, user, v));
 				}
 				// ～ではない
 				case 'not': {
