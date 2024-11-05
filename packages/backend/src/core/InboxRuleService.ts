@@ -118,8 +118,11 @@ export class InboxRuleService {
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
 					if (isNote(activity)) {
+						console.log('attachment');
 						console.log(activity.attachment?.length);
 						console.log(value.value);
+						console.log(activity.attachment?.length ? activity.attachment.length >= value.value : false);
+						console.log('attachmentEnd');
 						return activity.attachment?.length ? activity.attachment.length >= value.value : false;
 					}
 					return false;
