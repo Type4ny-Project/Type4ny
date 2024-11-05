@@ -106,11 +106,6 @@ export class InboxRuleService {
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
 					if (isNote(activity)) {
-						console.log('apMentions');
-						console.log(apMentions.length);
-						console.log(value.value);
-						console.log('apMentionsEnd');
-
 						const apMentions = await this.apMentionService.extractApMentions(activity.tag as unknown as IPost, this.apResolverService.createResolver());
 						return apMentions.length ? apMentions.length >= value.value : false;
 					}
@@ -119,20 +114,11 @@ export class InboxRuleService {
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
 					if (isNote(activity)) {
-						console.log('attachment');
-						console.log(activity.attachment?.length);
-						console.log(value.value);
-						console.log(activity.attachment?.length ? activity.attachment.length >= value.value : false);
-						console.log('attachmentEnd');
 						return activity.attachment?.length ? activity.attachment.length >= value.value : false;
 					}
 					return false;
 				}
 				case 'thisActivityIsNote': {
-					console.log('thisActivityIsNote');
-					console.log(isNote(activity.object));
-					console.log(activity.object);
-					console.log('thisActivityIsNoteEnd');
 					return isNote(activity.object);
 				}
 				// 指定されたワードが含まれている
@@ -165,10 +151,6 @@ export class InboxRuleService {
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以下
 				case 'serverSubLessThanOrEq': {
-					console.log('serverSubLessThanOrEq');
-					console.log(instance.followingCount);
-					console.log(value.value);
-					console.log('serverSubLessThanOrEqEnd');
 					return instance.followingCount <= value.value;
 				}
 				// このサーバーのユーザーをフォローしているユーザーの数が～以上
