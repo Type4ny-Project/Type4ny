@@ -106,7 +106,9 @@ export class InboxRuleService {
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
 					if (isNote(activity.object)) {
-						return activity.object?.tag ? activity.object?.tag?.length >= value.value : false;
+						return activity.object?.tag
+							? activity.object?.tag?.filter(t => t.type === 'Mention').length >= value.value
+							: false;
 					}
 					return false;
 				}
@@ -123,7 +125,7 @@ export class InboxRuleService {
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
 					if (isNote(activity.object)) {
-						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object.content : '', [value.value]);
+						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object?.content : '', [value.value]);
 					}
 					return false;
 				}
