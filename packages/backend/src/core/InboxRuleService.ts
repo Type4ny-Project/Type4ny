@@ -105,9 +105,8 @@ export class InboxRuleService {
 				}
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
-					if (isNote(activity)) {
-						const apMentions = await this.apMentionService.extractApMentions(activity.object?.tag as unknown as IPost, this.apResolverService.createResolver());
-						return apMentions.length ? apMentions.length >= value.value : false;
+					if (isNote(activity.object)) {
+						return activity.object?.tag ? activity.object?.tag?.length >= value.value : false;
 					}
 					return false;
 				}
