@@ -5610,7 +5610,7 @@ export interface Locale extends ILocale {
          */
         "makeNotesHiddenBeforeDescription": string;
         /**
-         * リモートサーバーに連合されたノートには効果が及ばない場合があります。
+         * リモートサーバーに連合されたノートには効果が及ばない可能性がとてもとても高いです。
          */
         "mayNotEffectForFederatedNotes": string;
         /**

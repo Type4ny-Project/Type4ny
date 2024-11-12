@@ -207,11 +207,6 @@ export class MiUser {
 	})
 	public isHibernated: boolean;
 
-	@Column('boolean', {
-		default: false,
-	})
-	public requireSigninToViewContents: boolean;
-
 	// in sec, マイナスで相対時間
 	@Column('integer', {
 		nullable: true,

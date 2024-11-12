@@ -83,7 +83,6 @@ function generateDummyUser(override?: Partial<MiUser>): MiUser {
 		isExplorable: true,
 		isHibernated: false,
 		isDeleted: false,
-		requireSigninToViewContents: false,
 		makeNotesFollowersOnlyBefore: null,
 		makeNotesHiddenBefore: null,
 		emojis: [],
