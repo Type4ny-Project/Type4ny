@@ -73,17 +73,6 @@ async function save(avatarDecoration) {
 	}
 }
 
-function add() {
-	avatarDecorations.value.unshift({
-		_id: Math.random().toString(36),
-		id: null,
-		name: '',
-		description: '',
-		url: '',
-		category: '',
-	});
-}
-
 function selectItems(decorationId) {
 	if (selectItemsId.value.includes(decorationId)) {
 		const index = selectItemsId.value.indexOf(decorationId);
