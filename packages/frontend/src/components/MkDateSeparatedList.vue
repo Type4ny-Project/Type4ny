@@ -138,13 +138,13 @@ export default defineComponent({
 			return children;
 		};
 
-		function onBeforeLeave(element: Element) {
-			const el = element as HTMLElement;
+		function onBeforeLeave(el: Element) {
+			if (!(el instanceof HTMLElement)) return;
 			el.classList.add('before-leave');
 		}
 
-		function onLeaveCancelled(element: Element) {
-			const el = element as HTMLElement;
+		function onLeaveCancelled(el: Element) {
+			if (!(el instanceof HTMLElement)) return;
 			el.classList.remove('before-leave');
 		}
 

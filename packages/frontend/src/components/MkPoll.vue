@@ -28,14 +28,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import * as Misskey from 'misskey-js';
+import { host } from '@@/js/config.js';
+import { useInterval } from '@@/js/use-interval.js';
 import type { OpenOnRemoteOptions } from '@/scripts/please-login.js';
 import { sum } from '@/scripts/array.js';
 import { pleaseLogin } from '@/scripts/please-login.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
-import { host } from '@@/js/config.js';
-import { useInterval } from '@@/js/use-interval.js';
 
 const props = defineProps<{
 	noteId: string;
@@ -84,7 +84,7 @@ if (props.poll.expiresAt) {
 const vote = async (id) => {
 	if (props.readOnly || closed.value || isVoted.value) return;
 
-	pleaseLogin(undefined, pleaseLoginContext.value);
+	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
 
 	const { canceled } = await os.confirm({
 		type: 'question',

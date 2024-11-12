@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <MkStickyContainer>
 	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
 
-	<MkSpacer v-if="!(typeof error === 'undefined')" :contentMax="1200">
+	<MkSpacer v-if="error != null" :contentMax="1200">
 		<div :class="$style.root">
 			<img :class="$style.img" :src="serverErrorImageUrl" class="_ghost"/>
 			<p :class="$style.text">
@@ -53,7 +53,7 @@ const props = defineProps<{
 }>();
 
 const list = ref<Misskey.entities.UserList | null>(null);
-const error = ref();
+const error = ref<unknown | null>(null);
 const users = ref<Misskey.entities.UserDetailed[]>([]);
 
 function fetchList(): void {

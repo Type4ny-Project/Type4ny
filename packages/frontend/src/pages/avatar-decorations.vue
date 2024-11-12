@@ -51,9 +51,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { ref, computed, defineAsyncComponent, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-import MkButton from '@/components/MkButton.vue';
-import MkInput from '@/components/MkInput.vue';
-import MkTextarea from '@/components/MkTextarea.vue';
 import { signinRequired } from '@/account.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
@@ -64,6 +61,7 @@ import MkSwitch from '@/components/MkSwitch.vue';
 const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
 const select = ref(false);
 const selectItemsId = ref<string[]>([]);
+const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
 
 const $i = signinRequired();
 
@@ -150,6 +148,37 @@ async function deletes() {
 	}
 }
 
+async function add(ev: MouseEvent) {
+	const { dispose } = os.popup(defineAsyncComponent(() => import('./avatar-decoration-edit-dialog.vue')), {
+	}, {
+		done: result => {
+			if (result.created) {
+				avatarDecorations.value.unshift(result.created);
+			}
+		},
+		closed: () => dispose(),
+	});
+}
+
+function edit(avatarDecoration) {
+	const { dispose } = os.popup(defineAsyncComponent(() => import('./avatar-decoration-edit-dialog.vue')), {
+		avatarDecoration: avatarDecoration,
+	}, {
+		done: result => {
+			if (result.updated) {
+				const index = avatarDecorations.value.findIndex(x => x.id === avatarDecoration.id);
+				avatarDecorations.value[index] = {
+					...avatarDecorations.value[index],
+					...result.updated,
+				};
+			} else if (result.deleted) {
+				avatarDecorations.value = avatarDecorations.value.filter(x => x.id !== avatarDecoration.id);
+			}
+		},
+		closed: () => dispose(),
+	});
+}
+
 const headerActions = computed(() => [{
 	asFullButton: true,
 	icon: 'ti ti-plus',
@@ -176,53 +205,26 @@ definePageMetadata(() => ({
 </style>
 
 <style lang="scss" module>
-.editorRoot {
-	container: editor / inline-size;
-}
-
-.editorWrapper {
+.decorations {
 	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: auto auto;
-	gap: var(--MI-margin);
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	grid-gap: 12px;
 }
 
-.preview {
-	display: grid;
-	place-items: center;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr;
-	gap: var(--MI-margin);
+.decoration {
+	cursor: pointer;
+	padding: 16px 16px 28px 16px;
+	border-radius: 8px;
+	text-align: center;
+	font-size: 90%;
+	overflow: clip;
+	contain: content;
 }
 
-.previewItem {
-	width: 100%;
-	height: 100%;
-	min-height: 160px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: var(--MI-radius);
-
-	&.light {
-		background: #eee;
-	}
-
-	&.dark {
-		background: #222;
-	}
-}
-
-@container editor (min-width: 600px) {
-	.editorWrapper {
-		grid-template-columns: 200px 1fr;
-		grid-template-rows: 1fr;
-		gap: calc(var(--MI-margin) * 2);
-	}
-
-	.preview {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr 1fr;
-	}
+.decorationName {
+	position: relative;
+	z-index: 10;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 </style>

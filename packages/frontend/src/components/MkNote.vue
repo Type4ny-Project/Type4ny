@@ -468,6 +468,7 @@ const emit = defineEmits<{
 }>();
 
 const inTimeline = inject<boolean>('inTimeline', false);
+const tl_withSensitive = inject<Ref<boolean>>('tl_withSensitive', ref(true));
 const inChannel = inject('inChannel', null);
 const currentClip = inject<Ref<Misskey.entities.Clip> | null>(
 	'currentClip',
@@ -562,11 +563,11 @@ function checkMute(
 	checkOnly = false,
 	userWordMute: Array<{ user: Misskey.entities.User; words: Array<string | string[]> }> | undefined | null = null,
 ): boolean | 'sensitiveMute' {
-	if (mutedWords == null) return false;
-
-	if (checkWordMute(noteToCheck, $i, mutedWords)) return true;
-	if (noteToCheck.reply && checkWordMute(noteToCheck.reply, $i, mutedWords)) return true;
-	if (noteToCheck.renote && checkWordMute(noteToCheck.renote, $i, mutedWords)) return true;
+	if (mutedWords != null) {
+		if (checkWordMute(noteToCheck, $i, mutedWords)) return true;
+		if (noteToCheck.reply && checkWordMute(noteToCheck.reply, $i, mutedWords)) return true;
+		if (noteToCheck.renote && checkWordMute(noteToCheck.renote, $i, mutedWords)) return true;
+	}
 
 	if (userWordMute && userWordMute.some(entry => entry.user.id === noteToCheck.userId && checkWordMute(noteToCheck, $i, entry.words))) {
 		return true;
@@ -576,10 +577,10 @@ function checkMute(
 
 	if (
 		inTimeline &&
-		!defaultStore.state.tl.filter.withSensitive &&
+		tl_withSensitive.value === false &&
 		noteToCheck.files?.some((v) => v.isSensitive)
-	) return 'sensitiveMute';
-
+	) {return 'sensitiveMute';
+}
 	return false;
 }
 
@@ -711,7 +712,7 @@ if (!props.mock) {
 }
 
 function renote(viaKeyboard = false) {
-	pleaseLogin(undefined, pleaseLoginContext.value);
+	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
 	showMovedDialog();
 
 	const { menu } = getRenoteMenu({
@@ -725,7 +726,7 @@ function renote(viaKeyboard = false) {
 }
 
 function reply(): void {
-	pleaseLogin(undefined, pleaseLoginContext.value);
+	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
 	if (props.mock) {
 		return;
 	}
@@ -738,7 +739,7 @@ function reply(): void {
 }
 
 function react(): void {
-	pleaseLogin(undefined, pleaseLoginContext.value);
+	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
 	showMovedDialog();
 	if (appearNote.value.reactionAcceptance === 'likeOnly') {
 		sound.playMisskeySfx('reaction');
@@ -881,7 +882,7 @@ function showRenoteMenu(): void {
 	}
 
 	if (isMyRenote) {
-		pleaseLogin(undefined, pleaseLoginContext.value);
+		pleaseLogin({ openOnRemote: pleaseLoginContext.value });
 		os.popupMenu(
 			[
 				getCopyNoteLinkMenu(note.value, i18n.ts.copyLinkRenote),

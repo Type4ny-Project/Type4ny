@@ -67,10 +67,10 @@ const onDriveFileCreated = (file) => {
 	}
 };
 
-const thumbnail = (image: any): string => {
+const thumbnail = (image: Misskey.entities.DriveFile): string => {
 	return defaultStore.state.disableShowingAnimatedImages
 		? getStaticImageUrl(image.url)
-		: image.thumbnailUrl;
+		: image.thumbnailUrl ?? image.url;
 };
 
 misskeyApi('drive/stream', {

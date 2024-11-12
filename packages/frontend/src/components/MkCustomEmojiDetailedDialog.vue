@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<MkModalWindow ref="dialogEl" @close="cancel()" @closed="$emit('closed')">
+<MkModalWindow ref="dialogEl" @close="cancel()" @closed="emit('closed')">
 	<template #header>:{{ emoji.name }}:</template>
 	<template #default>
 		<MkSpacer>

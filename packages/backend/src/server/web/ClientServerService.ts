@@ -31,6 +31,7 @@ import type {
 	InboxQueue,
 	ObjectStorageQueue,
 	ScheduleNotePostQueue,
+	RelationshipQueue,
 	SystemQueue,
 	SystemWebhookDeliverQueue,
 	UserWebhookDeliverQueue,
@@ -43,7 +44,7 @@ import { GalleryPostEntityService } from '@/core/entities/GalleryPostEntityServi
 import { ClipEntityService } from '@/core/entities/ClipEntityService.js';
 import { ChannelEntityService } from '@/core/entities/ChannelEntityService.js';
 import type {
-	ChannelsRepository,
+	AnnouncementsRepository,ChannelsRepository,
 	ClipsRepository,
 	FlashsRepository,
 	GalleryPostsRepository,
@@ -60,6 +61,7 @@ import { bindThis } from '@/decorators.js';
 import { FlashEntityService } from '@/core/entities/FlashEntityService.js';
 import { RoleService } from '@/core/RoleService.js';
 import { ReversiGameEntityService } from '@/core/entities/ReversiGameEntityService.js';
+import { AnnouncementEntityService } from '@/core/entities/AnnouncementEntityService.js';
 import { FeedService } from './FeedService.js';
 import { UrlPreviewService } from './UrlPreviewService.js';
 import { ClientLoggerService } from './ClientLoggerService.js';
@@ -104,6 +106,10 @@ export class ClientServerService {
 		private flashsRepository: FlashsRepository,
 		@Inject(DI.reversiGamesRepository)
 		private reversiGamesRepository: ReversiGamesRepository,
+
+		@Inject(DI.announcementsRepository)
+		private announcementsRepository: AnnouncementsRepository,
+
 		private flashEntityService: FlashEntityService,
 		private userEntityService: UserEntityService,
 		private noteEntityService: NoteEntityService,
@@ -113,6 +119,7 @@ export class ClientServerService {
 		private clipEntityService: ClipEntityService,
 		private channelEntityService: ChannelEntityService,
 		private reversiGameEntityService: ReversiGameEntityService,
+		private announcementEntityService: AnnouncementEntityService,
 		private urlPreviewService: UrlPreviewService,
 		private feedService: FeedService,
 		private roleService: RoleService,
@@ -125,6 +132,7 @@ export class ClientServerService {
 		@Inject('queue:deliver') public deliverQueue: DeliverQueue,
 		@Inject('queue:inbox') public inboxQueue: InboxQueue,
 		@Inject('queue:db') public dbQueue: DbQueue,
+		@Inject('queue:relationship') public relationshipQueue: RelationshipQueue,
 		@Inject('queue:objectStorage')
 		public objectStorageQueue: ObjectStorageQueue,
 		@Inject('queue:userWebhookDeliver')
@@ -273,6 +281,7 @@ export class ClientServerService {
 				this.deliverQueue,
 				this.inboxQueue,
 				this.dbQueue,
+				this.relationshipQueue,
 				this.objectStorageQueue,
 				this.userWebhookDeliverQueue,
 				this.systemWebhookDeliverQueue,
@@ -682,12 +691,15 @@ export class ClientServerService {
 			async (request, reply) => {
 				vary(reply.raw, 'Accept');
 
-				const note = await this.notesRepository.findOneBy({
+				const note = await this.notesRepository.findOne({
+				where: {
 					id: request.params.note,
 					visibility: In(['public', 'home']),
-				});
+				},
+				relations: ['user'],
+			});
 
-			if (note) {
+			if (note && !note.user!.requireSigninToViewContents) {
 				const _note = await this.noteEntityService.pack(note);
 				const profile = await this.userProfilesRepository.findOneByOrFail({ userId: note.userId });
 				reply.header('Cache-Control', 'public, max-age=15');
@@ -872,6 +884,24 @@ export class ClientServerService {
 				}
 			},
 		);
+
+		// 個別お知らせページ
+		fastify.get<{ Params: { announcementId: string; } }>('/announcements/:announcementId', async (request, reply) => {
+			const announcement = await this.announcementsRepository.findOneBy({
+				id: request.params.announcementId,
+			});
+
+			if (announcement) {
+				const _announcement = await this.announcementEntityService.pack(announcement);
+				reply.header('Cache-Control', 'public, max-age=3600');
+				return await reply.view('announcement', {
+					announcement: _announcement,
+					...await this.generateCommonPugData(this.meta),
+				});
+			} else {
+				return await renderBase(reply);
+			}
+		});
 		//#endregion
 
 		//#region noindex pages

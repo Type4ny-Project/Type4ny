@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div v-if="chosen && !shouldHide" :class="$style.root">
+<div v-if="chosen && !shouldHide">
 	<div
 		v-if="!showMenu"
 		:class="[$style.main, {
@@ -119,10 +119,6 @@ function reduceFrequency(): void {
 </script>
 
 <style lang="scss" module>
-.root {
-
-}
-
 .main {
 	text-align: center;
 

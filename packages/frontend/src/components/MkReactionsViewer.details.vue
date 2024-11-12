@@ -22,6 +22,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { } from 'vue';
+import * as Misskey from 'misskey-js';
 import { getEmojiName } from '@@/js/emojilist.js';
 import MkTooltip from './MkTooltip.vue';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
@@ -29,7 +30,7 @@ import MkReactionIcon from '@/components/MkReactionIcon.vue';
 defineProps<{
 	showing: boolean;
 	reaction: string;
-	users: any[]; // TODO
+	users: Misskey.entities.UserLite[];
 	count: number;
 	targetElement: HTMLElement;
 }>();

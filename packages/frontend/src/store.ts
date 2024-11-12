@@ -8,9 +8,11 @@ import * as Misskey from 'misskey-js';
 import { hemisphere } from '@@/js/intl-const.js';
 import lightTheme from '@@/themes/l-TypeLightEmerald.json5';
 import darkTheme from '@@/themes/d-TypeDarkEmerald.json5';
-import { miLocalStorage } from './local-storage.js';
 import type { SoundType } from '@/scripts/sound.js';
+import { DEFAULT_DEVICE_KIND, type DeviceKind } from '@/scripts/device-kind.js';
+import { miLocalStorage } from '@/local-storage.js';
 import { Storage } from '@/pizzax.js';
+import type { Ast } from '@syuilo/aiscript';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
 import { instance } from '@/instance.js';
 
@@ -316,7 +318,7 @@ export const defaultStore = markRaw(
 		},
 		overridedDeviceKind: {
 			where: 'device',
-			default: null as null | 'smartphone' | 'tablet' | 'desktop',
+			default: null as DeviceKind | null,
 		},
 		serverDisconnectedBehavior: {
 			where: 'device',
@@ -388,11 +390,11 @@ export const defaultStore = markRaw(
 		},
 		useBlurEffectForModal: {
 			where: 'device',
-			default: !/mobile|iphone|android/.test(navigator.userAgent.toLowerCase()), // 循環参照するのでdevice-kind.tsは参照できない
+			default: DEFAULT_DEVICE_KIND === 'desktop',
 		},
 		useBlurEffect: {
 			where: 'device',
-			default: !/mobile|iphone|android/.test(navigator.userAgent.toLowerCase()), // 循環参照するのでdevice-kind.tsは参照できない
+			default: DEFAULT_DEVICE_KIND === 'desktop',
 		},
 		showFixedPostForm: {
 			where: 'device',
@@ -750,7 +752,7 @@ export type Plugin = {
 	token: string;
 	src: string | null;
 	version: string;
-	ast: any[];
+	ast: Ast.Node[];
 	author?: string;
 	description?: string;
 	permissions?: string[];
@@ -849,7 +851,7 @@ export class ColdDeviceStorage {
 			get: () => {
 				return valueRef.value;
 			},
-			set: (value: unknown) => {
+			set: (value: typeof ColdDeviceStorage.default[K]) => {
 				const val = value;
 				ColdDeviceStorage.set(key, val);
 			},

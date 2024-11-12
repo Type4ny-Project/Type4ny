@@ -117,7 +117,7 @@ function addUser() {
 				userId: user.id,
 			});
 		}
-		paginationEl.value.reload();
+		paginationEl.value?.reload();
 	});
 }
 
@@ -132,7 +132,7 @@ async function removeUser(item, ev) {
 				listId: list.value.id,
 				userId: item.userId,
 			}).then(() => {
-				paginationEl.value.removeItem(item.id);
+				paginationEl.value?.removeItem(item.id);
 			});
 		},
 	}], ev.currentTarget ?? ev.target);
