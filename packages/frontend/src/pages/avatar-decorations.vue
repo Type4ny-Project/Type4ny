@@ -61,7 +61,6 @@ import MkSwitch from '@/components/MkSwitch.vue';
 const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
 const select = ref(false);
 const selectItemsId = ref<string[]>([]);
-const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListResponse>([]);
 
 const $i = signinRequired();
 
