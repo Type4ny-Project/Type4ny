@@ -1144,9 +1144,10 @@ function more(ev: MouseEvent) {
   100% {
     background-position: 0% 50%
   }
+}
 
 	.toggleButton {
 		left: var(--nav-icon-only-width);
 	}
-}
+
 </style>
