@@ -121,6 +121,17 @@ declare module '../api.js' {
     /**
      * No description provided.
      * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:account*
+     */
+    request<E extends 'admin/accounts/present-points', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
      * **Credential required**: *Yes* / **Permission**: *write:admin:ad*
      */
     request<E extends 'admin/ad/create', P extends Endpoints[E]['req']>(
@@ -157,6 +168,50 @@ declare module '../api.js' {
      * **Credential required**: *Yes* / **Permission**: *write:admin:ad*
      */
     request<E extends 'admin/ad/update', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *read:admin:inbox-rule*
+     */
+    request<E extends 'admin/inbox-rule/list', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:inbox-rule*
+     */
+    request<E extends 'admin/inbox-rule/set', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:inbox-rule*
+     */
+    request<E extends 'admin/inbox-rule/edit', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:inbox-rule*
+     */
+    request<E extends 'admin/inbox-rule/delete', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -354,6 +409,17 @@ declare module '../api.js' {
      * 
      * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
      */
+    request<E extends 'admin/emoji/add-request', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
+     */
     request<E extends 'admin/emoji/copy', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
@@ -419,6 +485,17 @@ declare module '../api.js' {
     /**
      * No description provided.
      * 
+     * **Credential required**: *Yes* / **Permission**: *read:admin:emoji*
+     */
+    request<E extends 'admin/emoji/list-request', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
      * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
      */
     request<E extends 'admin/emoji/remove-aliases-bulk', P extends Endpoints[E]['req']>(
@@ -454,6 +531,28 @@ declare module '../api.js' {
      * 
      * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
      */
+    request<E extends 'admin/emoji/set-localonly-bulk', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
+     */
+    request<E extends 'admin/emoji/set-issensitive-bulk', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
+     */
     request<E extends 'admin/emoji/set-license-bulk', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
@@ -466,6 +565,28 @@ declare module '../api.js' {
      * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
      */
     request<E extends 'admin/emoji/update', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
+     */
+    request<E extends 'admin/emoji/update-request', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:emoji*
+     */
+    request<E extends 'emoji/speedtest', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -686,6 +807,28 @@ declare module '../api.js' {
      * **Credential required**: *Yes* / **Permission**: *write:admin:resolve-abuse-user-report*
      */
     request<E extends 'admin/resolve-abuse-user-report', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:resolve-abuse-user-report*
+     */
+    request<E extends 'admin/forward-abuse-user-report', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:admin:resolve-abuse-user-report*
+     */
+    request<E extends 'admin/update-abuse-user-report', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -955,6 +1098,18 @@ declare module '../api.js' {
      * **Credential required**: *Yes* / **Permission**: *write:admin:system-webhook*
      */
     request<E extends 'admin/system-webhook/update', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *read:admin:system-webhook*
+     */
+    request<E extends 'admin/system-webhook/test', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -2831,6 +2986,29 @@ declare module '../api.js' {
     ): Promise<SwitchCaseResponseType<E, P>>;
 
     /**
+     * Show statistics about a user.
+     * 
+     * **Credential required**: *No*
+     */
+    request<E extends 'i/stats', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *read:account*
+     */
+    request<E extends 'i/webhooks/test', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
      * No description provided.
      * 
      * **Credential required**: *Yes* / **Permission**: *write:invite-codes*
@@ -2891,6 +3069,17 @@ declare module '../api.js' {
      * **Credential required**: *No*
      */
     request<E extends 'emojis', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *No*
+     */
+    request<E extends 'emoji-requests', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -3056,7 +3245,40 @@ declare module '../api.js' {
      * 
      * **Credential required**: *Yes* / **Permission**: *write:notes*
      */
+    request<E extends 'notes/schedule/delete', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:notes*
+     */
+    request<E extends 'notes/schedule/list', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:notes*
+     */
     request<E extends 'notes/delete', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *Yes* / **Permission**: *write:notes*
+     */
+    request<E extends 'notes/update', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -3123,6 +3345,17 @@ declare module '../api.js' {
      * **Credential required**: *No*
      */
     request<E extends 'notes/local-timeline', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * No description provided.
+     * 
+     * **Credential required**: *No*
+     */
+    request<E extends 'notes/any-local-timeline', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
@@ -3864,6 +4097,17 @@ declare module '../api.js' {
      * **Credential required**: *No* / **Permission**: *read:account*
      */
     request<E extends 'users/lists/list', P extends Endpoints[E]['req']>(
+      endpoint: E,
+      params: P,
+      credential?: string | null,
+    ): Promise<SwitchCaseResponseType<E, P>>;
+
+    /**
+     * Show all lists that the authenticated user has created.
+     * 
+     * **Credential required**: *No* / **Permission**: *read:account*
+     */
+    request<E extends 'users/lists/list-favorite', P extends Endpoints[E]['req']>(
       endpoint: E,
       params: P,
       credential?: string | null,
