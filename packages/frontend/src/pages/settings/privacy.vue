@@ -170,6 +170,7 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import FormSlot from '@/components/form/slot.vue';
 import { formatDateTimeString } from '@/scripts/format-time-string.js';
 import MkInput from '@/components/MkInput.vue';
+import * as os from '@/os.js';
 
 const $i = signinRequired();
 
@@ -213,6 +214,19 @@ const makeNotesHiddenBefore_type = computed(() => {
 watch([makeNotesFollowersOnlyBefore, makeNotesHiddenBefore], () => {
 	save();
 });
+
+async function update_requireSigninToViewContents(value: boolean) {
+	if (value) {
+		const { canceled } = await os.confirm({
+			type: 'warning',
+			text: i18n.ts.acknowledgeNotesAndEnable,
+		});
+		if (canceled) return;
+	}
+
+	requireSigninToViewContents.value = value;
+	save();
+}
 
 function save() {
 	misskeyApi('i/update', {

@@ -16,7 +16,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</template>
 						<template #caption>
 							<p v-if="isManaged">{{ i18n.ts.managedInstanceIsNotEditable }}</p>
-							<p>{{ i18n.ts._serverSettings.thisSettingWillAutomaticallyOffWhenModeratorsInactive }}</p>
+							<div>{{ i18n.ts._serverSettings.thisSettingWillAutomaticallyOffWhenModeratorsInactive }}</div>
+							<div><i class="ti ti-alert-triangle" style="color: var(--MI_THEME-warn);"></i> {{ i18n.ts._serverSettings.openRegistrationWarning }}</div>
 						</template>
 					</MkSwitch>
 
@@ -177,7 +178,17 @@ async function init() {
 	mediaSilencedHosts.value = meta.mediaSilencedHosts.join('\n');
 }
 
-function onChange_enableRegistration(value: boolean) {
+async function onChange_enableRegistration(value: boolean) {
+	if (value) {
+		const { canceled } = await os.confirm({
+			type: 'warning',
+			text: i18n.ts.acknowledgeNotesAndEnable,
+		});
+		if (canceled) return;
+	}
+
+	enableRegistration.value = value;
+
 	os.apiWithDialog('admin/update-meta', {
 		disableRegistration: !value,
 	}).then(() => {
