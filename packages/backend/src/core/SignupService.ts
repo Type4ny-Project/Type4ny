@@ -64,7 +64,7 @@ export class SignupService {
 		if (
 			envOption.managed &&
 			this.config.maxLocalUsers !== -1 &&
-			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor'])) } })) >=
+			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } })) >=
 				this.config.maxLocalUsers
 		) {
 			throw new Error('MAX_LOCAL_USERS');
