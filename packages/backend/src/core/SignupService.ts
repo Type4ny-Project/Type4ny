@@ -67,9 +67,6 @@ export class SignupService {
 			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } })) >=
 				this.config.maxLocalUsers
 		) {
-			console.log('MAX_LOCAL_USERS');
-			console.log(this.config.maxLocalUsers);
-			console.log(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }));
 			throw new Error('MAX_LOCAL_USERS');
 		}
 		if (password != null && passwordHash == null) {
