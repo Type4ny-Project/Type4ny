@@ -27,7 +27,7 @@ const modal = shallowRef<InstanceType<typeof MkModal>>();
 
 function whatIsNew() {
 	modal.value?.close();
-	window.open(`https://type4ny-hub.net/changelogs/#type4ny-${version.replace(/\./g, '')}`, '_blank');
+	window.open(`https://github.com/Type4ny-Project/Type4ny/blob/develop/CHANGELOG.md#type4ny-${version.replace(/\./g, '')}`, '_blank');
 }
 
 onMounted(() => {
