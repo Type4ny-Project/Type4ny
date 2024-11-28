@@ -942,10 +942,11 @@ async function post(ev?: MouseEvent) {
 		if (canceled) return;
 		if (result === 'cancel') return;
 		if (result === 'cw') {
+			useCw.value = true;
 			cw.value = '動きの激しいMFMを含んでいる投稿です';
 		}
 		if (result === 'home') {
-			cw.value = '動きの激しいMFMを含んでいる投稿です';
+			visibility.value = 'home';
 		}
 	}
 
