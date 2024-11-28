@@ -53,8 +53,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					[$style.t_quote]: notification.type === 'quote',
 					[$style.t_pollEnded]: notification.type === 'pollEnded',
 					[$style.t_achievementEarned]:
-						notification.type === 'achievementEarned',
-					[$style.t_achievementEarned]: notification.type === 'loginBonus',
+						notification.type === 'achievementEarned' || notification.type === 'loginBonus',
 					[$style.t_exportCompleted]: notification.type === 'exportCompleted',
 				[$style.t_login]: notification.type === 'login',
 				[$style.t_roleAssigned]:
