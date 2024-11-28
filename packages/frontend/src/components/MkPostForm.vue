@@ -86,6 +86,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-tooltip="i18n.ts.hashtags" class="_button" :class="[$style.footerButton, { [$style.footerButtonActive]: withHashtags }]" @click="withHashtags = !withHashtags"><i class="ti ti-hash"></i></button>
 			<button v-if="postFormActions.length > 0" v-tooltip="i18n.ts.plugins" class="_button" :class="$style.footerButton" @click="showActions"><i class="ti ti-plug"></i></button>
 			<button v-tooltip="i18n.ts.emoji" :class="['_button', $style.footerButton]" @click="insertEmoji"><i class="ti ti-mood-happy"></i></button>
+			<button v-if="useCw" v-tooltip="i18n.ts.cwInsertEmoji" :class="['_button', $style.footerButton]" @click="(ev) => insertEmoji(ev,true)"><i class="ti ti-eye-edit"></i></button>
 			<button v-if="showAddMfmFunction" v-tooltip="i18n.ts.addMfmFunction" :class="['_button', $style.footerButton]" @click="insertMfmFunction"><i class="ti ti-palette"></i></button>
 			<button v-tooltip="i18n.ts.ruby" :class="['_button', $style.footerButton]" @click="insertRuby"><i class="ti ti-abc"></i></button>
 			<button v-tooltip="i18n.ts.saveAsDraft" class="_button" :class="$style.footerButton" @click="saveDraft(false)"><i class="ti ti-device-floppy"></i></button>
@@ -1096,7 +1097,7 @@ function insertMention() {
 	});
 }
 
-async function insertEmoji(ev: MouseEvent) {
+async function insertEmoji(ev: MouseEvent, cwMode = false) {
 	textAreaReadOnly.value = true;
 	const target = ev.currentTarget ?? ev.target;
 	if (target == null) return;
@@ -1109,12 +1110,21 @@ async function insertEmoji(ev: MouseEvent) {
 
 	let pos = textareaEl.value?.selectionStart ?? 0;
 	let posEnd = textareaEl.value?.selectionEnd ?? text.value.length;
+	let cwPos = cwInputEl.value?.selectionStart ?? 0;
+	let cwPosEnd = cwInputEl.value?.selectionEnd ?? cw.value?.length;
 	emojiPicker.show(
 		target as HTMLElement,
 		emoji => {
-			const textBefore = text.value.substring(0, pos);
-			const textAfter = text.value.substring(posEnd);
-			text.value = textBefore + emoji + textAfter;
+			if (cwMode && useCw.value) {
+				const textBefore = cw.value?.substring(0, cwPos);
+				const textAfter = cw.value?.substring(cwPosEnd);
+				cw.value = textBefore + emoji + textAfter;
+			} else {
+				const textBefore = text.value.substring(0, pos);
+				const textAfter = text.value.substring(posEnd);
+				text.value = textBefore + emoji + textAfter;
+			}
+
 			pos += emoji.length;
 			posEnd += emoji.length;
 		},

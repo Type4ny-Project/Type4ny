@@ -5584,6 +5584,10 @@ export interface Locale extends ILocale {
      * 注意事項を理解した上でオンにします。
      */
     "acknowledgeNotesAndEnable": string;
+    /**
+     * CWに絵文字を挿入
+     */
+    "cwInsertEmoji": string;
     "_accountSettings": {
         /**
          * コンテンツの表示にログインを必須にする
