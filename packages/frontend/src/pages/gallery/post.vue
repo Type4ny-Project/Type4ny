@@ -10,14 +10,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div class="_root">
 			<Transition :name="defaultStore.state.animation ? 'fade' : ''" mode="out-in">
 				<div v-if="post" class="rkxwuolj">
-					<div class="files">
-						<div v-for="file in post.files" :key="file.id" class="file">
-							<img :src="file.url"/>
-						</div>
-					</div>
 					<div class="body">
 						<div class="title">{{ post.title }}</div>
 						<div class="description"><Mfm :text="post.description"/></div>
+						<div class="files">
+							<div v-for="file in post.files" :key="file.id" :class="$style.file" class="file">
+								<img :class="$style.center" :src="file.url"/>
+							</div>
+						</div>
 						<div class="info">
 							<i class="ti ti-clock"></i> <MkTime :time="post.createdAt" mode="detail"/>
 						</div>
@@ -65,6 +65,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, watch, ref, defineAsyncComponent } from 'vue';
 import * as Misskey from 'misskey-js';
+import { url } from '@@/js/config.js';
+import type { MenuItem } from '@/types/menu.js';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
@@ -72,7 +74,6 @@ import MkContainer from '@/components/MkContainer.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import MkGalleryPostPreview from '@/components/MkGalleryPostPreview.vue';
 import MkFollowButton from '@/components/MkFollowButton.vue';
-import { url } from '@@/js/config.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { defaultStore } from '@/store.js';
@@ -80,7 +81,8 @@ import { $i } from '@/account.js';
 import { isSupportShare } from '@/scripts/navigator.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import { useRouter } from '@/router/supplier.js';
-import type { MenuItem } from '@/types/menu.js';
+import { notePage } from '@/filters/note.js';
+import ImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
 
 const router = useRouter();
 
@@ -216,6 +218,18 @@ definePageMetadata(() => ({
 }));
 </script>
 
+<style lang="scss" module>
+.file {
+	margin-top: 16px;
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+
 <style lang="scss" scoped>
 .fade-enter-active,
 .fade-leave-active {
@@ -234,6 +248,7 @@ definePageMetadata(() => ({
 				max-width: 100%;
 				max-height: 500px;
 				margin: 0 auto;
+
 			}
 
 			& + .file {
