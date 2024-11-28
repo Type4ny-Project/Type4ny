@@ -44,84 +44,74 @@ export default defineComponent({
 	setup(props, { slots, expose }) {
 		const $style = useCssModule(); // カスタムレンダラなので使っても大丈夫
 
-		const dateTextCache = new Map<string, string>();
-		const time = Date.now();
-
 		function getDateText(dateInstance: Date) {
-			if (dateTextCache.has(time)) {
-				return dateTextCache.get(time)!;
-			}
 			const date = dateInstance.getDate();
 			const month = dateInstance.getMonth() + 1;
-			const text = i18n.tsx.monthAndDay({
+			return i18n.tsx.monthAndDay({
 				month: month.toString(),
 				day: date.toString(),
 			});
-			dateTextCache.set(time, text);
-			return text;
 		}
 
 		if (props.items.length === 0) return;
 
-		const renderChildrenImpl = () => {
-			const slotContent = slots.default ? slots.default : () => [];
-			return props.items.map((item, i) => {
-				const el = slotContent({
-					item: item,
-				})[0];
-				if (el.key == null && item.id) el.key = item.id;
+		const renderChildrenImpl = () => props.items.map((item, i) => {
+			if (!slots || !slots.default) return;
 
-				const date =
-					new Date(item.createdAt);
-				const nextDate = props.items[i + 1] ? new Date(props.items[i + 1].createdAt) : null;
+			const el = slots.default({
+				item: item,
+			})[0];
+			if (el.key == null && item.id) el.key = item.id;
 
-				if (
-					i !== props.items.length - 1 &&
+			const date = new Date(item.createdAt);
+			const nextDate = props.items[i + 1] ? new Date(props.items[i + 1].createdAt) : null;
+
+			if (
+				i !== props.items.length - 1 &&
 				nextDate != null && (
-						date.getFullYear() !== nextDate.getFullYear() ||
+					date.getFullYear() !== nextDate.getFullYear() ||
 					date.getMonth() !== nextDate.getMonth() ||
 					date.getDate() !== nextDate.getDate()
-					)
-				) {
-					const separator = h('div', {
-						class: $style['separator'],
-						key: item.id + ':separator',
-					}, h('p', {
-						class: $style['date'],
+				)
+			) {
+				const separator = h('div', {
+					class: $style['separator'],
+					key: item.id + ':separator',
+				}, h('p', {
+					class: $style['date'],
+				}, [
+					h('span', {
+						class: $style['date-1'],
 					}, [
-						h('span', {
-							class: $style['date-1'],
-						}, [
-							h('i', {
-								class: `ti ti-chevron-up ${$style['date-1-icon']}`,
-							}),
-							getDateText(date),
-						]),
-						h('span', {
-							class: $style['date-2'],
-						}, [
-							getDateText(nextDate),
-							h('i', {
-								class: `ti ti-chevron-down ${$style['date-2-icon']}`,
-							}),
-						]),
-					]));
+						h('i', {
+							class: `ti ti-chevron-up ${$style['date-1-icon']}`,
+						}),
+						getDateText(date),
+					]),
+					h('span', {
+						class: $style['date-2'],
+					}, [
+						getDateText(nextDate),
+						h('i', {
+							class: `ti ti-chevron-down ${$style['date-2-icon']}`,
+						}),
+					]),
+				]));
 
-					return [el, separator];
+				return [el, separator];
+			} else {
+				if (props.ad && instance.ads.length > 0 && item._shouldInsertAd_) {
+					return [h('div', {
+						key: item.id + ':ad',
+						class: $style['ad-wrapper'],
+					}, [h(MkAd, {
+						prefer: ['horizontal', 'horizontal-big'],
+					})]), el];
 				} else {
-					if (props.ad && instance.ads.length > 0 && item._shouldInsertAd_) {
-						return [h('div', {
-							key: item.id + ':ad',
-							class: $style['ad-wrapper'],
-						}, [h(MkAd, {
-							prefer: ['horizontal', 'horizontal-big'],
-						})]), el];
-					} else {
-						return el;
-					}
+					return el;
 				}
-			});
-		};
+			}
+		});
 
 		const renderChildren = () => {
 			const children = renderChildrenImpl();
@@ -140,12 +130,14 @@ export default defineComponent({
 
 		function onBeforeLeave(el: Element) {
 			if (!(el instanceof HTMLElement)) return;
-			el.classList.add('before-leave');
+			el.style.top = `${el.offsetTop}px`;
+			el.style.left = `${el.offsetLeft}px`;
 		}
 
 		function onLeaveCancelled(el: Element) {
 			if (!(el instanceof HTMLElement)) return;
-			el.classList.remove('before-leave');
+			el.style.top = '';
+			el.style.left = '';
 		}
 
 		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
@@ -175,21 +167,21 @@ export default defineComponent({
 	container-type: inline-size;
 
 	&:global {
-		> .list-move {
-			transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-		}
+	> .list-move {
+		transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+	}
 
-		&.deny-move-transition > .list-move {
-			transition: none !important;
-		}
+	&.deny-move-transition > .list-move {
+		transition: none !important;
+	}
 
-		> .list-enter-active {
-			transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-		}
+	> .list-enter-active {
+		transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+	}
 
-		> *:empty {
-			display: none;
-		}
+	> *:empty {
+		display: none;
+	}
 	}
 
 	&:not(.date-separated-list-nogap) > *:not(:last-child) {
@@ -212,20 +204,20 @@ export default defineComponent({
 
 .direction-up {
 	&:global {
-		> .list-enter-from,
-		> .list-leave-to {
-			opacity: 0;
-			transform: translateY(64px);
-		}
+	> .list-enter-from,
+	> .list-leave-to {
+		opacity: 0;
+		transform: translateY(64px);
+	}
 	}
 }
 .direction-down {
 	&:global {
-		> .list-enter-from,
-		> .list-leave-to {
-			opacity: 0;
-			transform: translateY(-64px);
-		}
+	> .list-enter-from,
+	> .list-leave-to {
+		opacity: 0;
+		transform: translateY(-64px);
+	}
 	}
 }
 
@@ -263,10 +255,6 @@ export default defineComponent({
 
 .date-2-icon {
 	margin-left: 8px;
-}
-
-.before-leave {
-	position: absolute !important;
 }
 
 .ad-wrapper {
