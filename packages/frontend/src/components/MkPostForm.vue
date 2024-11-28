@@ -916,7 +916,9 @@ async function post(ev?: MouseEvent) {
       text.value.includes('$[x3') ||
       text.value.includes('$[x4') ||
       text.value.includes('$[scale') ||
-      text.value.includes('$[position');
+      text.value.includes('$[position') ||
+			text.value.includes('$[shake') ||
+			text.value.includes('$[twitch');
 
 	if (annoying && visibility.value === 'public' && !cw.value) {
 		const { canceled, result } = await os.actions({
@@ -1031,7 +1033,7 @@ async function post(ev?: MouseEvent) {
 
 			const text = postData.text ?? '';
 			const lowerCase = text.toLowerCase();
-			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('misskey')) {
+			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('type4ny')) {
 				claimAchievement('iLoveType4ny');
 			}
 			if ([
