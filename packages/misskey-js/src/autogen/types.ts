@@ -5442,6 +5442,9 @@ export type operations = {
             iconDark: string | null;
             bannerLight: string | null;
             bannerDark: string | null;
+            maxLocalUsers: number | null;
+            nowLocalUsers: number | null;
+            isManaged: boolean | null;
           };
         };
       };

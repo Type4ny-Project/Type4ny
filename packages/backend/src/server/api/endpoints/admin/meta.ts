@@ -4,12 +4,14 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
+import { In, IsNull, Not } from 'typeorm';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
 import { DEFAULT_POLICIES } from '@/core/RoleService.js';
 import { envOption } from '@/env.js';
+import type { UsersRepository } from '@/models/_.js';
 
 export const meta = {
 	tags: ['meta'],
@@ -644,6 +646,9 @@ export const meta = {
 			iconDark: { type: 'string', nullable: true },
 			bannerLight: { type: 'string', nullable: true },
 			bannerDark: { type: 'string', nullable: true },
+			maxLocalUsers: { type: 'number', nullable: true },
+			nowLocalUsers: { type: 'number', nullable: true },
+			isManaged: { type: 'boolean', nullable: true },
 		},
 	},
 } as const;
@@ -659,6 +664,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
 		private metaService: MetaService,
 	) {
 		super(meta, paramDef, async (_, me) => {
@@ -787,6 +794,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
+				maxLocalUsers: 0,
+				nowLocalUsers: 0,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {
@@ -807,6 +816,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageUseProxy: false,
 					objectStorageSetPublicRead: false,
 					objectStorageS3ForcePathStyle: false,
+					maxLocalUsers: this.config.maxLocalUsers,
+					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
 					summalyProxy: 'Masked',
 					deeplAuthKey: 'Masked',
 					isManaged: true,
