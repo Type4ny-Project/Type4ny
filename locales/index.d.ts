@@ -4461,6 +4461,10 @@ export interface Locale extends ILocale {
      */
     "thisPostMayBeAnnoyingHome": string;
     /**
+     * CWをつけて投稿
+     */
+    "thisPostMayBeAnnoyingCW": string;
+    /**
      * やめる
      */
     "thisPostMayBeAnnoyingCancel": string;

@@ -108,6 +108,7 @@ import * as Misskey from 'misskey-js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { toASCII } from 'punycode/';
 import { host, url } from '@@/js/config.js';
+import type { PostFormProps } from '@/types/post-form.js';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
 import MkNotePreview from '@/components/MkNotePreview.vue';
 import XPostFormAttaches from '@/components/MkPostFormAttaches.vue';
@@ -143,7 +144,6 @@ import { emojiPicker } from '@/scripts/emoji-picker.js';
 import { mfmFunctionPicker } from '@/scripts/mfm-function-picker.js';
 import MkScheduleEditor from '@/components/MkScheduleEditor.vue';
 import { listSchedulePost } from '@/os.js';
-import type { PostFormProps } from '@/types/post-form.js';
 
 const $i = signinRequired();
 
@@ -917,11 +917,15 @@ async function post(ev?: MouseEvent) {
       text.value.includes('$[scale') ||
       text.value.includes('$[position');
 
-	if (annoying && visibility.value === 'public') {
+	if (annoying && visibility.value === 'public' && !cw.value) {
 		const { canceled, result } = await os.actions({
 			type: 'warning',
 			text: i18n.ts.thisPostMayBeAnnoying,
 			actions: [{
+				value: 'cw',
+				text: i18n.ts.thisPostMayBeAnnoyingCW,
+				primary: true,
+			}, {
 				value: 'home',
 				text: i18n.ts.thisPostMayBeAnnoyingHome,
 				primary: true,
@@ -936,8 +940,11 @@ async function post(ev?: MouseEvent) {
 
 		if (canceled) return;
 		if (result === 'cancel') return;
+		if (result === 'cw') {
+			cw.value = '動きの激しいMFMを含んでいる投稿です';
+		}
 		if (result === 'home') {
-			visibility.value = 'home';
+			cw.value = '動きの激しいMFMを含んでいる投稿です';
 		}
 	}
 
