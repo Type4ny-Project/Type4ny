@@ -7,13 +7,15 @@ import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IActivity } from '@/core/activitypub/type.js';
 import type { MiDriveFile } from '@/models/DriveFile.js';
-import type { MiWebhook, WebhookEventTypes, webhookEventTypes } from '@/models/Webhook.js';
+import type { MiWebhook, WebhookEventTypes } from '@/models/Webhook.js';
 import type { MiSystemWebhook, SystemWebhookEventType } from '@/models/SystemWebhook.js';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
 import type { Antenna } from '@/server/api/endpoints/i/import-antennas.js';
 import { ApRequestCreator } from '@/core/activitypub/ApRequestService.js';
+import { type SystemWebhookPayload } from '@/core/SystemWebhookService.js';
+import { type UserWebhookPayload } from './UserWebhookService.js';
 
 import type {
 	DbJobData,
@@ -31,13 +33,13 @@ import type {
 	ObjectStorageQueue,
 	RelationshipQueue,
 	SystemQueue,
+	SystemWebhookDeliverQueue,
 	UserWebhookDeliverQueue,
 	SystemWebhookDeliverQueue,
 	ScheduleNotePostQueue,
 } from './QueueModule.js';
 import type httpSignature from '@peertube/http-signature';
 import type * as Bull from 'bullmq';
-import { type UserWebhookPayload } from './UserWebhookService.js';
 
 @Injectable()
 export class QueueService {
@@ -504,10 +506,10 @@ export class QueueService {
 	 * @see SystemWebhookDeliverProcessorService
 	 */
 	@bindThis
-	public systemWebhookDeliver(
+	public systemWebhookDeliver<T extends SystemWebhookEventType>(
 		webhook: MiSystemWebhook,
-		type: SystemWebhookEventType,
-		content: unknown,
+		type: T,
+		content: SystemWebhookPayload<T>,
 		opts?: { attempts?: number },
 	) {
 		const data: SystemWebhookDeliverJobData = {

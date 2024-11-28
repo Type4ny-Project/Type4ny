@@ -46,7 +46,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</template>
 			<div :class="$style.divider"></div>
 			<MkA
-				v-if="$i.isAdmin || $i.isModerator" v-tooltip.noDelay.right="i18n.ts.controlPanel"
+				v-if="$i != null && ($i.isAdmin || $i.isModerator)" v-tooltip.noDelay.right="i18n.ts.controlPanel"
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				:activeClass="$style.active" to="/admin"
 			>
@@ -78,7 +78,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-tooltip.noDelay.right="i18n.ts.note" class="_button"
 				:class="[$style.post ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
 				data-cy-open-post-form
-				@click="os.post"
+				@click="() => { os.post(); }"
 			>
 				<i class="ti ti-pencil ti-fw" :class="$style.postIcon"></i><span
 					:class="[$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				}}</span>
 			</button>
 			<button
-				v-tooltip.noDelay.right="`${i18n.ts.account}: @${$i.username}`" class="_button"
+				v-if="$i != null"v-tooltip.noDelay.right="`${i18n.ts.account}: @${$i.username}`" class="_button"
 				:class="[$style.account]" @click="openAccountMenu"
 			>
 				<MkAvatar :user="$i" :class="$style.avatar"/>
@@ -138,8 +138,12 @@ document.documentElement.style.setProperty('--followerColor', hexToRgb(defaultSt
 document.documentElement.style.setProperty('--specifiedColor', hexToRgb(defaultStore.state.specifiedColor));
 document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(defaultStore.state.localOnlyColor));
 document.documentElement.style.setProperty('--gamingspeed', defaultStore.state.numberOfGamingSpeed + 's');
+import { getHTMLElementOrNull } from '@/scripts/get-dom-node-or-null.js';
 
-const iconOnly = ref(false);
+const forceIconOnly = ref(window.innerWidth <= 1279);
+const iconOnly = computed(() => {
+	return forceIconOnly.value || (defaultStore.reactiveState.menuDisplay.value === 'sideIcon');
+});
 let bannerUrl = computed(defaultStore.makeGetterSetter('bannerUrl'));
 let iconUrl = ref();
 let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
@@ -195,13 +199,9 @@ const otherMenuItemIndicated = computed(() => {
 	return false;
 });
 
-const forceIconOnly = window.innerWidth <= 1279;
-
 function calcViewState() {
-	iconOnly.value = forceIconOnly || (defaultStore.state.menuDisplay === 'sideIcon');
+	forceIconOnly.value = window.innerWidth <= 1279;
 }
-
-calcViewState();
 
 window.addEventListener('resize', calcViewState);
 
@@ -220,8 +220,10 @@ function openAccountMenu(ev: MouseEvent) {
 }
 
 function more(ev: MouseEvent) {
+	const target = getHTMLElementOrNull(ev.currentTarget ?? ev.target);
+	if (!target) return;
 	const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkLaunchPad.vue')), {
-		src: ev.currentTarget ?? ev.target,
+		src: target,
 	}, { closed: () => dispose(),
 	});
 }

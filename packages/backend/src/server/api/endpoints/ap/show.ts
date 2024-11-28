@@ -124,6 +124,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		]));
 		if (local != null) return local;
 
+		const host = this.utilityService.extractDbHost(uri);
+
+		// local object, not found in db? fail
+		if (this.utilityService.isSelfHost(host)) return null;
+
 		// リモートから一旦オブジェクトフェッチ
 		const resolver = this.apResolverService.createResolver();
 		console.log(uri);
@@ -139,10 +144,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			if (local != null) return local;
 		}
 
+		// 同一ユーザーの情報を再度処理するので、使用済みのresolverを再利用してはいけない
 		return await this.mergePack(
 			me,
 			isActor(object) ? await this.apPersonService.createPerson(getApId(object)) : null,
-			isPost(object) ? await this.apNoteService.createNote(getApId(object), undefined, true) : null,
+			isPost(object) ? await this.apNoteService.createNote(getApId(object), undefined, undefined, true) : null,
 		);
 	}
 
