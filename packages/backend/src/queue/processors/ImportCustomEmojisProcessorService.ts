@@ -87,30 +87,23 @@ export class ImportCustomEmojisProcessorService {
 				await this.emojisRepository.delete({
 					name: emojiInfo.name,
 				});
-				try {
-					const driveFile = await this.driveService.addFile({
-						user: null,
-						path: emojiPath,
-						name: record.fileName,
-						force: true,
-					});
-					await this.customEmojiService.add({
-						name: emojiInfo.name,
-						category: emojiInfo.category,
-						host: null,
-						aliases: emojiInfo.aliases,
-						driveFile,
-						license: emojiInfo.license,
-						isSensitive: emojiInfo.isSensitive,
-						localOnly: emojiInfo.localOnly,
-						roleIdsThatCanBeUsedThisEmojiAsReaction: [],
-					});
-				} catch (e) {
-					if (e instanceof Error || typeof e === 'string') {
-						this.logger.error(`couldn't import ${emojiPath} for ${emojiInfo.name}: ${e}`);
-					}
-					continue;
-				}
+				const driveFile = await this.driveService.addFile({
+					user: null,
+					path: emojiPath,
+					name: record.fileName,
+					force: true,
+				});
+				await this.customEmojiService.add({
+					name: emojiInfo.name,
+					category: emojiInfo.category,
+					host: null,
+					aliases: emojiInfo.aliases,
+					driveFile,
+					license: emojiInfo.license,
+					isSensitive: emojiInfo.isSensitive,
+					localOnly: emojiInfo.localOnly,
+					roleIdsThatCanBeUsedThisEmojiAsReaction: [],
+				});
 			}
 
 			cleanup();

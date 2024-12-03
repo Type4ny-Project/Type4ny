@@ -138,13 +138,12 @@ const token = ref<string | number | null>(null);
 const backupCodes = ref<string[]>();
 
 function cancel() {
-	dialog.value?.close();
+	dialog.value.close();
 }
 
 async function tokenDone() {
-	if (token.value == null) return;
 	const res = await os.apiWithDialog('i/2fa/done', {
-		token: typeof token.value === 'string' ? token.value : token.value.toString(),
+		token: token.value.toString(),
 	});
 
 	backupCodes.value = res.backupCodes;
@@ -167,7 +166,7 @@ function downloadBackupCodes() {
 }
 
 function allDone() {
-	dialog.value?.close();
+	dialog.value.close();
 }
 </script>
 

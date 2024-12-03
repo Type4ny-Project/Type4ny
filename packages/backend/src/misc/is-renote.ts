@@ -6,8 +6,6 @@
 import type { MiNote } from '@/models/Note.js';
 import type { Packed } from '@/misc/json-schema.js';
 
-// NoteEntityService.isPureRenote とよしなにリンク
-
 type Renote =
 	MiNote & {
 		renoteId: NonNullable<MiNote['renoteId']>

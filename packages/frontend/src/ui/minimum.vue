@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { computed, provide, ref } from 'vue';
 import XCommon from './_common_/common.vue';
 import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
-import { instanceName } from '@@/js/config.js';
+import { instanceName } from '@/config.js';
 import { mainRouter } from '@/router/main.js';
 
 const isRoot = computed(() => mainRouter.currentRoute.value.name === 'index');

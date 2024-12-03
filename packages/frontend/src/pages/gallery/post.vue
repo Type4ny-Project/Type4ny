@@ -10,14 +10,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div class="_root">
 			<Transition :name="defaultStore.state.animation ? 'fade' : ''" mode="out-in">
 				<div v-if="post" class="rkxwuolj">
+					<div class="files">
+						<div v-for="file in post.files" :key="file.id" class="file">
+							<img :src="file.url"/>
+						</div>
+					</div>
 					<div class="body">
 						<div class="title">{{ post.title }}</div>
 						<div class="description"><Mfm :text="post.description"/></div>
-						<div class="files">
-							<div v-for="file in post.files" :key="file.id" :class="$style.file" class="file">
-								<img :class="$style.center" :src="file.url"/>
-							</div>
-						</div>
 						<div class="info">
 							<i class="ti ti-clock"></i> <MkTime :time="post.createdAt" mode="detail"/>
 						</div>
@@ -65,8 +65,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, watch, ref, defineAsyncComponent } from 'vue';
 import * as Misskey from 'misskey-js';
-import { url } from '@@/js/config.js';
-import type { MenuItem } from '@/types/menu.js';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
@@ -74,6 +72,7 @@ import MkContainer from '@/components/MkContainer.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import MkGalleryPostPreview from '@/components/MkGalleryPostPreview.vue';
 import MkFollowButton from '@/components/MkFollowButton.vue';
+import { url } from '@/config.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { defaultStore } from '@/store.js';
@@ -81,8 +80,7 @@ import { $i } from '@/account.js';
 import { isSupportShare } from '@/scripts/navigator.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import { useRouter } from '@/router/supplier.js';
-import { notePage } from '@/filters/note.js';
-import ImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
+import { MenuItem } from '@/types/menu';
 
 const router = useRouter();
 
@@ -173,35 +171,35 @@ function reportAbuse() {
 function showMenu(ev: MouseEvent) {
 	if (!post.value) return;
 
-	const menuItems: MenuItem[] = [];
+	const menu: MenuItem[] = [
+		...($i && $i.id !== post.value.userId ? [
+			{
+				icon: 'ti ti-exclamation-circle',
+				text: i18n.ts.reportAbuse,
+				action: reportAbuse,
+			},
+			...($i.isModerator || $i.isAdmin ? [
+				{
+					type: 'divider' as const,
+				},
+				{
+					icon: 'ti ti-trash',
+					text: i18n.ts.delete,
+					danger: true,
+					action: () => os.confirm({
+						type: 'warning',
+						text: i18n.ts.deleteConfirm,
+					}).then(({ canceled }) => {
+						if (canceled || !post.value) return;
 
-	if ($i && $i.id !== post.value.userId) {
-		menuItems.push({
-			icon: 'ti ti-exclamation-circle',
-			text: i18n.ts.reportAbuse,
-			action: reportAbuse,
-		});
+						os.apiWithDialog('gallery/posts/delete', { postId: post.value.id });
+					}),
+				},
+			] : []),
+		] : []),
+	];
 
-		if ($i.isModerator || $i.isAdmin) {
-			menuItems.push({
-				type: 'divider',
-			}, {
-				icon: 'ti ti-trash',
-				text: i18n.ts.delete,
-				danger: true,
-				action: () => os.confirm({
-					type: 'warning',
-					text: i18n.ts.deleteConfirm,
-				}).then(({ canceled }) => {
-					if (canceled || !post.value) return;
-
-					os.apiWithDialog('gallery/posts/delete', { postId: post.value.id });
-				}),
-			});
-		}
-	}
-
-	os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
+	os.popupMenu(menu, ev.currentTarget ?? ev.target);
 }
 
 watch(() => props.postId, fetchPost, { immediate: true });
@@ -217,18 +215,6 @@ definePageMetadata(() => ({
 	} : {},
 }));
 </script>
-
-<style lang="scss" module>
-.file {
-	margin-top: 16px;
-}
-
-.center {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-</style>
 
 <style lang="scss" scoped>
 .fade-enter-active,
@@ -248,7 +234,6 @@ definePageMetadata(() => ({
 				max-width: 100%;
 				max-height: 500px;
 				margin: 0 auto;
-
 			}
 
 			& + .file {
@@ -277,14 +262,14 @@ definePageMetadata(() => ({
 			align-items: center;
 			margin-top: 16px;
 			padding: 16px 0 0 0;
-			border-top: solid 0.5px var(--MI_THEME-divider);
+			border-top: solid 0.5px var(--divider);
 
 			> .like {
 				> .button {
-					--MI_THEME-accent: rgb(241 97 132);
-					--MI_THEME-X8: rgb(241 92 128);
-					--MI_THEME-buttonBg: rgb(216 71 106 / 5%);
-					--MI_THEME-buttonHoverBg: rgb(216 71 106 / 10%);
+					--accent: rgb(241 97 132);
+					--X8: rgb(241 92 128);
+					--buttonBg: rgb(216 71 106 / 5%);
+					--buttonHoverBg: rgb(216 71 106 / 10%);
 					color: #ff002f;
 
 					::v-deep(.count) {
@@ -301,7 +286,7 @@ definePageMetadata(() => ({
 					margin: 0 8px;
 
 					&:hover {
-						color: var(--MI_THEME-fgHighlighted);
+						color: var(--fgHighlighted);
 					}
 				}
 			}
@@ -310,7 +295,7 @@ definePageMetadata(() => ({
 		> .user {
 			margin-top: 16px;
 			padding: 16px 0 0 0;
-			border-top: solid 0.5px var(--MI_THEME-divider);
+			border-top: solid 0.5px var(--divider);
 			display: flex;
 			align-items: center;
 			flex-wrap: wrap;
@@ -336,7 +321,7 @@ definePageMetadata(() => ({
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 	grid-gap: 12px;
-	margin: var(--MI-margin);
+	margin: var(--margin);
 
 	> .post {
 

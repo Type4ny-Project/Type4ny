@@ -56,9 +56,9 @@ const toggle = () => {
   width: calc(var(--height) * 1.6);
   height: calc(var(--height) + 2px); // 枠線
   outline: none;
-  background: var(--MI_THEME-switchOffBg);
+  background: var(--switchOffBg);
   background-clip: content-box;
-  border: solid 1px var(--MI_THEME-switchOffBg);
+  border: solid 1px var(--switchOffBg);
   border-radius: 999px;
   cursor: pointer;
   transition: inherit;
@@ -76,8 +76,8 @@ const toggle = () => {
 }
 
 .buttonChecked {
-  background-color: var(--MI_THEME-switchOnBg);
-  border-color: var(--MI_THEME-switchOnBg);
+  background-color: var(--switchOnBg);
+  border-color: var(--switchOnBg);
 }
 
 .gamingLight {
@@ -110,14 +110,14 @@ const toggle = () => {
 
   &:not(.knobChecked) {
     left: 3px;
-    background: var(--MI_THEME-switchOffFg);
+    background: var(--switchOffFg);
 
   }
 }
 
 .knobChecked {
   left: calc(calc(100% - var(--height)) + 3px);
-  background: var(--MI_THEME-switchOnFg);
+  background: var(--switchOnFg);
 
   &.gamingDark {
     background: white !important;

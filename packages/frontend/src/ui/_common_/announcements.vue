@@ -12,9 +12,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	>
 		<span :class="$style.icon">
 			<i v-if="announcement.icon === 'info'" class="ti ti-info-circle"></i>
-			<i v-else-if="announcement.icon === 'warning'" class="ti ti-alert-triangle" style="color: var(--MI_THEME-warn);"></i>
-			<i v-else-if="announcement.icon === 'error'" class="ti ti-circle-x" style="color: var(--MI_THEME-error);"></i>
-			<i v-else-if="announcement.icon === 'success'" class="ti ti-check" style="color: var(--MI_THEME-success);"></i>
+			<i v-else-if="announcement.icon === 'warning'" class="ti ti-alert-triangle" style="color: var(--warn);"></i>
+			<i v-else-if="announcement.icon === 'error'" class="ti ti-circle-x" style="color: var(--error);"></i>
+			<i v-else-if="announcement.icon === 'success'" class="ti ti-check" style="color: var(--success);"></i>
 		</span>
 		<span :class="$style.title">{{ announcement.title }}</span>
 		<span :class="$style.body">{{ announcement.text }}</span>
@@ -29,7 +29,7 @@ import { $i } from '@/account.js';
 <style lang="scss" module>
 .root {
 	font-size: 15px;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 }
 
 .item {
@@ -43,8 +43,8 @@ import { $i } from '@/account.js';
 	height: var(--height);
 	overflow: clip;
 	contain: strict;
-	background: var(--MI_THEME-accent);
-	color: var(--MI_THEME-fgOnAccent);
+	background: var(--accent);
+	color: var(--fgOnAccent);
 
 	@container (max-width: 1000px) {
 		display: block;

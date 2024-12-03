@@ -33,13 +33,13 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private deleteAccountService: DeleteAccountService,
 	) {
-		super(meta, paramDef, async (ps, me) => {
+		super(meta, paramDef, async (ps) => {
 			const user = await this.usersRepository.findOneByOrFail({ id: ps.userId });
 			if (user.isDeleted) {
 				return;
 			}
 
-			await this.deleteAccountService.deleteAccount(user, me);
+			await this.deleteAccountService.deleteAccount(user);
 		});
 	}
 }

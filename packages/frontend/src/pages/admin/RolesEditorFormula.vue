@@ -155,12 +155,12 @@ function removeSelf() {
 }
 
 .item {
-	border: solid 2px var(--MI_THEME-divider);
-	border-radius: var(--MI-radius);
+	border: solid 2px var(--divider);
+	border-radius: var(--radius);
 	padding: 12px;
 
 	&:hover {
-		border-color: var(--MI_THEME-accent);
+		border-color: var(--accent);
 	}
 }
 </style>

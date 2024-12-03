@@ -48,13 +48,13 @@ const remaining = computed(() => {
 		outline: none;
 
 		.root {
-			box-shadow: inset 0 0 0 2px var(--MI_THEME-focus);
+			box-shadow: inset 0 0 0 2px var(--focus);
 		}
 	}
 
 	&:hover {
 		text-decoration: none;
-		color: var(--MI_THEME-accent);
+		color: var(--accent);
 	}
 }
 
@@ -64,7 +64,7 @@ const remaining = computed(() => {
 
 .divider {
 	height: 1px;
-	background: var(--MI_THEME-divider);
+	background: var(--divider);
 }
 
 .description {

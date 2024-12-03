@@ -18,7 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 			<svg viewBox="0 0 128 128" :class="$style.avatarBack">
 				<g transform="matrix(1.6,0,0,1.6,-38.4,-51.2)">
-					<path d="M64,32C81.661,32 96,46.339 96,64C95.891,72.184 104,72 104,72C104,72 74.096,80 64,80C52.755,80 24,72 24,72C24,72 31.854,72.018 32,64C32,46.339 46.339,32 64,32Z" style="fill: var(--MI_THEME-popup);"/>
+					<path d="M64,32C81.661,32 96,46.339 96,64C95.891,72.184 104,72 104,72C104,72 74.096,80 64,80C52.755,80 24,72 24,72C24,72 31.854,72.018 32,64C32,46.339 46.339,32 64,32Z" style="fill: var(--popup);"/>
 				</g>
 			</svg>
 			<MkAvatar :class="$style.avatar" :user="user" indicator/>
@@ -148,7 +148,7 @@ onMounted(() => {
 	color: #fff;
 	background: rgba(0, 0, 0, 0.7);
 	font-size: 0.7em;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 }
 
 .avatarBack {
@@ -197,8 +197,8 @@ onMounted(() => {
 	padding: 16px 26px;
 	font-size: 0.8em;
 	text-align: center;
-	border-top: solid 1px var(--MI_THEME-divider);
-	border-bottom: solid 1px var(--MI_THEME-divider);
+	border-top: solid 1px var(--divider);
+	border-bottom: solid 1px var(--divider);
 }
 
 .mfm {
@@ -220,7 +220,7 @@ onMounted(() => {
 
 .statusItemLabel {
 	font-size: 0.7em;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 }
 
 .menu {
@@ -228,7 +228,7 @@ onMounted(() => {
 	top: 8px;
 	right: 44px;
 	padding: 6px;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	border-radius: 999px;
 }
 

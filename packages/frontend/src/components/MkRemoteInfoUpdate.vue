@@ -28,12 +28,12 @@ function UserInfoUpdate() {
 	padding: 16px;
 	background: var(--infoWarnBg);
 	color: var(--infoWarnFg);
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	overflow: clip;
 }
 
 .link {
 	margin-left: 4px;
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 }
 </style>

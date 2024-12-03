@@ -42,14 +42,6 @@ export class MiUserProfile {
 	})
 	public description: string | null;
 
-	// フォローされた際のメッセージ
-	@Column('varchar', {
-		length: 256, nullable: true,
-	})
-	public followedMessage: string | null;
-
-	// TODO: 鍵アカウントの場合の、フォローリクエスト受信時のメッセージも設定できるようにする
-
 	@Column('jsonb', {
 		default: [],
 	})
@@ -247,6 +239,11 @@ export class MiUserProfile {
 		comment: 'List of instances muted by the user.',
 	})
 	public mutedInstances: string[];
+
+	@Column('jsonb', {
+		default: [],
+	})
+	public mutedReactions: (string[] | string)[];
 
 	@Column('jsonb', {
 		default: {},

@@ -37,16 +37,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:to="navbarItemDef[item].to"
 					v-on="navbarItemDef[item].action ? { click: navbarItemDef[item].action } : {}"
 				>
-					<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span :class="$style.itemText">{{ navbarItemDef[item].title }}</span>
-					<span v-if="navbarItemDef[item].indicated" :class="$style.itemIndicator" class="_blink">
-						<span v-if="navbarItemDef[item].indicateValue" class="_indicateCounter" :class="[$style.itemIndicator ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{ navbarItemDef[item].indicateValue }}</span>
-						<i v-else class="_indicatorCircle"></i>
-					</span>
+					<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span
+						:class="$style.itemText"
+					>{{ navbarItemDef[item].title }}</span>
+					<span
+						v-if="navbarItemDef[item].indicated"
+						:class="[$style.itemIndicator ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]"
+					>
+						<span v-if="navbarItemDef[item].indicateValue && indicatorCounterToggle" class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ navbarItemDef[item].indicateValue }}</span><i
+							v-else class="_indicatorCircle"
+						></i></span>
 				</component>
 			</template>
 			<div :class="$style.divider"></div>
 			<MkA
-				v-if="$i != null && ($i.isAdmin || $i.isModerator)" v-tooltip.noDelay.right="i18n.ts.controlPanel"
+				v-if="$i.isAdmin || $i.isModerator" v-tooltip.noDelay.right="i18n.ts.controlPanel"
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				:activeClass="$style.active" to="/admin"
 			>
@@ -59,8 +64,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				@click="more"
 			>
-				<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{ i18n.ts.more }}</span>
-				<span v-if="otherMenuItemIndicated" :class="$style.itemIndicator" class="_blink"><i class="_indicatorCircle"></i></span>
+				<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{
+					i18n.ts.more
+				}}</span>
+				<span
+					v-if="otherMenuItemIndicated"
+					:class="[$style.itemIndicator,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]"
+				><i
+					class="_indicatorCircle"
+				></i></span>
 			</button>
 			<MkA
 				v-tooltip.noDelay.right="i18n.ts.settings"
@@ -78,7 +90,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-tooltip.noDelay.right="i18n.ts.note" class="_button"
 				:class="[$style.post ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
 				data-cy-open-post-form
-				@click="() => { os.post(); }"
+				@click="os.post"
 			>
 				<i class="ti ti-pencil ti-fw" :class="$style.postIcon"></i><span
 					:class="[$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
@@ -87,7 +99,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				}}</span>
 			</button>
 			<button
-				v-if="$i != null"v-tooltip.noDelay.right="`${i18n.ts.account}: @${$i.username}`" class="_button"
+				v-tooltip.noDelay.right="`${i18n.ts.account}: @${$i.username}`" class="_button"
 				:class="[$style.account]" @click="openAccountMenu"
 			>
 				<MkAvatar :user="$i" :class="$style.avatar"/>
@@ -95,21 +107,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</button>
 		</div>
 	</div>
-	<button v-if="!forceIconOnly" class="_button" :class="$style.toggleButton" @click="toggleIconOnly">
-		<!--
-		<svg viewBox="0 0 16 48" :class="$style.toggleButtonShape">
-			<g transform="matrix(0.333333,0,0,0.222222,0.000895785,13.3333)">
-				<path d="M23.935,-24C37.223,-24 47.995,-7.842 47.995,12.09C47.995,34.077 47.995,62.07 47.995,84.034C47.995,93.573 45.469,102.721 40.972,109.466C36.475,116.211 30.377,120 24.018,120L23.997,120C10.743,120 -0.003,136.118 -0.003,156C-0.003,156 -0.003,156 -0.003,156L-0.003,-60L-0.003,-59.901C-0.003,-50.379 2.519,-41.248 7.007,-34.515C11.496,-27.782 17.584,-24 23.931,-24C23.932,-24 23.934,-24 23.935,-24Z" style="fill:var(--MI_THEME-navBg);"/>
-			</g>
-		</svg>
-		-->
-		<svg viewBox="0 0 16 64" :class="$style.toggleButtonShape">
-			<g transform="matrix(0.333333,0,0,0.222222,0.000895785,21.3333)">
-				<path d="M47.488,7.995C47.79,10.11 47.943,12.266 47.943,14.429C47.997,26.989 47.997,84 47.997,84C47.997,84 44.018,118.246 23.997,133.5C-0.374,152.07 -0.003,192 -0.003,192L-0.003,-96C-0.003,-96 0.151,-56.216 23.997,-37.5C40.861,-24.265 46.043,-1.243 47.488,7.995Z" style="fill:var(--MI_THEME-navBg);"/>
-			</g>
-		</svg>
-		<i :class="'ti ' + `ti-chevron-${ iconOnly ? 'right' : 'left' }`" style="font-size: 12px; margin-left: -8px;"></i>
-	</button>
 </div>
 </template>
 
@@ -138,12 +135,8 @@ document.documentElement.style.setProperty('--followerColor', hexToRgb(defaultSt
 document.documentElement.style.setProperty('--specifiedColor', hexToRgb(defaultStore.state.specifiedColor));
 document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(defaultStore.state.localOnlyColor));
 document.documentElement.style.setProperty('--gamingspeed', defaultStore.state.numberOfGamingSpeed + 's');
-import { getHTMLElementOrNull } from '@/scripts/get-dom-node-or-null.js';
 
-const forceIconOnly = ref(window.innerWidth <= 1279);
-const iconOnly = computed(() => {
-	return forceIconOnly.value || (defaultStore.reactiveState.menuDisplay.value === 'sideIcon');
-});
+const iconOnly = ref(false);
 let bannerUrl = computed(defaultStore.makeGetterSetter('bannerUrl'));
 let iconUrl = ref();
 let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
@@ -199,19 +192,17 @@ const otherMenuItemIndicated = computed(() => {
 	return false;
 });
 
-function calcViewState() {
-	forceIconOnly.value = window.innerWidth <= 1279;
-}
+const calcViewState = () => {
+	iconOnly.value = (window.innerWidth <= 1279) || (defaultStore.state.menuDisplay === 'sideIcon');
+};
+
+calcViewState();
 
 window.addEventListener('resize', calcViewState);
 
 watch(defaultStore.reactiveState.menuDisplay, () => {
 	calcViewState();
 });
-
-function toggleIconOnly() {
-	defaultStore.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
-}
 
 function openAccountMenu(ev: MouseEvent) {
 	openAccountMenu_({
@@ -220,10 +211,8 @@ function openAccountMenu(ev: MouseEvent) {
 }
 
 function more(ev: MouseEvent) {
-	const target = getHTMLElementOrNull(ev.currentTarget ?? ev.target);
-	if (!target) return;
 	const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkLaunchPad.vue')), {
-		src: target,
+		src: ev.currentTarget ?? ev.target,
 	}, { closed: () => dispose(),
 	});
 }
@@ -233,7 +222,7 @@ function more(ev: MouseEvent) {
 .root {
 	--nav-width: 250px;
 	--nav-icon-only-width: 80px;
-	--nav-bg-transparent: color(from var(--MI_THEME-navBg) srgb r g b / 0.5);
+	--nav-bg-transparent: color-mix(in srgb, var(--navBg), transparent 50%);
 
   flex: 0 0 var(--nav-width);
   width: var(--nav-width);
@@ -251,42 +240,10 @@ function more(ev: MouseEvent) {
   overflow: auto;
   overflow-x: clip;
   overscroll-behavior: contain;
-  background: var(--MI_THEME-navBg);
+  background: var(--navBg);
   contain: strict;
   display: flex;
   flex-direction: column;
-	direction: rtl; // スクロールバーを左に表示したいため
-}
-
-.top {
-	direction: ltr;
-}
-
-.middle {
-	direction: ltr;
-}
-
-.bottom {
-	direction: ltr;
-}
-
-.toggleButton {
-	position: fixed;
-	bottom: 20px;
-	left: var(--nav-width);
-	z-index: 1001;
-	width: 16px;
-	height: 64px;
-	box-sizing: border-box;
-}
-
-.toggleButtonShape {
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	width: 16px;
-	height: 64px;
 }
 
 .root:not(.iconOnly) {
@@ -300,8 +257,8 @@ function more(ev: MouseEvent) {
     z-index: 1;
     padding: 20px 0;
     //background: var(--nav-bg-transparent);
-    -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-    backdrop-filter: var(--MI-blur, blur(8px));
+    -webkit-backdrop-filter: var(--blur, blur(8px));
+    backdrop-filter: var(--blur, blur(8px));
   }
 
   .banner {
@@ -325,7 +282,7 @@ function more(ev: MouseEvent) {
 			outline: none;
 
 			> .instanceIcon {
-				outline: 2px solid var(--MI_THEME-focus);
+				outline: 2px solid var(--focus);
 				outline-offset: 2px;
 			}
 		}
@@ -342,8 +299,8 @@ function more(ev: MouseEvent) {
     bottom: 0;
     padding-top: 20px;
     background: var(--nav-bg-transparent);
-    -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-    backdrop-filter: var(--MI-blur, blur(8px));
+    -webkit-backdrop-filter: var(--blur, blur(8px));
+    backdrop-filter: var(--blur, blur(8px));
   }
 
   .post {
@@ -351,7 +308,7 @@ function more(ev: MouseEvent) {
     display: block;
     width: 100%;
     height: 40px;
-    color: var(--MI_THEME-fgOnAccent);
+    color: var(--fgOnAccent);
     font-weight: bold;
     text-align: left;
 
@@ -367,21 +324,21 @@ function more(ev: MouseEvent) {
       right: 0;
       bottom: 0;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+      background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
     }
 
     &:focus-visible {
 			outline: none;
 
 			&::before {
-				outline: 2px solid var(--MI_THEME-fgOnAccent);
+				outline: 2px solid var(--fgOnAccent);
 				outline-offset: -4px;
 			}
 		}
 
 		&:hover, &.active {
       &::before {
-        background: var(--MI_THEME-accentLighten);
+        background: var(--accentLighten);
       }
     }
 
@@ -485,7 +442,7 @@ function more(ev: MouseEvent) {
 			outline: none;
 
 			> .avatar {
-				box-shadow: 0 0 0 4px var(--MI_THEME-focus);
+				box-shadow: 0 0 0 4px var(--focus);
 			}
 		}
 	}
@@ -511,7 +468,7 @@ function more(ev: MouseEvent) {
 
   .divider {
     margin: 16px 16px;
-    border-top: solid 0.5px var(--MI_THEME-divider);
+    border-top: solid 0.5px var(--divider);
   }
 
   .item {
@@ -525,7 +482,7 @@ function more(ev: MouseEvent) {
     width: 100%;
     text-align: left;
     box-sizing: border-box;
-    color: var(--MI_THEME-navFg);
+    color: var(--navFg);
 		transition: all 0.2s ease;
 
     &.gamingDark {
@@ -538,18 +495,18 @@ function more(ev: MouseEvent) {
 
     &:hover {
       text-decoration: none;
-      color: var(--MI_THEME-navHoverFg);
+      color: var(--navHoverFg);
     }
 
     &.active {
-      color: var(--MI_THEME-navActive);
+      color: var(--navActive);
     }
 
     &:focus-visible {
 			outline: none;
 
 			&::before {
-				outline: 2px solid var(--MI_THEME-focus);
+				outline: 2px solid var(--focus);
 				outline-offset: -2px;
 			}
 		}
@@ -566,12 +523,12 @@ function more(ev: MouseEvent) {
 			bottom: 0;
 			opacity: 0;
 			border-radius: 999px;
-			background: var(--MI_THEME-accentedBg);
+			background: var(--accentedBg);
 			transition: opacity 0.1s ease;
 
 		}
 		&:hover, &.active, &:focus {
-      color: var(--MI_THEME-accent);
+      color: var(--accent);
 
       &::before {
 				opacity: 1;
@@ -669,8 +626,9 @@ function more(ev: MouseEvent) {
 		position: absolute;
 		top: 0;
 		left: 20px;
-		color: var(--MI_THEME-navIndicator);
+		color: var(--navIndicator);
 		font-size: 8px;
+		animation: global-blink 1s infinite;
 
 		&:has(.itemIndicateValueIcon) {
 			animation: none;
@@ -683,7 +641,7 @@ function more(ev: MouseEvent) {
     position: absolute;
     top: 0;
     left: 20px;
-    color: var(--MI_THEME-navIndicator);
+    color: var(--navIndicator);
     font-size: 8px;
     animation: blink 1s infinite;
 
@@ -710,10 +668,6 @@ function more(ev: MouseEvent) {
 		font-size: 0.9em;
 		transform: rotate(0.03deg);
   }
-
-	.toggleButton {
-		left: var(--nav-width);
-	}
 }
 
 .root.iconOnly {
@@ -730,8 +684,8 @@ function more(ev: MouseEvent) {
     z-index: 1;
     padding: 20px 0;
     background: var(--nav-bg-transparent);
-    -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-    backdrop-filter: var(--MI-blur, blur(8px));
+    -webkit-backdrop-filter: var(--blur, blur(8px));
+    backdrop-filter: var(--blur, blur(8px));
   }
 
   .instance {
@@ -742,7 +696,7 @@ function more(ev: MouseEvent) {
 			outline: none;
 
 			> .instanceIcon {
-				outline: 2px solid var(--MI_THEME-focus);
+				outline: 2px solid var(--focus);
 				outline-offset: 2px;
 			}
 		}
@@ -759,8 +713,8 @@ function more(ev: MouseEvent) {
     bottom: 0;
     padding-top: 20px;
     background: var(--nav-bg-transparent);
-    -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-    backdrop-filter: var(--MI-blur, blur(8px));
+    -webkit-backdrop-filter: var(--blur, blur(8px));
+    backdrop-filter: var(--blur, blur(8px));
   }
 
   .post {
@@ -784,21 +738,21 @@ function more(ev: MouseEvent) {
       width: 52px;
       aspect-ratio: 1/1;
       border-radius: 100%;
-      background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+      background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
     }
 
     &:focus-visible {
 			outline: none;
 
 			&::before {
-				outline: 2px solid var(--MI_THEME-fgOnAccent);
+				outline: 2px solid var(--fgOnAccent);
 				outline-offset: -4px;
 			}
 		}
 
 		&:hover, &.active {
       &::before {
-        background: var(--MI_THEME-accentLighten);
+        background: var(--accentLighten);
       }
     }
 
@@ -870,7 +824,7 @@ function more(ev: MouseEvent) {
 
   .postIcon {
     position: relative;
-    color: var(--MI_THEME-fgOnAccent);
+    color: var(--fgOnAccent);
   }
 
   .postText {
@@ -888,7 +842,7 @@ function more(ev: MouseEvent) {
 			outline: none;
 
 			> .avatar {
-				box-shadow: 0 0 0 4px var(--MI_THEME-focus);
+				box-shadow: 0 0 0 4px var(--focus);
 			}
 		}
 	}
@@ -910,7 +864,7 @@ function more(ev: MouseEvent) {
   .divider {
     margin: 8px auto;
     width: calc(100% - 32px);
-    border-top: solid 0.5px var(--MI_THEME-divider);
+    border-top: solid 0.5px var(--divider);
   }
 
   .item {
@@ -922,14 +876,14 @@ function more(ev: MouseEvent) {
 		transition: all 0.1s ease;
 
     &.gamingLight {
-      color: var(--MI_THEME-fg);
+      color: var(--fg);
     }
 
     &:focus-visible {
 			outline: none;
 
 			&::before {
-				outline: 2px solid var(--MI_THEME-focus);
+				outline: 2px solid var(--focus);
 				outline-offset: -2px;
 			}
 		}
@@ -947,21 +901,21 @@ function more(ev: MouseEvent) {
 			bottom: 0;
 			border-radius: 999px;
 			opacity: 0;
-			background: var(--MI_THEME-accentedBg);
+			background: var(--accentedBg);
 			transition: opacity 0.2s ease;
 
 		}
 
 		&:hover, &.active, &:focus {
       text-decoration: none;
-      color: var(--MI_THEME-accent);
+      color: var(--accent);
 
       &.gamingDark {
         color: black;
       }
 
       &.gamingLight {
-        color: var(--MI_THEME-fg);
+        color: var(--fg);
       }
 
       &::before {
@@ -1038,8 +992,9 @@ function more(ev: MouseEvent) {
 		position: absolute;
 		top: 6px;
 		left: 24px;
-		color: var(--MI_THEME-navIndicator);
+		color: var(--navIndicator);
 		font-size: 8px;
+		animation: global-blink 1s infinite;
 
 		&:has(.itemIndicateValueIcon) {
 			animation: none;
@@ -1053,7 +1008,7 @@ function more(ev: MouseEvent) {
     position: absolute;
     top: 6px;
     left: 24px;
-    color: var(--MI_THEME-navIndicator);
+    color: var(--navIndicator);
     font-size: 8px;
     animation: blink 1s infinite;
 
@@ -1147,9 +1102,4 @@ function more(ev: MouseEvent) {
     background-position: 0% 50%
   }
 }
-
-	.toggleButton {
-		left: var(--nav-icon-only-width);
-	}
-
 </style>

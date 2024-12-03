@@ -120,7 +120,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</button>
 					<button ref="reactButton" :class="$style.footerButton" class="_button" @click="toggleReact()">
 						<i v-if="appearNote.reactionAcceptance === 'likeOnly' && appearNote.myReaction != null" class="ti ti-heart-filled" style="color: var(--eventReactionHeart);"></i>
-						<i v-else-if="appearNote.myReaction != null" class="ti ti-minus" style="color: var(--MI_THEME-accent);"></i>
+						<i v-else-if="appearNote.myReaction != null" class="ti ti-minus" style="color: var(--accent);"></i>
 						<i v-else-if="appearNote.reactionAcceptance === 'likeOnly'" class="ti ti-heart"></i>
 						<i v-else class="ti ti-plus"></i>
 						<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || defaultStore.state.showReactionsCount) && appearNote.reactionCount > 0" :class="$style.footerButtonCount">{{ number(appearNote.reactionCount) }}</p>
@@ -621,7 +621,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 			width: calc(100% - 8px);
 			height: calc(100% - 8px);
 			border: dashed 1px var(--focus);
-			border-radius: var(--MI-radius);
+			border-radius: var(--radius);
 			box-sizing: border-box;
 		}
 	}
@@ -879,13 +879,13 @@ function emitUpdReaction(emoji: string, delta: number) {
 }
 
 .replyIcon {
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 	margin-right: 0.5em;
 }
 
 .translation {
-	border: solid 0.5px var(--MI_THEME-divider);
-	border-radius: var(--MI-radius);
+	border: solid 0.5px var(--divider);
+	border-radius: var(--radius);
 	padding: 12px;
 	margin-top: 8px;
 }
@@ -924,7 +924,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 	opacity: 0.7;
 
 	&:hover {
-		color: var(--MI_THEME-fgHighlighted);
+		color: var(--fgHighlighted);
 	}
 }
 

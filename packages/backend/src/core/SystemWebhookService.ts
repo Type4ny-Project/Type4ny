@@ -15,38 +15,7 @@ import { QueueService } from '@/core/QueueService.js';
 import { ModerationLogService } from '@/core/ModerationLogService.js';
 import { LoggerService } from '@/core/LoggerService.js';
 import Logger from '@/logger.js';
-import { Packed } from '@/misc/json-schema.js';
-import { AbuseReportResolveType } from '@/models/AbuseUserReport.js';
-import { ModeratorInactivityRemainingTime } from '@/queue/processors/CheckModeratorsActivityProcessorService.js';
 import type { OnApplicationShutdown } from '@nestjs/common';
-
-export type AbuseReportPayload = {
-	id: string;
-	targetUserId: string;
-	targetUser: Packed<'UserLite'> | null;
-	targetUserHost: string | null;
-	reporterId: string;
-	reporter: Packed<'UserLite'> | null;
-	reporterHost: string | null;
-	assigneeId: string | null;
-	assignee: Packed<'UserLite'> | null;
-	resolved: boolean;
-	forwarded: boolean;
-	comment: string;
-	moderationNote: string;
-	resolvedAs: AbuseReportResolveType | null;
-};
-
-export type InactiveModeratorsWarningPayload = {
-	remainingTime: ModeratorInactivityRemainingTime;
-};
-
-export type SystemWebhookPayload<T extends SystemWebhookEventType> =
-	T extends 'abuseReport' | 'abuseReportResolved' ? AbuseReportPayload :
-	T extends 'userCreated' ? Packed<'UserLite'> :
-	T extends 'inactiveModeratorsWarning' ? InactiveModeratorsWarningPayload :
-	T extends 'inactiveModeratorsInvitationOnlyChanged' ? Record<string, never> :
-		never;
 
 @Injectable()
 export class SystemWebhookService implements OnApplicationShutdown {
@@ -85,7 +54,7 @@ export class SystemWebhookService implements OnApplicationShutdown {
 	 * SystemWebhook の一覧を取得する.
 	 */
 	@bindThis
-	public fetchSystemWebhooks(params?: {
+	public async fetchSystemWebhooks(params?: {
 		ids?: MiSystemWebhook['id'][];
 		isActive?: MiSystemWebhook['isActive'];
 		on?: MiSystemWebhook['on'];
@@ -132,7 +101,8 @@ export class SystemWebhookService implements OnApplicationShutdown {
 			.log(updater, 'createSystemWebhook', {
 				systemWebhookId: webhook.id,
 				webhook: webhook,
-			});
+			})
+			.then();
 
 		return webhook;
 	}
@@ -169,7 +139,8 @@ export class SystemWebhookService implements OnApplicationShutdown {
 				systemWebhookId: beforeEntity.id,
 				before: beforeEntity,
 				after: afterEntity,
-			});
+			})
+			.then();
 
 		return afterEntity;
 	}
@@ -187,30 +158,26 @@ export class SystemWebhookService implements OnApplicationShutdown {
 			.log(updater, 'deleteSystemWebhook', {
 				systemWebhookId: webhook.id,
 				webhook,
-			});
+			})
+			.then();
 	}
 
 	/**
 	 * SystemWebhook をWebhook配送キューに追加する
 	 * @see QueueService.systemWebhookDeliver
-	 * // TODO: contentの型を厳格化する
 	 */
 	@bindThis
-	public async enqueueSystemWebhook<T extends SystemWebhookEventType>(
-		webhook: MiSystemWebhook | MiSystemWebhook['id'],
-		type: T,
-		content: SystemWebhookPayload<T>,
-	) {
+	public async enqueueSystemWebhook(webhook: MiSystemWebhook | MiSystemWebhook['id'], type: SystemWebhookEventType, content: unknown) {
 		const webhookEntity = typeof webhook === 'string'
 			? (await this.fetchActiveSystemWebhooks()).find(a => a.id === webhook)
 			: webhook;
 		if (!webhookEntity || !webhookEntity.isActive) {
-			this.logger.info(`SystemWebhook is not active or not found : ${webhook}`);
+			this.logger.info(`Webhook is not active or not found : ${webhook}`);
 			return;
 		}
 
 		if (!webhookEntity.on.includes(type)) {
-			this.logger.info(`SystemWebhook ${webhookEntity.id} is not listening to ${type}`);
+			this.logger.info(`Webhook ${webhookEntity.id} is not listening to ${type}`);
 			return;
 		}
 

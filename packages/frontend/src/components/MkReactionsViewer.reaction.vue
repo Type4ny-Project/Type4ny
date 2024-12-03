@@ -43,7 +43,6 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { computed, inject, onMounted, shallowRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-import { getUnicodeEmoji } from '@@/js/emojilist.js';
 import MkCustomEmojiDetailedDialog from './MkCustomEmojiDetailedDialog.vue';
 import XDetails from '@/components/MkReactionsViewer.details.vue';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
@@ -58,6 +57,7 @@ import { i18n } from '@/i18n.js';
 import * as sound from '@/scripts/sound.js';
 import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
 import { customEmojisMap } from '@/custom-emojis.js';
+import { getUnicodeEmoji } from '@/scripts/emojilist.js';
 
 const gamingType = defaultStore.state.gamingType;
 
@@ -114,7 +114,6 @@ function getReactionName(reaction: string, formated = false) {
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
-
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const oldReaction = props.note.myReactions?.includes(props.reaction)
 		? props.reaction
@@ -148,7 +147,9 @@ async function toggleReaction() {
 			reaction: oldReaction,
 		}).then(() => {
 			if (
-				oldReaction !== props.reaction
+				oldReaction !== props.reaction &&
+				oldReaction !== '🚮' &&
+				props.reaction !== '🚮'
 			) {
 				misskeyApi('notes/reactions/create', {
 					noteId: props.note.id,
@@ -297,13 +298,13 @@ if (!mock) {
 	margin: 2px;
 	padding: 0 6px;
 	font-size: 1.5em;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s ease;
 
 	&.canToggle {
-		background: var(--MI_THEME-buttonBg);
+		background: var(--buttonBg);
 
 		&:hover {
 			background: rgba(0, 0, 0, 0.1);
@@ -338,9 +339,9 @@ if (!mock) {
 
 	&.reacted,
 	&.reacted:hover {
-		background: var(--MI_THEME-accentedBg);
-		color: var(--MI_THEME-accent);
-		box-shadow: 0 0 0 1px var(--MI_THEME-accent) inset;
+		background: var(--accentedBg);
+		color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent) inset;
 
 		&.gamingDark {
 			color: black;
@@ -391,7 +392,7 @@ if (!mock) {
 		}
 
 		> .count {
-			color: var(--MI_THEME-accent);
+			color: var(--accent);
 
 			&.gamingLight {
 				color: white;

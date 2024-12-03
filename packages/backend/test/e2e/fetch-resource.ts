@@ -230,7 +230,6 @@ describe('Webリソース', () => {
 				path: path('xxxxxxxxxx'),
 				type: HTML,
 			}));
-			test.todo('HTMLとしてGETできる。(リモートユーザーでもリダイレクトせず)');
 		});
 
 		describe.each([
@@ -250,7 +249,6 @@ describe('Webリソース', () => {
 				path: path('xxxxxxxxxx'),
 				accept,
 			}));
-			test.todo('はオリジナルにリダイレクトされる。(リモートユーザー)');
 		});
 	});
 

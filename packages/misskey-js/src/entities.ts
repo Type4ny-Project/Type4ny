@@ -10,7 +10,6 @@ import {
 	User,
 	UserDetailedNotMe,
 } from './autogen/models.js';
-import type { AuthenticationResponseJSON, PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types';
 
 export * from './autogen/entities.js';
 export * from './autogen/models.js';
@@ -154,12 +153,6 @@ export type ModerationLog = {
 	type: 'resolveAbuseReport';
 	info: ModerationLogPayloads['resolveAbuseReport'];
 } | {
-	type: 'forwardAbuseReport';
-	info: ModerationLogPayloads['forwardAbuseReport'];
-} | {
-	type: 'updateAbuseReportNote';
-	info: ModerationLogPayloads['updateAbuseReportNote'];
-} | {
 	type: 'unsetUserAvatar';
 	info: ModerationLogPayloads['unsetUserAvatar'];
 } | {
@@ -260,7 +253,6 @@ export type SignupRequest = {
 	'hcaptcha-response'?: string | null;
 	'g-recaptcha-response'?: string | null;
 	'turnstile-response'?: string | null;
-	'm-captcha-response'?: string | null;
 }
 
 export type SignupResponse = MeDetailed & {
@@ -276,42 +268,15 @@ export type SignupPendingResponse = {
 	i: string,
 };
 
-export type SigninFlowRequest = {
+export type SigninRequest = {
 	username: string;
-	password?: string;
+	password: string;
 	token?: string;
-	credential?: AuthenticationResponseJSON;
-	'hcaptcha-response'?: string | null;
-	'g-recaptcha-response'?: string | null;
-	'turnstile-response'?: string | null;
-	'm-captcha-response'?: string | null;
 };
 
-export type SigninFlowResponse = {
-	finished: true;
-	id: User['id'];
-	i: string;
-} | {
-	finished: false;
-	next: 'captcha' | 'password' | 'totp';
-} | {
-	finished: false;
-	next: 'passkey';
-	authRequest: PublicKeyCredentialRequestOptionsJSON;
-};
-
-export type SigninWithPasskeyRequest = {
-	credential?: AuthenticationResponseJSON;
-	context?: string;
-};
-
-export type SigninWithPasskeyInitResponse = {
-	option: PublicKeyCredentialRequestOptionsJSON;
-	context: string;
-};
-
-export type SigninWithPasskeyResponse = {
-	signinResponse: SigninFlowResponse & { finished: true };
+export type SigninResponse = {
+	id: User['id'],
+	i: string,
 };
 
 type Values<T extends Record<PropertyKey, unknown>> = T[keyof T];

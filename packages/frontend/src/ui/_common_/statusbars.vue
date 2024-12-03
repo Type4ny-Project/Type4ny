@@ -31,21 +31,13 @@ const XUserList = defineAsyncComponent(() => import('./statusbar-user-list.vue')
 <style lang="scss" module>
 .root {
 	font-size: 15px;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 }
 
 .item {
 	--height: 24px;
 	--nameMargin: 10px;
 	font-size: 0.85em;
-	display: flex;
-	vertical-align: bottom;
-	width: 100%;
-	line-height: var(--height);
-	height: var(--height);
-	overflow: clip;
-	contain: strict;
-
 	display: flex;
 	vertical-align: bottom;
 	width: 100%;
@@ -87,7 +79,7 @@ const XUserList = defineAsyncComponent(() => import('./statusbar-user-list.vue')
 .name {
 	padding: 0 var(--nameMargin);
 	font-weight: bold;
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 
 	&:empty {
 		display: none;

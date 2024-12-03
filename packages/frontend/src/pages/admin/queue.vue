@@ -16,18 +16,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, type Ref } from 'vue';
+import { ref, computed } from 'vue';
 import XQueue from './queue.chart.vue';
 import XHeader from './_header_.vue';
 import * as os from '@/os.js';
-import * as config from '@@/js/config.js';
+import * as config from '@/config.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import MkButton from '@/components/MkButton.vue';
 
-export type ApQueueDomain = 'deliver' | 'inbox';
-
-const tab: Ref<ApQueueDomain> = ref('deliver');
+const tab = ref('deliver');
 
 function clear() {
 	os.confirm({

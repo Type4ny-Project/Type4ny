@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div
-	:style="!dialog ? { borderBottom: 'solid 1px var(--MI_THEME-divider)' } : {}"
+	:style="!dialog ? { borderBottom: 'solid 1px var(--divider)' } : {}"
 	:class="[$style.root, { [$style.modal]: modal, _popup: modal }]"
 	@dragover.stop="onDragover"
 	@dragenter="onDragenter"
@@ -44,11 +44,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<input v-show="withHashtags" ref="hashtagsInputEl" v-model="hashtags" :class="$style.hashtags" :placeholder="i18n.ts.hashtags" list="hashtags">
 	<XPostFormAttaches v-model="files" @detach="detachFile" @changeSensitive="updateFileSensitive" @changeName="updateFileName" @replaceFile="replaceFile"/>
-	<MkPollEditor v-if="poll" v-model="poll" style="margin: 8px 32px; padding: 8px; border: solid 0.5px var(--MI_THEME-divider); border-radius: 16px;" @destroyed="poll = null"/>
+	<MkPollEditor v-if="poll" v-model="poll" style="margin: 8px 32px; padding: 8px; border: solid 0.5px var(--divider); border-radius: 16px;" @destroyed="poll = null"/>
 	<div v-if="showingOptions" style="padding: 8px 16px;">
 	</div>
 
-	<footer :style="dialog ? { borderTop: 'solid 1px var(--MI_THEME-divider)' , padding: ' 8px'} : {padding: '0 16px 16px 64px'}" :class="$style.footer">
+	<footer :style="dialog ? { borderTop: 'solid 1px var(--divider)' , padding: ' 8px'} : {padding: '0 16px 16px 64px'}" :class="$style.footer">
 		<div :class="$style.footerLeft">
 			<button v-tooltip="i18n.ts.attachFile" class="_button" :class="$style.footerButton" @click="chooseFileFrom"><i class="ti ti-photo-plus"></i></button>
 			<button v-tooltip="i18n.ts.poll" class="_button" :class="[$style.footerButton, { [$style.footerButtonActive]: poll }]" @click="togglePoll"><i class="ti ti-chart-arrows"></i></button>
@@ -83,11 +83,11 @@ import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { toASCII } from 'punycode/';
-import { host, url } from '@@/js/config.js';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
 import MkNotePreview from '@/components/MkNotePreview.vue';
 import XPostFormAttaches from '@/components/MkPostFormAttaches.vue';
 import MkPollEditor, { type PollEditorModelValue } from '@/components/MkPollEditor.vue';
+import { host, url } from '@/config.js';
 import { erase, unique } from '@/scripts/array.js';
 import { extractMentions } from '@/scripts/extract-mentions.js';
 import { formatTimeString } from '@/scripts/format-time-string.js';
@@ -1094,8 +1094,8 @@ defineExpose({
 	font-weight: bold;
 	border-radius: 6px;
 	min-width: 90px;
-	color: var(--MI_THEME-fgOnAccent);
-	background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+	color: var(--fgOnAccent);
+	background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
 }
 
 .headerRightItem {
@@ -1147,7 +1147,7 @@ defineExpose({
 
 .withQuote {
 	margin: 0 0 8px 0;
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 }
 
 .toSpecified {
@@ -1186,7 +1186,7 @@ defineExpose({
 	border: none;
 	border-radius: 0;
 	background: transparent;
-	color: var(--MI_THEME-fg);
+	color: var(--fg);
 	font-family: inherit;
 
 	&:focus {
@@ -1201,14 +1201,14 @@ defineExpose({
 .cw {
 	z-index: 1;
 	padding-bottom: 8px;
-	border-bottom: solid 0.5px var(--MI_THEME-divider);
+	border-bottom: solid 0.5px var(--divider);
 }
 
 .hashtags {
 	z-index: 1;
 	padding-top: 8px;
 	padding-bottom: 8px;
-	border-top: solid 0.5px var(--MI_THEME-divider);
+	border-top: solid 0.5px var(--divider);
 }
 
 .textOuter {
@@ -1285,12 +1285,12 @@ defineExpose({
 	}
 
 	&.footerButtonActive {
-		color: var(--MI_THEME-accent);
+		color: var(--accent);
 	}
 }
 
 .previewButtonActive {
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 }
 
 @container (max-width: 500px) {

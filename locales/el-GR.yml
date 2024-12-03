@@ -378,7 +378,6 @@ _notification:
     renote: "Κοινοποίηση σημειώματος"
     quote: "Παράθεση"
     reaction: "Αντιδράσεις"
-    login: "Σύνδεση"
   _actions:
     reply: "Απάντηση"
     renote: "Κοινοποίηση σημειώματος"

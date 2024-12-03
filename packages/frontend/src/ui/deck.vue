@@ -1,6 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
-SPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -50,11 +49,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 
 	<div v-if="isMobile" :class="$style.nav">
-		<button :class="$style.navButton" class="_button" @click="drawerMenuShowing = true"><i :class="$style.navButtonIcon" class="ti ti-menu-2"></i><span v-if="menuIndicated" :class="$style.navButtonIndicator" class="_blink"><i class="_indicatorCircle"></i></span></button>
+		<button :class="$style.navButton" class="_button" @click="drawerMenuShowing = true"><i :class="$style.navButtonIcon" class="ti ti-menu-2"></i><span v-if="menuIndicated" :class="$style.navButtonIndicator"><i class="_indicatorCircle"></i></span></button>
 		<button :class="$style.navButton" class="_button" @click="mainRouter.push('/')"><i :class="$style.navButtonIcon" class="ti ti-home"></i></button>
 		<button :class="$style.navButton" class="_button" @click="mainRouter.push('/my/notifications')">
 			<i :class="$style.navButtonIcon" class="ti ti-bell"></i>
-			<span v-if="$i?.hasUnreadNotification" :class="$style.navButtonIndicator" class="_blink">
+			<span v-if="$i?.hasUnreadNotification" :class="$style.navButtonIndicator">
 				<span class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ $i.unreadNotificationsCount > 99 && indicatorCounterToggle ? '99+' : $i.unreadNotificationsCount }}</span>
 			</span>
 		</button>
@@ -97,7 +96,6 @@ import { v4 as uuid } from 'uuid';
 import XCommon from './_common_/common.vue';
 import { deckStore, columnTypes, addColumn as addColumnToStore, loadDeck, getProfiles, deleteProfile as deleteProfile_ } from './deck/deck-store.js';
 import type { ColumnType } from './deck/deck-store.js';
-import type { MenuItem } from '@/types/menu.js';
 import XSidebar from '@/ui/_common_/navbar.vue';
 import XDrawerMenu from '@/ui/_common_/navbar-for-mobile.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -119,6 +117,7 @@ import XMentionsColumn from '@/ui/deck/mentions-column.vue';
 import XDirectColumn from '@/ui/deck/direct-column.vue';
 import XRoleTimelineColumn from '@/ui/deck/role-timeline-column.vue';
 import { mainRouter } from '@/router/main.js';
+import { MenuItem } from '@/types/menu.js';
 const XStatusBars = defineAsyncComponent(() => import('@/ui/_common_/statusbars.vue'));
 const XAnnouncements = defineAsyncComponent(() => import('@/ui/_common_/announcements.vue'));
 const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
@@ -306,7 +305,7 @@ body {
 .root {
 	$nav-hide-threshold: 650px; // TODO: どこかに集約したい
 
-	--MI-margin: var(--MI-marginHalf);
+	--margin: var(--marginHalf);
 
 	--columnGap: 6px;
 
@@ -333,7 +332,7 @@ body {
 	overflow-x: auto;
 	overflow-y: clip;
 	overscroll-behavior: contain;
-	background: var(--MI_THEME-deckBg);
+	background: var(--deckBg);
 
 	&.center {
 		> .section:first-of-type {
@@ -415,7 +414,7 @@ body {
 	contain: strict;
 	overflow: auto;
 	overscroll-behavior: contain;
-	background: var(--MI_THEME-navBg);
+	background: var(--navBg);
 }
 
 .nav {
@@ -429,10 +428,10 @@ body {
 	grid-gap: 8px;
 	width: 100%;
 	box-sizing: border-box;
-	-webkit-backdrop-filter: var(--MI-blur, blur(32px));
-	backdrop-filter: var(--MI-blur, blur(32px));
-	background-color: var(--MI_THEME-header);
-	border-top: solid 0.5px var(--MI_THEME-divider);
+	-webkit-backdrop-filter: var(--blur, blur(32px));
+	backdrop-filter: var(--blur, blur(32px));
+	background-color: var(--header);
+	border-top: solid 0.5px var(--divider);
 }
 
 .navButton {
@@ -443,29 +442,29 @@ body {
 	max-width: 60px;
 	margin: auto;
 	border-radius: 100%;
-	background: var(--MI_THEME-panel);
-	color: var(--MI_THEME-fg);
+	background: var(--panel);
+	color: var(--fg);
 
 	&:hover {
-		background: var(--MI_THEME-panelHighlight);
+		background: var(--panelHighlight);
 	}
 
 	&:active {
-		background: hsl(from var(--MI_THEME-panel) h s calc(l - 2%));
+		background: hsl(from var(--panel) h s calc(l - 2));
 	}
 }
 
 .postButton {
 	composes: navButton;
-	background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
-	color: var(--MI_THEME-fgOnAccent);
+	background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
+	color: var(--fgOnAccent);
 
 	&:hover {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+		background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
 	}
 
 	&:active {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+		background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
 	}
 }
 
@@ -478,8 +477,9 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
-	color: var(--MI_THEME-indicator);
+	color: var(--indicator);
 	font-size: 16px;
+	animation: global-blink 1s infinite;
 
 	&:has(.itemIndicateValueIcon) {
 		animation: none;

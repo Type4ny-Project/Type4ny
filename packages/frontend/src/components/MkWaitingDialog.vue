@@ -47,8 +47,8 @@ watch(() => props.showing, () => {
 	padding: 32px;
 	box-sizing: border-box;
 	text-align: center;
-	background: var(--MI_THEME-panel);
-	border-radius: var(--MI-radius);
+	background: var(--panel);
+	border-radius: var(--radius);
 	width: 250px;
 
 	&.iconOnly {
@@ -65,7 +65,7 @@ watch(() => props.showing, () => {
 	font-size: 32px;
 
 	&.success {
-		color: var(--MI_THEME-accent);
+		color: var(--accent);
 	}
 
 	&.waiting {

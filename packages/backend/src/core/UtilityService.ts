@@ -31,11 +31,6 @@ export class UtilityService {
 	}
 
 	@bindThis
-	public isUriLocal(uri: string): boolean {
-		return this.punyHost(uri) === this.toPuny(this.config.host);
-	}
-
-	@bindThis
 	public isBlockedHost(blockedHosts: string[], host: string | null): boolean {
 		if (host == null) return false;
 		return blockedHosts.some(x => `.${host.toLowerCase()}`.endsWith(`.${x}`));
@@ -97,7 +92,7 @@ export class UtilityService {
 	@bindThis
 	public extractDbHost(uri: string): string {
 		const url = new URL(uri);
-		return this.toPuny(url.host);
+		return this.toPuny(url.hostname);
 	}
 
 	@bindThis
@@ -109,27 +104,5 @@ export class UtilityService {
 	public toPunyNullable(host: string | null | undefined): string | null {
 		if (host == null) return null;
 		return toASCII(host.toLowerCase());
-	}
-
-	@bindThis
-	public punyHost(url: string): string {
-		const urlObj = new URL(url);
-		const host = `${this.toPuny(urlObj.hostname)}${urlObj.port.length > 0 ? ':' + urlObj.port : ''}`;
-		return host;
-	}
-
-	@bindThis
-	public isFederationAllowedHost(host: string): boolean {
-		if (this.meta.federation === 'none') return false;
-		if (this.meta.federation === 'specified' && !this.meta.federationHosts.some(x => `.${host.toLowerCase()}`.endsWith(`.${x}`))) return false;
-		if (this.isBlockedHost(this.meta.blockedHosts, host)) return false;
-
-		return true;
-	}
-
-	@bindThis
-	public isFederationAllowedUri(uri: string): boolean {
-		const host = this.extractDbHost(uri);
-		return this.isFederationAllowedHost(host);
 	}
 }

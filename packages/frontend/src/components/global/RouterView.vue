@@ -27,7 +27,6 @@ import MkLoadingPage from '@/pages/_loading_.vue';
 
 const props = defineProps<{
 	router?: IRouter;
-	nested?: boolean;
 }>();
 
 const router = props.router ?? inject('router');
@@ -40,8 +39,6 @@ const currentDepth = inject('routerCurrentDepth', 0);
 provide('routerCurrentDepth', currentDepth + 1);
 
 function resolveNested(current: Resolved, d = 0): Resolved | null {
-	if (!props.nested) return current;
-
 	if (d === currentDepth) {
 		return current;
 	} else {

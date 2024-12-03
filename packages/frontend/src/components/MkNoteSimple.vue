@@ -95,8 +95,8 @@ const showContent = ref(false);
 
 }
 .button{
-  margin-right: var(--MI-margin);
-  margin-bottom: var(--MI-margin);
+  margin-right: var(--margin);
+  margin-bottom: var(--margin);
 }
 .avatar {
 	flex-shrink: 0;
@@ -106,7 +106,7 @@ const showContent = ref(false);
 	height: 34px;
 	border-radius: 8px;
 	position: sticky !important;
-	top: calc(16px + var(--MI-stickyTop, 0px));
+	top: calc(16px + var(--stickyTop, 0px));
 	left: 0;
 }
 

@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<{
 	--size: 38px;
 
 	&.colored {
-		color: var(--MI_THEME-accent);
+		color: #5f5f5f;
 	}
 
 	&.inline {
@@ -84,7 +84,7 @@ const props = withDefaults(defineProps<{
 	margin: 0 auto;
 }
 .text{
-	color: var(--MI_THEME-fg);
+	color: var(--fg);
 }
 .spinner {
 	position: absolute;

@@ -51,13 +51,13 @@ const pagination = computed(() => tab.value === 'featured' ? {
 
 <style lang="scss" module>
 .tab {
-	padding: calc(var(--MI-margin) / 2) 0;
-	background: var(--MI_THEME-bg);
+	padding: calc(var(--margin) / 2) 0;
+	background: var(--bg);
 }
 
 .tl {
-	background: var(--MI_THEME-bg);
-	border-radius: var(--MI-radius);
+	background: var(--bg);
+	border-radius: var(--radius);
 	overflow: clip;
 }
 </style>

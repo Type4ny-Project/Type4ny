@@ -3,11 +3,8 @@ import { UserDetailed } from './autogen/models.js';
 import { AdminRolesCreateRequest, AdminRolesCreateResponse, UsersShowRequest } from './autogen/entities.js';
 import {
 	PartialRolePolicyOverride,
-	SigninFlowRequest,
-	SigninFlowResponse,
-	SigninWithPasskeyInitResponse,
-	SigninWithPasskeyRequest,
-	SigninWithPasskeyResponse,
+	SigninRequest,
+	SigninResponse,
 	SignupPendingRequest,
 	SignupPendingResponse,
 	SignupRequest,
@@ -81,25 +78,9 @@ export type Endpoints = Overwrite<
 			res: SignupPendingResponse;
 		},
 		// api.jsonには載せないものなのでここで定義
-		'signin-flow': {
-			req: SigninFlowRequest;
-			res: SigninFlowResponse;
-		},
-		'signin-with-passkey': {
-			req: SigninWithPasskeyRequest;
-			res: {
-				$switch: {
-					$cases: [
-						[
-							{
-								context: string;
-							},
-							SigninWithPasskeyResponse,
-						],
-					];
-					$default: SigninWithPasskeyInitResponse;
-				},
-			},
+		'signin': {
+			req: SigninRequest;
+			res: SigninResponse;
 		},
 		'admin/roles/create': {
 			req: Overwrite<AdminRolesCreateRequest, { policies: PartialRolePolicyOverride }>;

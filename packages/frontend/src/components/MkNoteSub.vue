@@ -126,7 +126,7 @@ if (props.detail) {
 }
 
 .reply, .more {
-	border-left: solid 0.5px var(--MI_THEME-divider);
+	border-left: solid 0.5px var(--divider);
 	margin-top: 10px;
 }
 
@@ -147,7 +147,7 @@ if (props.detail) {
 .muted {
 	text-align: center;
 	padding: 8px !important;
-	border: 1px solid var(--MI_THEME-divider);
+	border: 1px solid var(--divider);
 	margin: 8px 8px 0 8px;
 	border-radius: 8px;
 }

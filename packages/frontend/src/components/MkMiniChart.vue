@@ -33,7 +33,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { watch, ref } from 'vue';
 import { v4 as uuid } from 'uuid';
 import tinycolor from 'tinycolor2';
-import { useInterval } from '@@/js/use-interval.js';
+import { useInterval } from '@/scripts/use-interval.js';
 
 const props = defineProps<{
 	src: number[];
@@ -47,7 +47,7 @@ const polygonPoints = ref('');
 const headX = ref<number | null>(null);
 const headY = ref<number | null>(null);
 const clock = ref<number | null>(null);
-const accent = tinycolor(getComputedStyle(document.documentElement).getPropertyValue('--MI_THEME-accent'));
+const accent = tinycolor(getComputedStyle(document.documentElement).getPropertyValue('--accent'));
 const color = accent.toRgbString();
 
 function draw(): void {

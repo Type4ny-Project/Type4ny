@@ -21,7 +21,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import MkPlusOneEffect from '@/components/MkPlusOneEffect.vue';
 import * as os from '@/os.js';
-import { useInterval } from '@@/js/use-interval.js';
+import { useInterval } from '@/scripts/use-interval.js';
 import * as game from '@/scripts/clicker-game.js';
 import number from '@/filters/number.js';
 import { claimAchievement } from '@/scripts/achievements.js';

@@ -45,7 +45,7 @@ function getInstanceIcon(instance): string {
 	display: flex;
 	align-items: center;
 	padding: 16px;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	border-radius: 8px;
 
 	> :global(.icon) {
@@ -61,7 +61,7 @@ function getInstanceIcon(instance): string {
 		flex: 1;
 		overflow: hidden;
 		font-size: 0.9em;
-		color: var(--MI_THEME-fg);
+		color: var(--fg);
 		padding-right: 8px;
 
 		> :global(.host) {
@@ -108,7 +108,7 @@ function getInstanceIcon(instance): string {
 	}
 
 	&:global(.gray) {
-		--c: var(--MI_THEME-bg);
+		--c: var(--bg);
 		background-image: linear-gradient(45deg, var(--c) 16.67%, transparent 16.67%, transparent 50%, var(--c) 50%, var(--c) 66.67%, transparent 66.67%, transparent 100%);
 		background-size: 16px 16px;
 	}

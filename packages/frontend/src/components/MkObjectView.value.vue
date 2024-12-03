@@ -38,7 +38,7 @@ import number from '@/filters/number.js';
 import XValue from '@/components/MkObjectView.value.vue';
 
 const props = defineProps<{
-	value: unknown;
+	value: any;
 }>();
 
 const collapsed = reactive({});
@@ -49,19 +49,19 @@ if (isObject(props.value)) {
 	}
 }
 
-function isObject(v: unknown): v is Record<PropertyKey, unknown> {
+function isObject(v): boolean {
 	return typeof v === 'object' && !Array.isArray(v) && v !== null;
 }
 
-function isArray(v: unknown): v is unknown[] {
+function isArray(v): boolean {
 	return Array.isArray(v);
 }
 
-function isEmpty(v: unknown): v is Record<PropertyKey, never> | never[] {
+function isEmpty(v): boolean {
 	return (isArray(v) && v.length === 0) || (isObject(v) && Object.keys(v).length === 0);
 }
 
-function collapsable(v: unknown): boolean {
+function collapsable(v): boolean {
 	return (isObject(v) || isArray(v)) && !isEmpty(v);
 }
 </script>
@@ -77,7 +77,7 @@ function collapsable(v: unknown): boolean {
 
 	> .boolean {
 		display: inline;
-		color: var(--MI_THEME-codeBoolean);
+		color: var(--codeBoolean);
 
 		&.true {
 			font-weight: bold;
@@ -90,12 +90,12 @@ function collapsable(v: unknown): boolean {
 
 	> .string {
 		display: inline;
-		color: var(--MI_THEME-codeString);
+		color: var(--codeString);
 	}
 
 	> .number {
 		display: inline;
-		color: var(--MI_THEME-codeNumber);
+		color: var(--codeNumber);
 	}
 
 	> .array.empty {
@@ -126,7 +126,7 @@ function collapsable(v: unknown): boolean {
 
 			> .toggle {
 				width: 16px;
-				color: var(--MI_THEME-accent);
+				color: var(--accent);
 				visibility: hidden;
 
 				&.visible {

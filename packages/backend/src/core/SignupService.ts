@@ -8,7 +8,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
 import { DataSource, In, IsNull, Not } from 'typeorm';
 import { DI } from '@/di-symbols.js';
-import type { MiMeta, UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
+import type { UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
 import { MiUser } from '@/models/User.js';
 import { MiUserProfile } from '@/models/UserProfile.js';
 import { IdService } from '@/core/IdService.js';
@@ -38,9 +38,9 @@ export class SignupService {
 		private config: Config,
 		private utilityService: UtilityService,
 		private userService: UserService,
-		private metaService: MetaService,
 		private userEntityService: UserEntityService,
 		private idService: IdService,
+		private metaService: MetaService,
 		private instanceActorService: InstanceActorService,
 		private usersChart: UsersChart,
 	) {}
@@ -64,7 +64,7 @@ export class SignupService {
 		if (
 			envOption.managed &&
 			this.config.maxLocalUsers !== -1 &&
-			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } })) >=
+			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor'])) } })) >=
 				this.config.maxLocalUsers
 		) {
 			throw new Error('MAX_LOCAL_USERS');
@@ -104,9 +104,9 @@ export class SignupService {
 		const isTheFirstUser =
 			!(await this.instanceActorService.realLocalUsersPresent());
 
-		const meta = await this.metaService.fetch();
 		if (!opts.ignorePreservedUsernames && !isTheFirstUser) {
-			const isPreserved = meta.preservedUsernames
+			const instance = await this.metaService.fetch(true);
+			const isPreserved = instance.preservedUsernames
 				.map((x) => x.toLowerCase())
 				.includes(username.toLowerCase());
 			if (isPreserved) {
@@ -181,8 +181,8 @@ export class SignupService {
 			);
 		});
 
-		this.usersChart.update(account, true);
-		this.userService.notifySystemWebhook(account, 'userCreated');
+		this.usersChart.update(account, true).then();
+		this.userService.notifySystemWebhook(account, 'userCreated').then();
 
 		return { account, secret };
 	}

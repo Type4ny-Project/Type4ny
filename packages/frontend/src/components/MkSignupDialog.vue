@@ -7,8 +7,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	ref="dialog"
 	:width="500"
 	:height="600"
-	@close="onClose"
-	@closed="emit('closed')"
+	@close="dialog?.close()"
+	@closed="$emit('closed')"
 >
 	<template #header>{{ i18n.ts.signup }}</template>
 
@@ -21,7 +21,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			:leaveToClass="$style.transition_x_leaveTo"
 		>
 			<template v-if="!isAcceptedServerRule">
-				<XServerRules @done="isAcceptedServerRule = true" @cancel="onClose"/>
+				<XServerRules @done="isAcceptedServerRule = true" @cancel="dialog?.close()"/>
 			</template>
 			<template v-else>
 				<XSignup :autoSet="autoSet" @signup="onSignup" @signupEmailPending="onSignupEmailPending"/>
@@ -46,8 +46,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(ev: 'done', res: Misskey.entities.SignupResponse): void;
-	(ev: 'cancelled'): void;
+	(ev: 'done', res: Misskey.entities.SigninResponse): void;
 	(ev: 'closed'): void;
 }>();
 
@@ -55,12 +54,7 @@ const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
 
 const isAcceptedServerRule = ref(false);
 
-function onClose() {
-	emit('cancelled');
-	dialog.value?.close();
-}
-
-function onSignup(res: Misskey.entities.SignupResponse) {
+function onSignup(res: Misskey.entities.SigninResponse) {
 	emit('done', res);
 	dialog.value?.close();
 }

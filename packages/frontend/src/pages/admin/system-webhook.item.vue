@@ -4,50 +4,33 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkFolder>
-	<template #label>{{ entity.name || entity.url }}</template>
-	<template v-if="entity.name != null && entity.name != ''" #caption>{{ entity.url }}</template>
-	<template #icon>
+<div :class="$style.main">
+	<span :class="$style.icon">
 		<i v-if="!entity.isActive" class="ti ti-player-pause"/>
 		<i v-else-if="entity.latestStatus === null" class="ti ti-circle"/>
 		<i
 			v-else-if="[200, 201, 204].includes(entity.latestStatus)"
 			class="ti ti-check"
-			:style="{ color: 'var(--MI_THEME-success)' }"
+			:style="{ color: 'var(--success)' }"
 		/>
-		<i v-else class="ti ti-alert-triangle" :style="{ color: 'var(--MI_THEME-error)' }"/>
-	</template>
-	<template #suffix>
+		<i v-else class="ti ti-alert-triangle" :style="{ color: 'var(--error)' }"/>
+	</span>
+	<span :class="$style.text">{{ entity.name || entity.url }}</span>
+	<span :class="$style.suffix">
 		<MkTime v-if="entity.latestSentAt" :time="entity.latestSentAt" style="margin-right: 8px"/>
-		<span v-else>-</span>
-	</template>
-	<template #footer>
-		<div class="_buttons">
-			<MkButton @click="onEditClick">
-				<i class="ti ti-settings"></i> {{ i18n.ts.edit }}
-			</MkButton>
-			<MkButton danger @click="onDeleteClick">
-				<i class="ti ti-trash"></i> {{ i18n.ts.delete }}
-			</MkButton>
-		</div>
-	</template>
-
-	<div class="_gaps">
-		<MkKeyValue>
-			<template #key>latestStatus</template>
-			<template #value>{{ entity.latestStatus ?? '-' }}</template>
-		</MkKeyValue>
-	</div>
-</MkFolder>
+		<button :class="$style.suffixButton" @click="onEditClick">
+			<i class="ti ti-settings"></i>
+		</button>
+		<button :class="$style.suffixButton" @click="onDeleteClick">
+			<i class="ti ti-trash"></i>
+		</button>
+	</span>
+</div>
 </template>
 
 <script lang="ts" setup>
 import { entities } from 'misskey-js';
 import { toRefs } from 'vue';
-import MkFolder from '@/components/MkFolder.vue';
-import { i18n } from '@/i18n.js';
-import MkButton from '@/components/MkButton.vue';
-import MkKeyValue from '@/components/MkKeyValue.vue';
 
 const emit = defineEmits<{
 	(ev: 'edit', value: entities.SystemWebhook): void;
@@ -77,19 +60,19 @@ function onDeleteClick() {
 	width: 100%;
 	box-sizing: border-box;
 	padding: 10px 14px;
-	background: var(--MI_THEME-buttonBg);
+	background: var(--buttonBg);
 	border: none;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	font-size: 0.9em;
 
 	&:hover {
 		text-decoration: none;
-		background: var(--MI_THEME-buttonHoverBg);
+		background: var(--buttonHoverBg);
 	}
 
 	&.active {
-		color: var(--MI_THEME-accent);
-		background: var(--MI_THEME-buttonHoverBg);
+		color: var(--accent);
+		background: var(--buttonHoverBg);
 	}
 }
 
@@ -97,6 +80,38 @@ function onDeleteClick() {
 	margin-right: 0.75em;
 	flex-shrink: 0;
 	text-align: center;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
+}
+
+.text {
+	flex-shrink: 1;
+	white-space: normal;
+	padding-right: 12px;
+	text-align: center;
+}
+
+.suffix {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gaps: 4px;
+	margin-left: auto;
+	margin-right: -8px;
+	opacity: 0.7;
+	white-space: nowrap;
+}
+
+.suffixButton {
+	background: transparent;
+	border: none;
+	border-radius: 9999px;
+	margin-top: -8px;
+	margin-bottom: -8px;
+	padding: 8px;
+
+	&:hover {
+		background: var(--buttonBg);
+	}
 }
 </style>

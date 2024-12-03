@@ -4,15 +4,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-	<div class="_gaps_m">
-		<div>
-			<MkTextarea v-model="mutedWords">
-				<span>{{ i18n.ts._wordMute.muteWords }}</span>
-				<template #caption>{{ i18n.ts._wordMute.muteWordsDescription }}<br>{{ i18n.ts._wordMute.muteWordsDescription2 }}</template>
-			</MkTextarea>
-		</div>
-		<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
+<div class="_gaps_m">
+	<div>
+		<MkTextarea v-model="mutedWords">
+			<span>{{ i18n.ts._wordMute.muteWords }}</span>
+			<template v-if="!notCaption" #caption>{{ i18n.ts._wordMute.muteWordsDescription }}<br>{{ i18n.ts._wordMute.muteWordsDescription2 }}</template>
+			<template v-if="notCaption" #caption>{{ i18n.ts._reactionMute.muteReactionsDescription }}<br>{{ i18n.ts._reactionMute.muteReactionsDescription2 }}</template>
+		</MkTextarea>
 	</div>
+	<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -23,11 +24,12 @@ import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 
 const props = defineProps<{
-	muted: (string[] | string)[];
+  muted: (string[] | string)[];
+	notCaption?: boolean;
 }>();
 
 const emit = defineEmits<{
-	(ev: 'save', value: (string[] | string)[]): void;
+  (ev: 'save', value: (string[] | string)[]): void;
 }>();
 
 const render = (mutedWords) => mutedWords.map(x => {
@@ -79,6 +81,7 @@ async function save() {
 
 	let parsed;
 	try {
+		console.log(mutedWords.value);
 		parsed = parseMutes(mutedWords.value);
 	} catch (err) {
 		// already displayed error message in parseMutes

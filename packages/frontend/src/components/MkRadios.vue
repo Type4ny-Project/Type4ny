@@ -77,7 +77,7 @@ export default defineComponent({
 	> .caption {
 		font-size: 0.85em;
 		padding: 8px 0 0 0;
-		color: var(--MI_THEME-fgTransparentWeak);
+		color: var(--fgTransparentWeak);
 
 		&:empty {
 			display: none;

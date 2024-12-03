@@ -184,12 +184,7 @@ const ilFilesObserver = new IntersectionObserver(
 	(entries) => entries.some((entry) => entry.isIntersecting) && !fetching.value && moreFiles.value && fetchMoreFiles(),
 );
 
-const sortModeSelect = ref<NonNullable<Misskey.entities.DriveFilesRequest['sort']>>('+createdAt');
-
 watch(folder, () => emit('cd', folder.value));
-watch(sortModeSelect, () => {
-	fetch();
-});
 
 function onStreamDriveFileCreated(file: Misskey.entities.DriveFile) {
 	addFile(file, true);
@@ -225,7 +220,7 @@ function onStreamDriveFolderDeleted(folderId: string) {
 	removeFolder(folderId);
 }
 
-function onDragover(ev: DragEvent) {
+function onDragover(ev: DragEvent): any {
 	if (!ev.dataTransfer) return;
 
 	// ドラッグ元が自分自身の所有するアイテムだったら
@@ -270,7 +265,7 @@ function onDragleave() {
 	draghover.value = false;
 }
 
-function onDrop(ev: DragEvent) {
+function onDrop(ev: DragEvent): any {
 	draghover.value = false;
 
 	if (!ev.dataTransfer) return;
@@ -359,7 +354,7 @@ function createFolder() {
 		title: i18n.ts.createFolder,
 		placeholder: i18n.ts.folderName,
 	}).then(({ canceled, result: name }) => {
-		if (canceled || name == null) return;
+		if (canceled) return;
 		misskeyApi('drive/folders/create', {
 			name: name,
 			parentId: folder.value ? folder.value.id : undefined,
@@ -591,7 +586,6 @@ async function fetch() {
 		folderId: folder.value ? folder.value.id : null,
 		type: props.type,
 		limit: filesMax + 1,
-		sort: sortModeSelect.value,
 	}).then(fetchedFiles => {
 		if (fetchedFiles.length === filesMax + 1) {
 			moreFiles.value = true;
@@ -641,7 +635,6 @@ function fetchMoreFiles() {
 		type: props.type,
 		untilId: files.value.at(-1)?.id,
 		limit: max + 1,
-		sort: sortModeSelect.value,
 	}).then(files => {
 		if (files.length === max + 1) {
 			moreFiles.value = true;
@@ -655,9 +648,7 @@ function fetchMoreFiles() {
 }
 
 function getMenu() {
-	const menu: MenuItem[] = [];
-
-	menu.push({
+	const menu: MenuItem[] = [{
 		type: 'switch',
 		text: i18n.ts.keepOriginalUploading,
 		ref: keepOriginal,
@@ -679,66 +670,25 @@ function getMenu() {
 	}, { type: 'divider' }, {
 		text: folder.value ? folder.value.name : i18n.ts.drive,
 		type: 'label',
-	});
-
-	menu.push({
-		type: 'parent',
-		text: i18n.ts.sort,
-		icon: 'ti ti-arrows-sort',
-		children: [{
-			text: `${i18n.ts.registeredDate} (${i18n.ts.descendingOrder})`,
-			icon: 'ti ti-sort-descending-letters',
-			action: () => { sortModeSelect.value = '+createdAt'; },
-			active: sortModeSelect.value === '+createdAt',
-		}, {
-			text: `${i18n.ts.registeredDate} (${i18n.ts.ascendingOrder})`,
-			icon: 'ti ti-sort-ascending-letters',
-			action: () => { sortModeSelect.value = '-createdAt'; },
-			active: sortModeSelect.value === '-createdAt',
-		}, {
-			text: `${i18n.ts.size} (${i18n.ts.descendingOrder})`,
-			icon: 'ti ti-sort-descending-letters',
-			action: () => { sortModeSelect.value = '+size'; },
-			active: sortModeSelect.value === '+size',
-		}, {
-			text: `${i18n.ts.size} (${i18n.ts.ascendingOrder})`,
-			icon: 'ti ti-sort-ascending-letters',
-			action: () => { sortModeSelect.value = '-size'; },
-			active: sortModeSelect.value === '-size',
-		}, {
-			text: `${i18n.ts.name} (${i18n.ts.descendingOrder})`,
-			icon: 'ti ti-sort-descending-letters',
-			action: () => { sortModeSelect.value = '+name'; },
-			active: sortModeSelect.value === '+name',
-		}, {
-			text: `${i18n.ts.name} (${i18n.ts.ascendingOrder})`,
-			icon: 'ti ti-sort-ascending-letters',
-			action: () => { sortModeSelect.value = '-name'; },
-			active: sortModeSelect.value === '-name',
-		}],
-	});
-
-	if (folder.value) {
-		menu.push({
-			text: i18n.ts.renameFolder,
-			icon: 'ti ti-forms',
-			action: () => {
-				if (folder.value)renameFolder(folder.value);
-			},
-		}, {
-			text: i18n.ts.deleteFolder,
-			icon: 'ti ti-trash',
-			action: () => {
-				deleteFolder(folder.value as Misskey.entities.DriveFolder);
-			},
-		});
-	}
-
-	menu.push({
+	}, folder.value ? {
+		text: i18n.ts.renameFolder,
+		icon: 'ti ti-forms',
+		action: () => {
+			if (folder.value)renameFolder(folder.value);
+		},
+	} : undefined, folder.value ? {
+		text: i18n.ts.deleteFolder,
+		icon: 'ti ti-trash',
+		action: () => {
+			deleteFolder(folder.value as Misskey.entities.DriveFolder);
+		},
+	} : undefined, {
 		text: i18n.ts.createFolder,
 		icon: 'ti ti-folder-plus',
-		action: () => { createFolder(); },
-	});
+		action: () => {
+			createFolder();
+		},
+	}];
 
 	return menu;
 }
@@ -884,13 +834,13 @@ onBeforeUnmount(() => {
   top: 0;
   position: sticky;
   z-index: 1000;
-  background-color: var(--MI_THEME-bg);
+  background-color: var(--bg);
   width: 100%;
   padding: 0 8px;
   box-sizing: border-box;
   overflow: auto;
   font-size: 0.9em;
-  box-shadow: 0 1px 0 var(--MI_THEME-divider);
+  box-shadow: 0 1px 0 var(--divider);
   user-select: none;
   height: 55px;
 }
@@ -939,7 +889,7 @@ onBeforeUnmount(() => {
 .main {
   flex: 1;
   overflow: auto;
-  padding: var(--MI-margin);
+  padding: var(--margin);
   user-select: none;
 
   &.fetching {
@@ -986,7 +936,7 @@ onBeforeUnmount(() => {
   top: 38px;
   width: 100%;
   height: calc(100% - 38px);
-  border: dashed 2px var(--MI_THEME-focus);
+  border: dashed 2px var(--focus);
   pointer-events: none;
 }
 </style>

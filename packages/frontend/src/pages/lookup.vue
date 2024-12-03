@@ -40,7 +40,7 @@ function fetch() {
 		return;
 	}
 
-	let promise: Promise<unknown>;
+	let promise: Promise<any>;
 
 	if (uri.startsWith('https://')) {
 		promise = misskeyApi('ap/show', {

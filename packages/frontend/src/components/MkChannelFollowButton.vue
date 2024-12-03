@@ -87,8 +87,8 @@ async function onClick() {
   position: relative;
   display: inline-block;
   font-weight: bold;
-  color: var(--MI_THEME-accent);
-  border: solid 1px var(--MI_THEME-accent);
+  color: var(--accent);
+  border: solid 1px var(--accent);
   padding: 0;
   height: 31px;
   font-size: 16px;
@@ -136,17 +136,17 @@ async function onClick() {
   }
 
   &.active {
-    color: var(--MI_THEME-fgOnAccent);
-    background: var(--MI_THEME-accent);
+    color: var(--fgOnAccent);
+    background: var(--accent);
 
     &:hover {
-      background: var(--MI_THEME-accentLighten);
-      border-color: var(--MI_THEME-accentLighten);
+      background: var(--accentLighten);
+      border-color: var(--accentLighten);
     }
 
     &:active {
-      background: var(--MI_THEME-accentDarken);
-      border-color: var(--MI_THEME-accentDarken);
+      background: var(--accentDarken);
+      border-color: var(--accentDarken);
     }
 
     &.gamingDark:hover {

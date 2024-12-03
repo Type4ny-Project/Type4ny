@@ -65,18 +65,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkTextarea v-model="ad.memo">
 					<template #label>{{ i18n.ts.memo }}</template>
 				</MkTextarea>
-				<div class="_buttons">
-					<MkButton inline primary style="margin-right: 12px;" @click="save(ad)">
+				<div class="buttons">
+					<MkButton class="button" inline primary style="margin-right: 12px;" @click="save(ad)">
 						<i
 							class="ti ti-device-floppy"
 						></i> {{ i18n.ts.save }}
 					</MkButton>
-					<MkButton inline danger @click="remove(ad)">
+					<MkButton class="button" inline danger @click="remove(ad)">
 						<i class="ti ti-trash"></i> {{ i18n.ts.remove }}
 					</MkButton>
 				</div>
 			</div>
-			<MkButton @click="more()">
+			<MkButton class="button" @click="more()">
 				<i class="ti ti-reload"></i>{{ i18n.ts.more }}
 			</MkButton>
 		</div>
@@ -266,7 +266,7 @@ definePageMetadata(() => ({
 	padding: 32px;
 
 	&:not(:last-child) {
-		margin-bottom: var(--MI-margin);
+		margin-bottom: var(--margin);
 	}
 }
 .input {

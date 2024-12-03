@@ -4,14 +4,14 @@
  */
 
 import { createApp, defineAsyncComponent, markRaw } from 'vue';
-import { ui } from '@@/js/config.js';
 import { common } from './common.js';
 import type * as Misskey from 'misskey-js';
+import { ui } from '@/config.js';
 import { i18n } from '@/i18n.js';
 import { alert, confirm, popup, post, toast } from '@/os.js';
 import { useStream } from '@/stream.js';
 import * as sound from '@/scripts/sound.js';
-import { $i, signout, updateAccountPartial } from '@/account.js';
+import { $i, signout, updateAccount } from '@/account.js';
 import { instance } from '@/instance.js';
 import { ColdDeviceStorage, defaultStore } from '@/store.js';
 import { reactionPicker } from '@/scripts/reaction-picker.js';
@@ -22,7 +22,6 @@ import { deckStore } from '@/ui/deck/deck-store.js';
 import { emojiPicker } from '@/scripts/emoji-picker.js';
 import { mainRouter } from '@/router/main.js';
 import { type Keymap, makeHotkey } from '@/scripts/hotkey.js';
-import { addCustomEmoji, removeCustomEmojis, updateCustomEmojis } from '@/custom-emojis.js';
 
 export async function mainBoot() {
 	const { isClientUpdated } = await common(() => createApp(
@@ -62,18 +61,6 @@ export async function mainBoot() {
 				location.reload();
 			}
 		}
-	});
-
-	stream.on('emojiAdded', emojiData => {
-		addCustomEmoji(emojiData.emoji);
-	});
-
-	stream.on('emojiUpdated', emojiData => {
-		updateCustomEmojis(emojiData.emojis);
-	});
-
-	stream.on('emojiDeleted', emojiData => {
-		removeCustomEmojis(emojiData.emojis);
 	});
 
 	for (const plugin of ColdDeviceStorage.get('plugins').filter(p => p.active)) {
@@ -231,55 +218,19 @@ export async function mainBoot() {
 			claimAchievement('collectAchievements30');
 		}
 
-		if (!claimedAchievements.includes('justPlainLucky')) {
-			let justPlainLuckyTimer: number | null = null;
-			let lastVisibilityChangedAt = Date.now();
-
-			function claimPlainLucky() {
-				if (document.visibilityState !== 'visible') {
-					if (justPlainLuckyTimer != null) window.clearTimeout(justPlainLuckyTimer);
-					return;
-				}
-
-				if (Math.floor(Math.random() * 20000) === 0) {
-					claimAchievement('justPlainLucky');
-				} else {
-					justPlainLuckyTimer = window.setTimeout(claimPlainLucky, 1000 * 10);
-				}
+		window.setInterval(() => {
+			if (Math.floor(Math.random() * 20000) === 0) {
+				claimAchievement('justPlainLucky');
 			}
+		}, 1000 * 10);
 
-			window.addEventListener('visibilitychange', () => {
-				const now = Date.now();
+		window.setTimeout(() => {
+			claimAchievement('client30min');
+		}, 1000 * 60 * 30);
 
-				if (document.visibilityState === 'visible') {
-					// タブを高速で切り替えたら取得処理が何度も走るのを防ぐ
-					if ((now - lastVisibilityChangedAt) < 1000 * 10) {
-						justPlainLuckyTimer = window.setTimeout(claimPlainLucky, 1000 * 10);
-					} else {
-						claimPlainLucky();
-					}
-				} else if (justPlainLuckyTimer != null) {
-					window.clearTimeout(justPlainLuckyTimer);
-					justPlainLuckyTimer = null;
-				}
-
-				lastVisibilityChangedAt = now;
-			}, { passive: true });
-
-			claimPlainLucky();
-		}
-
-		if (!claimedAchievements.includes('client30min')) {
-			window.setTimeout(() => {
-				claimAchievement('client30min');
-			}, 1000 * 60 * 30);
-		}
-
-		if (!claimedAchievements.includes('client60min')) {
-			window.setTimeout(() => {
-				claimAchievement('client60min');
-			}, 1000 * 60 * 60);
-		}
+		window.setTimeout(() => {
+			claimAchievement('client60min');
+		}, 1000 * 60 * 60);
 
 		// 邪魔
 		//const lastUsed = miLocalStorage.getItem('lastUsed');
@@ -322,11 +273,11 @@ if (modifiedVersionMustProminentlyOfferInAgplV3Section13Read !== 'true' && insta
 
 		// 自分の情報が更新されたとき
 		main.on('meUpdated', i => {
-			updateAccountPartial(i);
+			updateAccount(i);
 		});
 
 		main.on('readAllNotifications', () => {
-			updateAccountPartial({
+			updateAccount({
 				hasUnreadNotification: false,
 				unreadNotificationsCount: 0,
 			});
@@ -334,39 +285,39 @@ if (modifiedVersionMustProminentlyOfferInAgplV3Section13Read !== 'true' && insta
 
 		main.on('unreadNotification', () => {
 			const unreadNotificationsCount = ($i?.unreadNotificationsCount ?? 0) + 1;
-			updateAccountPartial({
+			updateAccount({
 				hasUnreadNotification: true,
 				unreadNotificationsCount,
 			});
 		});
 
 		main.on('unreadMention', () => {
-			updateAccountPartial({ hasUnreadMentions: true });
+			updateAccount({ hasUnreadMentions: true });
 		});
 
 		main.on('readAllUnreadMentions', () => {
-			updateAccountPartial({ hasUnreadMentions: false });
+			updateAccount({ hasUnreadMentions: false });
 		});
 
 		main.on('unreadSpecifiedNote', () => {
-			updateAccountPartial({ hasUnreadSpecifiedNotes: true });
+			updateAccount({ hasUnreadSpecifiedNotes: true });
 		});
 
 		main.on('readAllUnreadSpecifiedNotes', () => {
-			updateAccountPartial({ hasUnreadSpecifiedNotes: false });
+			updateAccount({ hasUnreadSpecifiedNotes: false });
 		});
 
 		main.on('readAllAntennas', () => {
-			updateAccountPartial({ hasUnreadAntenna: false });
+			updateAccount({ hasUnreadAntenna: false });
 		});
 
 		main.on('unreadAntenna', () => {
-			updateAccountPartial({ hasUnreadAntenna: true });
+			updateAccount({ hasUnreadAntenna: true });
 			sound.playMisskeySfx('antenna');
 		});
 
 		main.on('readAllAnnouncements', () => {
-			updateAccountPartial({ hasUnreadAnnouncement: false });
+			updateAccount({ hasUnreadAnnouncement: false });
 		});
 
 		// 個人宛てお知らせが発行されたとき

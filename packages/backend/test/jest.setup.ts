@@ -6,6 +6,8 @@
 import { initTestDb, sendEnvResetRequest } from './utils.js';
 
 beforeAll(async () => {
-		await initTestDb(false);
-		await sendEnvResetRequest();
+	await Promise.all([
+		initTestDb(false),
+		sendEnvResetRequest(),
+	]);
 });

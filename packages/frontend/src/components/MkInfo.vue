@@ -35,14 +35,14 @@ function close() {
   align-items: center;
 	padding: 12px 14px;
 	font-size: 90%;
-	background: var(--MI_THEME-infoBg);
-	color: var(--MI_THEME-infoFg);
-	border-radius: var(--MI-radius);
+	background: var(--infoBg);
+	color: var(--infoFg);
+	border-radius: var(--radius);
 	white-space: pre-wrap;
 
 	&.warn {
-		background: var(--MI_THEME-infoWarnBg);
-		color: var(--MI_THEME-infoWarnFg);
+		background: var(--infoWarnBg);
+		color: var(--infoWarnFg);
 	}
 }
 

@@ -92,7 +92,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</template>
 
 	<div>
-		<div style="display: flex; gap: var(--MI-margin); flex-wrap: wrap;">
+		<div style="display: flex; gap: var(--margin); flex-wrap: wrap;">
 			<div style="flex: 1;">{{ i18n.ts.moderator }}: <MkA :to="`/admin/user/${log.userId}`" class="_link">@{{ log.user?.username }}</MkA></div>
 			<div style="flex: 1;">{{ i18n.ts.dateAndTime }}: <MkTime :time="log.createdAt" mode="detail"/></div>
 		</div>
@@ -171,11 +171,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<template v-else-if="log.type === 'inboxRejected'">
 			<div>{{ log.info.rule.name }} {{ i18n.ts._moderationLogTypes.rejectedWithTheRule }}</div>
 		</template>
-		<template v-else-if="log.type === 'updateAbuseReportNote'">
-			<div :class="$style.diff">
-				<CodeDiff :context="5" :hideHeader="true" :oldString="log.info.before ?? ''" :newString="log.info.after ?? ''" maxHeight="300px"/>
-			</div>
-		</template>
 
 		<details>
 			<summary>raw</summary>
@@ -206,19 +201,19 @@ const props = defineProps<{
 .diff {
 	background: #fff;
 	color: #000;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	overflow: clip;
 }
 
 .logYellow {
-	color: var(--MI_THEME-warn);
+	color: var(--warn);
 }
 
 .logRed {
-	color: var(--MI_THEME-error);
+	color: var(--error);
 }
 
 .logGreen {
-	color: var(--MI_THEME-success);
+	color: var(--success);
 }
 </style>

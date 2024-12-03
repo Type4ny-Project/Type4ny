@@ -76,7 +76,7 @@ definePageMetadata(() => ({
 <style lang="scss" module>
 .item {
 	display: block;
-	color: var(--MI_THEME-navFg);
+	color: var(--navFg);
 }
 
 .itemHeader {
@@ -96,8 +96,8 @@ definePageMetadata(() => ({
 
 .itemNumber {
 	display: flex;
-	background-color: var(--MI_THEME-accentedBg);
-	color: var(--MI_THEME-accent);
+	background-color: var(--accentedBg);
+	color: var(--accent);
 	font-size: 14px;
 	font-weight: bold;
 	width: 28px;
@@ -117,12 +117,12 @@ definePageMetadata(() => ({
 .itemRemove {
 	width: 40px;
 	height: 40px;
-	color: var(--MI_THEME-error);
+	color: var(--error);
 	margin-left: auto;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 
 	&:hover {
-		background: var(--MI_THEME-X5);
+		background: var(--X5);
 	}
 }
 

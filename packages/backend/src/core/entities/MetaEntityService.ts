@@ -10,6 +10,7 @@ import type { Packed } from '@/misc/json-schema.js';
 import type { MiMeta } from '@/models/Meta.js';
 import type { AdsRepository } from '@/models/_.js';
 import { MAX_NOTE_TEXT_LENGTH } from '@/const.js';
+import { MetaService } from '@/core/MetaService.js';
 import { bindThis } from '@/decorators.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { InstanceActorService } from '@/core/InstanceActorService.js';
@@ -22,13 +23,10 @@ export class MetaEntityService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
-
-		@Inject(DI.meta)
-		private meta: MiMeta,
-
 		@Inject(DI.adsRepository)
 		private adsRepository: AdsRepository,
 		private userEntityService: UserEntityService,
+		private metaService: MetaService,
 		private instanceActorService: InstanceActorService,
 	) {}
 
@@ -37,7 +35,7 @@ export class MetaEntityService {
 		let instance = meta;
 
 		if (!instance) {
-			instance = this.meta;
+			instance = await this.metaService.fetch();
 		}
 
 		const ads = await this.adsRepository
@@ -106,7 +104,6 @@ export class MetaEntityService {
 			recaptchaSiteKey: instance.recaptchaSiteKey,
 			enableTurnstile: instance.enableTurnstile,
 			turnstileSiteKey: instance.turnstileSiteKey,
-			enableTestcaptcha: instance.enableTestcaptcha,
 			swPublickey: instance.swPublicKey,
 			themeColor: instance.themeColor,
 			mascotImageUrl: instance.mascotImageUrl ?? '/assets/ai.png',
@@ -154,7 +151,7 @@ export class MetaEntityService {
 		let instance = meta;
 
 		if (!instance) {
-			instance = this.meta;
+			instance = await this.metaService.fetch();
 		}
 
 		const packed = await this.pack(instance);

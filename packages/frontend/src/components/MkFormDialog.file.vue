@@ -65,6 +65,6 @@ function selectButton(ev: MouseEvent) {
 <style module>
 .fileNotSelected {
 	font-weight: 700;
-	color: var(--MI_THEME-infoWarnFg);
+	color: var(--infoWarnFg);
 }
 </style>

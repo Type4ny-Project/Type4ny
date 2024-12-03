@@ -1,5 +1,14 @@
+import { type Endpoints } from './api.types.js';
 import Stream, { Connection } from './streaming.js';
+import { type Channels } from './streaming.types.js';
+import { type Acct } from './acct.js';
 import * as consts from './consts.js';
+
+export type {
+	Endpoints,
+	Channels,
+	Acct,
+};
 
 export {
 	Stream,
@@ -22,21 +31,4 @@ import * as api from './api.js';
 import * as entities from './entities.js';
 import * as acct from './acct.js';
 import * as note from './note.js';
-import { nyaize } from './nyaize.js';
-export { api, entities, acct, note, nyaize };
-
-//#region standalone types
-import type { Endpoints } from './api.types.js';
-import type { StreamEvents, IStream, IChannelConnection } from './streaming.js';
-import type { Channels } from './streaming.types.js';
-import type { Acct } from './acct.js';
-
-export type {
-	Endpoints,
-	Channels,
-	Acct,
-	StreamEvents,
-	IStream,
-	IChannelConnection,
-};
-//#endregion
+export { api, entities, acct, note };

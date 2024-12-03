@@ -55,7 +55,7 @@ export const paramDef = {
 	properties: {
 		title: { type: 'string', minLength: 1 },
 		text: { type: 'string', minLength: 1 },
-		imageUrl: { type: 'string', nullable: true, minLength: 0 },
+		imageUrl: { type: 'string', nullable: true, minLength: 1 },
 		icon: { type: 'string', enum: ['info', 'warning', 'error', 'success'], default: 'info' },
 		display: { type: 'string', enum: ['normal', 'banner', 'dialog'], default: 'normal' },
 		forExistingUsers: { type: 'boolean', default: false },
@@ -76,8 +76,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				updatedAt: null,
 				title: ps.title,
 				text: ps.text,
-				/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 空の文字列の場合、nullを渡すようにするため */
-				imageUrl: ps.imageUrl || null,
+				imageUrl: ps.imageUrl,
 				icon: ps.icon,
 				display: ps.display,
 				forExistingUsers: ps.forExistingUsers,

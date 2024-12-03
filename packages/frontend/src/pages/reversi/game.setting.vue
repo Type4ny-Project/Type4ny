@@ -17,7 +17,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</template>
 				<template v-else>
 					<div class="_panel">
-						<div style="display: flex; align-items: center; padding: 16px; border-bottom: solid 1px var(--MI_THEME-divider);">
+						<div style="display: flex; align-items: center; padding: 16px; border-bottom: solid 1px var(--divider);">
 							<div>{{ mapName }}</div>
 							<MkButton style="margin-left: auto;" @click="chooseMap">{{ i18n.ts._reversi.chooseBoard }}</MkButton>
 						</div>
@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div :class="$style.footer">
 			<MkSpacer :contentMax="700" :marginMin="16" :marginMax="16">
 				<div style="text-align: center;" class="_gaps_s">
-					<div v-if="opponentHasSettingsChanged" style="color: var(--MI_THEME-warn);">{{ i18n.ts._reversi.opponentHasSettingsChanged }}</div>
+					<div v-if="opponentHasSettingsChanged" style="color: var(--warn);">{{ i18n.ts._reversi.opponentHasSettingsChanged }}</div>
 					<div>
 						<template v-if="isReady && isOpReady">{{ i18n.ts._reversi.thisGameIsStartedSoon }}<MkEllipsis/></template>
 						<template v-if="isReady && !isOpReady">{{ i18n.ts._reversi.waitingForOther }}<MkEllipsis/></template>
@@ -113,7 +113,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, watch, ref, onMounted, shallowRef, onUnmounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as Reversi from 'misskey-reversi';
-import type { MenuItem } from '@/types/menu.js';
 import { i18n } from '@/i18n.js';
 import { signinRequired } from '@/account.js';
 import { deepClone } from '@/scripts/clone.js';
@@ -122,6 +121,7 @@ import MkRadios from '@/components/MkRadios.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import * as os from '@/os.js';
+import { MenuItem } from '@/types/menu.js';
 import { useRouter } from '@/router/supplier.js';
 
 const $i = signinRequired();
@@ -132,7 +132,7 @@ const mapCategories = Array.from(new Set(Object.values(Reversi.maps).map(x => x.
 
 const props = defineProps<{
 	game: Misskey.entities.ReversiGameDetailed;
-	connection: Misskey.ChannelConnection<Misskey.Channels['reversiGame']>;
+	connection: Misskey.ChannelConnection;
 }>();
 
 const shareWhenStart = defineModel<boolean>('shareWhenStart', { default: false });
@@ -217,14 +217,14 @@ function onChangeReadyStates(states) {
 	game.value.user2Ready = states.user2;
 }
 
-function updateSettings(key: typeof Misskey.reversiUpdateKeys[number]) {
+function updateSettings(key: keyof Misskey.entities.ReversiGameDetailed) {
 	props.connection.send('updateSettings', {
 		key: key,
 		value: game.value[key],
 	});
 }
 
-function onUpdateSettings<K extends typeof Misskey.reversiUpdateKeys[number]>({ userId, key, value }: { userId: string; key: K; value: Misskey.entities.ReversiGameDetailed[K]; }) {
+function onUpdateSettings({ userId, key, value }: { userId: string; key: keyof Misskey.entities.ReversiGameDetailed; value: any; }) {
 	if (userId === $i.id) return;
 	if (game.value[key] === value) return;
 	game.value[key] = value;
@@ -273,15 +273,15 @@ onUnmounted(() => {
 	width: 300px;
 	height: 300px;
 	margin: 0 auto;
-	color: var(--MI_THEME-fg);
+	color: var(--fg);
 }
 
 .boardCell {
 	display: grid;
 	place-items: center;
 	background: transparent;
-	border: solid 2px var(--MI_THEME-divider);
-	border-radius: var(--MI-radius);
+	border: solid 2px var(--divider);
+	border-radius: var(--radius);
 	overflow: clip;
 	cursor: pointer;
 }
@@ -290,9 +290,9 @@ onUnmounted(() => {
 }
 
 .footer {
-	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
-	backdrop-filter: var(--MI-blur, blur(15px));
-	background: var(--MI_THEME-acrylicBg);
-	border-top: solid 0.5px var(--MI_THEME-divider);
+	-webkit-backdrop-filter: var(--blur, blur(15px));
+	backdrop-filter: var(--blur, blur(15px));
+	background: var(--acrylicBg);
+	border-top: solid 0.5px var(--divider);
 }
 </style>

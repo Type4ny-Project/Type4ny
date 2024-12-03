@@ -9,14 +9,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
-import { colorizeEmoji, getEmojiName } from '@@/js/emojilist.js';
-import { char2fluentEmojiFilePath, char2twemojiFilePath } from '@@/js/emoji-base.js';
+import { char2fluentEmojiFilePath, char2twemojiFilePath } from '@/scripts/emoji-base.js';
 import { defaultStore } from '@/store.js';
+import { colorizeEmoji, getEmojiName } from '@/scripts/emojilist.js';
 import * as os from '@/os.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import * as sound from '@/scripts/sound.js';
 import { i18n } from '@/i18n.js';
-import type { MenuItem } from '@/types/menu.js';
 
 const props = defineProps<{
 	emoji: string;
@@ -39,9 +38,7 @@ function computeTitle(event: PointerEvent): void {
 
 function onClick(ev: MouseEvent) {
 	if (props.menu) {
-		const menuItems: MenuItem[] = [];
-
-		menuItems.push({
+		os.popupMenu([{
 			type: 'label',
 			text: props.emoji,
 		}, {
@@ -51,20 +48,14 @@ function onClick(ev: MouseEvent) {
 				copyToClipboard(props.emoji);
 				os.success();
 			},
-		});
-
-		if (props.menuReaction && react) {
-			menuItems.push({
-				text: i18n.ts.doReaction,
-				icon: 'ti ti-plus',
-				action: () => {
-					react(props.emoji);
-					sound.playMisskeySfx('reaction');
-				},
-			});
-		}
-
-		os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
+		}, ...(props.menuReaction && react ? [{
+			text: i18n.ts.doReaction,
+			icon: 'ti ti-plus',
+			action: () => {
+				react(props.emoji);
+				sound.playMisskeySfx('reaction');
+			},
+		}] : [])], ev.currentTarget ?? ev.target);
 	}
 }
 </script>

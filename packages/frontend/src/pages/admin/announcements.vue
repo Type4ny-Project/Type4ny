@@ -24,21 +24,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #label>{{ announcement.title }}</template>
 					<template #icon>
 						<i v-if="announcement.icon === 'info'" class="ti ti-info-circle"></i>
-						<i v-else-if="announcement.icon === 'warning'" class="ti ti-alert-triangle" style="color: var(--MI_THEME-warn);"></i>
-						<i v-else-if="announcement.icon === 'error'" class="ti ti-circle-x" style="color: var(--MI_THEME-error);"></i>
-						<i v-else-if="announcement.icon === 'success'" class="ti ti-check" style="color: var(--MI_THEME-success);"></i>
+						<i v-else-if="announcement.icon === 'warning'" class="ti ti-alert-triangle" style="color: var(--warn);"></i>
+						<i v-else-if="announcement.icon === 'error'" class="ti ti-circle-x" style="color: var(--error);"></i>
+						<i v-else-if="announcement.icon === 'success'" class="ti ti-check" style="color: var(--success);"></i>
 					</template>
 					<template #caption>{{ announcement.text }}</template>
-					<template #footer>
-						<div class="_buttons">
-							<MkButton rounded primary @click="save(announcement)"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
-							<MkButton v-if="announcement.id != null && announcement.isActive" rounded @click="archive(announcement)"><i class="ti ti-check"></i> {{ i18n.ts._announcement.end }} ({{ i18n.ts.archive }})</MkButton>
-							<MkButton v-if="announcement.id != null && !announcement.isActive" rounded @click="unarchive(announcement)"><i class="ti ti-restore"></i> {{ i18n.ts.unarchive }}</MkButton>
-							<MkButton v-if="announcement.id != null" rounded danger @click="del(announcement)"><i class="ti ti-trash"></i> {{ i18n.ts.delete }}</MkButton>
-						</div>
-					</template>
 
-					<div class="_gaps">
+					<div class="_gaps_m">
 						<MkInput v-model="announcement.title">
 							<template #label>{{ i18n.ts.title }}</template>
 						</MkInput>
@@ -51,9 +43,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkRadios v-model="announcement.icon">
 							<template #label>{{ i18n.ts.icon }}</template>
 							<option value="info"><i class="ti ti-info-circle"></i></option>
-							<option value="warning"><i class="ti ti-alert-triangle" style="color: var(--MI_THEME-warn);"></i></option>
-							<option value="error"><i class="ti ti-circle-x" style="color: var(--MI_THEME-error);"></i></option>
-							<option value="success"><i class="ti ti-check" style="color: var(--MI_THEME-success);"></i></option>
+							<option value="warning"><i class="ti ti-alert-triangle" style="color: var(--warn);"></i></option>
+							<option value="error"><i class="ti ti-circle-x" style="color: var(--error);"></i></option>
+							<option value="success"><i class="ti ti-check" style="color: var(--success);"></i></option>
 						</MkRadios>
 						<MkRadios v-model="announcement.display">
 							<template #label>{{ i18n.ts.display }}</template>
@@ -72,10 +64,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 							{{ i18n.ts._announcement.needConfirmationToRead }}
 						</MkSwitch>
 						<p v-if="announcement.reads">{{ i18n.tsx.nUsersRead({ n: announcement.reads }) }}</p>
+						<div class="buttons _buttons">
+							<MkButton class="button" inline primary @click="save(announcement)"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
+							<MkButton v-if="announcement.id != null && announcement.isActive" class="button" inline @click="archive(announcement)"><i class="ti ti-check"></i> {{ i18n.ts._announcement.end }} ({{ i18n.ts.archive }})</MkButton>
+							<MkButton v-if="announcement.id != null && !announcement.isActive" class="button" inline @click="unarchive(announcement)"><i class="ti ti-restore"></i> {{ i18n.ts.unarchive }}</MkButton>
+							<MkButton v-if="announcement.id != null" class="button" inline danger @click="del(announcement)"><i class="ti ti-trash"></i> {{ i18n.ts.delete }}</MkButton>
+						</div>
 					</div>
 				</MkFolder>
 				<MkLoading v-if="loadingMore"/>
-				<MkButton @click="more()">
+				<MkButton class="button" @click="more()">
 					<i class="ti ti-reload"></i>{{ i18n.ts.more }}
 				</MkButton>
 			</template>

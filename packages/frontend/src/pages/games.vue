@@ -35,7 +35,7 @@ definePageMetadata(() => ({
 
 <style module>
 .link:focus-within {
-	outline: 2px solid var(--MI_THEME-focus);
+	outline: 2px solid var(--focus);
 	outline-offset: -2px;
 }
 </style>

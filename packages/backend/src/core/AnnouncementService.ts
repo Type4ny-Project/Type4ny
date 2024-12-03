@@ -72,7 +72,7 @@ export class AnnouncementService {
 			updatedAt: null,
 			title: values.title,
 			text: values.text,
-			imageUrl: values.imageUrl || null,
+			imageUrl: values.imageUrl,
 			icon: values.icon,
 			display: values.display,
 			forExistingUsers: values.forExistingUsers,
@@ -207,13 +207,6 @@ export class AnnouncementService {
 			});
 		} catch (e) {
 			return;
-		}
-
-		const announcement = await this.announcementsRepository.findOneBy({ id: announcementId });
-		if (announcement != null && announcement.userId === user.id) {
-			await this.announcementsRepository.update(announcementId, {
-				isActive: false,
-			});
 		}
 
 		if ((await this.getUnreadAnnouncements(user)).length === 0) {

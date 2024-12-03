@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkA :to="`/gallery/${post.id}`" class="ttasepnz _panel" tabindex="-1">
+<MkA :to="`/gallery/${post.id}`" class="ttasepnz _panel" tabindex="-1" @pointerenter="enterHover" @pointerleave="leaveHover">
 	<div class="thumbnail">
 		<Transition>
 			<ImgWithBlurhash
@@ -43,7 +43,15 @@ const props = defineProps<{
 
 const hover = ref(false);
 const safe = computed(() => defaultStore.state.nsfw === 'ignore' || defaultStore.state.nsfw === 'respect' && !props.post.isSensitive);
-const show = computed(() => safe.value);
+const show = computed(() => safe.value || hover.value);
+
+function enterHover(): void {
+	hover.value = true;
+}
+
+function leaveHover(): void {
+	hover.value = false;
+}
 </script>
 
 <style lang="scss" module>
@@ -67,7 +75,7 @@ const show = computed(() => safe.value);
 
 	&:hover {
 		text-decoration: none;
-		color: var(--MI_THEME-accent);
+		color: var(--accent);
 
 		> .thumbnail {
 			transform: scale(1.1);

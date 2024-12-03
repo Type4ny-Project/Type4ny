@@ -34,7 +34,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-if="full"
 				:class="[$style.text,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }] "
 			>{{
-				i18n.ts.youFollowing
+				i18n.ts.unfollow
 			}}</span><i class="ti ti-minus"></i>
 		</template>
 		<template v-else-if="!isFollowing && user.isLocked">
@@ -69,13 +69,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-import { host } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { useStream } from '@/stream.js';
 import { i18n } from '@/i18n.js';
 import { claimAchievement } from '@/scripts/achievements.js';
 import { pleaseLogin } from '@/scripts/please-login.js';
+import { host } from '@/config.js';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 
@@ -114,7 +114,7 @@ function onFollowChange(user: Misskey.entities.UserDetailed) {
 }
 
 async function onClick() {
-	pleaseLogin({ openOnRemote: { type: 'web', path: `/@${props.user.username}@${props.user.host ?? host}` } });
+	pleaseLogin(undefined, { type: 'web', path: `/@${props.user.username}@${props.user.host ?? host}` });
 
 	wait.value = true;
 
@@ -125,10 +125,7 @@ async function onClick() {
 				text: i18n.tsx.unfollowConfirm({ name: props.user.name || props.user.username }),
 			});
 
-			if (canceled) {
-				wait.value = false;
-				return;
-			}
+			if (canceled) return;
 
 			await misskeyApi('following/delete', {
 				userId: props.user.id,
@@ -162,10 +159,7 @@ async function onClick() {
 				});
 				hasPendingFollowRequestFromYou.value = true;
 
-				if ($i == null) {
-					wait.value = false;
-					return;
-				}
+				if ($i == null) return;
 
 				claimAchievement('following1');
 
@@ -205,8 +199,8 @@ onBeforeUnmount(() => {
   position: relative;
   display: inline-block;
   font-weight: bold;
-  color: var(--MI_THEME-fgOnWhite);
-  border: solid 1px var(--MI_THEME-accent);
+  color: var(--fgOnWhite);
+  border: solid 1px var(--accent);
   padding: 0;
   height: 31px;
   font-size: 16px;
@@ -279,17 +273,17 @@ onBeforeUnmount(() => {
   }
 
   &.active {
-    color: var(--MI_THEME-fgOnAccent);
-    background: var(--MI_THEME-accent);
+    color: var(--fgOnAccent);
+    background: var(--accent);
 
     &:hover {
-      background: var(--MI_THEME-accentLighten);
-      border-color: var(--MI_THEME-accentLighten);
+      background: var(--accentLighten);
+      border-color: var(--accentLighten);
     }
 
     &:active {
-      background: var(--MI_THEME-accentDarken);
-      border-color: var(--MI_THEME-accentDarken);
+      background: var(--accentDarken);
+      border-color: var(--accentDarken);
     }
 
     &.gamingDark:hover {

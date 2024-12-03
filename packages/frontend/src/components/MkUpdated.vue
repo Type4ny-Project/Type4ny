@@ -16,10 +16,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { onMounted, shallowRef } from 'vue';
-import { version } from '@@/js/config.js';
 import MkModal from '@/components/MkModal.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkSparkle from '@/components/MkSparkle.vue';
+import { version } from '@/config.js';
 import { i18n } from '@/i18n.js';
 import { confetti } from '@/scripts/confetti.js';
 
@@ -27,7 +27,7 @@ const modal = shallowRef<InstanceType<typeof MkModal>>();
 
 function whatIsNew() {
 	modal.value?.close();
-	window.open(`https://github.com/Type4ny-Project/Type4ny/blob/develop/CHANGELOG.md#type4ny-${version.replace(/\./g, '')}`, '_blank');
+	window.open(`https://type4ny-hub/changelogs/#_${version.replace(/\./g, '')}`, '_blank');
 }
 
 onMounted(() => {
@@ -46,8 +46,8 @@ onMounted(() => {
 	max-width: 480px;
 	box-sizing: border-box;
 	text-align: center;
-	background: var(--MI_THEME-panel);
-	border-radius: var(--MI-radius);
+	background: var(--panel);
+	border-radius: var(--radius);
 }
 
 .title {

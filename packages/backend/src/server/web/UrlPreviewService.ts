@@ -8,6 +8,7 @@ import { summaly } from '@misskey-dev/summaly';
 import { SummalyResult } from '@misskey-dev/summaly/built/summary.js';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
+import { MetaService } from '@/core/MetaService.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
 import type Logger from '@/logger.js';
 import { query } from '@/misc/prelude/url.js';
@@ -25,9 +26,7 @@ export class UrlPreviewService {
 		@Inject(DI.config)
 		private config: Config,
 
-		@Inject(DI.meta)
-		private meta: MiMeta,
-
+		private metaService: MetaService,
 		private httpRequestService: HttpRequestService,
 		private loggerService: LoggerService,
 	) {
@@ -63,7 +62,9 @@ export class UrlPreviewService {
 			return;
 		}
 
-		if (!this.meta.urlPreviewEnabled) {
+		const meta = await this.metaService.fetch();
+
+		if (!meta.urlPreviewEnabled) {
 			reply.code(403);
 			return {
 				error: new ApiError({
@@ -74,14 +75,14 @@ export class UrlPreviewService {
 			};
 		}
 
-		this.logger.info(this.meta.urlPreviewSummaryProxyUrl
+		this.logger.info(meta.urlPreviewSummaryProxyUrl
 			? `(Proxy) Getting preview of ${url}@${lang} ...`
 			: `Getting preview of ${url}@${lang} ...`);
 
 		try {
-			const summary = this.meta.urlPreviewSummaryProxyUrl
-				? await this.fetchSummaryFromProxy(url, this.meta, lang)
-				: await this.fetchSummary(url, this.meta, lang);
+			const summary = meta.urlPreviewSummaryProxyUrl
+				? await this.fetchSummaryFromProxy(url, meta, lang)
+				: await this.fetchSummary(url, meta, lang);
 
 			this.logger.succ(`Got preview of ${url}: ${summary.title}`);
 
@@ -145,6 +146,6 @@ export class UrlPreviewService {
 			contentLengthRequired: meta.urlPreviewRequireContentLength,
 		});
 
-		return this.httpRequestService.getJson<SummalyResult>(`${proxy}?${queryStr}`, 'application/json, */*', undefined, true);
+		return this.httpRequestService.getJson<SummalyResult>(`${proxy}?${queryStr}`);
 	}
 }

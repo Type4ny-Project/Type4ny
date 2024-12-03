@@ -62,10 +62,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</div>
 	<MkInfo v-if="hasNotSpecifiedMentions" warn :class="$style.hasNotSpecifiedMentions">{{ i18n.ts.notSpecifiedMentionWarning }} - <button class="_textButton" @click="addMissingMention()">{{ i18n.ts.add }}</button></MkInfo>
-	<input v-show="useCw" ref="cwInputEl" v-model="cw" :class="$style.cw" :placeholder="i18n.ts.annotation" @keydown="onKeydown" @keyup="onKeyup" @compositionend="onCompositionEnd">
+	<input v-show="useCw" ref="cwInputEl" v-model="cw" :class="$style.cw" :placeholder="i18n.ts.annotation" @keydown="onKeydown">
 	<div :class="[$style.textOuter, { [$style.withCw]: useCw }]">
 		<div v-if="channel" :class="$style.colorBar" :style="{ background: channel.color }"></div>
-		<textarea ref="textareaEl" v-model="text" :class="[$style.text]" :disabled="posting || posted" :readonly="textAreaReadOnly" :placeholder="placeholder" data-cy-post-form-text @keydown="onKeydown" @keyup="onKeyup" @paste="onPaste" @compositionupdate="onCompositionUpdate" @compositionend="onCompositionEnd"/>
+		<textarea ref="textareaEl" v-model="text" :class="[$style.text]" :disabled="posting || posted" :readonly="textAreaReadOnly" :placeholder="placeholder" data-cy-post-form-text @keydown="onKeydown" @paste="onPaste" @compositionupdate="onCompositionUpdate" @compositionend="onCompositionEnd"/>
 		<div v-if="maxTextLength - textLength < 100" :class="['_acrylic', $style.textCount, { [$style.textOver]: textLength > maxTextLength }]">{{ maxTextLength - textLength }}</div>
 	</div>
 	<input v-show="withHashtags" ref="hashtagsInputEl" v-model="hashtags" :class="$style.hashtags" :placeholder="i18n.ts.hashtags" list="hashtags">
@@ -86,7 +86,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-tooltip="i18n.ts.hashtags" class="_button" :class="[$style.footerButton, { [$style.footerButtonActive]: withHashtags }]" @click="withHashtags = !withHashtags"><i class="ti ti-hash"></i></button>
 			<button v-if="postFormActions.length > 0" v-tooltip="i18n.ts.plugins" class="_button" :class="$style.footerButton" @click="showActions"><i class="ti ti-plug"></i></button>
 			<button v-tooltip="i18n.ts.emoji" :class="['_button', $style.footerButton]" @click="insertEmoji"><i class="ti ti-mood-happy"></i></button>
-			<button v-if="useCw" v-tooltip="i18n.ts.cwInsertEmoji" :class="['_button', $style.footerButton]" @click="(ev) => insertEmoji(ev,true)"><i class="ti ti-eye-edit"></i></button>
 			<button v-if="showAddMfmFunction" v-tooltip="i18n.ts.addMfmFunction" :class="['_button', $style.footerButton]" @click="insertMfmFunction"><i class="ti ti-palette"></i></button>
 			<button v-tooltip="i18n.ts.ruby" :class="['_button', $style.footerButton]" @click="insertRuby"><i class="ti ti-abc"></i></button>
 			<button v-tooltip="i18n.ts.saveAsDraft" class="_button" :class="$style.footerButton" @click="saveDraft(false)"><i class="ti ti-device-floppy"></i></button>
@@ -108,12 +107,11 @@ import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { toASCII } from 'punycode/';
-import { host, url } from '@@/js/config.js';
-import type { PostFormProps } from '@/types/post-form.js';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
 import MkNotePreview from '@/components/MkNotePreview.vue';
 import XPostFormAttaches from '@/components/MkPostFormAttaches.vue';
 import MkPollEditor, { type PollEditorModelValue } from '@/components/MkPollEditor.vue';
+import { host, url } from '@/config.js';
 import { erase, unique } from '@/scripts/array.js';
 import { extractMentions } from '@/scripts/extract-mentions.js';
 import { formatTimeString } from '@/scripts/format-time-string.js';
@@ -151,7 +149,20 @@ const $i = signinRequired();
 const modal = inject('modal');
 const gamingType = defaultStore.state.gamingType;
 
-const props = withDefaults(defineProps<PostFormProps & {
+const props = withDefaults(defineProps<{
+	reply?: Misskey.entities.Note;
+	renote?: Misskey.entities.Note;
+	channel?: Misskey.entities.Channel; // TODO
+	mention?: Misskey.entities.User;
+	specified?: Misskey.entities.UserDetailed;
+	initialText?: string;
+	initialCw?: string;
+	initialVisibility?: (typeof Misskey.noteVisibilities)[number];
+	initialFiles?: Misskey.entities.DriveFile[];
+	initialLocalOnly?: boolean;
+	initialVisibleUsers?: Misskey.entities.UserDetailed[];
+	initialNote?: Misskey.entities.Note;
+	instant?: boolean;
 	fixed?: boolean;
 	autofocus?: boolean;
 	freezeAfterPosted?: boolean;
@@ -212,7 +223,6 @@ const recentHashtags = ref(JSON.parse(miLocalStorage.getItem('hashtags') ?? '[]'
 const imeText = ref('');
 const showingOptions = ref(false);
 const textAreaReadOnly = ref(false);
-const justEndedComposition = ref(false);
 
 const draftType = computed(() => {
 	if (props.channel) return 'channel';
@@ -682,13 +692,7 @@ function clear() {
 function onKeydown(ev: KeyboardEvent) {
 	if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey) && canPost.value) post();
 
-	// justEndedComposition.value is for Safari, which keyDown occurs after compositionend.
-	// ev.isComposing is for another browsers.
-	if (ev.key === 'Escape' && !justEndedComposition.value && !ev.isComposing) emit('esc');
-}
-
-function onKeyup(ev: KeyboardEvent) {
-	justEndedComposition.value = false;
+	if (ev.key === 'Escape') emit('esc');
 }
 
 function onCompositionUpdate(ev: CompositionEvent) {
@@ -697,7 +701,6 @@ function onCompositionUpdate(ev: CompositionEvent) {
 
 function onCompositionEnd(ev: CompositionEvent) {
 	imeText.value = '';
-	justEndedComposition.value = true;
 }
 
 async function onPaste(ev: ClipboardEvent) {
@@ -916,19 +919,13 @@ async function post(ev?: MouseEvent) {
       text.value.includes('$[x3') ||
       text.value.includes('$[x4') ||
       text.value.includes('$[scale') ||
-      text.value.includes('$[position') ||
-			text.value.includes('$[shake') ||
-			text.value.includes('$[twitch');
+      text.value.includes('$[position');
 
-	if (annoying && visibility.value === 'public' && !cw.value) {
+	if (annoying && visibility.value === 'public') {
 		const { canceled, result } = await os.actions({
 			type: 'warning',
 			text: i18n.ts.thisPostMayBeAnnoying,
 			actions: [{
-				value: 'cw',
-				text: i18n.ts.thisPostMayBeAnnoyingCW,
-				primary: true,
-			}, {
 				value: 'home',
 				text: i18n.ts.thisPostMayBeAnnoyingHome,
 				primary: true,
@@ -943,10 +940,6 @@ async function post(ev?: MouseEvent) {
 
 		if (canceled) return;
 		if (result === 'cancel') return;
-		if (result === 'cw') {
-			useCw.value = true;
-			cw.value = '動きの激しいMFMを含んでいる投稿です';
-		}
 		if (result === 'home') {
 			visibility.value = 'home';
 		}
@@ -1033,7 +1026,7 @@ async function post(ev?: MouseEvent) {
 
 			const text = postData.text ?? '';
 			const lowerCase = text.toLowerCase();
-			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('type4ny')) {
+			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('misskey')) {
 				claimAchievement('iLoveType4ny');
 			}
 			if ([
@@ -1100,7 +1093,7 @@ function insertMention() {
 	});
 }
 
-async function insertEmoji(ev: MouseEvent, cwMode = false) {
+async function insertEmoji(ev: MouseEvent) {
 	textAreaReadOnly.value = true;
 	const target = ev.currentTarget ?? ev.target;
 	if (target == null) return;
@@ -1113,21 +1106,12 @@ async function insertEmoji(ev: MouseEvent, cwMode = false) {
 
 	let pos = textareaEl.value?.selectionStart ?? 0;
 	let posEnd = textareaEl.value?.selectionEnd ?? text.value.length;
-	let cwPos = cwInputEl.value?.selectionStart ?? 0;
-	let cwPosEnd = cwInputEl.value?.selectionEnd ?? cw.value?.length;
 	emojiPicker.show(
 		target as HTMLElement,
 		emoji => {
-			if (cwMode && useCw.value) {
-				const textBefore = cw.value?.substring(0, cwPos);
-				const textAfter = cw.value?.substring(cwPosEnd);
-				cw.value = textBefore + emoji + textAfter;
-			} else {
-				const textBefore = text.value.substring(0, pos);
-				const textAfter = text.value.substring(posEnd);
-				text.value = textBefore + emoji + textAfter;
-			}
-
+			const textBefore = text.value.substring(0, pos);
+			const textAfter = text.value.substring(posEnd);
+			text.value = textBefore + emoji + textAfter;
 			pos += emoji.length;
 			posEnd += emoji.length;
 		},
@@ -1154,8 +1138,8 @@ function showActions(ev: MouseEvent) {
 			action.handler({
 				text: text.value,
 				cw: cw.value,
-			}, (key, value) => {
-				if (typeof key !== 'string' || typeof value !== 'string') return;
+			}, (key, value: any) => {
+				if (typeof key !== 'string') return;
 				if (key === 'text') { text.value = value; }
 				if (key === 'cw') { useCw.value = value !== null; cw.value = value; }
 			});
@@ -1352,8 +1336,8 @@ defineExpose({
   &:focus-visible {
 		outline: none;
 
-		> .submitInner {
-			outline: 2px solid var(--MI_THEME-fgOnAccent);
+		.submitInner {
+			outline: 2px solid var(--fgOnAccent);
 			outline-offset: -4px;
 		}
 	}
@@ -1367,14 +1351,14 @@ defineExpose({
   }
 
   &:not(:disabled):hover {
-    > .submitInner {
-      background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+    > .inner {
+      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
     }
   }
 
   &:not(:disabled):active {
-    > .submitInner {
-      background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+    > .inner {
+      background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
     }
   }
 }
@@ -1409,8 +1393,8 @@ defineExpose({
   border-radius: 6px;
   min-width: 90px;
   box-sizing: border-box;
-  color: var(--MI_THEME-fgOnAccent);
-  background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+  color: var(--fgOnAccent);
+  background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
   &.gamingLight{
     background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
     background-size: 1800% 1800%;
@@ -1434,7 +1418,7 @@ defineExpose({
   border-radius: 6px;
 
   &:hover {
-    background: var(--MI_THEME-X5);
+    background: var(--X5);
   }
 
   &:disabled {
@@ -1442,7 +1426,7 @@ defineExpose({
   }
 
   &.headerRightButtonActive {
-    color: var(--MI_THEME-accent);
+    color: var(--accent);
   }
 
 	&.danger {
@@ -1471,7 +1455,6 @@ defineExpose({
   padding: 16px 20px 0 20px;
   min-height: 75px;max-height: 150px;
   overflow: auto;
-	background-size: auto auto;
 }
 
 .targetNote {
@@ -1480,7 +1463,7 @@ defineExpose({
 
 .withQuote {
   margin: 0 0 8px 0;
-  color: var(--MI_THEME-accent);
+  color: var(--accent);
 }
 
 .toSpecified {
@@ -1500,7 +1483,7 @@ defineExpose({
   margin-right: 14px;
   padding: 8px 0 8px 8px;
   border-radius: 8px;
-  background: var(--MI_THEME-X4);
+  background: var(--X4);
 }
 
 .hasNotSpecifiedMentions {
@@ -1519,7 +1502,7 @@ defineExpose({
   border: none;
   border-radius: 0;
   background: transparent;
-  color: var(--MI_THEME-fg);
+  color: var(--fg);
   font-family: inherit;
 
   &:focus {
@@ -1534,20 +1517,21 @@ defineExpose({
 .cw {
   z-index: 1;
   padding-bottom: 8px;
-  border-bottom: solid 1px var(--MI_THEME-divider);
+  border-bottom: solid 1px var(--divider);
 }
 
 .postOptionsRoot {
 	>* {
-		border-bottom: solid 1px var(--MI_THEME-divider);
+		border-bottom: solid 1px var(--divider);
 	}
+
 }
 
 .hashtags {
   z-index: 1;
   padding-top: 8px;
   padding-bottom: 8px;
-  border-top: solid 1px var(--MI_THEME-divider);
+  border-top: solid 1px var(--divider);
 }
 
 .textOuter {
@@ -1573,7 +1557,7 @@ defineExpose({
   right: 2px;
   padding: 4px 6px;
   font-size: .9em;
-  color: var(--MI_THEME-warn);
+  color: var(--warn);
   border-radius: 6px;
   min-width: 1.6em;
   text-align: center;
@@ -1617,16 +1601,16 @@ defineExpose({
   border-radius: 6px;
 
   &:hover {
-    background: var(--MI_THEME-X5);
+    background: var(--X5);
   }
 
   &.footerButtonActive {
-    color: var(--MI_THEME-accent);
+    color: var(--accent);
   }
 }
 
 .previewButtonActive {
-  color: var(--MI_THEME-accent);
+  color: var(--accent);
 }
 
 @container (max-width: 500px) {

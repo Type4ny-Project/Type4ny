@@ -5,10 +5,9 @@
 
 import * as os from 'node:os';
 import si from 'systeminformation';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Endpoint } from '@/server/api/endpoint-base.js';
-import { MiMeta } from '@/models/_.js';
-import { DI } from '@/di-symbols.js';
+import { MetaService } from '@/core/MetaService.js';
 
 export const meta = {
 	requireCredential: false,
@@ -74,11 +73,10 @@ export const paramDef = {
 @Injectable()
 export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
 	constructor(
-		@Inject(DI.meta)
-		private serverSettings: MiMeta,
+		private metaService: MetaService,
 	) {
 		super(meta, paramDef, async () => {
-			if (!this.serverSettings.enableServerMachineStats) return {
+			if (!(await this.metaService.fetch()).enableServerMachineStats) return {
 				machine: '?',
 				cpu: {
 					model: '?',

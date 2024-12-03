@@ -22,15 +22,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { } from 'vue';
-import * as Misskey from 'misskey-js';
-import { getEmojiName } from '@@/js/emojilist.js';
 import MkTooltip from './MkTooltip.vue';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
+import { getEmojiName } from '@/scripts/emojilist.js';
 
 defineProps<{
 	showing: boolean;
 	reaction: string;
-	users: Misskey.entities.UserLite[];
+	users: any[]; // TODO
 	count: number;
 	targetElement: HTMLElement;
 }>();
@@ -57,13 +56,12 @@ function getReactionName(reaction: string): string {
 	max-width: 100px;
 	padding-right: 10px;
 	text-align: center;
-	border-right: solid 0.5px var(--MI_THEME-divider);
+	border-right: solid 0.5px var(--divider);
 }
 
 .reactionIcon {
 	display: block;
 	width: 60px;
-	max-height: 60px;
 	font-size: 60px; // unicodeな絵文字についてはwidthが効かないため
 	object-fit: contain;
 	margin: 0 auto;

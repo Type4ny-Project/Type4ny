@@ -30,14 +30,14 @@ import { basicTimelineIconClass, basicTimelineTypes } from '@/timelines.js';
 
 <style lang="scss" module>
 .exampleNoteRoot {
-	border-radius: var(--MI-radius);
-	border: var(--MI_THEME-panelBorder);
-	background: var(--MI_THEME-panel);
+	border-radius: var(--radius);
+	border: var(--panelBorder);
+	background: var(--panel);
 }
 
 .divider {
 	height: 1px;
-	background: var(--MI_THEME-divider);
+	background: var(--divider);
 }
 
 .image {
@@ -50,7 +50,7 @@ import { basicTimelineIconClass, basicTimelineTypes } from '@/timelines.js';
 	display: block;
 	width: 100%;
 	height: 40px;
-	color: var(--MI_THEME-fgOnAccent);
+	color: var(--fgOnAccent);
 	font-weight: bold;
 	text-align: left;
 
@@ -66,7 +66,7 @@ import { basicTimelineIconClass, basicTimelineTypes } from '@/timelines.js';
 		right: 0;
 		bottom: 0;
 		border-radius: 999px;
-		background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+		background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
 	}
 
 }

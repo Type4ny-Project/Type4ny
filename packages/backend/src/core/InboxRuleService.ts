@@ -6,7 +6,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { bindThis } from '@/decorators.js';
 import type { MiRemoteUser } from '@/models/User.js';
 import { IdService } from '@/core/IdService.js';
-import { isCreate, isNote } from '@/core/activitypub/type.js';
+import { isCreate } from '@/core/activitypub/type.js';
 import type { IObject, IPost } from '@/core/activitypub/type.js';
 import type { InstancesRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
@@ -15,17 +15,12 @@ import { InstanceEntityService } from '@/core/entities/InstanceEntityService.js'
 import type { InboxRuleCondFormulaValue } from '@/models/InboxRule.js';
 import { ApMentionService } from '@/core/activitypub/models/ApMentionService.js';
 import { ApResolverService } from '@/core/activitypub/ApResolverService.js';
-import type { MiMeta } from '@/models/Meta.js';
 
 @Injectable()
 export class InboxRuleService {
 	constructor(
 		@Inject(DI.instancesRepository)
 		private instancesRepository: InstancesRepository,
-
-		@Inject(DI.meta)
-		private meta: MiMeta,
-
 		private idService: IdService,
 		private utilityService: UtilityService,
 		private instanceEntityService: InstanceEntityService,
@@ -44,16 +39,17 @@ export class InboxRuleService {
 		const instance = await this.instanceEntityService.pack(instanceUnpack, user);
 		try {
 			switch (value.type) {
+				// ～かつ～
 				case 'and': {
-					const results = await Promise.all(value.values.map(v => this.evalCond(activity, user, v)));
-					return results.every(result => result);
+					return value.values.every(v => this.evalCond(activity, user, v));
 				}
+				// ～または～
 				case 'or': {
-					const results = await Promise.all(value.values.map(v => this.evalCond(activity, user, v)));
-					return results.some(result => result);
+					return value.values.some(v => this.evalCond(activity, user, v));
 				}
+				// ～ではない
 				case 'not': {
-					return !(await this.evalCond(activity, user, value.value));
+					return !await this.evalCond(activity, user, value.value);
 				}
 				// サスペンド済みユーザである
 				case 'isSuspended': {
@@ -105,34 +101,30 @@ export class InboxRuleService {
 				}
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
-					if (isNote(activity.object)) {
-						return activity.object?.tag
-							? activity.object?.tag?.filter(t => t.type === 'Mention').length >= value.value
-							: false;
+					if (isCreate(activity)) {
+						const apMentions = await this.apMentionService.extractApMentions(activity.tag as unknown as IPost, this.apResolverService.createResolver());
+
+						return apMentions.length ? apMentions.length >= value.value : false;
 					}
 					return false;
 				}
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
-					if (isNote(activity.object)) {
-						return activity.object?.attachment?.length ? activity.object?.attachment.length >= value.value : false;
+					if (isCreate(activity)) {
+						return activity.attachment?.length ? activity.attachment.length >= value.value : false;
 					}
 					return false;
 				}
-				case 'thisActivityIsNote': {
-					return isNote(activity.object);
-				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
-					if (isNote(activity.object)) {
-						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object?.content : '', [value.value]);
+					if (isCreate(activity)) {
+						return this.utilityService.isKeyWordIncluded(typeof activity.content === 'string' ? activity.content : '', [value.value]);
 					}
 					return false;
 				}
 				// 指定されたサーバーホスト
 				case 'serverHost': {
-					// eslint-disable-next-line eqeqeq
-					return user.host == value.value;
+					return user.host === value.value;
 				}
 				// 指定されたサーバーソフトウェア
 				case 'serverSoftware': {

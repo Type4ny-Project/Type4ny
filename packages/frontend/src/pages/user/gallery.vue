@@ -38,6 +38,6 @@ const pagination = {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 	grid-gap: 12px;
-	margin: var(--MI-margin);
+	margin: var(--margin);
 }
 </style>

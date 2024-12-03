@@ -29,9 +29,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			[$style.localonly]:
 				defaultStore.state.showVisibilityColor && note.localOnly && note.visibility === 'public',
 		},
-		{
-			[$style.skipRender]: defaultStore.state.skipNoteRender
-		}
 	]"
 	:tabindex="isDeleted ? '-1' : '0'"
 >
@@ -79,19 +76,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 				style="margin-left: 0.5em"
 				:title="i18n.ts._visibility[note.visibility]"
 			>
-				<i
-					v-if="note.visibility === 'home'" class="ti ti-home"
+				<i v-if="note.visibility === 'home'" class="ti ti-home"
 					data-cy-note-visibility-home
 				></i>
-				<i
-					v-else-if="note.visibility === 'followers'" class="ti ti-lock"
-					data-cy-note-visibility-followers
+				<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"
+					 data-cy-note-visibility-followers
 				></i>
 				<i
 					v-else-if="note.visibility === 'specified'"
 					ref="specified"
 					class="ti ti-mail"
 					data-cy-note-visibility-specified
+
 				></i>
 			</span>
 			<span
@@ -149,8 +145,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 						:text="appearNote.cw"
 						:author="appearNote.user"
 						:nyaize="'respect'"
-						:enableEmojiMenu="true"
-						:enableEmojiMenuReaction="true"
 					/>
 					<MkCwButton
 						v-model="showContent"
@@ -308,7 +302,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 								appearNote.myReactions?.length >= 4
 						"
 						class="ti ti-heart-filled"
-						style="color: var(--MI_THEME-love)"
+						style="color: var(--eventReactionHeart)"
 					></i>
 					<i
 						v-else-if="
@@ -316,7 +310,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 								(appearNote.myReaction && appearNote.user.host)
 						"
 						class="ti ti-minus"
-						style="color: var(--MI_THEME-accent)"
+						style="color: var(--accent)"
 					></i>
 					<i
 						v-else-if="appearNote.reactionAcceptance === 'likeOnly'"
@@ -400,10 +394,6 @@ import {
 } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
-import { isLink } from '@@/js/is-link.js';
-import { shouldCollapsed } from '@@/js/collapsed.js';
-import { host } from '@@/js/config.js';
-import type { MenuItem } from '@/types/menu.js';
 import MkNoteSub from '@/components/MkNoteSub.vue';
 import MkNoteHeader from '@/components/MkNoteHeader.vue';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
@@ -420,7 +410,6 @@ import {
 	pleaseLogin,
 } from '@/scripts/please-login.js';
 import { checkWordMute } from '@/scripts/check-word-mute.js';
-import { notePage } from '@/filters/note.js';
 import { userPage } from '@/filters/user.js';
 import number from '@/filters/number.js';
 import * as os from '@/os.js';
@@ -443,8 +432,11 @@ import { deepClone } from '@/scripts/clone.js';
 import { useTooltip } from '@/scripts/use-tooltip.js';
 import { claimAchievement } from '@/scripts/achievements.js';
 import { getNoteSummary } from '@/scripts/get-note-summary.js';
+import { MenuItem } from '@/types/menu.js';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
 import { showMovedDialog } from '@/scripts/show-moved-dialog.js';
+import { shouldCollapsed } from '@/scripts/collapsed.js';
+import { host } from '@/config.js';
 import { isEnabledUrlPreview } from '@/instance.js';
 import { type Keymap } from '@/scripts/hotkey.js';
 import { focusNext, focusPrev } from '@/scripts/focus.js';
@@ -470,7 +462,6 @@ const emit = defineEmits<{
 }>();
 
 const inTimeline = inject<boolean>('inTimeline', false);
-const tl_withSensitive = inject<Ref<boolean>>('tl_withSensitive', ref(true));
 const inChannel = inject('inChannel', null);
 const currentClip = inject<Ref<Misskey.entities.Clip> | null>(
 	'currentClip',
@@ -565,11 +556,11 @@ function checkMute(
 	checkOnly = false,
 	userWordMute: Array<{ user: Misskey.entities.User; words: Array<string | string[]> }> | undefined | null = null,
 ): boolean | 'sensitiveMute' {
-	if (mutedWords != null) {
-		if (checkWordMute(noteToCheck, $i, mutedWords)) return true;
-		if (noteToCheck.reply && checkWordMute(noteToCheck.reply, $i, mutedWords)) return true;
-		if (noteToCheck.renote && checkWordMute(noteToCheck.renote, $i, mutedWords)) return true;
-	}
+	if (mutedWords == null) return false;
+
+	if (checkWordMute(noteToCheck, $i, mutedWords)) return true;
+	if (noteToCheck.reply && checkWordMute(noteToCheck.reply, $i, mutedWords)) return true;
+	if (noteToCheck.renote && checkWordMute(noteToCheck.renote, $i, mutedWords)) return true;
 
 	if (userWordMute && userWordMute.some(entry => entry.user.id === noteToCheck.userId && checkWordMute(noteToCheck, $i, entry.words))) {
 		return true;
@@ -579,11 +570,10 @@ function checkMute(
 
 	if (
 		inTimeline &&
-		tl_withSensitive.value === false &&
+		!defaultStore.state.tl.filter.withSensitive &&
 		noteToCheck.files?.some((v) => v.isSensitive)
-	) {
-		return 'sensitiveMute';
-	}
+	) return 'sensitiveMute';
+
 	return false;
 }
 
@@ -715,7 +705,7 @@ if (!props.mock) {
 }
 
 function renote(viaKeyboard = false) {
-	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
+	pleaseLogin(undefined, pleaseLoginContext.value);
 	showMovedDialog();
 
 	const { menu } = getRenoteMenu({
@@ -729,7 +719,7 @@ function renote(viaKeyboard = false) {
 }
 
 function reply(): void {
-	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
+	pleaseLogin(undefined, pleaseLoginContext.value);
 	if (props.mock) {
 		return;
 	}
@@ -742,7 +732,7 @@ function reply(): void {
 }
 
 function react(): void {
-	pleaseLogin({ openOnRemote: pleaseLoginContext.value });
+	pleaseLogin(undefined, pleaseLoginContext.value);
 	showMovedDialog();
 	if (appearNote.value.reactionAcceptance === 'likeOnly') {
 		sound.playMisskeySfx('reaction');
@@ -815,6 +805,16 @@ function onContextmenu(ev: MouseEvent): void {
 		return;
 	}
 
+	const isLink = (el: HTMLElement): boolean => {
+		if (el.tagName === 'A') return true;
+		// 再生速度の選択などのために、Audio要素のコンテキストメニューはブラウザデフォルトとする。
+		if (el.tagName === 'AUDIO') return true;
+		if (el.parentElement) {
+			return isLink(el.parentElement);
+		}
+		return false;
+	};
+
 	if (ev.target && isLink(ev.target as HTMLElement)) return;
 	if (window.getSelection()?.toString() !== '') return;
 
@@ -884,29 +884,26 @@ function showRenoteMenu(): void {
 		};
 	}
 
-	const renoteDetailsMenu: MenuItem = {
-		type: 'link',
-		text: i18n.ts.renoteDetails,
-		icon: 'ti ti-info-circle',
-		to: notePage(note.value),
-	};
-
 	if (isMyRenote) {
-		pleaseLogin({ openOnRemote: pleaseLoginContext.value });
-		os.popupMenu([
-			renoteDetailsMenu,
-			getCopyNoteLinkMenu(note.value, i18n.ts.copyLinkRenote),
-			{ type: 'divider' },
-			getUnrenote(),
-		], renoteTime.value);
+		pleaseLogin(undefined, pleaseLoginContext.value);
+		os.popupMenu(
+			[
+				getCopyNoteLinkMenu(note.value, i18n.ts.copyLinkRenote),
+				{ type: 'divider' },
+				getUnrenote(),
+			],
+			renoteTime.value,
+		);
 	} else {
-		os.popupMenu([
-			renoteDetailsMenu,
-			getCopyNoteLinkMenu(note.value, i18n.ts.copyLinkRenote),
-			{ type: 'divider' },
-			getAbuseNoteMenu(note.value, i18n.ts.reportAbuseRenote),
-			($i?.isModerator || $i?.isAdmin) ? getUnrenote() : undefined,
-		], renoteTime.value);
+		os.popupMenu(
+			[
+				getCopyNoteLinkMenu(note.value, i18n.ts.copyLinkRenote),
+				{ type: 'divider' },
+				getAbuseNoteMenu(note.value, i18n.ts.reportAbuseRenote),
+				$i?.isModerator || $i?.isAdmin ? getUnrenote() : undefined,
+			],
+			renoteTime.value,
+		);
 	}
 }
 
@@ -983,8 +980,8 @@ function emitUpdReaction(emoji: string, delta: number) {
 			margin: auto;
 			width: calc(100% - 8px);
 			height: calc(100% - 8px);
-			border: dashed 2px var(--MI_THEME-focus);
-			border-radius: var(--MI-radius);
+			border: dashed 2px var(--focus);
+			border-radius: var(--radius);
 			box-sizing: border-box;
 		}
 	}
@@ -1006,9 +1003,9 @@ function emitUpdReaction(emoji: string, delta: number) {
 			right: 12px;
 			padding: 0 4px;
 			margin-bottom: 0 !important;
-			background: var(--MI_THEME-popup);
+			background: var(--popup);
 			border-radius: 8px;
-			box-shadow: 0px 4px 32px var(--MI_THEME-shadow);
+			box-shadow: 0px 4px 32px var(--shadow);
 		}
 
 		.footerButton {
@@ -1025,11 +1022,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 			visibility: visible;
 		}
 	}
-}
-
-.skipRender {
-	content-visibility: auto;
-	contain-intrinsic-size: 0 150px;
 }
 
 .tip {
@@ -1058,7 +1050,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 	padding: 16px 32px 8px 32px;
 	line-height: 28px;
 	white-space: pre;
-	color: var(--MI_THEME-renote);
+	color: var(--renote);
 
 	& + .article {
 		padding-top: 8px;
@@ -1151,12 +1143,10 @@ function emitUpdReaction(emoji: string, delta: number) {
 .avatar {
 	flex-shrink: 0;
 	display: block !important;
-	z-index: 1;
 	margin: 0 14px 0 0;
 	width: 58px;
 	height: 58px;
 	position: sticky !important;
-	top: calc(22px + var(--MI-stickyTop, 0px));
 	left: 0;
 }
 
@@ -1177,12 +1167,12 @@ function emitUpdReaction(emoji: string, delta: number) {
 	width: 100%;
 	margin-top: 14px;
 	position: sticky;
-	bottom: calc(var(--MI-stickyBottom, 0px) + 14px);
+	bottom: calc(var(--stickyBottom, 0px) + 14px);
 }
 
 .showLessLabel {
 	display: inline-block;
-	background: var(--MI_THEME-popup);
+	background: var(--popup);
 	padding: 6px 10px;
 	font-size: 0.8em;
 	border-radius: 999px;
@@ -1203,16 +1193,16 @@ function emitUpdReaction(emoji: string, delta: number) {
 	z-index: 2;
 	width: 100%;
 	height: 64px;
-	background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
+	background: linear-gradient(0deg, var(--panel), color(from var(--panel) srgb r g b / 0));
 
 	&:hover > .collapsedLabel {
-		background: var(--MI_THEME-panelHighlight);
+		background: var(--panelHighlight);
 	}
 }
 
 .collapsedLabel {
 	display: inline-block;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	padding: 6px 10px;
 	font-size: 0.8em;
 	border-radius: 999px;
@@ -1221,17 +1211,16 @@ function emitUpdReaction(emoji: string, delta: number) {
 
 .text {
 	overflow-wrap: break-word;
-	z-index: 10;
 }
 
 .replyIcon {
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 	margin-right: 0.5em;
 }
 
 .translation {
-	border: solid 0.5px var(--MI_THEME-divider);
-	border-radius: var(--MI-radius);
+	border: solid 0.5px var(--divider);
+	border-radius: var(--radius);
 	padding: 12px;
 	margin-top: 8px;
 }
@@ -1250,7 +1239,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 
 .quoteNote {
 	padding: 16px;
-	border: dashed 1px var(--MI_THEME-renote);
+	border: dashed 1px var(--renote);
 	border-radius: 8px;
 	overflow: clip;
 }
@@ -1275,7 +1264,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 	}
 
 	&:hover {
-		color: var(--MI_THEME-fgHighlighted);
+		color: var(--fgHighlighted);
 	}
 }
 
@@ -1346,7 +1335,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 		margin: 0 10px 0 0;
 		width: 46px;
 		height: 46px;
-		top: calc(14px + var(--MI-stickyTop, 0px));
 	}
 }
 

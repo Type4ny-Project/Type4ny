@@ -60,7 +60,7 @@ async function follow() {
 	z-index: 2;
 	width: 58px;
 	height: 58px;
-	border: solid 4px var(--MI_THEME-panel);
+	border: solid 4px var(--panel);
 }
 
 .title {
@@ -81,7 +81,7 @@ async function follow() {
 	margin: 0;
 	line-height: 16px;
 	font-size: 0.8em;
-	color: var(--MI_THEME-fg);
+	color: var(--fg);
 	opacity: 0.7;
 }
 
@@ -98,7 +98,7 @@ async function follow() {
 }
 
 .footer {
-	border-top: solid 0.5px var(--MI_THEME-divider);
+	border-top: solid 0.5px var(--divider);
 	padding: 16px;
 }
 </style>

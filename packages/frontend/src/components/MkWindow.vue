@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	:enterFromClass="defaultStore.state.animation ? $style.transition_window_enterFrom : ''"
 	:leaveToClass="defaultStore.state.animation ? $style.transition_window_leaveTo : ''"
 	appear
-	@afterLeave="emit('closed')"
+	@afterLeave="$emit('closed')"
 >
 	<div v-if="showing" ref="rootEl" :class="[$style.root, { [$style.maximized]: maximized }]">
 		<div :class="$style.body" class="_shadow" @mousedown="onBodyMousedown" @keydown="onKeydown">
@@ -54,18 +54,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, provide, shallowRef, ref } from 'vue';
-import type { MenuItem } from '@/types/menu.js';
 import contains from '@/scripts/contains.js';
 import * as os from '@/os.js';
+import { MenuItem } from '@/types/menu.js';
 import { i18n } from '@/i18n.js';
 import { defaultStore } from '@/store.js';
-
-type WindowButton = {
-	title: string;
-	icon: string;
-	onClick: () => void;
-	highlighted?: boolean;
-};
 
 const minHeight = 50;
 const minWidth = 250;
@@ -94,8 +87,8 @@ const props = withDefaults(defineProps<{
 	mini?: boolean;
 	front?: boolean;
 	contextmenu?: MenuItem[] | null;
-	buttonsLeft?: WindowButton[];
-	buttonsRight?: WindowButton[];
+	buttonsLeft?: any[];
+	buttonsRight?: any[];
 }>(), {
 	initialWidth: 400,
 	initialHeight: null,
@@ -491,10 +484,6 @@ defineExpose({
 }
 
 .root {
-	// universal.vueとかで直接--MI-stickyBottomが定義されていたりするのでリセット
-	--MI-stickyTop: 0;
-	--MI-stickyBottom: 0;
-
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -513,22 +502,21 @@ defineExpose({
 	contain: content;
 	width: 100%;
 	height: 100%;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 }
 
 .header {
 	--height: 39px;
-
 	display: flex;
 	position: relative;
 	z-index: 1;
 	flex-shrink: 0;
 	user-select: none;
 	height: var(--height);
-	background: var(--MI_THEME-windowHeader);
-	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
-	backdrop-filter: var(--MI-blur, blur(15px));
-	//border-bottom: solid 1px var(--MI_THEME-divider);
+	background: var(--windowHeader);
+	-webkit-backdrop-filter: var(--blur, blur(15px));
+	backdrop-filter: var(--blur, blur(15px));
+	//border-bottom: solid 1px var(--divider);
 	font-size: 90%;
 	font-weight: bold;
 
@@ -542,11 +530,11 @@ defineExpose({
 	width: var(--height);
 
 	&:hover {
-		color: var(--MI_THEME-fgHighlighted);
+		color: var(--fgHighlighted);
 	}
 
 	&.highlighted {
-		color: var(--MI_THEME-accent);
+		color: var(--accent);
 	}
 }
 
@@ -571,7 +559,7 @@ defineExpose({
 .content {
 	flex: 1;
 	overflow: auto;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	container-type: size;
 }
 

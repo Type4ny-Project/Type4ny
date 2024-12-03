@@ -103,8 +103,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			if (!isRequest) {
-				await this.customEmojiService.update({
-					id: emojiId,
+				await this.customEmojiService.update(emojiId, {
 					driveFile,
 					name: ps.name,
 					category: ps.category,

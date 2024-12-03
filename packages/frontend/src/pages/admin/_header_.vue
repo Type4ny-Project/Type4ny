@@ -35,8 +35,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch, nextTick } from 'vue';
 import tinycolor from 'tinycolor2';
-import { scrollToTop } from '@@/js/scroll.js';
 import { popupMenu } from '@/os.js';
+import { scrollToTop } from '@/scripts/scroll.js';
 import MkButton from '@/components/MkButton.vue';
 import { globalEvents } from '@/events.js';
 import { injectReactiveMetadata } from '@/scripts/page-metadata.js';
@@ -119,7 +119,7 @@ function onTabClick(tab: Tab, ev: MouseEvent): void {
 }
 
 const calcBg = () => {
-	const rawBg = pageMetadata.value?.bg ?? 'var(--MI_THEME-bg)';
+	const rawBg = pageMetadata.value?.bg ?? 'var(--bg)';
 	const tinyBg = tinycolor(rawBg.startsWith('var(') ? getComputedStyle(document.documentElement).getPropertyValue(rawBg.slice(4, -1)) : rawBg);
 	tinyBg.setAlpha(0.85);
 	bg.value = tinyBg.toRgbString();
@@ -156,15 +156,15 @@ onUnmounted(() => {
 	--height: 60px;
 	display: flex;
 	width: 100%;
-	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
-	backdrop-filter: var(--MI-blur, blur(15px));
+	-webkit-backdrop-filter: var(--blur, blur(15px));
+	backdrop-filter: var(--blur, blur(15px));
 
 	> .buttons {
-		--MI-margin: 8px;
+		--margin: 8px;
 		display: flex;
     align-items: center;
 		height: var(--height);
-		margin: 0 var(--MI-margin);
+		margin: 0 var(--margin);
 
 		&.right {
 			margin-left: auto;
@@ -178,18 +178,18 @@ onUnmounted(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			height: calc(var(--height) - (var(--MI-margin) * 2));
-			width: calc(var(--height) - (var(--MI-margin) * 2));
+			height: calc(var(--height) - (var(--margin) * 2));
+			width: calc(var(--height) - (var(--margin) * 2));
 			box-sizing: border-box;
 			position: relative;
-			border-radius: var(--MI-radius);
+			border-radius: var(--radius);
 
 			&:hover {
 				background: rgba(0, 0, 0, 0.05);
 			}
 
 			&.highlighted {
-				color: var(--MI_THEME-accent);
+				color: var(--accent);
 			}
 		}
 
@@ -286,7 +286,7 @@ onUnmounted(() => {
 			position: absolute;
 			bottom: 0;
 			height: 3px;
-			background: var(--MI_THEME-accent);
+			background: var(--accent);
 			border-radius: 999px;
 			transition: all 0.2s ease;
 			pointer-events: none;

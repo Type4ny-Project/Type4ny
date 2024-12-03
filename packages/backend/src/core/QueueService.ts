@@ -7,15 +7,13 @@ import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IActivity } from '@/core/activitypub/type.js';
 import type { MiDriveFile } from '@/models/DriveFile.js';
-import type { MiWebhook, WebhookEventTypes } from '@/models/Webhook.js';
+import type { MiWebhook, webhookEventTypes } from '@/models/Webhook.js';
 import type { MiSystemWebhook, SystemWebhookEventType } from '@/models/SystemWebhook.js';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
 import type { Antenna } from '@/server/api/endpoints/i/import-antennas.js';
 import { ApRequestCreator } from '@/core/activitypub/ApRequestService.js';
-import { type SystemWebhookPayload } from '@/core/SystemWebhookService.js';
-import { type UserWebhookPayload } from './UserWebhookService.js';
 
 import type {
 	DbJobData,
@@ -33,7 +31,6 @@ import type {
 	ObjectStorageQueue,
 	RelationshipQueue,
 	SystemQueue,
-	SystemWebhookDeliverQueue,
 	UserWebhookDeliverQueue,
 	SystemWebhookDeliverQueue,
 	ScheduleNotePostQueue,
@@ -91,19 +88,6 @@ export class QueueService {
 		this.systemQueue.add('checkExpiredMutings', {
 		}, {
 			repeat: { pattern: '*/5 * * * *' },
-			removeOnComplete: true,
-		});
-
-		this.systemQueue.add('bakeBufferedReactions', {
-		}, {
-			repeat: { pattern: '0 0 * * *' },
-			removeOnComplete: true,
-		});
-
-		this.systemQueue.add('checkModeratorsActivity', {
-		}, {
-			// 毎時30分に起動
-			repeat: { pattern: '30 * * * *' },
 			removeOnComplete: true,
 		});
 	}
@@ -471,15 +455,10 @@ export class QueueService {
 
 	/**
 	 * @see UserWebhookDeliverJobData
-	 * @see UserWebhookDeliverProcessorService
+	 * @see WebhookDeliverProcessorService
 	 */
 	@bindThis
-	public userWebhookDeliver<T extends WebhookEventTypes>(
-		webhook: MiWebhook,
-		type: T,
-		content: UserWebhookPayload<T>,
-		opts?: { attempts?: number },
-	) {
+	public userWebhookDeliver(webhook: MiWebhook, type: typeof webhookEventTypes[number], content: unknown) {
 		const data: UserWebhookDeliverJobData = {
 			type,
 			content,
@@ -492,7 +471,7 @@ export class QueueService {
 		};
 
 		return this.userWebhookDeliverQueue.add(webhook.id, data, {
-			attempts: opts?.attempts ?? 4,
+			attempts: 4,
 			backoff: {
 				type: 'custom',
 			},
@@ -503,15 +482,10 @@ export class QueueService {
 
 	/**
 	 * @see SystemWebhookDeliverJobData
-	 * @see SystemWebhookDeliverProcessorService
+	 * @see WebhookDeliverProcessorService
 	 */
 	@bindThis
-	public systemWebhookDeliver<T extends SystemWebhookEventType>(
-		webhook: MiSystemWebhook,
-		type: T,
-		content: SystemWebhookPayload<T>,
-		opts?: { attempts?: number },
-	) {
+	public systemWebhookDeliver(webhook: MiSystemWebhook, type: SystemWebhookEventType, content: unknown) {
 		const data: SystemWebhookDeliverJobData = {
 			type,
 			content,
@@ -523,7 +497,7 @@ export class QueueService {
 		};
 
 		return this.systemWebhookDeliverQueue.add(webhook.id, data, {
-			attempts: opts?.attempts ?? 4,
+			attempts: 4,
 			backoff: {
 				type: 'custom',
 			},

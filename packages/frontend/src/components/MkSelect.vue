@@ -15,8 +15,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		@keydown.space.enter="show"
 	>
 		<div ref="prefixEl" :class="$style.prefix"><slot name="prefix"></slot></div>
-		<div
+		<select
 			ref="inputEl"
+			v-model="v"
 			v-adaptive-border
 			tabindex="-1"
 			:class="$style.inputCore"
@@ -24,50 +25,55 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			:required="required"
 			:readonly="readonly"
 			:placeholder="placeholder"
+			@input="onInput"
 			@mousedown.prevent="() => {}"
 			@keydown.prevent="() => {}"
 		>
-			<div style="pointer-events: none;">{{ currentValueText ?? '' }}</div>
-			<div style="display: none;">
-				<slot></slot>
-			</div>
-		</div>
+			<slot></slot>
+		</select>
 		<div ref="suffixEl" :class="$style.suffix"><i class="ti ti-chevron-down" :class="[$style.chevron, { [$style.chevronOpening]: opening }]"></i></div>
 	</div>
 	<div :class="$style.caption"><slot name="caption"></slot></div>
+
+	<MkButton v-if="manualSave && changed" primary :class="$style.save" @click="updated"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
 </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, nextTick, ref, watch, computed, toRefs, VNode, useSlots, VNodeChild } from 'vue';
-import { useInterval } from '@@/js/use-interval.js';
-import type { MenuItem } from '@/types/menu.js';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
+import { useInterval } from '@/scripts/use-interval.js';
 import { i18n } from '@/i18n.js';
+import { MenuItem } from '@/types/menu.js';
 
 const props = defineProps<{
-	modelValue: string | number | null;
+	modelValue: string | null;
 	required?: boolean;
 	readonly?: boolean;
 	disabled?: boolean;
 	placeholder?: string;
 	autofocus?: boolean;
 	inline?: boolean;
+	manualSave?: boolean;
 	small?: boolean;
 	large?: boolean;
 }>();
 
 const emit = defineEmits<{
-	(ev: 'update:modelValue', value: string | number | null): void;
+	(ev: 'changeByUser', value: string | null): void;
+	(ev: 'update:modelValue', value: string | null): void;
 }>();
 
 const slots = useSlots();
 
 const { modelValue, autofocus } = toRefs(props);
+const v = ref(modelValue.value);
 const focused = ref(false);
 const opening = ref(false);
-const currentValueText = ref<string | null>(null);
+const changed = ref(false);
+const invalid = ref(false);
+const filled = computed(() => v.value !== '' && v.value != null);
 const inputEl = ref<HTMLObjectElement | null>(null);
 const prefixEl = ref<HTMLElement | null>(null);
 const suffixEl = ref<HTMLElement | null>(null);
@@ -78,6 +84,26 @@ const height =
 	36;
 
 const focus = () => container.value?.focus();
+const onInput = (ev) => {
+	changed.value = true;
+};
+
+const updated = () => {
+	changed.value = false;
+	emit('update:modelValue', v.value);
+};
+
+watch(modelValue, newValue => {
+	v.value = newValue;
+});
+
+watch(v, () => {
+	if (!props.manualSave) {
+		updated();
+	}
+
+	invalid.value = inputEl.value?.validity.badInput ?? true;
+});
 
 // このコンポーネントが作成された時、非表示状態である場合がある
 // 非表示状態だと要素の幅などは0になってしまうので、定期的に計算する
@@ -107,31 +133,6 @@ onMounted(() => {
 	});
 });
 
-watch(modelValue, () => {
-	const scanOptions = (options: VNodeChild[]) => {
-		for (const vnode of options) {
-			if (typeof vnode !== 'object' || vnode === null || Array.isArray(vnode)) continue;
-			if (vnode.type === 'optgroup') {
-				const optgroup = vnode;
-				if (Array.isArray(optgroup.children)) scanOptions(optgroup.children);
-			} else if (Array.isArray(vnode.children)) { // 何故かフラグメントになってくることがある
-				const fragment = vnode;
-				if (Array.isArray(fragment.children)) scanOptions(fragment.children);
-			} else if (vnode.props == null) { // v-if で条件が false のときにこうなる
-				// nop?
-			} else {
-				const option = vnode;
-				if (option.props?.value === modelValue.value) {
-					currentValueText.value = option.children as string;
-					break;
-				}
-			}
-		}
-	};
-
-	scanOptions(slots.default!());
-}, { immediate: true });
-
 function show() {
 	if (opening.value) return;
 	focus();
@@ -144,9 +145,11 @@ function show() {
 	const pushOption = (option: VNode) => {
 		menu.push({
 			text: option.children as string,
-			active: computed(() => modelValue.value === option.props?.value),
+			active: computed(() => v.value === option.props?.value),
 			action: () => {
-				emit('update:modelValue', option.props?.value);
+				v.value = option.props?.value;
+				changed.value = true;
+				emit('changeByUser', v.value);
 			},
 		});
 	};
@@ -198,7 +201,7 @@ function show() {
 .caption {
 	font-size: 0.85em;
 	padding: 8px 0 0 0;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 
 	&:empty {
 		display: none;
@@ -216,8 +219,8 @@ function show() {
 
 	&.focused {
 		> .inputCore {
-			border-color: var(--MI_THEME-accent) !important;
-			//box-shadow: 0 0 0 4px var(--MI_THEME-focus);
+			border-color: var(--accent) !important;
+			//box-shadow: 0 0 0 4px var(--focus);
 		}
 	}
 
@@ -236,7 +239,7 @@ function show() {
 
 	&:hover {
 		> .inputCore {
-			border-color: var(--MI_THEME-inputBorderHover) !important;
+			border-color: var(--inputBorderHover) !important;
 		}
 	}
 }
@@ -244,8 +247,7 @@ function show() {
 .inputCore {
 	appearance: none;
 	-webkit-appearance: none;
-	display: flex;
-	align-items: center;
+	display: block;
 	height: v-bind("height + 'px'");
 	width: 100%;
 	margin: 0;
@@ -253,10 +255,10 @@ function show() {
 	font: inherit;
 	font-weight: normal;
 	font-size: 1em;
-	color: var(--MI_THEME-fg);
-	background: var(--MI_THEME-panel);
-	border: solid 1px var(--MI_THEME-panel);
-	border-radius: var(--MI-radius);
+	color: var(--fg);
+	background: var(--panel);
+	border: solid 1px var(--panel);
+	border-radius: var(--radius);
 	outline: none;
 	box-shadow: none;
 	box-sizing: border-box;

@@ -49,8 +49,8 @@ export default defineComponent({
 		}
 
 		&.active {
-			color: var(--MI_THEME-accent);
-			background: var(--MI_THEME-accentedBg);
+			color: var(--accent);
+			background: var(--accentedBg);
 
       &.gamingDark{
 				color: black !important;
@@ -72,8 +72,8 @@ export default defineComponent({
 		}
 
 		&:not(.active):hover {
-			color: var(--MI_THEME-fgHighlighted);
-			background: var(--MI_THEME-panelHighlight);
+			color: var(--fgHighlighted);
+			background: var(--panelHighlight);
 		}
 
 		&:not(:first-child) {

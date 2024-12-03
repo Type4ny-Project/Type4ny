@@ -183,7 +183,7 @@ export function genOpenapiSpec(config: Config, includeSelfRef = false) {
 				},
 				...(endpoint.meta.limit ? {
 					'429': {
-						description: 'Too many requests',
+						description: 'To many requests',
 						content: {
 							'application/json': {
 								schema: {

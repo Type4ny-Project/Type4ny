@@ -104,7 +104,7 @@ import XPage from '@/components/page/page.vue';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import { url } from '@@/js/config.js';
+import { url } from '@/config.js';
 import MkMediaImage from '@/components/MkMediaImage.vue';
 import MkImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
 import MkFollowButton from '@/components/MkFollowButton.vue';
@@ -121,7 +121,7 @@ import { instance } from '@/instance.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import { useRouter } from '@/router/supplier.js';
-import type { MenuItem } from '@/types/menu.js';
+import { MenuItem } from '@/types/menu';
 
 const router = useRouter();
 
@@ -165,23 +165,18 @@ function fetchPage() {
 function share(ev: MouseEvent) {
 	if (!page.value) return;
 
-	const menuItems: MenuItem[] = [];
-
-	menuItems.push({
-		text: i18n.ts.shareWithNote,
-		icon: 'ti ti-pencil',
-		action: shareWithNote,
-	});
-
-	if (isSupportShare()) {
-		menuItems.push({
+	os.popupMenu([
+		{
+			text: i18n.ts.shareWithNote,
+			icon: 'ti ti-pencil',
+			action: shareWithNote,
+		},
+		...(isSupportShare() ? [{
 			text: i18n.ts.share,
 			icon: 'ti ti-share',
 			action: shareWithNavigator,
-		});
-	}
-
-	os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
+		}] : []),
+	], ev.currentTarget ?? ev.target);
 }
 
 function copyLink() {
@@ -261,59 +256,51 @@ function reportAbuse() {
 function showMenu(ev: MouseEvent) {
 	if (!page.value) return;
 
-	const menuItems: MenuItem[] = [];
-
-	if ($i && $i.id === page.value.userId) {
-		menuItems.push({
-			icon: 'ti ti-pencil',
-			text: i18n.ts.editThisPage,
-			action: () => router.push(`/pages/edit/${page.value.id}`),
-		});
-
-		if ($i.pinnedPageId === page.value.id) {
-			menuItems.push({
-				icon: 'ti ti-pinned-off',
-				text: i18n.ts.unpin,
-				action: () => pin(false),
-			});
-		} else {
-			menuItems.push({
-				icon: 'ti ti-pin',
-				text: i18n.ts.pin,
-				action: () => pin(true),
-			});
-		}
-	} else if ($i && $i.id !== page.value.userId) {
-		menuItems.push({
+	const menu: MenuItem[] = [
+		...($i && $i.id === page.value.userId ? [
+			{
 				icon: 'ti ti-code',
 				text: i18n.ts._pages.viewSource,
 				action: () => router.push(`/@${props.username}/pages/${props.pageName}/view-source`),
-		}, {
-			icon: 'ti ti-exclamation-circle',
-			text: i18n.ts.reportAbuse,
-			action: reportAbuse,
-		});
+			},
+			...($i.pinnedPageId === page.value.id ? [{
+				icon: 'ti ti-pinned-off',
+				text: i18n.ts.unpin,
+				action: () => pin(false),
+			}] : [{
+				icon: 'ti ti-pin',
+				text: i18n.ts.pin,
+				action: () => pin(true),
+			}]),
+		] : []),
+		...($i && $i.id !== page.value.userId ? [
+			{
+				icon: 'ti ti-exclamation-circle',
+				text: i18n.ts.reportAbuse,
+				action: reportAbuse,
+			},
+			...($i.isModerator || $i.isAdmin ? [
+				{
+					type: 'divider' as const,
+				},
+				{
+					icon: 'ti ti-trash',
+					text: i18n.ts.delete,
+					danger: true,
+					action: () => os.confirm({
+						type: 'warning',
+						text: i18n.ts.deleteConfirm,
+					}).then(({ canceled }) => {
+						if (canceled || !page.value) return;
 
-		if ($i.isModerator || $i.isAdmin) {
-			menuItems.push({
-				type: 'divider',
-			}, {
-				icon: 'ti ti-trash',
-				text: i18n.ts.delete,
-				danger: true,
-				action: () => os.confirm({
-					type: 'warning',
-					text: i18n.ts.deleteConfirm,
-				}).then(({ canceled }) => {
-					if (canceled || !page.value) return;
+						os.apiWithDialog('pages/delete', { pageId: page.value.id });
+					}),
+				},
+			] : []),
+		] : []),
+	];
 
-					os.apiWithDialog('pages/delete', { pageId: page.value.id });
-				}),
-			});
-		}
-	}
-
-	os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
+	os.popupMenu(menu, ev.currentTarget ?? ev.target);
 }
 
 watch(() => path.value, fetchPage, { immediate: true });
@@ -357,24 +344,24 @@ definePageMetadata(() => ({
 
 	&:hover,
 	&:focus-visible {
-		background-color: var(--MI_THEME-accentedBg);
-		color: var(--MI_THEME-accent);
+		background-color: var(--accentedBg);
+		color: var(--accent);
 		text-decoration: none;
 		outline: none;
 	}
 }
 
 .pageMain {
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	padding: 2rem;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	box-sizing: border-box;
 }
 
 .pageBanner {
 	width: calc(100% + 4rem);
 	margin: -2rem -2rem 1.5rem;
-	border-radius: var(--MI-radius) var(--MI-radius) 0 0;
+	border-radius: var(--radius) var(--radius) 0 0;
 	overflow: hidden;
 	position: relative;
 
@@ -399,7 +386,7 @@ definePageMetadata(() => ({
 		}
 
 		.pageBannerBgFallback2 {
-			background-color: var(--MI_THEME-accentedBg);
+			background-color: var(--accentedBg);
 		}
 
 		&::after {
@@ -409,7 +396,7 @@ definePageMetadata(() => ({
 			bottom: 0;
 			width: 100%;
 			height: 100px;
-			background: linear-gradient(0deg, var(--MI_THEME-panel), transparent);
+			background: linear-gradient(0deg, var(--panel), transparent);
 		}
 	}
 
@@ -433,7 +420,7 @@ definePageMetadata(() => ({
 		h1 {
 			font-size: 2rem;
 			font-weight: 700;
-			color: var(--MI_THEME-fg);
+			color: var(--fg);
 			margin: 0;
 		}
 
@@ -459,7 +446,7 @@ definePageMetadata(() => ({
 			flex-shrink: 0;
 			display: flex;
 			align-items: center;
-			gap: var(--MI-marginHalf);
+			gap: var(--marginHalf);
 			margin-left: auto;
 		}
 	}
@@ -473,14 +460,14 @@ definePageMetadata(() => ({
 	display: flex;
 	align-items: center;
 
-	border-top: 1px solid var(--MI_THEME-divider);
+	border-top: 1px solid var(--divider);
 	padding-top: 1.5rem;
 	margin-bottom: 1.5rem;
 
 	> .other {
 		margin-left: auto;
 		display: flex;
-		gap: var(--MI-marginHalf);
+		gap: var(--marginHalf);
 	}
 }
 
@@ -488,7 +475,7 @@ definePageMetadata(() => ({
 	display: flex;
 	align-items: center;
 
-	border-top: 1px solid var(--MI_THEME-divider);
+	border-top: 1px solid var(--divider);
 	padding-top: 1.5rem;
 	margin-bottom: 1.5rem;
 
@@ -527,14 +514,14 @@ definePageMetadata(() => ({
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	gap: var(--MI-marginHalf);
+	gap: var(--marginHalf);
 }
 
 .relatedPagesRoot {
-	padding: var(--MI-margin);
+	padding: var(--margin);
 }
 
 .relatedPagesItem > article {
-	background-color: var(--MI_THEME-panelHighlight) !important;
+	background-color: var(--panelHighlight) !important;
 }
 </style>

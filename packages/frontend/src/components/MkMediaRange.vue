@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <!-- Media系専用のinput range -->
 <template>
-<div :style="sliderBgWhite ? '--sliderBg: rgba(255,255,255,.25);' : '--sliderBg: var(--MI_THEME-scrollbarHandle);'">
+<div :style="sliderBgWhite ? '--sliderBg: rgba(255,255,255,.25);' : '--sliderBg: var(--scrollbarHandle);'">
 	<div :class="$style.controlsSeekbar">
 		<progress v-if="buffer !== undefined" :class="$style.buffer" :value="isNaN(buffer) ? 0 : buffer" min="0" max="1">{{ Math.round(buffer * 100) }}% buffered</progress>
 		<input v-model="model" :class="$style.seek" :style="`--value: ${modelValue * 100}%;`" type="range" min="0" max="1" step="any" @change="emit('dragEnded', modelValue)"/>
@@ -46,7 +46,7 @@ const modelValue = computed({
 	background: transparent;
 	border: 0;
 	border-radius: 26px;
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 	display: block;
 	height: 19px;
 	margin: 0;

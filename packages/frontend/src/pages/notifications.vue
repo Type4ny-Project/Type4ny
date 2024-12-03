@@ -30,7 +30,7 @@ import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { notificationTypes } from '@@/js/const.js';
+import { notificationTypes } from '@/const.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const tab = ref('all');
@@ -100,7 +100,7 @@ onMounted(() => {
 
 <style module lang="scss">
 .notifications {
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	overflow: clip;
 }
 </style>

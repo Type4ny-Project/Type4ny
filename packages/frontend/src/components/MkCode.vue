@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div :class="$style.codeBlockRoot">
-	<button v-if="copyButton" :class="$style.codeBlockCopyButton" class="_button" @click="copy">
+	<button :class="$style.codeBlockCopyButton" class="_button" @click="copy">
 		<i class="ti ti-copy"></i>
 	</button>
 	<Suspense>
@@ -31,17 +31,12 @@ import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
 	code: string;
-	forceShow?: boolean;
-	copyButton?: boolean;
 	lang?: string;
-}>(), {
-	copyButton: true,
-	forceShow: false,
-});
+}>();
 
-const show = ref(props.forceShow === true ? true : !defaultStore.state.dataSaver.code);
+const show = ref(!defaultStore.state.dataSaver.code);
 
 const XCode = defineAsyncComponent(() => import('@/components/MkCode.core.vue'));
 
@@ -70,7 +65,7 @@ function copy() {
 .codeBlockFallbackRoot {
 	display: block;
 	overflow-wrap: anywhere;
-	background: var(--MI_THEME-bg);
+	background: var(--bg);
 	padding: 1em;
 	margin: .5em 0;
 	overflow: auto;
@@ -93,8 +88,8 @@ function copy() {
 	border-radius: 8px;
 	padding: 24px;
 	margin-top: 4px;
-	color: var(--MI_THEME-fg);
-	background: var(--MI_THEME-bg);
+	color: var(--fg);
+	background: var(--bg);
 }
 
 .codePlaceholderContainer {

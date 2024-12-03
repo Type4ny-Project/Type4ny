@@ -55,33 +55,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<div class="label">Online</div>
 				</div>
 			</div>
-			<div v-if="meta?.isManaged" class="item _panel users">
-				<div class="icon"><i class="ti ti-users"></i></div>
-				<div class="body">
-					<div class="value">
-						<MkNumber :value="meta?.nowLocalUsers" style="margin-right: 0.5em;"/>
-					</div>
-					<div class="label">Now Local Users</div>
-				</div>
-			</div>
-			<div v-if="meta?.isManaged" class="item _panel users">
-				<div class="icon"><i class="ti ti-users"></i></div>
-				<div class="body">
-					<div class="value">
-						<MkNumber :value="meta?.maxLocalUsers" style="margin-right: 0.5em;"/>
-					</div>
-					<div class="label">Max Local Users</div>
-				</div>
-			</div>
-			<div v-if="meta?.isManaged" class="item _panel users">
-				<div class="icon"><i class="ti ti-users"></i></div>
-				<div class="body">
-					<div class="value">
-						<MkNumber :value="meta?.maxLocalUsers - meta?.nowLocalUsers" style="margin-right: 0.5em;"/>
-					</div>
-					<div class="label">登録できるユーザー数</div>
-				</div>
-			</div>
 		</div>
 	</Transition>
 </div>
@@ -98,21 +71,19 @@ import { customEmojis } from '@/custom-emojis.js';
 import { defaultStore } from '@/store.js';
 
 const stats = ref<Misskey.entities.StatsResponse | null>(null);
-const meta = ref<Misskey.entities.AdminMetaResponse | null>(null);
 const usersComparedToThePrevDay = ref<number>();
 const notesComparedToThePrevDay = ref<number>();
 const onlineUsersCount = ref(0);
 const fetching = ref(true);
 
 onMounted(async () => {
-	const [_stats, _meta, _onlineUsersCount] = await Promise.all([
+	const [_stats, _onlineUsersCount] = await Promise.all([
 		misskeyApi('stats', {}),
-		misskeyApi('admin/meta', {}),
 		misskeyApiGet('get-online-users-count').then(res => res.count),
 	]);
 	stats.value = _stats;
 	onlineUsersCount.value = _onlineUsersCount;
-	meta.value = _meta;
+
 	misskeyApiGet('charts/users', { limit: 2, span: 'day' }).then(chart => {
 		usersComparedToThePrevDay.value = stats.value.originalUsersCount - chart.local.total[1];
 	});
@@ -143,9 +114,9 @@ onMounted(async () => {
 				height: 100%;
 				aspect-ratio: 1;
 				margin-right: 12px;
-				background: var(--MI_THEME-accentedBg);
-				color: var(--MI_THEME-accent);
-				border-radius: var(--MI-radius);
+				background: var(--accentedBg);
+				color: var(--accent);
+				border-radius: var(--radius);
 			}
 
 			&.users {

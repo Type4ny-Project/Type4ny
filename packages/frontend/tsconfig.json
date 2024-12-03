@@ -23,8 +23,7 @@
 		"useDefineForClassFields": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@@/*": ["../frontend-shared/*"]
+			"@/*": ["./src/*"]
 		},
 		"typeRoots": [
 			"./@types",
@@ -45,11 +44,8 @@
 	},
 	"compileOnSave": false,
 	"include": [
-		"./src/**/*.ts",
-		"./src/**/*.vue",
-		"./test/**/*.ts",
-		"./test/**/*.vue",
-		"./@types/**/*.ts"
+		"./**/*.ts",
+		"./**/*.vue"
 	],
 	"exclude": [
 		".storybook/**/*"

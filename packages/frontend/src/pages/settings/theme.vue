@@ -105,8 +105,18 @@ import { uniqueBy } from '@/scripts/array';
 import { fetchThemes, getThemes } from '@/theme-store.js';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { miLocalStorage } from '@/local-storage';
-import { reloadAsk } from '@/scripts/reload-ask.js';
+import { unisonReload } from '@/scripts/unison-reload.js';
 import * as os from '@/os.js';
+
+async function reloadAsk() {
+	const { canceled } = await os.confirm({
+		type: 'info',
+		text: i18n.ts.reloadToApplySetting,
+	});
+	if (canceled) return;
+
+	unisonReload();
+}
 
 const installedThemes = ref(getThemes());
 const builtinThemes = getBuiltinThemesRef();
@@ -167,13 +177,13 @@ watch(syncDeviceDarkMode, () => {
 	}
 });
 
-watch(wallpaper, async () => {
+watch(wallpaper, () => {
 	if (wallpaper.value == null) {
 		miLocalStorage.removeItem('wallpaper');
 	} else {
 		miLocalStorage.setItem('wallpaper', wallpaper.value);
 	}
-	await reloadAsk({ reason: i18n.ts.reloadToApplySetting, unison: true });
+	reloadAsk();
 });
 
 onActivated(() => {
@@ -204,7 +214,7 @@ definePageMetadata(() => ({
 
 <style lang="scss" scoped>
 .rfqxtzch {
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 
 	> .toggle {
 		position: relative;
@@ -233,7 +243,7 @@ definePageMetadata(() => ({
 		}
 
 		.dn:focus-visible ~ .toggle {
-			outline: 2px solid var(--MI_THEME-focus);
+			outline: 2px solid var(--focus);
 			outline-offset: 2px;
 		}
 
@@ -256,12 +266,12 @@ definePageMetadata(() => ({
 
 			> .before {
 				left: -70px;
-				color: var(--MI_THEME-accent);
+				color: var(--accent);
 			}
 
 			> .after {
 				right: -68px;
-				color: var(--MI_THEME-fg);
+				color: var(--fg);
 			}
 		}
 
@@ -379,11 +389,11 @@ definePageMetadata(() => ({
 				background-color: #749DD6;
 
 				> .before {
-					color: var(--MI_THEME-fg);
+					color: var(--fg);
 				}
 
 				> .after {
-					color: var(--MI_THEME-accent);
+					color: var(--accent);
 				}
 
 				.toggle__handler {
@@ -436,14 +446,14 @@ definePageMetadata(() => ({
 
 	> .sync {
 		padding: 14px 16px;
-		border-top: solid 0.5px var(--MI_THEME-divider);
+		border-top: solid 0.5px var(--divider);
 	}
 }
 
 .rsljpzjq {
 	> .selects {
 		display: flex;
-		gap: 1.5em var(--MI-margin);
+		gap: 1.5em var(--margin);
 		flex-wrap: wrap;
 
 		> .select {

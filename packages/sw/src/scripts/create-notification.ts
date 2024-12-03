@@ -41,10 +41,11 @@ export async function createNotification<K extends keyof PushNotificationDataMap
 
 async function composeNotification(data: PushNotificationDataMap[keyof PushNotificationDataMap]): Promise<[string, NotificationOptions] | null> {
 	const i18n = await (swLang.i18n ?? swLang.fetchLocale());
+	const { t } = i18n;
 	switch (data.type) {
 		/*
 		case 'driveFileCreated': // TODO (Server Side)
-			return [i18n.ts._notification.fileUploaded, {
+			return [t('_notification.fileUploaded'), {
 				body: body.name,
 				icon: body.url,
 				data
@@ -57,52 +58,52 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 					const account = await getAccountFromId(data.userId);
 					if (!account) return null;
 					const userDetail = await cli.request('users/show', { userId: data.body.userId }, account.token);
-					return [i18n.ts._notification.youWereFollowed, {
+					return [t('_notification.youWereFollowed'), {
 						body: getUserName(data.body.user),
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('user-plus'),
 						data,
 						actions: userDetail.isFollowing ? [] : [
 							{
 								action: 'follow',
-								title: i18n.ts._notification._actions.followBack,
+								title: t('_notification._actions.followBack'),
 							},
 						],
 					}];
 				}
 
 				case 'mention':
-					return [i18n.tsx._notification.youGotMention({ name: getUserName(data.body.user) }), {
+					return [t('_notification.youGotMention', { name: getUserName(data.body.user) }), {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('at'),
 						data,
 						actions: [
 							{
 								action: 'reply',
-								title: i18n.ts._notification._actions.reply,
+								title: t('_notification._actions.reply'),
 							},
 						],
 					}];
 
 				case 'reply':
-					return [i18n.tsx._notification.youGotReply({ name: getUserName(data.body.user) }), {
+					return [t('_notification.youGotReply', { name: getUserName(data.body.user) }), {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('arrow-back-up'),
 						data,
 						actions: [
 							{
 								action: 'reply',
-								title: i18n.ts._notification._actions.reply,
+								title: t('_notification._actions.reply'),
 							},
 						],
 					}];
 
 				case 'renote':
-					return [i18n.tsx._notification.youRenoted({ name: getUserName(data.body.user) }), {
+					return [t('_notification.youRenoted', { name: getUserName(data.body.user) }), {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('repeat'),
 						data,
 						actions: [
@@ -114,29 +115,29 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 					}];
 
 				case 'quote':
-					return [i18n.tsx._notification.youGotQuote({ name: getUserName(data.body.user) }), {
+					return [t('_notification.youGotQuote', { name: getUserName(data.body.user) }), {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('quote'),
 						data,
 						actions: [
 							{
 								action: 'reply',
-								title: i18n.ts._notification._actions.reply,
+								title: t('_notification._actions.reply'),
 							},
 							...((data.body.note.visibility === 'public' || data.body.note.visibility === 'home') ? [
 								{
 									action: 'renote',
-									title: i18n.ts._notification._actions.renote,
+									title: t('_notification._actions.renote'),
 								},
 							] : []),
 						],
 					}];
 
 				case 'note':
-					return [i18n.ts._notification.newNote + ': ' + getUserName(data.body.user), {
+					return [t('_notification.newNote') + ': ' + getUserName(data.body.user), {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						data,
 					}];
 
@@ -163,7 +164,7 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 					const tag = `reaction:${data.body.note.id}`;
 					return [`${reaction} ${getUserName(data.body.user)}`, {
 						body: data.body.note.text ?? '',
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						tag,
 						badge,
 						data,
@@ -177,66 +178,41 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 				}
 
 				case 'receiveFollowRequest':
-					return [i18n.ts._notification.youReceivedFollowRequest, {
+					return [t('_notification.youReceivedFollowRequest'), {
 						body: getUserName(data.body.user),
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('user-plus'),
 						data,
 						actions: [
 							{
 								action: 'accept',
-								title: i18n.ts.accept,
+								title: t('accept'),
 							},
 							{
 								action: 'reject',
-								title: i18n.ts.reject,
+								title: t('reject'),
 							},
 						],
 					}];
 
 				case 'followRequestAccepted':
-					return [i18n.ts._notification.yourFollowRequestAccepted, {
+					return [t('_notification.yourFollowRequestAccepted'), {
 						body: getUserName(data.body.user),
-						icon: data.body.user.avatarUrl ?? undefined,
+						icon: data.body.user.avatarUrl,
 						badge: iconUrl('circle-check'),
 						data,
 					}];
 
 				case 'achievementEarned':
-					return [i18n.ts._notification.achievementEarned, {
-						body: i18n.ts._achievements._types[`_${data.body.achievement}`].title,
+					return [t('_notification.achievementEarned'), {
+						body: t(`_achievements._types._${data.body.achievement}.title`),
 						badge: iconUrl('medal'),
 						data,
 						tag: `achievement:${data.body.achievement}`,
 					}];
 
-				case 'login':
-					return [i18n.ts._notification.login, {
-						badge: iconUrl('login-2'),
-						data,
-					}];
-
-				case 'exportCompleted': {
-					const entityName = {
-						antenna: i18n.ts.antennas,
-						blocking: i18n.ts.blockedUsers,
-						clip: i18n.ts.clips,
-						customEmoji: i18n.ts.customEmojis,
-						favorite: i18n.ts.favorites,
-						following: i18n.ts.following,
-						muting: i18n.ts.mutedUsers,
-						note: i18n.ts.notes,
-						userList: i18n.ts.lists,
-					} as const satisfies Record<typeof data.body.exportedEntity, string>;
-
-					return [i18n.tsx._notification.exportOfXCompleted({ x: entityName[data.body.exportedEntity] }), {
-						badge: iconUrl('circle-check'),
-						data,
-					}];
-				}
-
 				case 'pollEnded':
-					return [i18n.ts._notification.pollEnded, {
+					return [t('_notification.pollEnded'), {
 						body: data.body.note.text ?? '',
 						badge: iconUrl('chart-arrows'),
 						data,
@@ -250,8 +226,8 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 					}];
 
 				case 'test':
-					return [i18n.ts._notification.testNotification, {
-						body: i18n.ts._notification.notificationWillBeDisplayedLikeThis,
+					return [t('_notification.testNotification'), {
+						body: t('_notification.notificationWillBeDisplayedLikeThis'),
 						badge: iconUrl('bell'),
 						data,
 					}];
@@ -260,9 +236,9 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 					return null;
 			}
 		case 'unreadAntennaNote':
-			return [i18n.tsx._notification.unreadAntennaNote({ name: data.body.antenna.name }), {
+			return [t('_notification.unreadAntennaNote', { name: data.body.antenna.name }), {
 				body: `${getUserName(data.body.note.user)}: ${data.body.note.text ?? ''}`,
-				icon: data.body.note.user.avatarUrl ?? undefined,
+				icon: data.body.note.user.avatarUrl,
 				badge: iconUrl('antenna'),
 				tag: `antenna:${data.body.antenna.id}`,
 				data,
@@ -276,6 +252,7 @@ async function composeNotification(data: PushNotificationDataMap[keyof PushNotif
 export async function createEmptyNotification(): Promise<void> {
 	return new Promise<void>(async res => {
 		const i18n = await (swLang.i18n ?? swLang.fetchLocale());
+		const { t } = i18n;
 
 		await globalThis.registration.showNotification(
 			(new URL(origin)).host,
@@ -287,11 +264,11 @@ export async function createEmptyNotification(): Promise<void> {
 				actions: [
 					{
 						action: 'markAllAsRead',
-						title: i18n.ts.markAllAsRead,
+						title: t('markAllAsRead'),
 					},
 					{
 						action: 'settings',
-						title: i18n.ts.notificationSettings,
+						title: t('notificationSettings'),
 					},
 				],
 				data: {},

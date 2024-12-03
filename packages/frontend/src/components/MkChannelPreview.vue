@@ -46,12 +46,11 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import * as Misskey from 'misskey-js';
 import { i18n } from '@/i18n.js';
 import { miLocalStorage } from '@/local-storage.js';
 
 const props = defineProps<{
-	channel: Misskey.entities.Channel;
+	channel: Record<string, any>;
 }>();
 
 const getLastReadedAt = (): number | null => {
@@ -100,7 +99,7 @@ const bannerStyle = computed(() => {
 			height: 100%;
 			border-radius: inherit;
 			pointer-events: none;
-			box-shadow: inset 0 0 0 2px var(--MI_THEME-focus);
+			box-shadow: inset 0 0 0 2px var(--focus);
 		}
 	}
 
@@ -117,7 +116,7 @@ const bannerStyle = computed(() => {
 			left: 0;
 			width: 100%;
 			height: 64px;
-			background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
+			background: linear-gradient(0deg, var(--panel), color(from var(--panel) srgb r g b / 0));
 		}
 
 		> .name {
@@ -138,7 +137,7 @@ const bannerStyle = computed(() => {
 			padding: 8px 12px;
 			font-size: 80%;
 			background: rgba(0, 0, 0, 0.7);
-			border-radius: var(--MI-radius);
+			border-radius: var(--radius);
 			color: #fff;
 		}
 
@@ -148,8 +147,8 @@ const bannerStyle = computed(() => {
 			bottom: 16px;
 			left: 16px;
 			background: rgba(0, 0, 0, 0.7);
-			color: var(--MI_THEME-warn);
-			border-radius: var(--MI-radius);
+			color: var(--warn);
+			border-radius: var(--radius);
 			font-weight: bold;
 			font-size: 1em;
 			padding: 4px 7px;
@@ -167,7 +166,7 @@ const bannerStyle = computed(() => {
 
 	> footer {
 		padding: 12px 16px;
-		border-top: solid 0.5px var(--MI_THEME-divider);
+		border-top: solid 0.5px var(--divider);
 
 		> span {
 			opacity: 0.7;
@@ -213,8 +212,8 @@ const bannerStyle = computed(() => {
 	top: 0;
 	right: 0;
 	transform: translate(25%, -25%);
-	background-color: var(--MI_THEME-accent);
-	border: solid var(--MI_THEME-bg) 4px;
+	background-color: var(--accent);
+	border: solid var(--bg) 4px;
 	border-radius: 100%;
 	width: 1.5rem;
 	height: 1.5rem;

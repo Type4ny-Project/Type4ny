@@ -36,9 +36,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { markRaw, onMounted, onUnmounted, ref, shallowRef } from 'vue';
-import * as Misskey from 'misskey-js';
 import XChart from './overview.queue.chart.vue';
-import type { ApQueueDomain } from '@/pages/admin/queue.vue';
 import number from '@/filters/number.js';
 import { useStream } from '@/stream.js';
 
@@ -54,10 +52,10 @@ const chartDelayed = shallowRef<InstanceType<typeof XChart>>();
 const chartWaiting = shallowRef<InstanceType<typeof XChart>>();
 
 const props = defineProps<{
-	domain: ApQueueDomain;
+	domain: string;
 }>();
 
-function onStats(stats: Misskey.entities.QueueStats) {
+const onStats = (stats) => {
 	activeSincePrevTick.value = stats[props.domain].activeSincePrevTick;
 	active.value = stats[props.domain].active;
 	delayed.value = stats[props.domain].delayed;
@@ -67,13 +65,13 @@ function onStats(stats: Misskey.entities.QueueStats) {
 	chartActive.value.pushData(stats[props.domain].active);
 	chartDelayed.value.pushData(stats[props.domain].delayed);
 	chartWaiting.value.pushData(stats[props.domain].waiting);
-}
+};
 
-function onStatsLog(statsLog: Misskey.entities.QueueStatsLog) {
-	const dataProcess: Misskey.entities.QueueStats[ApQueueDomain]['activeSincePrevTick'][] = [];
-	const dataActive: Misskey.entities.QueueStats[ApQueueDomain]['active'][] = [];
-	const dataDelayed: Misskey.entities.QueueStats[ApQueueDomain]['delayed'][] = [];
-	const dataWaiting: Misskey.entities.QueueStats[ApQueueDomain]['waiting'][] = [];
+const onStatsLog = (statsLog) => {
+	const dataProcess = [];
+	const dataActive = [];
+	const dataDelayed = [];
+	const dataWaiting = [];
 
 	for (const stats of [...statsLog].reverse()) {
 		dataProcess.push(stats[props.domain].activeSincePrevTick);
@@ -86,7 +84,7 @@ function onStatsLog(statsLog: Misskey.entities.QueueStatsLog) {
 	chartActive.value.setData(dataActive);
 	chartDelayed.value.setData(dataDelayed);
 	chartWaiting.value.setData(dataWaiting);
-}
+};
 
 onMounted(() => {
 	connection.on('stats', onStats);
@@ -119,8 +117,8 @@ onUnmounted(() => {
 			> .chart {
 				min-width: 0;
 				padding: 16px;
-				background: var(--MI_THEME-panel);
-				border-radius: var(--MI-radius);
+				background: var(--panel);
+				border-radius: var(--radius);
 
 				> .title {
 					font-size: 0.85em;

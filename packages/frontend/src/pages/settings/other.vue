@@ -52,11 +52,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.experimentalFeatures }}</template>
 
 				<div class="_gaps_m">
-					<MkSwitch v-model="enableCondensedLine">
-						<template #label>Enable condensed line</template>
-					</MkSwitch>
-					<MkSwitch v-model="skipNoteRender">
-						<template #label>Enable note render skipping</template>
+					<MkSwitch v-model="enableCondensedLineForAcct">
+						<template #label>Enable condensed line for acct</template>
 					</MkSwitch>
 				</div>
 			</MkFolder>
@@ -102,20 +99,15 @@ import { defaultStore } from '@/store.js';
 import { signout, signinRequired } from '@/account.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { reloadAsk } from '@/scripts/reload-ask.js';
+import { unisonReload } from '@/scripts/unison-reload.js';
 import FormSection from '@/components/form/section.vue';
 
 const $i = signinRequired();
 
 const reportError = computed(defaultStore.makeGetterSetter('reportError'));
-const enableCondensedLine = computed(defaultStore.makeGetterSetter('enableCondensedLine'));
-const skipNoteRender = computed(defaultStore.makeGetterSetter('skipNoteRender'));
+const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
 const defaultWithReplies = computed(defaultStore.makeGetterSetter('defaultWithReplies'));
-
-watch(skipNoteRender, async () => {
-	await reloadAsk({ reason: i18n.ts.reloadToApplySetting, unison: true });
-});
 
 async function deleteAccount() {
 	{
@@ -141,6 +133,16 @@ async function deleteAccount() {
 	await signout();
 }
 
+async function reloadAsk() {
+	const { canceled } = await os.confirm({
+		type: 'info',
+		text: i18n.ts.reloadToApplySetting,
+	});
+	if (canceled) return;
+
+	unisonReload();
+}
+
 async function updateRepliesAll(withReplies: boolean) {
 	const { canceled } = await os.confirm({
 		type: 'warning',
@@ -150,6 +152,12 @@ async function updateRepliesAll(withReplies: boolean) {
 
 	misskeyApi('following/update-all', { withReplies });
 }
+
+watch([
+	enableCondensedLineForAcct,
+], async () => {
+	await reloadAsk();
+});
 
 const headerActions = computed(() => []);
 

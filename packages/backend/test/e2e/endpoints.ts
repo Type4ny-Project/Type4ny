@@ -66,9 +66,9 @@ describe('Endpoints', () => {
 		});
 	});
 
-	describe('signin-flow', () => {
+	describe('signin', () => {
 		test('間違ったパスワードでサインインできない', async () => {
-			const res = await api('signin-flow', {
+			const res = await api('signin', {
 				username: 'test1',
 				password: 'bar',
 			});
@@ -77,7 +77,7 @@ describe('Endpoints', () => {
 		});
 
 		test('クエリをインジェクションできない', async () => {
-			const res = await api('signin-flow', {
+			const res = await api('signin', {
 				username: 'test1',
 				// @ts-expect-error password must be string
 				password: {
@@ -89,7 +89,7 @@ describe('Endpoints', () => {
 		});
 
 		test('正しい情報でサインインできる', async () => {
-			const res = await api('signin-flow', {
+			const res = await api('signin', {
 				username: 'test1',
 				password: 'test1',
 			});

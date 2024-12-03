@@ -149,9 +149,9 @@ import MkButton from '@/components/MkButton.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import { deepClone } from '@/scripts/clone.js';
-import { useInterval } from '@@/js/use-interval.js';
+import { useInterval } from '@/scripts/use-interval.js';
 import { signinRequired } from '@/account.js';
-import { url } from '@@/js/config.js';
+import { url } from '@/config.js';
 import { i18n } from '@/i18n.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { userPage } from '@/filters/user.js';
@@ -504,7 +504,7 @@ $gap: 4px;
 .boardInner {
 	padding: 32px;
 
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	box-shadow: 0 0 2px 1px #ce8a5c, inset 0 0 1px 1px #693410;
 	border-radius: 8px;
 }
@@ -574,34 +574,34 @@ $gap: 4px;
 	transition: border 0.25s ease, opacity 0.25s ease;
 
 	&.boardCell_empty {
-		border: solid 2px var(--MI_THEME-divider);
+		border: solid 2px var(--divider);
 	}
 
 	&.boardCell_empty.boardCell_can {
-		border-color: var(--MI_THEME-accent);
+		border-color: var(--accent);
 		opacity: 0.5;
 	}
 
 	&.boardCell_empty.boardCell_myTurn {
-		border-color: var(--MI_THEME-divider);
+		border-color: var(--divider);
 		opacity: 1;
 
 		&.boardCell_can {
-			border-color: var(--MI_THEME-accent);
+			border-color: var(--accent);
 			cursor: pointer;
 
 			&:hover {
-				background: var(--MI_THEME-accent);
+				background: var(--accent);
 			}
 		}
 	}
 
 	&.boardCell_prev {
-		box-shadow: 0 0 0 4px var(--MI_THEME-accent);
+		box-shadow: 0 0 0 4px var(--accent);
 	}
 
 	&.boardCell_isEnded {
-		border-color: var(--MI_THEME-divider);
+		border-color: var(--divider);
 	}
 
 	&.boardCell_none {

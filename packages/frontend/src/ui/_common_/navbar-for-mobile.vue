@@ -22,14 +22,23 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</MkA>
 		<template v-for="item in menu">
 			<div v-if="item === '-'" :class="$style.divider"></div>
-			<component :is="navbarItemDef[item].to ? 'MkA' : 'button'" v-else-if="navbarItemDef[item] && (navbarItemDef[item].show !== false)" class="_button"
-								 :class="[$style.item, { [$style.active]: gaming === '' && navbarItemDef[item].active, [$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"
-								 :activeClass="$style.active" :to="navbarItemDef[item].to" v-on="navbarItemDef[item].action ? { click: navbarItemDef[item].action } : {}">
-				<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span :class="$style.itemText">{{ navbarItemDef[item].title }}</span>
-				<span v-if="navbarItemDef[item].indicated" :class="$style.itemIndicator" class="_blink">
-					<span v-if="navbarItemDef[item].indicateValue" class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ navbarItemDef[item].indicateValue }}</span>
-					<i v-else class="_indicatorCircle"></i>
-				</span>
+			<component
+				:is="navbarItemDef[item].to ? 'MkA' : 'button'"
+				v-else-if="navbarItemDef[item] && (navbarItemDef[item].show !== false)" class="_button"
+				:class="[$style.item, { [$style.active]: gaming === '' && navbarItemDef[item].active, [$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"
+				:activeClass="$style.active" :to="navbarItemDef[item].to"
+				v-on="navbarItemDef[item].action ? { click: navbarItemDef[item].action } : {}"
+			>
+				<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span
+					:class="$style.itemText"
+				>{{ navbarItemDef[item].title }}</span>
+				<span
+					v-if="navbarItemDef[item].indicated"
+					:class="[$style.itemIndicator,{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light'}]"
+				>
+					<span v-if="navbarItemDef[item].indicateValue && indicatorCounterToggle" class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ navbarItemDef[item].indicateValue }}</span><i
+						v-else class="_indicatorCircle"
+					></i></span>
 			</component>
 		</template>
 		<div :class="$style.divider"></div>
@@ -44,9 +53,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</MkA>
 		<button
 			:class="[$style.item, { [$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"
-			class="_button" @click="more">
-			<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{ i18n.ts.more }}</span>
-			<span v-if="otherMenuItemIndicated" :class="$style.itemIndicator" class="_blink"><i class="_indicatorCircle"></i></span>
+			class="_button" @click="more"
+		>
+			<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{
+				i18n.ts.more
+			}}</span>
+			<span
+				v-if="otherMenuItemIndicated"
+				:class="[$style.itemIndicator,{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light'}]"
+			><i
+				class="_indicatorCircle"
+			></i></span>
 		</button>
 		<MkA
 			:class="[$style.item, { [$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"
@@ -180,7 +197,7 @@ function more() {
 
 <style lang="scss" module>
 .root {
-  --nav-bg-transparent: color(from var(--MI_THEME-navBg) srgb r g b / 0.5);display: flex;
+  --nav-bg-transparent: color-mix(in srgb, var(--navBg), transparent 50%);display: flex;
   flex-direction: column;
 }
 
@@ -190,8 +207,8 @@ function more() {
   z-index: 1;
   padding: 20px 0;
   background: var(--nav-bg-transparent);
-  -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-  backdrop-filter: var(--MI-blur, blur(8px));
+  -webkit-backdrop-filter: var(--blur, blur(8px));
+  backdrop-filter: var(--blur, blur(8px));
 }
 
 .banner {
@@ -224,8 +241,8 @@ function more() {
   bottom: 0;
   padding: 20px 0;
   background: var(--nav-bg-transparent);
-  -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-  backdrop-filter: var(--MI-blur, blur(8px));
+  -webkit-backdrop-filter: var(--blur, blur(8px));
+  backdrop-filter: var(--blur, blur(8px));
 }
 
 .post {
@@ -233,7 +250,7 @@ function more() {
   display: block;
   width: 100%;
   height: 40px;
-  color: var(--MI_THEME-fgOnAccent);
+  color: var(--fgOnAccent);
   font-weight: bold;
   text-align: left;
 
@@ -249,12 +266,12 @@ function more() {
     right: 0;
     bottom: 0;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
+    background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
   }
 
   &:hover, &.active {
     &::before {
-      background: var(--MI_THEME-accentLighten);
+      background: var(--accentLighten);
     }
   }
 
@@ -356,7 +373,7 @@ function more() {
 
 .divider {
   margin: 16px 16px;
-  border-top: solid 0.5px var(--MI_THEME-divider);
+  border-top: solid 0.5px var(--divider);
 }
 
 .item {
@@ -370,15 +387,15 @@ function more() {
   width: 100%;
   text-align: left;
   box-sizing: border-box;
-  color: var(--MI_THEME-navFg);
+  color: var(--navFg);
 
   &:hover {
     text-decoration: none;
-    color: var(--MI_THEME-navHoverFg);
+    color: var(--navHoverFg);
   }
 
   &.active {
-    color: var(--MI_THEME-navActive);
+    color: var(--navActive);
   }
 
   &:hover, &.active {
@@ -394,7 +411,7 @@ function more() {
       right: 0;
       bottom: 0;
       border-radius: 999px;
-      background: var(--MI_THEME-accentedBg);
+      background: var(--accentedBg);
     }
   }
 
@@ -457,7 +474,7 @@ function more() {
   position: absolute;
   top: 0;
   left: 20px;
-  color: var(--MI_THEME-navIndicator);
+  color: var(--navIndicator);
   font-size: 8px;
   animation: blink 1s infinite;
   &.gamingDark {

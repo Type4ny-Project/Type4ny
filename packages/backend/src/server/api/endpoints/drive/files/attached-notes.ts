@@ -10,7 +10,6 @@ import { QueryService } from '@/core/QueryService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { ApiError } from '../../../error.js';
-import { RoleService } from '@/core/RoleService.js';
 
 export const meta = {
 	tags: ['drive', 'notes'],
@@ -62,13 +61,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private noteEntityService: NoteEntityService,
 		private queryService: QueryService,
-		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			// Fetch file
 			const file = await this.driveFilesRepository.findOneBy({
 				id: ps.fileId,
-				userId: await this.roleService.isModerator(me) ? undefined : me.id,
+				userId: me.id,
 			});
 
 			if (file == null) {

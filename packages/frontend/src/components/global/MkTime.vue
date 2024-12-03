@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import isChromatic from 'chromatic/isChromatic';
 import { onMounted, onUnmounted, ref, computed } from 'vue';
 import { i18n } from '@/i18n.js';
-import { dateTimeFormat } from '@@/js/intl-const.js';
+import { dateTimeFormat } from '@/scripts/intl-const.js';
 
 const props = withDefaults(defineProps<{
 	time: Date | string | number | null;
@@ -98,10 +98,10 @@ if (!invalid && props.origin === null && (props.mode === 'relative' || props.mod
 
 <style lang="scss" module>
 .old1 {
-	color: var(--MI_THEME-warn);
+	color: var(--warn);
 }
 
 .old1.old2 {
-	color: var(--MI_THEME-error);
+	color: var(--error);
 }
 </style>

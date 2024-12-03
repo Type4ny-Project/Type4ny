@@ -51,7 +51,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkButton @click="refreshMetadata"><i class="ti ti-refresh"></i> Refresh metadata</MkButton>
 						<MkTextarea v-model="moderationNote" manualSave>
 							<template #label>{{ i18n.ts.moderationNote }}</template>
-							<template #caption>{{ i18n.ts.moderationNoteDescription }}</template>
 						</MkTextarea>
 					</div>
 				</FormSection>
@@ -135,7 +134,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-import MkChart, { type ChartSrc } from '@/components/MkChart.vue';
+import MkChart from '@/components/MkChart.vue';
 import MkObjectView from '@/components/MkObjectView.vue';
 import FormLink from '@/components/form/link.vue';
 import MkLink from '@/components/MkLink.vue';
@@ -151,7 +150,7 @@ import { iAmModerator, iAmAdmin } from '@/account.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { i18n } from '@/i18n.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
-import MkPagination, { type Paging } from '@/components/MkPagination.vue';
+import MkPagination from '@/components/MkPagination.vue';
 import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
 import { getProxiedImageUrlNullable } from '@/scripts/media-proxy.js';
 import { dateString } from '@/filters/date.js';
@@ -163,7 +162,7 @@ const props = defineProps<{
 
 const tab = ref('overview');
 
-const chartSrc = ref<ChartSrc>('instance-requests');
+const chartSrc = ref('instance-requests');
 const meta = ref<Misskey.entities.AdminMetaResponse | null>(null);
 const instance = ref<Misskey.entities.FederationInstance | null>(null);
 const suspensionState = ref<'none' | 'manuallySuspended' | 'goneSuspended' | 'autoSuspendedForNotResponding'>('none');
@@ -174,7 +173,7 @@ const faviconUrl = ref<string | null>(null);
 const moderationNote = ref('');
 
 const usersPagination = {
-	endpoint: iAmModerator ? 'admin/show-users' : 'users',
+	endpoint: iAmModerator ? 'admin/show-users' : 'users' as const,
 	limit: 10,
 	params: {
 		sort: '+updatedAt',
@@ -182,14 +181,11 @@ const usersPagination = {
 		hostname: props.host,
 	},
 	offsetMode: true,
-} satisfies Paging;
+};
 
-if (iAmModerator) {
-	watch(moderationNote, async () => {
-		if (instance.value == null) return;
-		await misskeyApi('admin/federation/update-instance', { host: instance.value.host, moderationNote: moderationNote.value });
-	});
-}
+watch(moderationNote, async () => {
+	await misskeyApi('admin/federation/update-instance', { host: instance.value.host, moderationNote: moderationNote.value });
+});
 
 async function fetch(): Promise<void> {
 	if (iAmAdmin) {
@@ -207,7 +203,6 @@ async function fetch(): Promise<void> {
 }
 
 async function toggleBlock(): Promise<void> {
-	if (!iAmAdmin) return;
 	if (!meta.value) throw new Error('No meta?');
 	if (!instance.value) throw new Error('No instance?');
 	const { host } = instance.value;
@@ -217,7 +212,6 @@ async function toggleBlock(): Promise<void> {
 }
 
 async function toggleSilenced(): Promise<void> {
-	if (!iAmAdmin) return;
 	if (!meta.value) throw new Error('No meta?');
 	if (!instance.value) throw new Error('No instance?');
 	const { host } = instance.value;
@@ -228,7 +222,6 @@ async function toggleSilenced(): Promise<void> {
 }
 
 async function toggleMediaSilenced(): Promise<void> {
-	if (!iAmAdmin) return;
 	if (!meta.value) throw new Error('No meta?');
 	if (!instance.value) throw new Error('No instance?');
 	const { host } = instance.value;
@@ -239,7 +232,6 @@ async function toggleMediaSilenced(): Promise<void> {
 }
 
 async function stopDelivery(): Promise<void> {
-	if (!iAmModerator) return;
 	if (!instance.value) throw new Error('No instance?');
 	suspensionState.value = 'manuallySuspended';
 	await misskeyApi('admin/federation/update-instance', {
@@ -249,7 +241,6 @@ async function stopDelivery(): Promise<void> {
 }
 
 async function resumeDelivery(): Promise<void> {
-	if (!iAmModerator) return;
 	if (!instance.value) throw new Error('No instance?');
 	suspensionState.value = 'none';
 	await misskeyApi('admin/federation/update-instance', {
@@ -259,7 +250,6 @@ async function resumeDelivery(): Promise<void> {
 }
 
 function refreshMetadata(): void {
-	if (!iAmModerator) return;
 	if (!instance.value) throw new Error('No instance?');
 	misskeyApi('admin/federation/refresh-remote-instance-metadata', {
 		host: instance.value.host,

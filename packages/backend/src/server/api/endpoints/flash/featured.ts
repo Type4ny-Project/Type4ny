@@ -8,7 +8,6 @@ import type { FlashsRepository } from '@/models/_.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { FlashEntityService } from '@/core/entities/FlashEntityService.js';
 import { DI } from '@/di-symbols.js';
-import { FlashService } from '@/core/FlashService.js';
 
 export const meta = {
 	tags: ['flash'],
@@ -28,25 +27,26 @@ export const meta = {
 
 export const paramDef = {
 	type: 'object',
-	properties: {
-		offset: { type: 'integer', minimum: 0, default: 0 },
-		limit: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
-	},
+	properties: {},
 	required: [],
 } as const;
 
 @Injectable()
 export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
 	constructor(
-		private flashService: FlashService,
+		@Inject(DI.flashsRepository)
+		private flashsRepository: FlashsRepository,
+
 		private flashEntityService: FlashEntityService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const result = await this.flashService.featured({
-				offset: ps.offset,
-				limit: ps.limit,
-			});
-			return await this.flashEntityService.packMany(result, me);
+			const query = this.flashsRepository.createQueryBuilder('flash')
+				.andWhere('flash.likedCount > 0')
+				.orderBy('flash.likedCount', 'DESC');
+
+			const flashs = await query.limit(10).getMany();
+
+			return await this.flashEntityService.packMany(flashs, me);
 		});
 	}
 }

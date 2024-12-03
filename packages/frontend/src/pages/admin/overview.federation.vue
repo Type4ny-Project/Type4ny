@@ -151,9 +151,9 @@ onMounted(async () => {
 					height: 100%;
 					aspect-ratio: 1;
 					margin-right: 12px;
-					background: var(--MI_THEME-accentedBg);
-					color: var(--MI_THEME-accent);
-					border-radius: var(--MI-radius);
+					background: var(--accentedBg);
+					color: var(--accent);
+					border-radius: var(--radius);
 				}
 
 				&.sub {

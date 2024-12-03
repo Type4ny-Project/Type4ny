@@ -37,15 +37,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			>
 				<KeepAlive>
 					<div v-show="opened">
-						<MkSpacer v-if="withSpacer" :marginMin="14" :marginMax="22">
+						<MkSpacer :marginMin="14" :marginMax="22">
 							<slot></slot>
 						</MkSpacer>
-						<div v-else>
-							<slot></slot>
-						</div>
-						<div v-if="$slots.footer" :class="$style.footer">
-							<slot name="footer"></slot>
-						</div>
 					</div>
 				</KeepAlive>
 			</Transition>
@@ -55,49 +49,51 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, shallowRef } from 'vue';
+import { nextTick, onMounted, shallowRef, ref } from 'vue';
 import { defaultStore } from '@/store.js';
-import { getBgColor } from '@/scripts/get-bg-color.js';
 
 const props = withDefaults(defineProps<{
 	defaultOpen?: boolean;
 	maxHeight?: number | null;
-	withSpacer?: boolean;
 }>(), {
 	defaultOpen: false,
 	maxHeight: null,
-	withSpacer: true,
 });
+
+const getBgColor = (el: HTMLElement) => {
+	const style = window.getComputedStyle(el);
+	if (style.backgroundColor && !['rgba(0, 0, 0, 0)', 'rgba(0,0,0,0)', 'transparent'].includes(style.backgroundColor)) {
+		return style.backgroundColor;
+	} else {
+		return el.parentElement ? getBgColor(el.parentElement) : 'transparent';
+	}
+};
 
 const rootEl = shallowRef<HTMLElement>();
 const bgSame = ref(false);
 const opened = ref(props.defaultOpen);
 const openedAtLeastOnce = ref(props.defaultOpen);
 
-function enter(el: Element) {
-	if (!(el instanceof HTMLElement)) return;
+function enter(el) {
 	const elementHeight = el.getBoundingClientRect().height;
-	el.style.height = '0';
+	el.style.height = 0;
 	el.offsetHeight; // reflow
-	el.style.height = `${Math.min(elementHeight, props.maxHeight ?? Infinity)}px`;
+	el.style.height = Math.min(elementHeight, props.maxHeight ?? Infinity) + 'px';
 }
 
-function afterEnter(el: Element) {
-	if (!(el instanceof HTMLElement)) return;
-	el.style.height = '';
+function afterEnter(el) {
+	el.style.height = null;
 }
 
-function leave(el: Element) {
-	if (!(el instanceof HTMLElement)) return;
+function leave(el) {
 	const elementHeight = el.getBoundingClientRect().height;
-	el.style.height = `${elementHeight}px`;
+	el.style.height = elementHeight + 'px';
 	el.offsetHeight; // reflow
-	el.style.height = '0';
+	el.style.height = 0;
 }
 
-function afterLeave(el: Element) {
-	if (!(el instanceof HTMLElement)) return;
-	el.style.height = '';
+function afterLeave(el) {
+	el.style.height = null;
 }
 
 function toggle() {
@@ -112,8 +108,8 @@ function toggle() {
 
 onMounted(() => {
 	const computedStyle = getComputedStyle(document.documentElement);
-	const parentBg = getBgColor(rootEl.value?.parentElement) ?? 'transparent';
-	const myBg = computedStyle.getPropertyValue('--MI_THEME-panel');
+	const parentBg = getBgColor(rootEl.value!.parentElement!);
+	const myBg = computedStyle.getPropertyValue('--panel');
 	bgSame.value = parentBg === myBg;
 });
 </script>
@@ -139,15 +135,15 @@ onMounted(() => {
 	width: 100%;
 	box-sizing: border-box;
 	padding: 9px 12px 9px 12px;
-	background: var(--MI_THEME-folderHeaderBg);
-	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
-	backdrop-filter: var(--MI-blur, blur(15px));
-	border-radius: var(--MI-radius);
+	background: var(--buttonBg);
+	-webkit-backdrop-filter: var(--blur, blur(15px));
+	backdrop-filter: var(--blur, blur(15px));
+	border-radius: var(--radius);
 	transition: border-radius 0.3s;
 
 	&:hover {
 		text-decoration: none;
-		background: var(--MI_THEME-folderHeaderHoverBg);
+		background: var(--buttonHoverBg);
 	}
 
 	&:focus-within {
@@ -155,8 +151,8 @@ onMounted(() => {
 	}
 
 	&.active {
-		color: var(--MI_THEME-accent);
-		background: var(--MI_THEME-folderHeaderHoverBg);
+		color: var(--accent);
+		background: var(--buttonHoverBg);
 	}
 
 	&.opened {
@@ -170,7 +166,7 @@ onMounted(() => {
 }
 
 .headerLower {
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 	font-size: .85em;
 	padding-left: 4px;
 }
@@ -204,13 +200,13 @@ onMounted(() => {
 }
 
 .headerTextSub {
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 	font-size: .85em;
 }
 
 .headerRight {
 	margin-left: auto;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 	white-space: nowrap;
 }
 
@@ -219,26 +215,12 @@ onMounted(() => {
 }
 
 .body {
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	border-radius: 0 0 6px 6px;
 	container-type: inline-size;
 
 	&.bgSame {
-		background: var(--MI_THEME-bg);
+		background: var(--bg);
 	}
-}
-
-.footer {
-	position: sticky !important;
-	z-index: 1;
-	bottom: var(--MI-stickyBottom, 0px);
-	left: 0;
-	padding: 12px;
-	background: var(--MI_THEME-acrylicBg);
-	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
-	backdrop-filter: var(--MI-blur, blur(15px));
-	background-size: auto auto;
-	background-image: repeating-linear-gradient(135deg, transparent, transparent 5px, var(--MI_THEME-panel) 5px, var(--MI_THEME-panel) 10px);
-	border-radius: 0 0 6px 6px;
 }
 </style>

@@ -2,7 +2,6 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"noEmitOnError": false,
-		"noImplicitAny": false,
 		"noImplicitReturns": true,
 		"noUnusedParameters": false,
 		"noUnusedLocals": true,
@@ -21,8 +20,7 @@
 		"isolatedModules": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@@/*": ["../frontend-shared/*"]
+			"@/*": ["./src/*"]
 		},
 		"typeRoots": [
 			"./node_modules/@types",

@@ -50,5 +50,4 @@ export type BadgeNames =
 	| 'quote'
 	| 'repeat'
 	| 'user-plus'
-	| 'users'
-	| 'login-2';
+	| 'users';

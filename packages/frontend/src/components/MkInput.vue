@@ -43,16 +43,16 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, nextTick, ref, shallowRef, watch, computed, toRefs, InputHTMLAttributes } from 'vue';
+import { onMounted, onUnmounted, nextTick, ref, shallowRef, watch, computed, toRefs } from 'vue';
 import { debounce } from 'throttle-debounce';
-import { useInterval } from '@@/js/use-interval.js';
 import MkButton from '@/components/MkButton.vue';
+import { useInterval } from '@/scripts/use-interval.js';
 import { i18n } from '@/i18n.js';
 import { Autocomplete, SuggestionType } from '@/scripts/autocomplete.js';
 
 const props = defineProps<{
 	modelValue: string | number | null;
-	type?: InputHTMLAttributes['type'];
+	type?: 'text' | 'number' | 'password' | 'email' | 'url' | 'date' | 'time' | 'search' | 'datetime-local';
 	required?: boolean;
 	readonly?: boolean;
 	disabled?: boolean;
@@ -63,8 +63,8 @@ const props = defineProps<{
 	mfmAutocomplete?: boolean | SuggestionType[],
 	autocapitalize?: string;
 	spellcheck?: boolean;
-	inputmode?: InputHTMLAttributes['inputmode'];
-	step?: InputHTMLAttributes['step'];
+	inputmode?: 'none' | 'text' | 'search' | 'email' | 'url' | 'numeric' | 'tel' | 'decimal';
+	step?: any;
 	datalist?: string[];
 	min?: number;
 	max?: number;
@@ -198,7 +198,7 @@ defineExpose({
 .caption {
 	font-size: 0.85em;
 	padding: 8px 0 0 0;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 
 	&:empty {
 		display: none;
@@ -215,8 +215,8 @@ defineExpose({
 
 	&.focused {
 		> .inputCore {
-			border-color: var(--MI_THEME-accent) !important;
-			//box-shadow: 0 0 0 4px var(--MI_THEME-focus);
+			border-color: var(--accent) !important;
+			//box-shadow: 0 0 0 4px var(--focus);
 		}
 	}
 
@@ -241,17 +241,17 @@ defineExpose({
 	font: inherit;
 	font-weight: normal;
 	font-size: 1em;
-	color: var(--MI_THEME-fg);
-	background: var(--MI_THEME-panel);
-	border: solid 1px var(--MI_THEME-panel);
-	border-radius: var(--MI-radius);
+	color: var(--fg);
+	background: var(--panel);
+	border: solid 1px var(--panel);
+	border-radius: var(--radius);
 	outline: none;
 	box-shadow: none;
 	box-sizing: border-box;
 	transition: border-color 0.1s ease-out;
 
 	&:hover {
-		border-color: var(--MI_THEME-inputBorderHover) !important;
+		border-color: var(--inputBorderHover) !important;
 	}
 }
 

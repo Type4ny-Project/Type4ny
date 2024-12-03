@@ -54,7 +54,7 @@ import MkContainer from '@/components/MkContainer.vue';
 import * as os from '@/os.js';
 import { navbarItemDef } from '@/navbar.js';
 import { defaultStore } from '@/store.js';
-import { reloadAsk } from '@/scripts/reload-ask.js';
+import { unisonReload } from '@/scripts/unison-reload.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
@@ -66,6 +66,16 @@ const items = ref(defaultStore.state.menu.map(x => ({
 })));
 
 const menuDisplay = computed(defaultStore.makeGetterSetter('menuDisplay'));
+
+async function reloadAsk() {
+	const { canceled } = await os.confirm({
+		type: 'info',
+		text: i18n.ts.reloadToApplySetting,
+	});
+	if (canceled) return;
+
+	unisonReload();
+}
 
 async function addItem() {
 	const menu = Object.keys(navbarItemDef).filter(k => !defaultStore.state.menu.includes(k));
@@ -90,7 +100,7 @@ function removeItem(index: number) {
 
 async function save() {
 	defaultStore.set('menu', items.value.map(x => x.type));
-	await reloadAsk({ reason: i18n.ts.reloadToApplySetting, unison: true });
+	await reloadAsk();
 }
 
 function reset() {
@@ -99,6 +109,10 @@ function reset() {
 		type: x,
 	}));
 }
+
+watch(menuDisplay, async () => {
+	await reloadAsk();
+});
 
 const headerActions = computed(() => []);
 
@@ -118,7 +132,7 @@ definePageMetadata(() => ({
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-	color: var(--MI_THEME-navFg);
+	color: var(--navFg);
 }
 
 .itemIcon {

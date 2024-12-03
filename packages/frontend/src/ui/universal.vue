@@ -30,16 +30,32 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</button>
 
 	<div v-if="isMobile" ref="navFooter" :class="$style.nav">
-		<button :class="$style.navButton" class="_button" @click="drawerMenuShowing = true"><i :class="$style.navButtonIcon" class="ti ti-menu-2"></i><span v-if="menuIndicated" :class="$style.navButtonIndicator" class="_blink"><i class="_indicatorCircle"></i></span></button>
-		<button :class="$style.navButton" class="_button" @click="isRoot ? top() : mainRouter.push('/')"><i :class="$style.navButtonIcon" class="ti ti-home"></i></button>
+		<button :class="$style.navButton" class="_button" @click="drawerMenuShowing = true">
+			<i
+				:class="$style.navButtonIcon" class="ti ti-menu-2"
+			></i><span
+				v-if="menuIndicated"
+				:class="[$style.navButtonIndicator,{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light'}]"
+			><i
+				class="_indicatorCircle"
+			></i></span>
+		</button>
+		<button
+			:class="$style.navButton" class="_button"
+			@click="isRoot ? top() : mainRouter.push('/')"
+		>
+			<i
+				:class="$style.navButtonIcon" class="ti ti-home"
+			></i>
+		</button>
 		<button :class="$style.navButton" class="_button" @click="mainRouter.push('/my/notifications')">
-			<i :class="$style.navButtonIcon" class="ti ti-bell"></i>
-			<span
+			<i
+				:class="$style.navButtonIcon" class="ti ti-bell"
+			></i><span
 				v-if="$i?.hasUnreadNotification"
 				:class="[$style.navButtonIndicator,{[$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light'}]"
-				class="_blink"
 			>
-				<span class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ $i.unreadNotificationsCount > 99 ? '99+' : $i.unreadNotificationsCount }}</span>
+				<span class="_indicateCounter" :class="$style.itemIndicateValueIcon">{{ $i.unreadNotificationsCount > 99 && indicatorCounterToggle ? '99+' : $i.unreadNotificationsCount }}</span>
 			</span>
 		</button>
 		<button :class="$style.navButton" class="_button" @click="widgetsShowing = true">
@@ -122,21 +138,20 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { defineAsyncComponent, provide, onMounted, computed, ref, watch, shallowRef, Ref } from 'vue';
-import { instanceName } from '@@/js/config.js';
-import { CURRENT_STICKY_BOTTOM } from '@@/js/const.js';
-import { isLink } from '@@/js/is-link.js';
 import XCommon from './_common_/common.vue';
 import type MkStickyContainer from '@/components/global/MkStickyContainer.vue';
+import { instanceName } from '@/config';
 import XDrawerMenu from '@/ui/_common_/navbar-for-mobile.vue';
-import * as os from '@/os.js';
-import { defaultStore } from '@/store.js';
-import { navbarItemDef } from '@/navbar.js';
-import { i18n } from '@/i18n.js';
-import { $i } from '@/account.js';
+import * as os from '@/os';
+import { defaultStore } from '@/store';
+import { navbarItemDef } from '@/navbar';
+import { i18n } from '@/i18n';
+import { $i } from '@/account';
 import { mainRouter } from '@/router/main.js';
 import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata';
 import { deviceKind } from '@/scripts/device-kind';
 import { miLocalStorage } from '@/local-storage';
+import { CURRENT_STICKY_BOTTOM } from '@/const';
 import { useScrollPositionManager } from '@/nirax';
 
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
@@ -254,6 +269,12 @@ onMounted(() => {
 });
 
 const onContextmenu = (ev) => {
+	const isLink = (el: HTMLElement) => {
+		if (el.tagName === 'A') return true;
+		if (el.parentElement) {
+			return isLink(el.parentElement);
+		}
+	};
 	if (isLink(ev.target)) return;
 	if (['INPUT', 'TEXTAREA', 'IMG', 'VIDEO', 'CANVAS'].includes(ev.target.tagName) || ev.target.attributes['contenteditable']) return;
 	if (window.getSelection()?.toString() !== '') return;
@@ -283,12 +304,12 @@ provide<Ref<number>>(CURRENT_STICKY_BOTTOM, navFooterHeight);
 watch(navFooter, () => {
 	if (navFooter.value) {
 		navFooterHeight.value = navFooter.value.offsetHeight;
-		document.body.style.setProperty('--MI-stickyBottom', `${navFooterHeight.value}px`);
-		document.body.style.setProperty('--MI-minBottomSpacing', 'var(--MI-minBottomSpacingMobile)');
+		document.body.style.setProperty('--stickyBottom', `${navFooterHeight.value}px`);
+		document.body.style.setProperty('--minBottomSpacing', 'var(--minBottomSpacingMobile)');
 	} else {
 		navFooterHeight.value = 0;
-		document.body.style.setProperty('--MI-stickyBottom', '0px');
-		document.body.style.setProperty('--MI-minBottomSpacing', '0px');
+		document.body.style.setProperty('--stickyBottom', '0px');
+		document.body.style.setProperty('--minBottomSpacing', '0px');
 	}
 }, {
 	immediate: true,
@@ -380,7 +401,7 @@ $widgets-hide-threshold: 1090px;
 }
 
 .sidebar {
-  border-right: solid 0.5px var(--MI_THEME-divider);
+  border-right: solid 0.5px var(--divider);
 }
 
 .contents {
@@ -390,7 +411,7 @@ $widgets-hide-threshold: 1090px;
   overflow: auto;
   overflow-y: scroll;
   overscroll-behavior: contain;
-  background: var(--MI_THEME-bg);
+  background: var(--bg);
 }
 
 .widgets {
@@ -398,9 +419,9 @@ $widgets-hide-threshold: 1090px;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
-  padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px));
-  border-left: solid 0.5px var(--MI_THEME-divider);
-  background: var(--MI_THEME-bg);
+  padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px));
+  border-left: solid 0.5px var(--divider);
+  background: var(--bg);
 
   @media (max-width: $widgets-hide-threshold) {
     display: none;
@@ -418,7 +439,7 @@ $widgets-hide-threshold: 1090px;
   border-radius: 100%;
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
   font-size: 22px;
-  background: var(--MI_THEME-panel);
+  background: var(--panel);
 }
 
 .widgetsDrawerBg {
@@ -432,11 +453,11 @@ $widgets-hide-threshold: 1090px;
   z-index: 1001;
   width: 310px;
   height: 100dvh;
-  padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px)) !important;
+  padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px)) !important;
   box-sizing: border-box;
   overflow: auto;
   overscroll-behavior: contain;
-  background: var(--MI_THEME-bg);
+  background: var(--bg);
 }
 
 .widgetsCloseButton {
@@ -462,10 +483,10 @@ $widgets-hide-threshold: 1090px;
   grid-gap: 8px;
   width: 100%;
   box-sizing: border-box;
-  -webkit-backdrop-filter: var(--MI-blur, blur(24px));
-  backdrop-filter: var(--MI-blur, blur(24px));
-  background-color: var(--MI_THEME-header);
-  border-top: solid 0.5px var(--MI_THEME-divider);
+  -webkit-backdrop-filter: var(--blur, blur(24px));
+  backdrop-filter: var(--blur, blur(24px));
+  background-color: var(--header);
+  border-top: solid 0.5px var(--divider);
 }
 
 .navButton {
@@ -476,21 +497,21 @@ $widgets-hide-threshold: 1090px;
   max-width: 60px;
   margin: auto;
   border-radius: 100%;
-  background: var(--MI_THEME-panel);
-  color: var(--MI_THEME-fg);
+  background: var(--panel);
+  color: var(--fg);
 
   &:hover {
-    background: var(--MI_THEME-panelHighlight);
+    background: var(--panelHighlight);
   }
 
   &:active {
-    background: hsl(from var(--MI_THEME-panel) h s calc(l - 2%));
+    background: hsl(from var(--panel) h s calc(l - 2));
   }
 }
 
 .postButton_gamingDark {
   composes: navButton;
-  color: var(--MI_THEME-fgOnAccent);
+  color: var(--fgOnAccent);
   background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
   background-size: 1800% 1800%;
   -webkit-animation: AnimationDark 44s cubic-bezier(0, 0.25, 0.25, 1) infinite;
@@ -516,7 +537,7 @@ $widgets-hide-threshold: 1090px;
 
 .postButton_gamingLight {
   composes: navButton;
-  color: var(--MI_THEME-fgOnAccent);
+  color: var(--fgOnAccent);
   background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
   background-size: 1800% 1800% !important;
   -webkit-animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
@@ -541,15 +562,15 @@ $widgets-hide-threshold: 1090px;
 
 .postButton {
   composes: navButton;
-  background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
-  color: var(--MI_THEME-fgOnAccent);
+  background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
+  color: var(--fgOnAccent);
 
   &:hover {
-    background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+    background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
   }
 
   &:active {
-    background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
+    background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
   }
 }
 
@@ -562,8 +583,9 @@ $widgets-hide-threshold: 1090px;
 	position: absolute;
 	top: 0;
 	left: 0;
-	color: var(--MI_THEME-indicator);
+	color: var(--indicator);
 	font-size: 16px;
+	animation: global-blink 1s infinite;
 
 	&:has(.itemIndicateValueIcon) {
 		animation: none;
@@ -593,7 +615,7 @@ $widgets-hide-threshold: 1090px;
   contain: strict;
   overflow: auto;
   overscroll-behavior: contain;
-  background: var(--MI_THEME-navBg);
+  background: var(--navBg);
 }
 
 .statusbars {
@@ -603,7 +625,7 @@ $widgets-hide-threshold: 1090px;
 }
 
 .spacer {
-  height: calc(var(--MI-minBottomSpacing));
+  height: calc(var(--minBottomSpacing));
 }
 @-webkit-keyframes AnimationLight {
   0% {

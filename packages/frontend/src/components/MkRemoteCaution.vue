@@ -18,14 +18,14 @@ defineProps<{
 .root {
 	font-size: 0.8em;
 	padding: 16px;
-	background: var(--MI_THEME-infoWarnBg);
-	color: var(--MI_THEME-infoWarnFg);
-	border-radius: var(--MI-radius);
+	background: var(--infoWarnBg);
+	color: var(--infoWarnFg);
+	border-radius: var(--radius);
 	overflow: clip;
 }
 
 .link {
 	margin-left: 4px;
-	color: var(--MI_THEME-accent);
+	color: var(--accent);
 }
 </style>

@@ -14,22 +14,15 @@ import { getUrlWithLoginId } from '@/scripts/login-id.js';
 
 export const cli = new Misskey.api.APIClient({ origin, fetch: (...args): Promise<Response> => fetch(...args) });
 
-export async function api<
-	E extends keyof Misskey.Endpoints,
-	P extends Misskey.Endpoints[E]['req']
->(endpoint: E, userId?: string, params?: P): Promise<Misskey.api.SwitchCaseResponseType<E, P> | undefined> {
-	let account: Pick<Misskey.entities.SignupResponse, 'id' | 'token'> | undefined;
+export async function api<E extends keyof Misskey.Endpoints, O extends Misskey.Endpoints[E]['req']>(endpoint: E, userId?: string, options?: O): Promise<void | ReturnType<typeof cli.request<E, O>>> {
+	let account: { token: string; id: string } | void = undefined;
 
 	if (userId) {
 		account = await getAccountFromId(userId);
 		if (!account) return;
 	}
 
-	return (cli.request as <E extends keyof Misskey.Endpoints, P extends Misskey.Endpoints[E]['req']>(
-		endpoint: E,
-		params: P,
-		credential?: string | null,
-	) => Promise<Misskey.api.SwitchCaseResponseType<E, P>>)(endpoint, params, account?.token);
+	return cli.request(endpoint, options, account?.token);
 }
 
 // mark-all-as-read送出を1秒間隔に制限する
@@ -40,7 +33,7 @@ export function sendMarkAllAsRead(userId: string): Promise<null | undefined | vo
 	return new Promise(resolve => {
 		setTimeout(() => {
 			readBlockingStatus.set(userId, false);
-			(api('notifications/mark-all-as-read', userId) as Promise<void>).then(resolve, resolve);
+			api('notifications/mark-all-as-read', userId).then(resolve, resolve);
 		}, 1000);
 	});
 }

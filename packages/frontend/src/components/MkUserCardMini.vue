@@ -22,7 +22,7 @@ import { acct } from '@/filters/user.js';
 
 const props = withDefaults(defineProps<{
 	user: Misskey.entities.User;
-	withChart?: boolean;
+	withChart: boolean;
 }>(), {
 	withChart: true,
 });
@@ -48,7 +48,7 @@ $bodyInfoHieght: 16px;
 	display: flex;
 	align-items: center;
 	padding: 16px;
-	background: var(--MI_THEME-panel);
+	background: var(--panel);
 	border-radius: 8px;
 }
 
@@ -63,7 +63,7 @@ $bodyInfoHieght: 16px;
 	flex: 1;
 	overflow: hidden;
 	font-size: 0.9em;
-	color: var(--MI_THEME-fg);
+	color: var(--fg);
 	padding-right: 8px;
 }
 

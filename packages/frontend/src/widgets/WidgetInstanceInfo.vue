@@ -23,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, ref, watch } from 'vue';
 import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
 import { GetFormResultType } from '@/scripts/form';
-import { host } from '@@/js/config';
+import { host } from '@/config';
 import { instance } from '@/instance';
 import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store';
 

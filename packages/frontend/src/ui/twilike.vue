@@ -12,7 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<XSidebar/>
 		</div>
 		<div v-else-if="!pageMetadata?.needWideArea && isDesktop" ref="widgetsLeft" :class="[$style.widgets,$style.left]">
-			<XWidgets place="left" :marginTop="'var(--MI-margin)'"/>
+			<XWidgets place="left" :marginTop="'var(--margin)'"/>
 		</div>
 
 		<main :class="[$style.main, {[$style.wide]: pageMetadata?.needWideArea} ]" @contextmenu.stop="onContextmenu">
@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</main>
 
 		<div v-if="isDesktop && !pageMetadata?.needWideArea" ref="widgetsRight" :class="$style.widgets">
-			<XWidgets :place="showMenuOnTop ? 'right' : null" :marginTop="showMenuOnTop ? '0' : 'var(--MI-margin)'"/>
+			<XWidgets :place="showMenuOnTop ? 'right' : null" :marginTop="showMenuOnTop ? '0' : 'var(--margin)'"/>
 		</div>
 	</div>
 
@@ -87,9 +87,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { defineAsyncComponent, onMounted, provide, ref, computed, shallowRef, watch } from 'vue';
-import { instanceName, ui } from '@@/js/config.js';
 import XSidebar from './twilike.sidebar.vue';
 import XCommon from './_common_/common.vue';
+import { instanceName, ui } from '@/config.js';
 import * as os from '@/os.js';
 import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
 import { defaultStore } from '@/store.js';
@@ -281,10 +281,10 @@ $widgets-hide-threshold: 1200px;
 		z-index: 1001;
 		height: 100dvh;
 		margin-top: var(--stickyTop);
-		padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px));
+		padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px));
 		box-sizing: border-box;
 		overflow: auto;
-		background: var(--MI_THEME-bg);
+		background: var(--bg);
 	}
 
 	> .ivnzpscs {
@@ -327,11 +327,11 @@ $widgets-hide-threshold: 1200px;
 		min-width: 0;
 		width: 750px;
 		margin: 0 16px 0 0;
-		border-left: solid 1px var(--MI_THEME-divider);
-		border-right: solid 1px var(--MI_THEME-divider);
+		border-left: solid 1px var(--divider);
+		border-right: solid 1px var(--divider);
 		border-radius: 0;
 		overflow: clip;
-		--MI-margin: 12px;
+		--margin: 12px;
 		max-width: 600px;
 	}
 
@@ -339,7 +339,7 @@ $widgets-hide-threshold: 1200px;
 		//--panelBorder: none;
 		width: 300px;
 		height: 100vh;
-		padding-bottom: calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px));
+		padding-bottom: calc(var(--margin) + env(safe-area-inset-bottom, 0px));
 		position: sticky;
 		overflow-y: auto;
 		top: 0;
@@ -365,8 +365,8 @@ $widgets-hide-threshold: 1200px;
 	&.withGlobalHeader {
 		> .main {
 			margin-top: 0;
-			border: solid 1px var(--MI_THEME-divider);
-			border-radius: var(--MI-radius);
+			border: solid 1px var(--divider);
+			border-radius: var(--radius);
 			--stickyTop: var(--globalHeaderHeight);
 		}
 
@@ -388,7 +388,7 @@ $widgets-hide-threshold: 1200px;
 		margin: 0;
 
 		> .sidebar {
-			border-right: solid 0.5px var(--MI_THEME-divider);
+			border-right: solid 0.5px var(--divider);
 		}
 
 		> .main {
@@ -410,10 +410,10 @@ $widgets-hide-threshold: 1200px;
 	grid-gap: 8px;
 	width: 100%;
 	box-sizing: border-box;
-	-webkit-backdrop-filter: var(--MI-blur, blur(24px));
-	backdrop-filter: var(--MI-blur, blur(24px));
-	background-color: var(--MI_THEME-bg);
-	border-top: solid 0.5px var(--MI_THEME-divider);
+	-webkit-backdrop-filter: var(--blur, blur(24px));
+	backdrop-filter: var(--blur, blur(24px));
+	background-color: var(--bg);
+	border-top: solid 0.5px var(--divider);
 	height: 52px;
 }
 
@@ -449,11 +449,11 @@ $widgets-hide-threshold: 1200px;
 	z-index: 1001;
 	width: 310px;
 	height: 100dvh;
-	padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px)) !important;
+	padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px)) !important;
 	box-sizing: border-box;
 	overflow: auto;
 	overscroll-behavior: contain;
-	background: var(--MI_THEME-bg);
+	background: var(--bg);
 }
 .widgetsCloseButton {
 	padding: 8px;

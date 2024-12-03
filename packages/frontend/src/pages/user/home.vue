@@ -23,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkUserName class="name" :user="user" :nowrap="true"/>
 							<div class="bottom">
 								<span class="username"><MkAcct :user="user" :detail="true"/></span>
-								<span v-if="user.isAdmin" :title="i18n.ts.isAdmin" style="color: var(--MI_THEME-badge);"><i
+								<span v-if="user.isAdmin" :title="i18n.ts.isAdmin" style="color: var(--badge);"><i
 									class="ti ti-shield"
 								></i></span>
 								<span v-if="user.isLocked" :title="i18n.ts.isLocked"><i class="ti ti-lock"></i></span>
@@ -48,18 +48,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkUserName :user="user" :nowrap="false" class="name"/>
 						<div class="bottom">
 							<span class="username"><MkAcct :user="user" :detail="true"/></span>
-							<span v-if="user.isAdmin" :title="i18n.ts.isAdmin" style="color: var(--MI_THEME-badge);"><i
+							<span v-if="user.isAdmin" :title="i18n.ts.isAdmin" style="color: var(--badge);"><i
 								class="ti ti-shield"
 							></i></span>
 							<span v-if="user.isLocked" :title="i18n.ts.isLocked"><i class="ti ti-lock"></i></span>
 							<span v-if="user.isBot" :title="i18n.ts.isBot"><i class="ti ti-robot"></i></span>
 						</div>
-					</div>
-					<div v-if="user.followedMessage != null" class="followedMessage">
-						<MkFukidashi class="fukidashi" :tail="narrow ? 'none' : 'left'" negativeMargin shadow>
-							<div class="messageHeader">{{ i18n.ts.messageToFollower }}</div>
-							<div><MkSparkle><Mfm :plain="true" :text="user.followedMessage" :author="user"/></MkSparkle></div>
-						</MkFukidashi>
 					</div>
 					<div v-if="user.roles.length > 0" class="roles">
 						<span
@@ -78,7 +72,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 							v-model="moderationNote" manualSave
 						>
 							<template #label>{{ i18n.ts.moderationNote }}</template>
-							<template #caption>{{ i18n.ts.moderationNoteDescription }}</template>
 						</MkTextarea>
 						<div v-else>
 							<MkButton small @click="editModerationNote = true">{{ i18n.ts.addModerationNote }}</MkButton>
@@ -188,16 +181,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { defineAsyncComponent, computed, onMounted, onUnmounted, nextTick, watch, ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import { getScrollPosition } from '@@/js/scroll.js';
 import MkNote from '@/components/MkNote.vue';
 import MkFollowButton from '@/components/MkFollowButton.vue';
 import MkAccountMoved from '@/components/MkAccountMoved.vue';
-import MkFukidashi from '@/components/MkFukidashi.vue';
 import MkRemoteCaution from '@/components/MkRemoteCaution.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkOmit from '@/components/MkOmit.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkButton from '@/components/MkButton.vue';
+import { getScrollPosition } from '@/scripts/scroll.js';
 import { getUserMenu } from '@/scripts/get-user-menu.js';
 import number from '@/filters/number.js';
 import { userPage } from '@/filters/user.js';
@@ -215,7 +207,6 @@ import MkRemoteInfoUpdate from '@/components/MkRemoteInfoUpdate.vue';
 import MkNotes from '@/components/MkNotes.vue';
 import MkLazy from '@/components/global/MkLazy.vue';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
-import MkSparkle from '@/components/MkSparkle.vue';
 import { instance } from '@/instance.js';
 
 function calcAge(birthdate: string): number {
@@ -304,7 +295,7 @@ function parallaxLoop() {
 }
 
 function parallax() {
-	const banner = bannerEl.value;
+	const banner = bannerEl.value as any;
 	if (banner == null) return;
 
 	const top = getScrollPosition(rootEl.value);
@@ -417,15 +408,15 @@ onUnmounted(() => {
             color: #fff;
             background: rgba(0, 0, 0, 0.7);
             font-size: 0.7em;
-            border-radius: var(--MI-radius);
+            border-radius: var(--radius);
           }
 
           > .actions {
             position: absolute;
             top: 12px;
             right: 12px;
-            -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-            backdrop-filter: var(--MI-blur, blur(8px));
+            -webkit-backdrop-filter: var(--blur, blur(8px));
+            backdrop-filter: var(--blur, blur(8px));
             background: rgba(0, 0, 0, 0.2);
             padding: 8px;
             border-radius: 24px;
@@ -479,8 +470,8 @@ onUnmounted(() => {
               > .add-note-button {
                 background: rgba(0, 0, 0, 0.2);
                 color: #fff;
-                -webkit-backdrop-filter: var(--MI-blur, blur(8px));
-                backdrop-filter: var(--MI-blur, blur(8px));
+                -webkit-backdrop-filter: var(--blur, blur(8px));
+                backdrop-filter: var(--blur, blur(8px));
                 border-radius: 24px;
                 padding: 4px 8px;
                 font-size: 80%;
@@ -494,7 +485,7 @@ onUnmounted(() => {
           text-align: center;
           padding: 50px 8px 16px 8px;
           font-weight: bold;
-          border-bottom: solid 0.5px var(--MI_THEME-divider);
+          border-bottom: solid 0.5px var(--divider);
 
           > .bottom {
             > * {
@@ -516,23 +507,7 @@ onUnmounted(() => {
           box-shadow: 1px 1px 3px rgba(#000, 0.2);
         }
 
-        > .followedMessage {
-					padding: 24px 24px 0 154px;
-
-					> .fukidashi {
-						display: block;
-						--fukidashi-bg: color-mix(in srgb, var(--MI_THEME-accent), var(--MI_THEME-panel) 85%);
-						--fukidashi-radius: 16px;
-						font-size: 0.9em;
-
-						.messageHeader {
-							opacity: 0.7;
-							font-size: 0.85em;
-						}
-					}
-				}
-
-				> .roles {
+        > .roles {
           padding: 24px 24px 0 154px;
           font-size: 0.95em;
           display: flex;
@@ -540,7 +515,7 @@ onUnmounted(() => {
           gap: 8px;
 
           > .role {
-            border: solid 1px var(--color, var(--MI_THEME-divider));
+            border: solid 1px var(--color, var(--divider));
             border-radius: 999px;
             margin-right: 4px;
             padding: 3px 8px;
@@ -554,15 +529,15 @@ onUnmounted(() => {
         > .memo {
           margin: 12px 24px 0 154px;
           background: transparent;
-          color: var(--MI_THEME-fg);
-          border: 1px solid var(--MI_THEME-divider);
+          color: var(--fg);
+          border: 1px solid var(--divider);
           border-radius: 8px;
           padding: 8px;
           line-height: 0;
 
           > .heading {
             text-align: left;
-            color: var(--MI_THEME-fgTransparent);
+            color: var(--fgTransparent);
             line-height: 1.5;
             font-size: 85%;
           }
@@ -577,7 +552,7 @@ onUnmounted(() => {
             height: auto;
             min-height: 0;
             line-height: 1.5;
-            color: var(--MI_THEME-fg);
+            color: var(--fg);
             overflow: hidden;
             background: transparent;
             font-family: inherit;
@@ -597,7 +572,7 @@ onUnmounted(() => {
         > .fields {
           padding: 24px;
           font-size: 0.9em;
-          border-top: solid 0.5px var(--MI_THEME-divider);
+          border-top: solid 0.5px var(--divider);
 
           > .field {
             display: flex;
@@ -634,14 +609,14 @@ onUnmounted(() => {
         > .status {
           display: flex;
           padding: 24px;
-          border-top: solid 0.5px var(--MI_THEME-divider);
+          border-top: solid 0.5px var(--divider);
 
           > a {
             flex: 1;
             text-align: center;
 
             &.active {
-              color: var(--MI_THEME-accent);
+              color: var(--accent);
             }
 
             &:hover {
@@ -663,7 +638,7 @@ onUnmounted(() => {
 
     > .contents {
       > .content {
-        margin-bottom: var(--MI-margin);
+        margin-bottom: var(--margin);
       }
     }
   }
@@ -680,7 +655,7 @@ onUnmounted(() => {
     > .sub {
       max-width: 350px;
       min-width: 350px;
-      margin-left: var(--MI-margin);
+      margin-left: var(--margin);
     }
   }
 }
@@ -714,11 +689,7 @@ onUnmounted(() => {
           margin: auto;
         }
 
-        > .followedMessage {
-					padding: 16px 16px 0 16px;
-				}
-
-				> .roles {
+        > .roles {
           padding: 16px 16px 0 16px;
           justify-content: center;
         }
@@ -757,13 +728,13 @@ onUnmounted(() => {
 
 <style lang="scss" module>
 .tl {
-  background: var(--MI_THEME-bg);
-  border-radius: var(--MI-radius);
+  background: var(--bg);
+  border-radius: var(--radius);
   overflow: clip;
 }
 
 .verifiedLink {
   margin-left: 4px;
-  color: var(--MI_THEME-success);
+  color: var(--success);
 }
 </style>

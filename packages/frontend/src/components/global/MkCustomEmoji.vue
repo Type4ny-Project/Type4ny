@@ -25,18 +25,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, inject, ref } from 'vue';
-import type { MenuItem } from '@/types/menu.js';
+import { computed, inject, ref } from 'vue';
 import { getProxiedImageUrl, getStaticImageUrl } from '@/scripts/media-proxy.js';
 import { defaultStore } from '@/store.js';
 import { customEmojisMap } from '@/custom-emojis.js';
 import * as os from '@/os.js';
-import { misskeyApi, misskeyApiGet } from '@/scripts/misskey-api.js';
+import { misskeyApiGet } from '@/scripts/misskey-api.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import * as sound from '@/scripts/sound.js';
 import { i18n } from '@/i18n.js';
 import MkCustomEmojiDetailedDialog from '@/components/MkCustomEmojiDetailedDialog.vue';
-import { $i } from '@/account.js';
 
 const props = defineProps<{
 	name: string;
@@ -95,9 +93,7 @@ const errored = ref(url.value == null);
 
 function onClick(ev: MouseEvent) {
 	if (props.menu) {
-		const menuItems: MenuItem[] = [];
-
-		menuItems.push({
+		os.popupMenu([{
 			type: 'label',
 			text: `:${props.name}:`,
 		}, {
@@ -107,30 +103,20 @@ function onClick(ev: MouseEvent) {
 				copyToClipboard(`:${props.name}:`);
 				os.success();
 			},
-		});
-
-		if (props.menuReaction && react) {
-			menuItems.push({
-				text: i18n.ts.doReaction,
-				icon: 'ti ti-plus',
-				action: () => {
-					react(`:${props.name}:`);
-					sound.playMisskeySfx('reaction');
-				},
-			});
-		}
-
-		if (!defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`].includes(`:${props.name}:`)){
-			menuItems.push({
-				text: i18n.ts.addToDefaultEmojiPicker,
-				icon: 'ti ti-plus',
-				action: () => {
-					defaultStore.set(`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`, [...defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`], `:${props.name}:`]);
-				},
-			})
-		}
-
-		menuItems.push({
+		}, ...(props.menuReaction && react ? [{
+			text: i18n.ts.doReaction,
+			icon: 'ti ti-plus',
+			action: () => {
+				react(`:${props.name}:`);
+				sound.playMisskeySfx('reaction');
+			},
+		}] : []), ...(!defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`].includes(`:${props.name}:`) ? [{
+			text: i18n.ts.addToDefaultEmojiPicker,
+			icon: 'ti ti-plus',
+			action: () => {
+				defaultStore.set(`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`, [...defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`], `:${props.name}:`]);
+			},
+		}] : []), {
 			text: i18n.ts.info,
 			icon: 'ti ti-info-circle',
 			action: async () => {
@@ -142,33 +128,9 @@ function onClick(ev: MouseEvent) {
 					closed: () => dispose(),
 				});
 			},
-		});
-
-		if ($i?.isModerator ?? $i?.isAdmin) {
-			menuItems.push({
-				text: i18n.ts.edit,
-				icon: 'ti ti-pencil',
-				action: async () => {
-					await edit(props.name);
-				},
-			});
-		}
-
-		os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
+		}], ev.currentTarget ?? ev.target);
 	}
 }
-
-async function edit(name: string) {
-	const emoji = await misskeyApi('emoji', {
-		name: name,
-	});
-	const { dispose } = os.popup(defineAsyncComponent(() => import('@/pages/emoji-edit-dialog.vue')), {
-		emoji: emoji,
-	}, {
-		closed: () => dispose(),
-	});
-}
-
 </script>
 
 <style lang="scss" module>

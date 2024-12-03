@@ -40,7 +40,6 @@ import MkContainer from '@/components/MkContainer.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
 import { i18n } from '@/i18n.js';
 import { availableBasicTimelines, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';
-import type { MenuItem } from '@/types/menu.js';
 
 const name = 'timeline';
 
@@ -110,26 +109,11 @@ const choose = async (ev) => {
 			setSrc('list');
 		},
 	}));
-
-	const menuItems: MenuItem[] = [];
-
-	menuItems.push(...availableBasicTimelines().map(tl => ({
+	os.popupMenu([...availableBasicTimelines().map(tl => ({
 		text: i18n.ts._timelines[tl],
 		icon: basicTimelineIconClass(tl),
 		action: () => { setSrc(tl); },
-	})));
-
-	if (antennaItems.length > 0) {
-		menuItems.push({ type: 'divider' });
-		menuItems.push(...antennaItems);
-	}
-
-	if (listItems.length > 0) {
-		menuItems.push({ type: 'divider' });
-		menuItems.push(...listItems);
-	}
-
-	os.popupMenu(menuItems, ev.currentTarget ?? ev.target).then(() => {
+	})), antennaItems.length > 0 ? { type: 'divider' } : undefined, ...antennaItems, listItems.length > 0 ? { type: 'divider' } : undefined, ...listItems], ev.currentTarget ?? ev.target).then(() => {
 		menuOpened.value = false;
 	});
 };

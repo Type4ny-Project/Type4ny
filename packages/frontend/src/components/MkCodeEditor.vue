@@ -139,7 +139,7 @@ watch(v, newValue => {
 .caption {
 	font-size: 0.85em;
 	padding: 8px 0 0 0;
-	color: var(--MI_THEME-fgTransparentWeak);
+	color: var(--fgTransparentWeak);
 
 	&:empty {
 		display: none;
@@ -157,20 +157,20 @@ watch(v, newValue => {
 	overflow-y: hidden;
 	box-sizing: border-box;
 	margin: 0;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	padding: 0;
-	color: var(--MI_THEME-fg);
-	border: solid 1px var(--MI_THEME-panel);
+	color: var(--fg);
+	border: solid 1px var(--panel);
 	transition: border-color 0.1s ease-out;
 	font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
 	&:hover {
-		border-color: var(--MI_THEME-inputBorderHover) !important;
+		border-color: var(--inputBorderHover) !important;
 	}
 }
 
 .focused.codeEditorRoot {
-	border-color: var(--MI_THEME-accent) !important;
-	border-radius: var(--MI-radius);
+	border-color: var(--accent) !important;
+	border-radius: var(--radius);
 }
 
 .codeEditorScroller {
@@ -195,10 +195,10 @@ watch(v, newValue => {
 	resize: none;
 	text-align: left;
 	color: transparent;
-	caret-color: var(--MI_THEME-fg);
+	caret-color: var(--fg);
 	background-color: transparent;
 	border: 0;
-	border-radius: var(--MI-radius);
+	border-radius: var(--radius);
 	box-sizing: border-box;
 	outline: 0;
 	min-width: calc(100% - 24px);
@@ -210,6 +210,6 @@ watch(v, newValue => {
 }
 
 .textarea::selection {
-	color: var(--MI_THEME-bg);
+	color: var(--bg);
 }
 </style>

@@ -28,35 +28,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 </div>
 </template>
 
-<script lang="ts">
-export type SuperMenuDef = {
-	title?: string;
-	items: ({
-		type: 'a';
-		href: string;
-		target?: string;
-		icon?: string;
-		text: string;
-		danger?: boolean;
-		active?: boolean;
-	} | {
-		type: 'button';
-		icon?: string;
-		text: string;
-		danger?: boolean;
-		active?: boolean;
-		action: (ev: MouseEvent) => void;
-	} | {
-		type: 'link';
-		to: string;
-		icon?: string;
-		text: string;
-		danger?: boolean;
-		active?: boolean;
-	})[];
-};
-</script>
-
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
 import { defaultStore } from '@/store.js';
@@ -64,7 +35,7 @@ import { defaultStore } from '@/store.js';
 const gamingType = defaultStore.state.gamingType;
 
 defineProps<{
-	def: SuperMenuDef[];
+	def: any[];
 	grid?: boolean;
 }>();
 </script>
@@ -75,7 +46,7 @@ defineProps<{
 		& + .group {
 			margin-top: 16px;
 			padding-top: 16px;
-			border-top: solid 0.5px var(--MI_THEME-divider);
+			border-top: solid 0.5px var(--divider);
 		}
 
 		> .title {
@@ -91,12 +62,12 @@ defineProps<{
 				width: 100%;
 				box-sizing: border-box;
 				padding: 9px 16px 9px 8px;
-				border-radius: var(--MI-radius);
+				border-radius: var(--radius);
 				font-size: 0.9em;
 
 				&:hover {
 					text-decoration: none;
-					background: var(--MI_THEME-panelHighlight);
+					background: var(--panelHighlight);
 				}
 
 				&:focus-visible {
@@ -104,8 +75,8 @@ defineProps<{
 				}
 
 				&.active {
-					color: var(--MI_THEME-accent);
-					background: var(--MI_THEME-accentedBg);
+					color: var(--accent);
+					background: var(--accentedBg);
           &.gamingDark{
             color: black !important;
             background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);            background-size: 1800% 1800%;
@@ -124,7 +95,7 @@ defineProps<{
 				}
 
 				&.danger {
-					color: var(--MI_THEME-error);
+					color: var(--error);
 				}
 
 				> .icon {
@@ -147,9 +118,6 @@ defineProps<{
 
 	&.grid {
 		> .group {
-			margin-left: 0;
-			margin-right: 0;
-
 			& + .group {
 				padding-top: 0;
 				border-top: none;
@@ -175,10 +143,10 @@ defineProps<{
 					&:hover {
 						text-decoration: none;
 						background: none;
-						color: var(--MI_THEME-accent);
+						color: var(--accent);
 
 						> .icon {
-							background: var(--MI_THEME-accentedBg);
+							background: var(--accentedBg);
 						}
 					}
 
@@ -191,7 +159,7 @@ defineProps<{
 						width: 60px;
 						height: 60px;
 						aspect-ratio: 1;
-						background: var(--MI_THEME-panel);
+						background: var(--panel);
 						border-radius: 100%;
 					}
 

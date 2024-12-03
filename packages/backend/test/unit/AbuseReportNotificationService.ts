@@ -5,7 +5,6 @@
 
 import { jest } from '@jest/globals';
 import { Test, TestingModule } from '@nestjs/testing';
-import { randomString } from '../utils.js';
 import { AbuseReportNotificationService } from '@/core/AbuseReportNotificationService.js';
 import {
 	AbuseReportNotificationRecipientRepository,
@@ -26,7 +25,7 @@ import { ModerationLogService } from '@/core/ModerationLogService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
 import { RecipientMethod } from '@/models/AbuseReportNotificationRecipient.js';
 import { SystemWebhookService } from '@/core/SystemWebhookService.js';
-import { UserEntityService } from '@/core/entities/UserEntityService.js';
+import { randomString } from '../utils.js';
 
 process.env.NODE_ENV = 'test';
 
@@ -110,9 +109,6 @@ describe('AbuseReportNotificationService', () => {
 					},
 					{
 						provide: SystemWebhookService, useFactory: () => ({ enqueueSystemWebhook: jest.fn() }),
-					},
-					{
-						provide: UserEntityService, useFactory: () => ({ pack: (v: any) => v }),
 					},
 					{
 						provide: EmailService, useFactory: () => ({ sendEmail: jest.fn() }),

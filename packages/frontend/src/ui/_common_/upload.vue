@@ -124,10 +124,10 @@ const zIndex = os.claimZIndex('high');
 	height: 8px;
 }
 .mk-uploader > ol > li > progress::-webkit-progress-value {
-  background: var(--MI_THEME-accent);
+  background: var(--accent);
 }
 .mk-uploader > ol > li > progress::-webkit-progress-bar {
-  //background: var(--MI_THEME-accentAlpha01);
+  //background: var(--accentAlpha01);
 	background: transparent;
 }
 </style>

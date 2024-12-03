@@ -17,7 +17,6 @@ import type { UtilityService } from '@/core/UtilityService.js';
 import { bindThis } from '@/decorators.js';
 import type {
 	FollowRequestsRepository,
-	MiMeta,
 	NoteReactionsRepository,
 	NotesRepository,
 	PollsRepository,
@@ -36,7 +35,6 @@ export class MockResolver extends Resolver {
 	constructor(loggerService: LoggerService) {
 		super(
 			{} as Config,
-			{} as MiMeta,
 			{} as UsersRepository,
 			{} as NotesRepository,
 			{} as PollsRepository,
@@ -44,6 +42,7 @@ export class MockResolver extends Resolver {
 			{} as FollowRequestsRepository,
 			{} as UtilityService,
 			{} as InstanceActorService,
+			{} as MetaService,
 			{} as ApRequestService,
 			{} as HttpRequestService,
 			{} as ApRendererService,
