@@ -43,8 +43,18 @@ const initialReactions = new Set(Object.keys(props.note.reactions));
 const reactions = ref<[string, number][]>([]);
 const hasMoreReactions = ref(false);
 
-if (props.note.myReaction && !Object.keys(reactions.value).includes(props.note.myReaction)) {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (props.note.myReaction && !Object.keys(reactions.value)?.includes(props.note.myReaction)) {
 	reactions.value[props.note.myReaction] = props.note.reactions[props.note.myReaction];
+}
+
+function shouldDisplayReaction([reaction]: [string, number]): boolean {
+	if (!$i) return true; // 非ログイン状態なら全部のリアクションを見れるように
+	if (reaction === props.note.myReaction) return true; // 自分がつけたリアクションなら表示する
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (!defaultStore.state.mutedReactions?.includes(reaction.replace('@.', ''))) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
+	if ($i.mutedInstances && !$i.mutedInstances.includes(reaction.split('@')[1])) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
+	return false;
 }
 
 function onMockToggleReaction(emoji: string, count: number) {
@@ -56,24 +66,6 @@ function onMockToggleReaction(emoji: string, count: number) {
 	emit('mockUpdateMyReaction', emoji, (count - reactions.value[i][1]));
 }
 
-if ($i && reactions.value) {
-	reactions.value = reactions.value.map(([reactionType, count]) => {
-		const isMuted = $i.mutedReactions.flat().some(mutedReaction => {
-			if (mutedReaction.startsWith('/') && mutedReaction.endsWith('/')) {
-				const regex = new RegExp(mutedReaction.slice(1, -1));
-				return regex.test(reactionType);
-			} else {
-				return reactionType.includes(mutedReaction);
-			}
-		});
-
-		if (reactionType === props.note.myReaction || !isMuted) {
-			return [reactionType, count];
-		} else {
-			return ['🚮', count];
-		}
-	});
-}
 watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumber]) => {
 	let newReactions: [string, number][] = [];
 	hasMoreReactions.value = Object.keys(newSource).length > maxNumber;
@@ -84,38 +76,24 @@ watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumbe
 			newReactions.push(reactions.value[i]);
 		}
 	}
+
 	const newReactionsNames = newReactions.map(([x]) => x);
 	newReactions = [
 		...newReactions,
 		...Object.entries(newSource)
 			.sort(([, a], [, b]) => b - a)
-			.filter(([y], i) => i < maxNumber && !newReactionsNames.includes(y)),
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			.filter(([y], i) => i < maxNumber && !newReactionsNames?.includes(y)),
 	];
 
 	newReactions = newReactions.slice(0, props.maxNumber);
 
-	if (props.note.myReaction && !newReactions.map(([x]) => x).includes(props.note.myReaction)) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (props.note. myReaction && !newReactions.map(([x]) => x)?.includes(props.note.myReaction)) {
 		newReactions.push([props.note.myReaction, newSource[props.note.myReaction]]);
 	}
-	if ($i) {
-		reactions.value = newReactions.map(([reactionType, count]) => {
-			const isMuted = $i.mutedReactions.flat().some(mutedReaction => {
-				if (mutedReaction.startsWith('/') && mutedReaction.endsWith('/')) {
-					const regex = new RegExp(mutedReaction.slice(1, -1));
-					return regex.test(reactionType);
-				} else {
-					return reactionType.includes(mutedReaction);
-				}
-			});
-			if (reactionType === props.note.myReaction || !isMuted) {
-				return [reactionType, count];
-			} else {
-				return ['🚮', count];
-			}
-		});
-	} else {
-		reactions.value = newReactions;
-	}
+
+	reactions.value = newReactions.filter(shouldDisplayReaction);
 }, { immediate: true, deep: true });
 </script>
 
@@ -139,6 +117,7 @@ watch([() => props.note.reactions, () => props.maxNumber], ([newSource, maxNumbe
 	flex-wrap: wrap;
 	align-items: center;
 	margin: 4px -2px 0 -2px;
+	max-width: 100%;
 
 	&:empty {
 		display: none;

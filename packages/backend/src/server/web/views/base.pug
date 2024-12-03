@@ -1,12 +1,13 @@
 block vars
 
 block loadClientEntry
-	- const clientEntry = config.clientEntry;
+	- const entry = config.frontendEntry;
+	- const baseUrl = config.url;
 
 doctype html
 //
 	-
-		_____               _ _
+		 _____               _ _
 		|_   _|  _ _ __  ___| | | _ _ _  _
 			| || || | \'_ \\/ -_)_  _| \' \\ || |
 			|_| \\_, | .__/\\___| |_||_||_\\_, |
@@ -32,7 +33,7 @@ html
 		link(rel='icon' href= icon || '/favicon.ico')
 		link(rel='apple-touch-icon' href= appleTouchIcon || '/apple-touch-icon.png')
 		link(rel='manifest' href='/manifest.json')
-		link(rel='search' type='application/opensearchdescription+xml' title=(title || "Type4ny") href=`${url}/opensearch.xml`)
+		link(rel='search' type='application/opensearchdescription+xml' title=(title || "Type4ny") href=`${baseUrl}/opensearch.xml`)
 		link(rel='prefetch' href=serverErrorImageUrl)
 		link(rel='prefetch' href=infoImageUrl)
 		link(rel='prefetch' href=notFoundImageUrl)
@@ -46,13 +47,13 @@ html
 				gtag('js', new Date());
 				gtag('config', '#{googleAnalyticsId}');
 
-		link(rel='modulepreload' href=`/vite/${clientEntry.file}`)
+		link(rel='modulepreload' href=`/vite/${entry.file}`)
 
-		if !config.clientManifestExists
+		if !config.frontendManifestExists
 			script(type="module" src="/vite/@vite/client")
 
-		if Array.isArray(clientEntry.css)
-			each href in clientEntry.css
+		if Array.isArray(entry.css)
+			each href in entry.css
 				link(rel='stylesheet' href=`/vite/${href}`)
 
 		title
@@ -78,10 +79,13 @@ html
 
 		script.
 			var VERSION = "#{version}";
-			var CLIENT_ENTRY = "#{clientEntry.file}";
+			var CLIENT_ENTRY = "#{entry.file}";
 
 		script(type='application/json' id='type4ny_meta' data-generated-at=now)
 			!= metaJson
+
+		script(type='application/json' id='misskey_clientCtx' data-generated-at=now)
+			!= clientCtx
 
 		script
 			include ../boot.js

@@ -4,7 +4,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div class="timctyfi" :class="{ disabled, easing }">
-	<div class="label"><slot name="label"></slot></div>
+	<div class="label">
+		<slot name="label"></slot>
+	</div>
 	<div v-adaptive-border class="body">
 		<div ref="containerEl" class="container">
 			<div class="track">
@@ -13,15 +15,18 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<div v-if="steps && showTicks" class="ticks">
 				<div v-for="i in (steps + 1)" class="tick" :style="{ left: (((i - 1) / steps) * 100) + '%' }"></div>
 			</div>
-			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mousedown="onMousedown" @touchstart="onMousedown"></div>
+			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mouseenter.passive="onMouseenter" @mousedown="onMousedown" @touchstart="onMousedown"></div>
 		</div>
 	</div>
-	<div class="caption"><slot name="caption"></slot></div>
+	<div class="caption">
+		<slot name="caption"></slot>
+	</div>
 </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch, shallowRef } from 'vue';
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
+import { isTouchUsing } from '@/scripts/touch.js';
 import * as os from '@/os.js';
 import { defaultStore } from '@/store.js';
 
@@ -102,12 +107,36 @@ const steps = computed(() => {
 	}
 });
 
+const tooltipForDragShowing = ref(false);
+const tooltipForHoverShowing = ref(false);
+
+function onMouseenter() {
+	if (isTouchUsing) return;
+
+	tooltipForHoverShowing.value = true;
+
+	const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkTooltip.vue')), {
+		showing: computed(() => tooltipForHoverShowing.value && !tooltipForDragShowing.value),
+		text: computed(() => {
+			return props.textConverter(finalValue.value);
+		}),
+		targetElement: thumbEl,
+	}, {
+		closed: () => dispose(),
+	});
+
+	thumbEl.value!.addEventListener('mouseleave', () => {
+		tooltipForHoverShowing.value = false;
+	}, { once: true, passive: true });
+}
+
 function onMousedown(ev: MouseEvent | TouchEvent) {
 	ev.preventDefault();
 
-	const tooltipShowing = ref(true);
+	tooltipForDragShowing.value = true;
+
 	const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkTooltip.vue')), {
-		showing: tooltipShowing,
+		showing: tooltipForDragShowing,
 		text: computed(() => {
 			return props.textConverter(finalValue.value);
 		}),
@@ -138,7 +167,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 
 	const onMouseup = () => {
 		document.head.removeChild(style);
-		tooltipShowing.value = false;
+		tooltipForDragShowing.value = false;
 		window.removeEventListener('mousemove', onDrag);
 		window.removeEventListener('touchmove', onDrag);
 		window.removeEventListener('mouseup', onMouseup);
@@ -177,7 +206,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 	> .caption {
 		font-size: 0.85em;
 		padding: 8px 0 0 0;
-		color: var(--fgTransparentWeak);
+		color: var(--MI_THEME-fgTransparentWeak);
 
 		&:empty {
 			display: none;
@@ -189,9 +218,9 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 
 	> .body {
 		padding: 7px 12px;
-		background: var(--panel);
-		border: solid 1px var(--panel);
-		border-radius: var(--radius);
+		background: var(--MI_THEME-panel);
+		border: solid 1px var(--MI_THEME-panel);
+		border-radius: var(--MI-radius);
 
 		> .container {
 			position: relative;
@@ -215,7 +244,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 					top: 0;
 					left: 0;
 					height: 100%;
-					background: var(--accent);
+					background: var(--MI_THEME-accent);
 					opacity: 0.5;
           &.gamingLight{
             background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
@@ -251,7 +280,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 					width: $tickWidth;
 					height: 3px;
 					margin-left: - math.div($tickWidth, 2);
-					background: var(--divider);
+					background: var(--MI_THEME-divider);
 					border-radius: 999px;
 				}
 			}
@@ -261,7 +290,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 				width: $thumbWidth;
 				height: $thumbHeight;
 				cursor: grab;
-				background: var(--accent);
+				background: var(--MI_THEME-accent);
 				border-radius: 999px;
         &.gamingDark{
           background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
@@ -278,7 +307,7 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
           animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
         }
 				&:hover {
-					background: var(--accentLighten);
+					background: var(--MI_THEME-accentLighten);
           &.gamingDark{
             background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
             background-size: 1800% 1800% !important;
@@ -303,12 +332,12 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 			> .container {
 				> .track {
 					> .highlight {
-						transition: width 0.2s cubic-bezier(0,0,0,1);
+						transition: width 0.2s cubic-bezier(0, 0, 0, 1);
 					}
 				}
 
 				> .thumb {
-					transition: left 0.2s cubic-bezier(0,0,0,1);
+					transition: left 0.2s cubic-bezier(0, 0, 0, 1);
 				}
 			}
 		}

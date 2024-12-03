@@ -20,8 +20,8 @@ defineProps<{
 
 <style lang="scss" module>
 .root {
-	border-top: solid 0.5px var(--divider);
-	//border-bottom: solid 0.5px var(--divider);
+	border-top: solid 0.5px var(--MI_THEME-divider);
+	//border-bottom: solid 0.5px var(--MI_THEME-divider);
 }
 
 .rootFirst {
@@ -48,7 +48,7 @@ defineProps<{
 
 .description {
 	font-size: 0.85em;
-	color: var(--fgTransparentWeak);
+	color: var(--MI_THEME-fgTransparentWeak);
 	margin: 0 0 8px 0;
 }
 </style>

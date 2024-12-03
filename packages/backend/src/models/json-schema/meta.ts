@@ -159,6 +159,10 @@ export const packedMetaLiteSchema = {
 			optional: false,
 			nullable: true,
 		},
+		enableTestcaptcha: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
 		swPublickey: {
 			type: 'string',
 			optional: false,

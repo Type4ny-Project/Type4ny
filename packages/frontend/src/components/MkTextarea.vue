@@ -158,7 +158,7 @@ onUnmounted(() => {
 .caption {
 	font-size: 0.85em;
 	padding: 8px 0 0 0;
-	color: var(--fgTransparentWeak);
+	color: var(--MI_THEME-fgTransparentWeak);
 
 	&:empty {
 		display: none;
@@ -178,23 +178,23 @@ onUnmounted(() => {
 	font: inherit;
 	font-weight: normal;
 	font-size: 1em;
-	color: var(--fg);
-	background: var(--panel);
-	border: solid 1px var(--panel);
-	border-radius: var(--radius);
+	color: var(--MI_THEME-fg);
+	background: var(--MI_THEME-panel);
+	border: solid 1px var(--MI_THEME-panel);
+	border-radius: var(--MI-radius);
 	outline: none;
 	box-shadow: none;
 	box-sizing: border-box;
 	transition: border-color 0.1s ease-out;
 
 	&:hover {
-		border-color: var(--inputBorderHover) !important;
+		border-color: var(--MI_THEME-inputBorderHover) !important;
 	}
 }
 
 .focused {
 	> .textarea {
-		border-color: var(--accent) !important;
+		border-color: var(--MI_THEME-accent) !important;
 	}
 }
 
@@ -225,7 +225,7 @@ onUnmounted(() => {
 
 .mfmPreview {
   padding: 12px;
-  border-radius: var(--radius);
+  border-radius: var(--MI-radius);
   box-sizing: border-box;
   min-height: 130px;
 	pointer-events: none;

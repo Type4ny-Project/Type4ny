@@ -12,25 +12,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </div>
 </template>
 
-<script lang="ts" setup>
- 
-import { onMounted, ref, shallowRef, watch } from 'vue';
-import { Chart } from 'chart.js';
-import * as Misskey from 'misskey-js';
-import { misskeyApiGet } from '@/scripts/misskey-api.js';
-import { defaultStore } from '@/store.js';
-import { useChartTooltip } from '@/scripts/use-chart-tooltip.js';
-import { chartVLine } from '@/scripts/chart-vline.js';
-import { alpha } from '@/scripts/color.js';
-import date from '@/filters/date.js';
-import bytes from '@/filters/bytes.js';
-import { initChart } from '@/scripts/init-chart.js';
-import { chartLegend } from '@/scripts/chart-legend.js';
-import MkChartLegend from '@/components/MkChartLegend.vue';
-
-initChart();
-
-type ChartSrc =
+<script lang="ts">
+export type ChartSrc =
 	| 'federation'
 	| 'ap-request'
 	| 'users'
@@ -57,7 +40,26 @@ type ChartSrc =
 	| 'per-user-pv'
 	| 'per-user-following'
 	| 'per-user-followers'
-	| 'per-user-drive'
+	| 'per-user-drive';
+</script>
+
+<script lang="ts" setup>
+
+import { onMounted, ref, shallowRef, watch } from 'vue';
+import { Chart } from 'chart.js';
+import * as Misskey from 'misskey-js';
+import { misskeyApiGet } from '@/scripts/misskey-api.js';
+import { defaultStore } from '@/store.js';
+import { useChartTooltip } from '@/scripts/use-chart-tooltip.js';
+import { chartVLine } from '@/scripts/chart-vline.js';
+import { alpha } from '@/scripts/color.js';
+import date from '@/filters/date.js';
+import bytes from '@/filters/bytes.js';
+import { initChart } from '@/scripts/init-chart.js';
+import { chartLegend } from '@/scripts/chart-legend.js';
+import MkChartLegend from '@/components/MkChartLegend.vue';
+
+initChart();
 
 const props = withDefaults(defineProps<{
 	src: ChartSrc;
@@ -842,7 +844,7 @@ watch(() => [props.src, props.span], fetchAndRender);
 onMounted(() => {
 	fetchAndRender();
 });
- 
+
 </script>
 
 <style lang="scss" module>
@@ -856,8 +858,8 @@ onMounted(() => {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	-webkit-backdrop-filter: var(--blur, blur(12px));
-	backdrop-filter: var(--blur, blur(12px));
+	-webkit-backdrop-filter: var(--MI-blur, blur(8px));
+	backdrop-filter: var(--MI-blur, blur(8px));
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<option value="notesLessThanOrEq">{{ i18n.ts._role._condition.notesLessThanOrEq }}</option>
 				<option value="notesMoreThanOrEq">{{ i18n.ts._role._condition.notesMoreThanOrEq }}</option>
 			</optgroup>
-			<optgroup v-if="isNote" :label="i18n.ts._inboxRule.notes">
+			<optgroup :label="i18n.ts._inboxRule.notes">
 				<option value="maxMentionsMoreThanOrEq">{{ i18n.ts._inboxRule.maxMentionsMoreThanOrEq }}</option>
 				<option value="attachmentFileMoreThanOrEq">{{ i18n.ts._inboxRule.attachmentFileMoreThanOrEq }}</option>
 				<option value="isIncludeThisWord">{{ i18n.ts._inboxRule.isIncludeThisWord }}</option>
@@ -197,12 +197,12 @@ function removeSelf() {
 }
 
 .item {
-	border: solid 2px var(--divider);
-	border-radius: var(--radius);
+	border: solid 2px var(--MI_THEME-divider);
+	border-radius: var(--MI-radius);
 	padding: 12px;
 
 	&:hover {
-		border-color: var(--accent);
+		border-color: var(--MI_THEME-accent);
 	}
 }
 </style>

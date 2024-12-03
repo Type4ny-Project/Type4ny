@@ -5,9 +5,9 @@
 
 import { URLSearchParams } from 'node:url';
 import * as nodemailer from 'nodemailer';
+import juice from 'juice';
 import { Inject, Injectable } from '@nestjs/common';
 import { validate as validateEmail } from 'deep-email-validator';
-import { MetaService } from '@/core/MetaService.js';
 import { UtilityService } from '@/core/UtilityService.js';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
@@ -16,7 +16,7 @@ import type { UserProfilesRepository } from '@/models/_.js';
 import { LoggerService } from '@/core/LoggerService.js';
 import { bindThis } from '@/decorators.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
-import { QueueService } from '@/core/QueueService.js';
+import { MetaService } from '@/core/MetaService.js';
 
 @Injectable()
 export class EmailService {
@@ -25,7 +25,6 @@ export class EmailService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
-
 		@Inject(DI.userProfilesRepository)
 		private userProfilesRepository: UserProfilesRepository,
 
@@ -39,8 +38,7 @@ export class EmailService {
 
 	@bindThis
 	public async sendEmail(to: string, subject: string, html: string, text: string) {
-		const meta = await this.metaService.fetch(true);
-
+		const meta = await this.metaService.fetch();
 		if (!meta.enableEmail) return;
 
 		const iconUrl = `${this.config.url}/static-assets/mi-white.png`;
@@ -60,14 +58,7 @@ export class EmailService {
 			} : undefined,
 		} as any);
 
-		try {
-			// TODO: htmlサニタイズ
-			const info = await transporter.sendMail({
-				from: meta.email!,
-				to: to,
-				subject: subject,
-				text: text,
-				html: `<!doctype html>
+		const htmlContent = `<!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -146,7 +137,18 @@ export class EmailService {
 			<a href="${ this.config.url }">${ this.config.host }</a>
 		</nav>
 	</body>
-</html>`,
+</html>`;
+
+		const inlinedHtml = juice(htmlContent);
+
+		try {
+			// TODO: htmlサニタイズ
+			const info = await transporter.sendMail({
+				from: meta.email!,
+				to: to,
+				subject: subject,
+				text: text,
+				html: inlinedHtml,
 			});
 
 			this.logger.info(`Message sent: ${info.messageId}`);
@@ -161,12 +163,12 @@ export class EmailService {
 		available: boolean;
 		reason: null | 'used' | 'format' | 'disposable' | 'mx' | 'smtp' | 'banned' | 'network' | 'blacklist';
 	}> {
-		const meta = await this.metaService.fetch();
-
 		const exist = await this.userProfilesRepository.countBy({
 			emailVerified: true,
 			email: emailAddress,
 		});
+
+		const meta = await this.metaService.fetch();
 
 		if (exist !== 0) {
 			return {
@@ -197,6 +199,18 @@ export class EmailService {
 			}
 		}
 
+		if (meta.enableActiveEmailValidation) {
+			const dispose = await this.httpRequestService.send('https://raw.githubusercontent.com/mattyatea/disposable-email-domains/master/disposable_email_blocklist.conf', {
+				method: 'GET',
+			});
+			const disposableEmailDomains = (await dispose.text()).split('\n');
+			const domain = emailAddress.split('@')[1];
+			console.log(domain);
+			if (disposableEmailDomains.includes(domain)) {
+				validated = { valid: false, reason: 'disposable' };
+			}
+		}
+
 		if (!validated.valid) {
 			const formatReason: Record<string, 'format' | 'disposable' | 'mx' | 'smtp' | 'network' | 'blacklist' | undefined> = {
 				regex: 'format',
@@ -211,17 +225,6 @@ export class EmailService {
 				available: false,
 				reason: validated.reason ? formatReason[validated.reason] ?? null : null,
 			};
-		}
-		if (meta.enableActiveEmailValidation) {
-			const dispose = await this.httpRequestService.send('https://raw.githubusercontent.com/mattyatea/disposable-email-domains/master/disposable_email_blocklist.conf', {
-				method: 'GET',
-			});
-			const disposableEmailDomains = (await dispose.text()).split('\n');
-			const domain = emailAddress.split('@')[1];
-			console.log(domain);
-			if (disposableEmailDomains.includes(domain)) {
-				validated = { valid: false, reason: 'disposable' };
-			}
 		}
 
 		const emailDomain: string = emailAddress.split('@')[1];
@@ -322,6 +325,7 @@ export class EmailService {
 					Accept: 'application/json',
 					Authorization: truemailAuthKey,
 				},
+				isLocalAddressAllowed: true,
 			});
 
 			const json = (await res.json()) as {

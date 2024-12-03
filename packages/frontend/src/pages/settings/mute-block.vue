@@ -19,16 +19,26 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<XWordMute :muted="$i.hardMutedWords" @save="saveHardMutedWords"/>
 	</MkFolder>
 
-	<MkFolder>
+    <MkFolder>
 		<template #icon><i class="ti ti-message-off"></i></template>
-		<template #label>{{ i18n.ts.mutedReactions }}<span class="_beta">Preview</span></template>
+		<template #label>{{ i18n.ts.mutedReactions }}</template>
 
-		<XWordMute :notCaption="true" :muted="$i.mutedReactions" @save="saveMutedReactions"/>
+		<div class="_gaps">
+			<div v-panel style="border-radius: var(--radius); padding: var(--margin);">
+				<button v-for="emoji in mutedReactions" class="_button" :class="$style.emojisItem" @click="removeReaction(emoji, $event)">
+					<MkCustomEmoji v-if="emoji && emoji[0] === ':'" :name="emoji"/>
+					<MkEmoji v-else :emoji="emoji ? emoji : 'null'"/>
+				</button>
+				<button class="_button" @click="chooseReaction">
+					<i class="ti ti-plus"></i>
+				</button>
+			</div>
+		</div>
 	</MkFolder>
 
 	<MkFolder>
-		<template #icon><i class="ti ti-planet-off"></i></template>
-		<template #label>{{ i18n.ts.instanceMute }}</template>
+      <template #icon><i class="ti ti-planet-off"></i></template>
+      <template #label>{{ i18n.ts.instanceMute }}</template>
 
 		<XInstanceMute/>
 	</MkFolder>
@@ -139,7 +149,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch, Ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import XInstanceMute from './mute-block.instance-mute.vue';
 import XUserWordMute from './mute-block.user-word-mute.vue';
@@ -154,6 +164,8 @@ import { misskeyApi } from '@/scripts/misskey-api.js';
 import { infoImageUrl } from '@/instance.js';
 import { signinRequired } from '@/account.js';
 import MkFolder from '@/components/MkFolder.vue';
+import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
+import MkEmoji from '@/components/global/MkEmoji.vue';
 import { defaultStore } from '@/store.js';
 
 const $i = signinRequired();
@@ -176,6 +188,37 @@ const blockingPagination = {
 const expandedRenoteMuteItems = ref([]);
 const expandedMuteItems = ref([]);
 const expandedBlockItems = ref([]);
+
+const mutedReactions = ref<string[]>(defaultStore.state.mutedReactions);
+
+watch(mutedReactions, () => {
+	defaultStore.set('mutedReactions', mutedReactions.value);
+}, {
+	deep: true,
+});
+
+const chooseReaction = (ev: MouseEvent) => pickEmoji(mutedReactions, ev);
+const removeReaction = (reaction: string, ev: MouseEvent) => remove(mutedReactions, reaction, ev);
+
+function remove(itemsRef: Ref<string[]>, reaction: string, ev: MouseEvent) {
+	os.popupMenu([{
+		text: i18n.ts.remove,
+		action: () => {
+			itemsRef.value = itemsRef.value.filter(x => x !== reaction);
+		},
+	}], ev.currentTarget ?? ev.target);
+}
+
+async function pickEmoji(itemsRef: Ref<string[]>, ev: MouseEvent) {
+	os.pickEmoji(ev.currentTarget ?? ev.target, {
+		showPinned: false,
+	}).then(it => {
+		const emoji = it;
+		if (!itemsRef.value.includes(emoji)) {
+			itemsRef.value.push(emoji);
+		}
+	});
+}
 
 async function unrenoteMute(user, ev) {
 	os.popupMenu([{
@@ -242,10 +285,6 @@ async function saveHardMutedWords(hardMutedWords: (string | string[])[]) {
 	await misskeyApi('i/update', { hardMutedWords });
 }
 
-async function saveMutedReactions(mutedReactions: (string | string[])[]) {
-	await misskeyApi('i/update', { mutedReactions });
-}
-
 async function saveMutedUsers(mutedUsers: { user: Misskey.entities.UserLite; words: (string | string[])}[]) {
 	defaultStore.set('userWordMute', mutedUsers);
 }
@@ -268,7 +307,7 @@ definePageMetadata(() => ({
 .userItemSub {
   padding: 6px 12px;
   font-size: 85%;
-  color: var(--fgTransparentWeak);
+  color: var(--MI_THEME-fgTransparentWeak);
 }
 
 .userItemMainBody {
@@ -297,5 +336,10 @@ definePageMetadata(() => ({
   .chevron {
     transform: rotateX(180deg);
   }
+}
+
+.emojisItem{
+	display: inline-block;
+	padding: 8px;
 }
 </style>

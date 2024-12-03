@@ -59,6 +59,11 @@ export const paramDef = {
 				type: 'string',
 			},
 		},
+		prohibitedWordsForNameOfUser: {
+			type: 'array', nullable: true, items: {
+				type: 'string',
+			},
+		},
 		themeColor: {
 			type: 'string',
 			nullable: true,
@@ -99,6 +104,7 @@ export const paramDef = {
 		enableTurnstile: { type: 'boolean' },
 		turnstileSiteKey: { type: 'string', nullable: true },
 		turnstileSecretKey: { type: 'string', nullable: true },
+		enableTestcaptcha: { type: 'boolean' },
 		sensitiveMediaDetection: {
 			type: 'string',
 			enum: ['none', 'all', 'local', 'remote'],
@@ -173,6 +179,7 @@ export const paramDef = {
 		perRemoteUserUserTimelineCacheMax: { type: 'integer' },
 		perUserHomeTimelineCacheMax: { type: 'integer' },
 		perUserListTimelineCacheMax: { type: 'integer' },
+		enableReactionsBuffering: { type: 'boolean' },
 		notesPerOneAd: { type: 'integer' },
 		silencedHosts: {
 			type: 'array',
@@ -287,6 +294,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					set.enableServerMachineStats = ps.enableServerMachineStats;
 				}
 
+				if (ps.enableStatsForFederatedInstances !== undefined) {
+					set.enableStatsForFederatedInstances = ps.enableStatsForFederatedInstances;
+				}
+
 				if (ps.cacheRemoteFiles !== undefined) {
 					set.cacheRemoteFiles = ps.cacheRemoteFiles;
 				}
@@ -379,12 +390,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (Array.isArray(ps.prohibitedWords)) {
 				set.prohibitedWords = ps.prohibitedWords.filter(Boolean);
 			}
+			if (Array.isArray(ps.prohibitedWordsForNameOfUser)) {
+				set.prohibitedWordsForNameOfUser = ps.prohibitedWordsForNameOfUser.filter(Boolean);
+			}
 			if (Array.isArray(ps.silencedHosts)) {
 				let lastValue = '';
 				set.silencedHosts = ps.silencedHosts.sort().filter((h) => {
 					const lv = lastValue;
 					lastValue = h;
-					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
+					return h !== '' && h !== lv && !set.silencedHosts?.includes(h);
 				});
 			}
 
@@ -393,7 +407,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.mediaSilencedHosts = ps.mediaSilencedHosts.sort().filter((h) => {
 					const lv = lastValue;
 					lastValue = h;
-					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
+					return h !== '' && h !== lv && !set.mediaSilencedHosts?.includes(h);
 				});
 			}
 			if (ps.themeColor !== undefined) {
@@ -553,6 +567,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.turnstileSecretKey = ps.turnstileSecretKey;
 			}
 
+			if (ps.enableTestcaptcha !== undefined) {
+				set.enableTestcaptcha = ps.enableTestcaptcha;
+			}
+
 			if (ps.sensitiveMediaDetection !== undefined) {
 				set.sensitiveMediaDetection = ps.sensitiveMediaDetection;
 			}
@@ -710,8 +728,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			}
 
 			if (ps.enableChartsForFederatedInstances !== undefined) {
-				set.enableChartsForFederatedInstances =
-					ps.enableChartsForFederatedInstances;
+				set.enableChartsForFederatedInstances = ps.enableChartsForFederatedInstances;
+			}
+
+			if (ps.enableServerMachineStats !== undefined) {
+				set.enableServerMachineStats = ps.enableServerMachineStats;
 			}
 
 			if (ps.enableIdenticonGeneration !== undefined) {
@@ -750,6 +771,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.iconLight !== undefined) {
 				set.iconLight = ps.iconLight;
 			}
+
 			const before = await this.metaService.fetch(true);
 
 			await this.metaService.update(set);

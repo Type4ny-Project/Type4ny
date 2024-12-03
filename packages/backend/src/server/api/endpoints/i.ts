@@ -57,7 +57,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			const isSecure = token == null;
 
 			const now = new Date();
-			const today = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+			const today = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`; //TODO: 日付変更の時間をサーバー管理者が設定できるように
 
 			let todayGetPoints = 0;
 			// 渡ってきている user はキャッシュされていて古い可能性があるので改めて取得

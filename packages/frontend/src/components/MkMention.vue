@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<MkA v-user-preview="canonical" :class="[$style.root, { [$style.isMe]: isMe }, {[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' } ]" :to="url" :style="{ background: bgCss }" :behavior="navigationBehavior">
+<MkA v-user-preview="canonical" :class="[$style.root, { [$style.isMe]: isMe }, {[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' } ]" :to="url" :behavior="navigationBehavior">
 	<img :class="$style.icon" :src="avatarUrl" alt="">
 	<span>
 		<span>@{{ username }}</span>
@@ -15,8 +15,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { toUnicode } from 'punycode';
 import { computed, ref, watch } from 'vue';
+import { host as localHost } from '@@/js/config.js';
 import tinycolor from 'tinycolor2';
-import { host as localHost } from '@/config.js';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
@@ -41,11 +41,10 @@ const isMe = $i && (
 const bg = tinycolor(getComputedStyle(document.documentElement).getPropertyValue(isMe ? '--mentionMe' : '--mention'));
 bg.setAlpha(0.1);
 
-const avatarUrl = computed(() => defaultStore.state.disableShowingAnimatedImages
+const avatarUrl = computed(() => defaultStore.state.disableShowingAnimatedImages || defaultStore.state.dataSaver.avatar
 	? getStaticImageUrl(`/avatar/@${props.username}@${props.host}`)
 	: `/avatar/@${props.username}@${props.host}`,
 );
-const bgCss = (gamingType.value === '') ? bg.toRgbString() : '';
 //const bgCss = `background:${bg.toRgbString()}; ${result}` ;
 </script>
 
@@ -54,7 +53,8 @@ const bgCss = (gamingType.value === '') ? bg.toRgbString() : '';
 	display: inline-block;
 	padding: 4px 8px 4px 4px;
 	border-radius: 999px;
-	color: var(--mention);
+	color: var(--MI_THEME-mention);
+	background: color(from var(--MI_THEME-mention) srgb r g b / 0.1);
 
   &.gamingLight{
     color: white;
@@ -74,7 +74,8 @@ const bgCss = (gamingType.value === '') ? bg.toRgbString() : '';
   }
 
 	&.isMe {
-		color: var(--mentionMe);
+		color: var(--MI_THEME-mentionMe);
+		background: color(from var(--MI_THEME-mentionMe) srgb r g b / 0.1);
 	}
 }
 
