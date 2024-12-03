@@ -9,10 +9,10 @@ import { hemisphere } from '@@/js/intl-const.js';
 import lightTheme from '@@/themes/l-TypeLightEmerald.json5';
 import darkTheme from '@@/themes/d-TypeDarkEmerald.json5';
 import type { SoundType } from '@/scripts/sound.js';
+import type { Ast } from '@syuilo/aiscript';
 import { DEFAULT_DEVICE_KIND, type DeviceKind } from '@/scripts/device-kind.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { Storage } from '@/pizzax.js';
-import type { Ast } from '@syuilo/aiscript';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
 import { instance } from '@/instance.js';
 
@@ -735,6 +735,10 @@ export const defaultStore = markRaw(
 		mutedReactions: {
 			where: 'account',
 			default: [] as string[],
+		},
+		reactionAndServerMute: {
+			where: 'account',
+			default: false as boolean,
 		},
 	}),
 );
