@@ -11,7 +11,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { nextTick, onMounted, onUnmounted, provide, shallowRef, watch } from 'vue';
 import MkMenu from './MkMenu.vue';
-import { MenuItem } from '@/types/menu.js';
+import type { MenuItem } from '@/types/menu.js';
 
 const props = defineProps<{
 	items: MenuItem[];

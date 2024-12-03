@@ -165,9 +165,8 @@ function onMousedown(evt: MouseEvent): void {
 	font-size: 95%;
 	box-shadow: none;
 	text-decoration: none;
-	background: var(--buttonBg);
-	border-radius: var(--radius);
-
+	background: var(--MI_THEME-buttonBg);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 	box-sizing: border-box;
 	transition: background 0.1s ease;
@@ -178,12 +177,12 @@ function onMousedown(evt: MouseEvent): void {
 
 	&:not(:disabled):hover {
 		&:not(.gradate) {
-			background: var(--buttonHoverBg);
+			background: var(--MI_THEME-buttonHoverBg);
 		}
 	}
 
 	&:not(:disabled):active {
-		background: var(--buttonHoverBg);
+		background: var(--MI_THEME-buttonHoverBg);
 	}
 
 	&.small {
@@ -206,8 +205,13 @@ function onMousedown(evt: MouseEvent): void {
 
 	&.primary {
 		font-weight: bold;
-		color: var(--fgOnAccent) !important;
-		background: var(--accent);
+		color: var(--MI_THEME-fgOnAccent) !important;
+		background: var(--MI_THEME-accent);
+
+		&:not(:disabled):hover {
+			background: hsl(from var(--MI_THEME-accent) h s calc(l + 5));
+		}
+
       &.gamingLight {
         background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
         background-size: 1800% 1800%;
@@ -216,15 +220,14 @@ function onMousedown(evt: MouseEvent): void {
         -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
         animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
 
-        &:not(:disabled):hover {
-          background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
-          background-size: 1800% 1800%;
-          color: white !important;
-          -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
-          -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
-          animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
-        }
-
+				&:not(:disabled):hover {
+					background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+					background-size: 1800% 1800%;
+					color: white !important;
+					-webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
+					-moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
+					animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite;
+				}
         &:not(:disabled):active {
           background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
           background-size: 1800% 1800% !important;
@@ -234,7 +237,7 @@ function onMousedown(evt: MouseEvent): void {
           animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1)  infinite ;
         }
 				&:hover{
-					background: var(--accent);
+					background: var(--MI_THEME-accent);
 				}
       }
 
@@ -265,11 +268,11 @@ function onMousedown(evt: MouseEvent): void {
         }
       }
 		&:not(:disabled):hover {
-			background: hsl(from var(--accent) h s calc(l + 5));
+			background: hsl(from var(--MI_THEME-accent) h s 60%);
 		}
 
 		&:not(:disabled):active {
-			background: hsl(from var(--accent) h s calc(l + 5));
+			background: hsl(from var(--MI_THEME-accent) h s 60%);
 		}
 	}
 
@@ -310,10 +313,10 @@ function onMousedown(evt: MouseEvent): void {
 
 	&.gradate {
 		font-weight: bold;
-		color: var(--fgOnAccent) !important;
+		color: var(--MI_THEME-fgOnAccent) !important;
 		position: relative;
 		z-index: 0;
-		background: linear-gradient(90deg, var(--buttonGradateA), var(--buttonGradateB));
+		background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 
 		&::after {
 			position: absolute;
@@ -324,7 +327,7 @@ function onMousedown(evt: MouseEvent): void {
 			z-index: -1;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(90deg, hsl(from var(--accent) h s calc(l + 5)), hsl(from var(--accent) h s calc(l + 5)));
+			background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s 60%), hsl(from var(--MI_THEME-accent) h s 60%));
 			opacity: 0;
 			transition: opacity 0.1s ease;
 
@@ -399,6 +402,7 @@ function onMousedown(evt: MouseEvent): void {
 	}
 
 	&.danger {
+		font-weight: bold;
 		color: #ff2a2a;
 
 		&.primary {
@@ -416,7 +420,7 @@ function onMousedown(evt: MouseEvent): void {
 	}
 
 	&:disabled {
-		opacity: 0.7;
+		opacity: 0.5;
 	}
 
 	&:focus-visible {
@@ -441,7 +445,7 @@ function onMousedown(evt: MouseEvent): void {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 	pointer-events: none;
 }

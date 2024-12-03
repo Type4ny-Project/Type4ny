@@ -23,16 +23,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div class="contents">
 		<MkVisitorDashboard/>
 	</div>
-
-	<div v-if="instances && instances.length > 0" class="federation">
-		<MarqueeText :duration="40">
-			<MkA v-for="instance in instances" :key="instance.id" :class="$style.federationInstance" :to="`/instance-info/${instance.host}`" behavior="window">
-				<!--<MkInstanceCardMini :instance="instance"/>-->
-				<img v-if="instance.iconUrl" class="icon" :src="getInstanceIcon(instance)" alt=""/>
-				<span class="name _monospace">{{ instance.host }}</span>
-			</MkA>
-		</MarqueeText>
-	</div>
 </div>
 </template>
 
@@ -49,13 +39,6 @@ import { getProxiedImageUrl } from '@/scripts/media-proxy.js';
 import { instance as meta } from '@/instance.js';
 
 const instances = ref<Misskey.entities.FederationInstance[]>();
-
-function getInstanceIcon(instance: Misskey.entities.FederationInstance): string {
-	if (!instance.iconUrl) {
-		return '';
-	}
-	return getProxiedImageUrl(instance.iconUrl, 'preview');
-}
 
 misskeyApiGet('federation/instances', {
 	sort: '+pubSub',
@@ -100,7 +83,7 @@ misskeyApiGet('federation/instances', {
 		right: 0;
 		width: 100vw;
 		height: 100vh;
-		background: linear-gradient(270deg, var(--buttonGradateA), var(--buttonGradateB));
+		background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 		background-size: 2000% 2000%;
 		-webkit-animation: AnimationLight 11s ease infinite;
 		-moz-animation: AnimationLight 11s ease infinite;
@@ -114,7 +97,7 @@ misskeyApiGet('federation/instances', {
 
 		width: 100vw;
 		height: 100vh;
-    background: linear-gradient(270deg, var(--buttonGradateA), var(--buttonGradateB));
+    background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 		background-size: 2000% 2000%;
     -webkit-animation: AnimationLight 11s ease infinite;
     -moz-animation: AnimationLight 11s ease infinite;
@@ -176,9 +159,9 @@ misskeyApiGet('federation/instances', {
 		left: 0;
 		right: 0;
 		margin: auto;
-		background: var(--acrylicPanel);
-		-webkit-backdrop-filter: var(--blur, blur(15px));
-		backdrop-filter: var(--blur, blur(15px));
+		background: var(--MI_THEME-acrylicPanel);
+		-webkit-backdrop-filter: var(--MI-blur, blur(15px));
+		backdrop-filter: var(--MI-blur, blur(15px));
 		border-radius: 999px;
 		overflow: clip;
 		width: 800px;
@@ -231,7 +214,7 @@ misskeyApiGet('federation/instances', {
 	vertical-align: bottom;
 	padding: 6px 12px 6px 6px;
 	margin: 0 10px 0 0;
-	background: var(--panel);
+	background: var(--MI_THEME-panel);
 	border-radius: 999px;
 
 	> :global(.icon) {

@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			class="file _button"
 		>
 			<div v-if="file.isSensitive" class="sensitive-label">{{ i18n.ts.sensitive }}</div>
-			<MkDriveFileThumbnail class="thumbnail" :file="file" fit="contain"/>
+			<MkDriveFileThumbnail class="thumbnail" :file="file" fit="contain" :highlightWhenSensitive="true"/>
 			<div v-if="viewMode === 'list'" class="body">
 				<div>
 					<small style="opacity: 0.7;">{{ file.name }}</small>
@@ -65,7 +65,7 @@ const props = defineProps<{
 			align-items: center;
 
 			&:hover {
-				color: var(--accent);
+				color: var(--MI_THEME-accent);
 			}
 
 			> .thumbnail {

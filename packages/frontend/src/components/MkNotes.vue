@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :virtualScrollOn="virtualScrollOn">
+<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad">
 	<template #empty>
 		<div class="_fullinfo">
 			<img :src="infoImageUrl" class="_ghost"/>
@@ -12,7 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</template>
 
-	<template v-if="!virtualScrollOn" #default="{ items: notes }">
+	<template #default="{ items: notes }">
 		<div :class="[$style.root, { [$style.noGap]: noGap }]">
 			<MkDateSeparatedList
 				ref="notes"
@@ -28,64 +28,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkDateSeparatedList>
 		</div>
 	</template>
-	<template v-else #default="{ item: note, index, items }">
-		<div :class="[$style.root, { [$style.noGap]: noGap },{ [$style.dateseparatedlist]: noGap}]">
-			<div :class="[$style.notes,{ [$style.dateseparatedlistnogap]: noGap}]">
-				<p :style="{margin: 0, borderBottom: 'solid 1px var(--divider)'}"></p>
-				<div :class="[$style.notes, { [$style.dateseparatedlistnogap]: noGap}]">
-					<p v-if="index !== 0" :style="{margin: 0, borderBottom: 'solid 1px var(--divider)'}"></p>
-					<MkNote v-if="props.withCw && !note.cw || !props.withCw" :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note" :withHardMute="true"/>
-					<div v-if="index !== items.length - 1 && note?.createdAt && items[index + 1]?.createdAt && (new Date(note?.createdAt).getDate()) !== ( new Date(items[index + 1]?.createdAt).getDate())" :key="note.id" :class="$style.separator">
-						<p :class="$style.date">
-							<span :class="$style.date1">
-								<i class="ti ti-chevron-up"></i>
-								{{ getDateText(note.createdAt) }}
-							</span>
-							<span :class="$style.date2">
-								{{ getDateText(items[index + 1].createdAt) }}
-								<i class="ti ti-chevron-down"></i>
-							</span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</template>
 </MkPagination>
 </template>
 
 <script lang="ts" setup>
-import { shallowRef, ref } from 'vue';
+import { shallowRef } from 'vue';
 import MkNote from '@/components/MkNote.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 import { infoImageUrl } from '@/instance.js';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
-import { defaultStore } from '@/store.js';
 const dateTextCache = new Map<string, string>();
-const virtualScrollOn = ref(false);
-virtualScrollOn.value = defaultStore.state.virtualScrollOn;
-const props = defineProps<{
+defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
 	disableAutoLoad?: boolean;
     withCw?: boolean;
 }>();
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
-
-function getDateText(time: string) {
-	if (dateTextCache.has(time)) {
-		return dateTextCache.get(time)!;
-	}
-	const date = new Date(time).getDate();
-	const month = new Date(time).getMonth() + 1;
-	const text = i18n.tsx.monthAndDay({
-		month: month.toString(),
-		day: date.toString(),
-	});
-	dateTextCache.set(time, text);
-	return text;
-}
 
 defineExpose({
 	pagingComponent,
@@ -96,21 +56,21 @@ defineExpose({
 .root {
 	&.noGap {
 		> .notes {
-			background: var(--panel);
+			background: var(--MI_THEME-panel);
 		}
 		.note{
 			&:not(:last-child) {
-				border-bottom: solid 0.5px var(--divider);
+				border-bottom: solid 0.5px var(--MI_THEME-divider);
 			}
 		}
 	}
 
 	&:not(.noGap) {
 		> .notes {
-			background: var(--bg);
+			background: var(--MI_THEME-bg);
 			.note {
-				background: var(--panel);
-				border-radius: var(--radius);
+				background: var(--MI_THEME-panel);
+				border-radius: var(--MI-radius);
 			}
 		}
 	}
@@ -137,7 +97,7 @@ defineExpose({
 	}
 
 	&:not(.date-separated-list-nogap) > *:not(:last-child) {
-		margin-bottom: var(--margin);
+		margin-bottom: var(--MI-margin);
 	}
 }
 
@@ -149,7 +109,7 @@ defineExpose({
 		box-shadow: none;
 
 		&:not(:last-child) {
-			border-bottom: solid 0.5px var(--divider);
+			border-bottom: solid 0.5px var(--MI_THEME-divider);
 		}
 	}
 }
@@ -179,7 +139,7 @@ defineExpose({
 }
 
 .separator {
-	border-bottom: solid 1px var(--divider);
+	border-bottom: solid 1px var(--MI_THEME-divider);
 	text-align: center;
 }
 

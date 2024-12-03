@@ -72,7 +72,7 @@ const remoteMenu = (emoji, ev: MouseEvent) => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   grid-gap: 12px;
-  margin: var(--margin) 0;
+  margin: var(--MI-margin) 0;
 }
 
 .emoji {
@@ -82,7 +82,7 @@ const remoteMenu = (emoji, ev: MouseEvent) => {
   text-align: left;
 
   &:hover {
-    color: var(--accent);
+    color: var(--MI_THEME-accent);
   }
 }
 

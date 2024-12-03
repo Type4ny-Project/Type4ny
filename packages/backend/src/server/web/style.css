@@ -5,8 +5,8 @@
  */
 
 html {
-	background-color: var(--bg);
-	color: var(--fg);
+	background-color: var(--MI_THEME-bg);
+	color: var(--MI_THEME-fg);
 }
 
 #splash {
@@ -17,7 +17,7 @@ html {
 	width: 100vw;
 	height: 100vh;
 	cursor: wait;
-	background-color: var(--bg);
+	background-color: var(--MI_THEME-bg);
 	opacity: 1;
 	transition: opacity 0.5s ease;
 }
@@ -45,14 +45,9 @@ html {
 	width: 28px;
 	height: 28px;
 	transform: translateY(70px);
-	background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
-	background-size: 1800% 1800%;
-	-webkit-animation: AnimationDark 44s cubic-bezier(0, 0.25, 0.25, 1) infinite;
-	-moz-animation: AnimationDark 44s cubic-bezier(0, 0.25, 0.25, 1) infinite;
-	animation: AnimationDark 44s cubic-bezier(0, 0.25, 0.25, 1) infinite;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: var(--MI_THEME-accent);
 }
+
 #splashSpinner > .spinner {
 	position: absolute;
 	top: 0;

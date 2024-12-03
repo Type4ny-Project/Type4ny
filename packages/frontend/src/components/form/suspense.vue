@@ -17,19 +17,19 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends unknown">
 import { ref, watch } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 
 const props = defineProps<{
-	p: () => Promise<any>;
+	p: () => Promise<T>;
 }>();
 
 const pending = ref(true);
 const resolved = ref(false);
 const rejected = ref(false);
-const result = ref<any>(null);
+const result = ref<T | null>(null);
 
 const process = () => {
 	if (props.p == null) {

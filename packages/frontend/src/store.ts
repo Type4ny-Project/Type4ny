@@ -5,18 +5,16 @@
 
 import { markRaw, ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import { miLocalStorage } from './local-storage.js';
+import { hemisphere } from '@@/js/intl-const.js';
+import lightTheme from '@@/themes/l-TypeLightEmerald.json5';
+import darkTheme from '@@/themes/d-TypeDarkEmerald.json5';
 import type { SoundType } from '@/scripts/sound.js';
+import { DEFAULT_DEVICE_KIND, type DeviceKind } from '@/scripts/device-kind.js';
+import { miLocalStorage } from '@/local-storage.js';
 import { Storage } from '@/pizzax.js';
-import { hemisphere } from '@/scripts/intl-const.js';
+import type { Ast } from '@syuilo/aiscript';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
 import { instance } from '@/instance.js';
-/**
- * 常にメモリにロードしておく必要がないような設定情報を保管するストレージ(非リアクティブ)
- */
-import lightTheme from '@/themes/l-TypeLightEmerald.json5';
-import darkTheme from '@/themes/d-TypeDarkEmerald.json5';
-import { TimelineHeaderItem } from '@/timeline-header.js';
 
 interface PostFormAction {
 	title: string;
@@ -87,7 +85,10 @@ export const defaultStore = markRaw(
 				global: false,
 			},
 		},
-		keepCw: {
+		abusesTutorial: {
+			where: 'account',
+			default: false,
+		}, keepCw: {
 			where: 'account',
 			default: true,
 		},
@@ -317,7 +318,7 @@ export const defaultStore = markRaw(
 		},
 		overridedDeviceKind: {
 			where: 'device',
-			default: null as null | 'smartphone' | 'tablet' | 'desktop',
+			default: null as DeviceKind | null,
 		},
 		serverDisconnectedBehavior: {
 			where: 'device',
@@ -337,7 +338,7 @@ export const defaultStore = markRaw(
 		},
 		animatedMfm: {
 			where: 'device',
-			default: false,
+			default: !window.matchMedia('(prefers-reduced-motion)').matches,
 		},
 		advancedMfm: {
 			where: 'device',
@@ -383,17 +384,17 @@ export const defaultStore = markRaw(
 			where: 'device',
 			default: 'twemoji', // twemoji / fluentEmoji / native
 		},
-		disableDrawer: {
+		menuStyle: {
 			where: 'device',
-			default: false,
+			default: 'auto' as 'auto' | 'popup' | 'drawer',
 		},
 		useBlurEffectForModal: {
 			where: 'device',
-			default: !/mobile|iphone|android/.test(navigator.userAgent.toLowerCase()), // 循環参照するのでdevice-kind.tsは参照できない
+			default: DEFAULT_DEVICE_KIND === 'desktop',
 		},
 		useBlurEffect: {
 			where: 'device',
-			default: !/mobile|iphone|android/.test(navigator.userAgent.toLowerCase()), // 循環参照するのでdevice-kind.tsは参照できない
+			default: DEFAULT_DEVICE_KIND === 'desktop',
 		},
 		showFixedPostForm: {
 			where: 'device',
@@ -471,9 +472,9 @@ export const defaultStore = markRaw(
 			where: 'device',
 			default: 2,
 		},
-		emojiPickerUseDrawerForMobile: {
+		emojiPickerStyle: {
 			where: 'device',
-			default: true,
+			default: 'auto' as 'auto' | 'popup' | 'drawer',
 		},
 		recentlyUsedEmojis: {
 			where: 'device',
@@ -623,9 +624,9 @@ export const defaultStore = markRaw(
 			where: 'device',
 			default: 'horizontal' as 'vertical' | 'horizontal',
 		},
-		enableCondensedLineForAcct: {
+		enableCondensedLine: {
 			where: 'device',
-			default: false,
+			default: true,
 		},
 		additionalUnicodeEmojiIndexes: {
 			where: 'device',
@@ -698,6 +699,9 @@ export const defaultStore = markRaw(
 		contextMenu: {
 			where: 'device',
 			default: 'app' as 'app' | 'appWithShift' | 'native',
+		}, skipNoteRender: {
+			where: 'device',
+			default: true,
 		},
 
 		sound_masterVolume: {
@@ -728,6 +732,10 @@ export const defaultStore = markRaw(
 			where: 'device',
 			default: { type: 'syuilo/bubble2', volume: 1 } as SoundStore,
 		},
+		mutedReactions: {
+			where: 'account',
+			default: [] as string[],
+		},
 	}),
 );
 
@@ -744,7 +752,7 @@ export type Plugin = {
 	token: string;
 	src: string | null;
 	version: string;
-	ast: any[];
+	ast: Ast.Node[];
 	author?: string;
 	description?: string;
 	permissions?: string[];
@@ -754,6 +762,10 @@ interface Watcher {
 	key: string;
 	callback: (value: unknown) => void;
 }
+
+/**
+ * 常にメモリにロードしておく必要がないような設定情報を保管するストレージ(非リアクティブ)
+ */
 
 export class ColdDeviceStorage {
 	public static default = {
@@ -798,7 +810,7 @@ export class ColdDeviceStorage {
 	): void {
 		// 呼び出し側のバグ等で undefined が来ることがある
 		// undefined を文字列として miLocalStorage に入れると参照する際の JSON.parse でコケて不具合の元になるため無視
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 		if (value === undefined) {
 			console.error(`attempt to store undefined value for key '${key}'`);
 			return;
@@ -839,7 +851,7 @@ export class ColdDeviceStorage {
 			get: () => {
 				return valueRef.value;
 			},
-			set: (value: unknown) => {
+			set: (value: typeof ColdDeviceStorage.default[K]) => {
 				const val = value;
 				ColdDeviceStorage.set(key, val);
 			},

@@ -54,7 +54,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { defineAsyncComponent, computed, watch, ref, shallowRef, onUnmounted, onMounted } from 'vue';
 import { openInstanceMenu } from './_common_/common.js';
-// import { host } from '@/config.js';
+// import { host } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { navbarItemDef } from '@/navbar.js';
 import { openAccountMenu as openAccountMenu_, $i } from '@/account.js';
@@ -176,7 +176,7 @@ onUnmounted(() => {
 			top: 0;
 			z-index: 1;
 			padding: 16px 0;
-			background: var(--bg);
+			background: var(--MI_THEME-bg);
 
 			> .button {
 				min-width: 0;
@@ -236,7 +236,7 @@ onUnmounted(() => {
 				position: absolute;
 				top: 0;
 				left: 0;
-				color: var(--navIndicator);
+				color: var(--MI_THEME-navIndicator);
 				font-size: 8px;
 				animation: global-blink 1s infinite;
 

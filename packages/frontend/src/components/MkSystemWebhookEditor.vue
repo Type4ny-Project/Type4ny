@@ -35,22 +35,49 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkFolder :defaultOpen="true">
 					<template #label>{{ i18n.ts._webhookSettings.trigger }}</template>
 
-					<div class="_gaps_s">
-						<MkSwitch v-model="events.abuseReport" :disabled="disabledEvents.abuseReport">
-							<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReport }}</template>
-						</MkSwitch>
-						<MkSwitch v-model="events.abuseReportResolved" :disabled="disabledEvents.abuseReportResolved">
-							<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReportResolved }}</template>
-						</MkSwitch>
-						<MkSwitch v-model="events.customEmojiRequest" :disabled="disabledEvents.customEmojiRequest">
+					<div class="_gaps">
+						<div class="_gaps_s">
+							<div :class="$style.switchBox">
+								<MkSwitch v-model="events.abuseReport" :disabled="disabledEvents.abuseReport">
+									<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReport }}</template>
+								</MkSwitch>
+								<MkButton v-show="mode === 'edit'" transparent :class="$style.testButton" :disabled="!(isActive && events.abuseReport)" @click="test('abuseReport')"><i class="ti ti-send"></i></MkButton>
+							</div>
+							<div :class="$style.switchBox">
+								<MkSwitch v-model="events.abuseReportResolved" :disabled="disabledEvents.abuseReportResolved">
+									<template #label>{{ i18n.ts._webhookSettings._systemEvents.abuseReportResolved }}</template>
+								</MkSwitch>
+								<MkButton v-show="mode === 'edit'" transparent :class="$style.testButton" :disabled="!(isActive && events.abuseReportResolved)" @click="test('abuseReportResolved')"><i class="ti ti-send"></i></MkButton>
+							</div>
+							<div :class="$style.switchBox">
+								<MkSwitch v-model="events.customEmojiRequest" :disabled="disabledEvents.customEmojiRequest">
 							<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequest }}</template>
 						</MkSwitch>
 						<MkSwitch v-model="events.customEmojiRequestResolved" :disabled="disabledEvents.customEmojiRequestResolved">
 							<template #label>{{ i18n.ts._webhookSettings._systemEvents.customEmojiRequestResolved }}</template>
 						</MkSwitch>
 						<MkSwitch v-model="events.userRegistered" :disabled="disabledEvents.userRegistered">
-							<template #label>{{ i18n.ts._webhookSettings._systemEvents.userRegistered }}</template>
-						</MkSwitch>
+									<template #label>{{ i18n.ts._webhookSettings._systemEvents.userRegistered }}</template>
+								</MkSwitch>
+								<MkButton v-show="mode === 'edit'" transparent :class="$style.testButton" :disabled="!(isActive && events.userCreated)" @click="test('userCreated')"><i class="ti ti-send"></i></MkButton>
+							</div>
+							<div :class="$style.switchBox">
+								<MkSwitch v-model="events.inactiveModeratorsWarning" :disabled="disabledEvents.inactiveModeratorsWarning">
+									<template #label>{{ i18n.ts._webhookSettings._systemEvents.inactiveModeratorsWarning }}</template>
+								</MkSwitch>
+								<MkButton v-show="mode === 'edit'" transparent :class="$style.testButton" :disabled="!(isActive && events.inactiveModeratorsWarning)" @click="test('inactiveModeratorsWarning')"><i class="ti ti-send"></i></MkButton>
+							</div>
+							<div :class="$style.switchBox">
+								<MkSwitch v-model="events.inactiveModeratorsInvitationOnlyChanged" :disabled="disabledEvents.inactiveModeratorsInvitationOnlyChanged">
+									<template #label>{{ i18n.ts._webhookSettings._systemEvents.inactiveModeratorsInvitationOnlyChanged }}</template>
+								</MkSwitch>
+								<MkButton v-show="mode === 'edit'" transparent :class="$style.testButton" :disabled="!(isActive && events.inactiveModeratorsInvitationOnlyChanged)" @click="test('inactiveModeratorsInvitationOnlyChanged')"><i class="ti ti-send"></i></MkButton>
+							</div>
+						</div>
+
+						<div v-show="mode === 'edit'" :class="$style.description">
+							{{ i18n.ts._webhookSettings.testRemarks }}
+						</div>
 					</div>
 				</MkFolder>
 
@@ -72,6 +99,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script setup lang="ts">
 import { computed, onMounted, ref, shallowRef, toRefs } from 'vue';
+import * as Misskey from 'misskey-js';
 import MkInput from '@/components/MkInput.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import {
@@ -92,6 +120,8 @@ type EventType = {
 	customEmojiRequest: boolean;
 	customEmojiRequestResolved: boolean;
 	userRegistered: boolean;
+	inactiveModeratorsWarning: boolean;
+	inactiveModeratorsInvitationOnlyChanged: boolean;
 }
 
 const emit = defineEmits<{
@@ -117,6 +147,8 @@ const events = ref<EventType>({
 	customEmojiRequest: true,
 	customEmojiRequestResolved: true,
 	userRegistered: true,
+	inactiveModeratorsWarning: true,
+	inactiveModeratorsInvitationOnlyChanged: true,
 });
 const isActive = ref<boolean>(true);
 
@@ -126,6 +158,8 @@ const disabledEvents = ref<EventType>({
 	customEmojiRequest: false,
 	customEmojiRequestResolved: false,
 	userRegistered: false,
+	inactiveModeratorsWarning: false,
+	inactiveModeratorsInvitationOnlyChanged: false,
 });
 
 const disableSubmitButton = computed(() => {
@@ -192,6 +226,21 @@ async function loadingScope<T>(fn: () => Promise<T>): Promise<T> {
 	}
 }
 
+async function test(type: Misskey.entities.SystemWebhook['on'][number]): Promise<void> {
+	if (!id.value) {
+		return Promise.resolve();
+	}
+
+	await os.apiWithDialog('admin/system-webhook/test', {
+		webhookId: id.value,
+		type,
+		override: {
+			secret: secret.value,
+			url: url.value,
+		},
+	});
+}
+
 onMounted(async () => {
 	await loadingScope(async () => {
 		switch (mode.value) {
@@ -242,9 +291,34 @@ onMounted(async () => {
 	bottom: 0;
 	left: 0;
 	padding: 12px;
-	border-top: solid 0.5px var(--divider);
-	background: var(--acrylicBg);
-	-webkit-backdrop-filter: var(--blur, blur(15px));
-	backdrop-filter: var(--blur, blur(15px));
+	border-top: solid 0.5px var(--MI_THEME-divider);
+	background: var(--MI_THEME-acrylicBg);
+	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
+	backdrop-filter: var(--MI-blur, blur(15px));
+}
+
+.switchBox {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+
+	.testButton {
+		$buttonSize: 28px;
+		padding: 0;
+		width: $buttonSize;
+		min-width: $buttonSize;
+		max-width: $buttonSize;
+		height: $buttonSize;
+		margin-left: auto;
+		line-height: normal;
+		font-size: 90%;
+		border-radius: 9999px;
+	}
+}
+
+.description {
+	font-size: 0.85em;
+	padding: 8px 0 0 0;
+	color: var(--MI_THEME-fgTransparentWeak);
 }
 </style>

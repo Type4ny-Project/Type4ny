@@ -76,7 +76,7 @@ const mock = inject<boolean>('mock', false);
 	opacity: 0.7;
 
 	&:hover {
-		color: var(--fgHighlighted);
+		color: var(--MI_THEME-fgHighlighted);
 	}
 }
 .name {
@@ -101,7 +101,7 @@ const mock = inject<boolean>('mock', false);
 	margin: 0 .5em 0 0;
 	padding: 1px 6px;
 	font-size: 80%;
-	border: solid 0.5px var(--divider);
+	border: solid 0.5px var(--MI_THEME-divider);
 	border-radius: 3px;
 }
 
@@ -110,7 +110,7 @@ const mock = inject<boolean>('mock', false);
 	margin: 0 .5em 0 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	color: var(--fgTransparentWeak);
+	color: var(--MI_THEME-fgTransparentWeak);
 }
 
 .info {
@@ -132,6 +132,6 @@ const mock = inject<boolean>('mock', false);
 	}
 }
 .time{
-	color: var(--fgTransparentWeak);
+	color: var(--MI_THEME-fgTransparentWeak);
 }
 </style>

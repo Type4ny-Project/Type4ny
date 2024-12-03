@@ -41,7 +41,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<i class="ti ti-eye-off" :class="$style.hide" @click="hide = true"></i>
 		<div :class="$style.indicators">
 			<div v-if="video.comment" :class="$style.indicator">ALT</div>
-			<div v-if="video.isSensitive" :class="$style.indicator" style="color: var(--warn);" :title="i18n.ts.sensitive"><i class="ti ti-eye-exclamation"></i></div>
+			<div v-if="video.isSensitive" :class="$style.indicator" style="color: var(--MI_THEME-warn);" :title="i18n.ts.sensitive"><i class="ti ti-eye-exclamation"></i></div>
 		</div>
 	</div>
 
@@ -66,7 +66,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<i class="ti ti-eye-off" :class="$style.hide" @click="hide = true"></i>
 		<div :class="$style.indicators">
 			<div v-if="video.comment" :class="$style.indicator">ALT</div>
-			<div v-if="video.isSensitive" :class="$style.indicator" style="color: var(--warn);" :title="i18n.ts.sensitive"><i class="ti ti-eye-exclamation"></i></div>
+			<div v-if="video.isSensitive" :class="$style.indicator" style="color: var(--MI_THEME-warn);" :title="i18n.ts.sensitive"><i class="ti ti-eye-exclamation"></i></div>
 		</div>
 		<div :class="$style.videoControls" @click.self="togglePlayPause">
 			<div :class="[$style.controlsChild, $style.controlsLeft]">
@@ -117,7 +117,7 @@ import { hms } from '@/filters/hms.js';
 import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import * as os from '@/os.js';
-import { isFullscreenNotSupported } from '@/scripts/device-kind.js';
+import { exitFullscreen, requestFullscreen } from '@/scripts/fullscreen.js';
 import hasAudio from '@/scripts/media-has-audio.js';
 import MkMediaRange from '@/components/MkMediaRange.vue';
 import { $i, iAmModerator } from '@/account.js';
@@ -191,9 +191,7 @@ async function show() {
 const menuShowing = ref(false);
 
 function showMenu(ev: MouseEvent) {
-	let menu: MenuItem[] = [];
-
-	menu = [
+	const menu: MenuItem[] = [
 		// TODO: 再生キューに追加
 		{
 			type: 'switch',
@@ -246,7 +244,7 @@ function showMenu(ev: MouseEvent) {
 		menu.push({
 			type: 'divider',
 		}, {
-			type: 'link' as const,
+			type: 'link',
 			text: i18n.ts._fileViewer.title,
 			icon: 'ti ti-info-circle',
 			to: `/my/drive/file/${props.video.id}`,
@@ -335,26 +333,21 @@ function togglePlayPause() {
 }
 
 function toggleFullscreen() {
-	if (isFullscreenNotSupported && videoEl.value) {
-		if (isFullscreen.value) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			videoEl.value.webkitExitFullscreen();
-			isFullscreen.value = false;
-		} else {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			videoEl.value.webkitEnterFullscreen();
-			isFullscreen.value = true;
-		}
-	} else if (playerEl.value) {
-		if (isFullscreen.value) {
-			document.exitFullscreen();
-			isFullscreen.value = false;
-		} else {
-			playerEl.value.requestFullscreen({ navigationUI: 'hide' });
-			isFullscreen.value = true;
-		}
+	if (playerEl.value == null || videoEl.value == null) return;
+	if (isFullscreen.value) {
+		exitFullscreen({
+			videoEl: videoEl.value,
+		});
+		isFullscreen.value = false;
+	} else {
+		requestFullscreen({
+			videoEl: videoEl.value,
+			playerEl: playerEl.value,
+			options: {
+				navigationUI: 'hide',
+			},
+		});
+		isFullscreen.value = true;
 	}
 }
 
@@ -455,8 +448,10 @@ watch(loop, (to) => {
 });
 
 watch(hide, (to) => {
-	if (to && isFullscreen.value) {
-		document.exitFullscreen();
+	if (videoEl.value && to && isFullscreen.value) {
+		exitFullscreen({
+			videoEl: videoEl.value,
+		});
 		isFullscreen.value = false;
 	}
 });
@@ -509,7 +504,7 @@ onDeactivated(() => {
 		height: 100%;
 		pointer-events: none;
 		border-radius: inherit;
-		box-shadow: inset 0 0 0 4px var(--warn);
+		box-shadow: inset 0 0 0 4px var(--MI_THEME-warn);
 	}
 }
 
@@ -524,10 +519,10 @@ onDeactivated(() => {
 }
 
 .indicator {
-	/* Hardcode to black because either --bg or --fg makes it hard to read in dark/light mode */
+	/* Hardcode to black because either --MI_THEME-bg or --MI_THEME-fg makes it hard to read in dark/light mode */
 	background-color: black;
-	border-radius: var(--radius);
-	color: var(--accentLighten);
+	border-radius: var(--MI-radius);
+	color: var(--MI_THEME-accentLighten);
 	display: inline-block;
 	font-weight: bold;
 	font-size: 0.8em;
@@ -537,9 +532,9 @@ onDeactivated(() => {
 .hide {
 	display: block;
 	position: absolute;
-	border-radius: var(--radius);
-	background-color: var(--fg);
-	color: var(--accentLighten);
+	border-radius: var(--MI-radius);
+	background-color: var(--MI_THEME-fg);
+	color: var(--MI_THEME-accentLighten);
 	font-size: 12px;
 	opacity: .5;
 	padding: 5px 8px;
@@ -593,7 +588,7 @@ onDeactivated(() => {
 	opacity: 0;
 	transition: opacity .4s ease-in-out;
 
-	background: var(--accent);
+	background: var(--MI_THEME-accent);
 	color: #fff;
 	padding: 1rem;
 	border-radius: 99rem;
@@ -659,12 +654,12 @@ onDeactivated(() => {
 
 	.controlButton {
 		padding: 6px;
-		border-radius: calc(var(--radius) / 2);
+		border-radius: calc(var(--MI-radius) / 2);
 		transition: background-color .2s ease-in-out;
 		font-size: 1.05rem;
 
 		&:hover {
-			background-color: var(--accent);
+			background-color: var(--MI_THEME-accent);
 		}
 
 		&:focus-visible {

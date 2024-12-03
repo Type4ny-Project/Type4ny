@@ -131,7 +131,7 @@ function send() {
 }
 .note{
   display: flex;
-  margin: var(--margin) 0;
+  margin: var(--MI-margin) 0;
   align-items: center;
 
 }

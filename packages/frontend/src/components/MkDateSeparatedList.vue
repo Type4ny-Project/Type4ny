@@ -9,6 +9,7 @@ import MkAd from '@/components/global/MkAd.vue';
 import { isDebuggerEnabled, stackTraceInstances } from '@/debug.js';
 import { i18n } from '@/i18n.js';
 import * as os from '@/os.js';
+import { instance } from '@/instance.js';
 import { defaultStore } from '@/store.js';
 import { MisskeyEntity } from '@/types/date-separated-list.js';
 
@@ -43,73 +44,74 @@ export default defineComponent({
 	setup(props, { slots, expose }) {
 		const $style = useCssModule(); // カスタムレンダラなので使っても大丈夫
 
-		const dateTextCache = new Map<string, string>();
-
-		function getDateText(time: string) {
-			if (dateTextCache.has(time)) {
-				return dateTextCache.get(time)!;
-			}
-			const date = new Date(time).getDate();
-			const month = new Date(time).getMonth() + 1;
-			const text = i18n.tsx.monthAndDay({
+		function getDateText(dateInstance: Date) {
+			const date = dateInstance.getDate();
+			const month = dateInstance.getMonth() + 1;
+			return i18n.tsx.monthAndDay({
 				month: month.toString(),
 				day: date.toString(),
 			});
-			dateTextCache.set(time, text);
-			return text;
 		}
 
 		if (props.items.length === 0) return;
 
-		const renderChildrenImpl = () => {
-			const slotContent = slots.default ? slots.default : () => [];
-			return props.items.map((item, i) => {
-				const el = slotContent({
-					item: item,
-				})[0];
-				if (el.key == null && item.id) el.key = item.id;
+		const renderChildrenImpl = () => props.items.map((item, i) => {
+			if (!slots || !slots.default) return;
 
-				if (
-					i !== props.items.length - 1 &&
-					new Date(item.createdAt).getDate() !== new Date(props.items[i + 1].createdAt).getDate()
-				) {
-					const separator = h('div', {
-						class: $style['separator'],
-						key: item.id + ':separator',
-					}, h('p', {
-						class: $style['date'],
+			const el = slots.default({
+				item: item,
+			})[0];
+			if (el.key == null && item.id) el.key = item.id;
+
+			const date = new Date(item.createdAt);
+			const nextDate = props.items[i + 1] ? new Date(props.items[i + 1].createdAt) : null;
+
+			if (
+				i !== props.items.length - 1 &&
+				nextDate != null && (
+					date.getFullYear() !== nextDate.getFullYear() ||
+					date.getMonth() !== nextDate.getMonth() ||
+					date.getDate() !== nextDate.getDate()
+				)
+			) {
+				const separator = h('div', {
+					class: $style['separator'],
+					key: item.id + ':separator',
+				}, h('p', {
+					class: $style['date'],
+				}, [
+					h('span', {
+						class: $style['date-1'],
 					}, [
-						h('span', {
-							class: $style['date-1'],
-						}, [
-							h('i', {
-								class: `ti ti-chevron-up ${$style['date-1-icon']}`,
-							}),
-							getDateText(item.createdAt),
-						]),
-						h('span', {
-							class: $style['date-2'],
-						}, [
-							getDateText(props.items[i + 1].createdAt),
-							h('i', {
-								class: `ti ti-chevron-down ${$style['date-2-icon']}`,
-							}),
-						]),
-					]));
+						h('i', {
+							class: `ti ti-chevron-up ${$style['date-1-icon']}`,
+						}),
+						getDateText(date),
+					]),
+					h('span', {
+						class: $style['date-2'],
+					}, [
+						getDateText(nextDate),
+						h('i', {
+							class: `ti ti-chevron-down ${$style['date-2-icon']}`,
+						}),
+					]),
+				]));
 
-					return [el, separator];
+				return [el, separator];
+			} else {
+				if (props.ad && instance.ads.length > 0 && item._shouldInsertAd_) {
+					return [h('div', {
+						key: item.id + ':ad',
+						class: $style['ad-wrapper'],
+					}, [h(MkAd, {
+						prefer: ['horizontal', 'horizontal-big'],
+					})]), el];
 				} else {
-					if (props.ad && item._shouldInsertAd_) {
-						return [h(MkAd, {
-							key: item.id + ':ad',
-							prefer: ['horizontal', 'horizontal-big'],
-						}), el];
-					} else {
-						return el;
-					}
+					return el;
 				}
-			});
-		};
+			}
+		});
 
 		const renderChildren = () => {
 			const children = renderChildrenImpl();
@@ -126,14 +128,16 @@ export default defineComponent({
 			return children;
 		};
 
-		function onBeforeLeave(element: Element) {
-			const el = element as HTMLElement;
-			el.classList.add('before-leave');
+		function onBeforeLeave(el: Element) {
+			if (!(el instanceof HTMLElement)) return;
+			el.style.top = `${el.offsetTop}px`;
+			el.style.left = `${el.offsetLeft}px`;
 		}
 
-		function onLeaveCancelled(element: Element) {
-			const el = element as HTMLElement;
-			el.classList.remove('before-leave');
+		function onLeaveCancelled(el: Element) {
+			if (!(el instanceof HTMLElement)) return;
+			el.style.top = '';
+			el.style.left = '';
 		}
 
 		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
@@ -163,25 +167,25 @@ export default defineComponent({
 	container-type: inline-size;
 
 	&:global {
-		> .list-move {
-			transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-		}
+	> .list-move {
+		transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+	}
 
-		&.deny-move-transition > .list-move {
-			transition: none !important;
-		}
+	&.deny-move-transition > .list-move {
+		transition: none !important;
+	}
 
-		> .list-enter-active {
-			transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-		}
+	> .list-enter-active {
+		transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+	}
 
-		> *:empty {
-			display: none;
-		}
+	> *:empty {
+		display: none;
+	}
 	}
 
 	&:not(.date-separated-list-nogap) > *:not(:last-child) {
-		margin-bottom: var(--margin);
+		margin-bottom: var(--MI-margin);
 	}
 }
 
@@ -193,27 +197,27 @@ export default defineComponent({
 		box-shadow: none;
 
 		&:not(:last-child) {
-			border-bottom: solid 0.5px var(--divider);
+			border-bottom: solid 0.5px var(--MI_THEME-divider);
 		}
 	}
 }
 
 .direction-up {
 	&:global {
-		> .list-enter-from,
-		> .list-leave-to {
-			opacity: 0;
-			transform: translateY(64px);
-		}
+	> .list-enter-from,
+	> .list-leave-to {
+		opacity: 0;
+		transform: translateY(64px);
+	}
 	}
 }
 .direction-down {
 	&:global {
-		> .list-enter-from,
-		> .list-leave-to {
-			opacity: 0;
-			transform: translateY(-64px);
-		}
+	> .list-enter-from,
+	> .list-leave-to {
+		opacity: 0;
+		transform: translateY(-64px);
+	}
 	}
 }
 
@@ -234,7 +238,7 @@ export default defineComponent({
 	line-height: 32px;
 	text-align: center;
 	font-size: 12px;
-	color: var(--dateLabelFg);
+	color: var(--MI_THEME-dateLabelFg);
 }
 
 .date-1 {
@@ -253,7 +257,9 @@ export default defineComponent({
 	margin-left: 8px;
 }
 
-.before-leave {
-	position: absolute !important;
+.ad-wrapper {
+	padding: 8px;
+	background-size: auto auto;
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--MI_THEME-bg) 8px, var(--MI_THEME-bg) 14px);
 }
 </style>

@@ -4,12 +4,14 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
+import { In, IsNull, Not } from 'typeorm';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
 import { DEFAULT_POLICIES } from '@/core/RoleService.js';
 import { envOption } from '@/env.js';
+import type { UsersRepository } from '@/models/_.js';
 
 export const meta = {
 	tags: ['meta'],
@@ -82,6 +84,10 @@ export const meta = {
 				type: 'string',
 				optional: false,
 				nullable: true,
+			},
+			enableTestcaptcha: {
+				type: 'boolean',
+				optional: false, nullable: false,
 			},
 			swPublickey: {
 				type: 'string',
@@ -200,6 +206,13 @@ export const meta = {
 				type: 'array',
 				optional: false,
 				nullable: false,
+				items: {
+					type: 'string',
+				},
+			},
+			prohibitedWordsForNameOfUser: {
+				type: 'array',
+				optional: false, nullable: false,
 				items: {
 					type: 'string',
 				},
@@ -458,6 +471,10 @@ export const meta = {
 				optional: false,
 				nullable: false,
 			},
+			enableReactionsBuffering: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			notesPerOneAd: {
 				type: 'number',
 				optional: false,
@@ -629,6 +646,9 @@ export const meta = {
 			iconDark: { type: 'string', nullable: true },
 			bannerLight: { type: 'string', nullable: true },
 			bannerDark: { type: 'string', nullable: true },
+			maxLocalUsers: { type: 'number', nullable: true },
+			nowLocalUsers: { type: 'number', nullable: true },
+			isManaged: { type: 'boolean', nullable: true },
 		},
 	},
 } as const;
@@ -644,6 +664,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
 		private metaService: MetaService,
 	) {
 		super(meta, paramDef, async (_, me) => {
@@ -674,6 +696,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				recaptchaSiteKey: instance.recaptchaSiteKey,
 				enableTurnstile: instance.enableTurnstile,
 				turnstileSiteKey: instance.turnstileSiteKey,
+				enableTestcaptcha: instance.enableTestcaptcha,
 				swPublickey: instance.swPublicKey,
 				themeColor: instance.themeColor,
 				requestEmojiAllOk: instance.requestEmojiAllOk,
@@ -702,6 +725,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				mediaSilencedHosts: instance.mediaSilencedHosts || [],
 				sensitiveWords: instance.sensitiveWords,
 				prohibitedWords: instance.prohibitedWords,
+				prohibitedWordsForNameOfUser: instance.prohibitedWordsForNameOfUser,
 				preservedUsernames: instance.preservedUsernames,
 				hcaptchaSecretKey: instance.hcaptchaSecretKey,
 				mcaptchaSecretKey: instance.mcaptchaSecretKey,
@@ -754,6 +778,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				perRemoteUserUserTimelineCacheMax: instance.perRemoteUserUserTimelineCacheMax,
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
+				enableReactionsBuffering: instance.enableReactionsBuffering,
 				notesPerOneAd: instance.notesPerOneAd,
 				DiscordWebhookUrl: instance.DiscordWebhookUrl,
 				DiscordWebhookUrlWordBlock: instance.DiscordWebhookUrlWordBlock,
@@ -769,13 +794,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
-				iconLight: instance.iconLight,
-				iconDark: instance.iconDark,
-				bannerLight: instance.bannerLight,
-				bannerDark: instance.bannerDark,
-				isManaged: false,
-				pointName: instance.pointName,
-				googleAnalyticsId: instance.googleAnalyticsId,
+				maxLocalUsers: 0,
+				nowLocalUsers: 0,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {
@@ -796,6 +816,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageUseProxy: false,
 					objectStorageSetPublicRead: false,
 					objectStorageS3ForcePathStyle: false,
+					maxLocalUsers: this.config.maxLocalUsers,
+					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
 					summalyProxy: 'Masked',
 					deeplAuthKey: 'Masked',
 					isManaged: true,

@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <MkPullToRefresh :refresher="() => reload()">
-	<MkPagination ref="pagingComponent" :pagination="pagination">
+	<MkPagination ref="pagingComponent" :pagination="pagination" :filter="filterMutedNotification">
 		<template #empty>
 			<div class="_fullinfo">
 				<img :src="infoImageUrl" class="_ghost"/>
@@ -31,9 +31,10 @@ import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkNote from '@/components/MkNote.vue';
 import { useStream } from '@/stream.js';
 import { i18n } from '@/i18n.js';
-import { notificationTypes } from '@/const.js';
+import { notificationTypes } from '@@/js/const.js';
 import { infoImageUrl } from '@/instance.js';
 import { defaultStore } from '@/store.js';
+import { filterMutedNotification } from '@/scripts/filter-muted-notification.js';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
 
 const props = defineProps<{
@@ -62,7 +63,7 @@ function onNotification(notification) {
 		useStream().send('readNotification');
 	}
 
-	if (!isMuted) {
+	if (!isMuted && filterMutedNotification(notification)) {
 		pagingComponent.value?.prepend(notification);
 	}
 }
@@ -98,6 +99,6 @@ onUnmounted(() => {
 
 <style lang="scss" module>
 .list {
-	background: var(--panel);
+	background: var(--MI_THEME-panel);
 }
 </style>

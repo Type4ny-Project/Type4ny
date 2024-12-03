@@ -107,24 +107,24 @@ const suspended = computed(() => props.user.isSuspended ?? false);
 	> .moderator {
 		display: inline-block;
 		border: solid 1px;
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 		padding: 2px 6px;
 		font-size: 85%;
 	}
 
 	> .suspended {
-		color: var(--error);
-		border-color: var(--error);
+		color: var(--MI_THEME-error);
+		border-color: var(--MI_THEME-error);
 	}
 
 	> .silenced {
-		color: var(--warn);
-		border-color: var(--warn);
+		color: var(--MI_THEME-warn);
+		border-color: var(--MI_THEME-warn);
 	}
 
 	> .moderator {
-		color: var(--success);
-		border-color: var(--success);
+		color: var(--MI_THEME-success);
+		border-color: var(--MI_THEME-success);
 	}
 }
 </style>
