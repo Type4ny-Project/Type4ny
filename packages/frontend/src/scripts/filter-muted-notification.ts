@@ -9,7 +9,7 @@ export function filterMutedNotification(notification: Misskey.entities.Notificat
 			if (defaultStore.state.reactionAndServerMute && $i && $i.mutedInstances && !$i.mutedInstances.includes(notification.reaction.split('@')[1])) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
 			break;
 		case 'reaction:grouped':
-			notification.reactions = notification.reactions.filter(reaction => !defaultStore.state.mutedReactions.includes(reaction.reaction.replace('@.', ''))).filter(reaction => !(defaultStore.state.reactionAndServerMute && $i && $i.mutedInstances && !$i.mutedInstances.includes(reaction.reaction.split('@')[1])));
+			notification.reactions = notification.reactions.filter(reaction => !(defaultStore.state.reactionAndServerMute && $i && $i.mutedInstances && !$i.mutedInstances.includes(reaction.reaction.split('@')[1]))).filter(reaction => !defaultStore.state.mutedReactions.includes(reaction.reaction.replace('@.', '')));
 			if (notification.reactions.length === 0) return false;
 			break;
 	}
