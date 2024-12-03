@@ -53,6 +53,7 @@ function shouldDisplayReaction([reaction]: [string, number]): boolean {
 	if (reaction === props.note.myReaction) return true; // 自分がつけたリアクションなら表示する
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (!defaultStore.state.mutedReactions?.includes(reaction.replace('@.', ''))) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
+	if ($i.mutedInstances && !$i.mutedInstances.includes(reaction.split('@')[1])) return true; // ローカルの絵文字には @. というsuffixがつくのでそれを消してから比較してあげる
 	return false;
 }
 
