@@ -291,8 +291,8 @@ export class DriveService {
 				};
 			}
 		}
-		this.registerLogger.debug(String(this.config.objectStorage?.useObjectStorage));
-		this.registerLogger.debug(String(this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage));
+		this.registerLogger.info(String(this.config.objectStorage?.useObjectStorage));
+		this.registerLogger.info(String(this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage));
 		if (!isMimeImage(type, 'sharp-convertible-image-with-bmp')) {
 			this.registerLogger.debug('web image and thumbnail not created (cannot convert by sharp)');
 			return {
