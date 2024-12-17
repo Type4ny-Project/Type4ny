@@ -150,7 +150,7 @@ export class DriveService {
 	// thunbnail, webpublic を必要なら生成
 		const alts = await this.generateAlts(path, type, !file.uri);
 
-		if (this.meta.useObjectStorage) {
+		if (this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage) {
 		//#region ObjectStorage params
 			let [ext] = (name.match(/\.([a-zA-Z0-9_-]+)$/) ?? ['']);
 
