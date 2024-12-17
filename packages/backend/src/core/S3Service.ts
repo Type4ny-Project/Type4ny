@@ -37,7 +37,7 @@ export class S3Service {
 
 			const agent = this.httpRequestService.getAgentByUrl(new URL(u), !objectStorageConfig.objectStorageUseProxy);
 			const handlerOption: NodeHttpHandlerOptions = {};
-			if (meta.objectStorageUseSSL) {
+			if (this.config.objectStorage.objectStorageUseSSL) {
 				handlerOption.httpsAgent = agent as https.Agent;
 			} else {
 				handlerOption.httpAgent = agent as http.Agent;
