@@ -149,8 +149,6 @@ export class DriveService {
 	private async save(file: MiDriveFile, path: string, name: string, type: string, hash: string, size: number): Promise<MiDriveFile> {
 	// thunbnail, webpublic を必要なら生成
 		const alts = await this.generateAlts(path, type, !file.uri);
-		this.registerLogger.debug(String(this.config.objectStorage?.useObjectStorage));
-		this.registerLogger.debug(String(this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage));
 
 		if (this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage) {
 		//#region ObjectStorage params
@@ -293,7 +291,8 @@ export class DriveService {
 				};
 			}
 		}
-
+		this.registerLogger.debug(String(this.config.objectStorage?.useObjectStorage));
+		this.registerLogger.debug(String(this.meta.useObjectStorage || this.config.objectStorage?.useObjectStorage));
 		if (!isMimeImage(type, 'sharp-convertible-image-with-bmp')) {
 			this.registerLogger.debug('web image and thumbnail not created (cannot convert by sharp)');
 			return {
