@@ -170,8 +170,10 @@ export class DriveService {
 			}
 
 			const baseUrl = this.meta.objectStorageBaseUrl
-				? `${ this.meta.objectStorageUseSSL ? 'https' : 'http' }://${ this.meta.objectStorageEndpoint }${ this.meta.objectStoragePort ? `:${this.meta.objectStoragePort}` : '' }/${ this.meta.objectStorageBucket }` : this.config.objectStorage?.objectStorageBaseUrl
-					? `${ this.config.objectStorage.objectStorageUseSSL ? 'https' : 'http' }://${ this.config.objectStorage.objectStorageEndpoint }${ this.config.objectStorage.objectStoragePort ? `:${this.config.objectStorage.objectStoragePort}` : '' }/${ this.config.objectStorage.objectStorageBucket }` : '';
+				? `${ this.meta.objectStorageUseSSL ? 'https' : 'http' }://${ this.meta.objectStorageEndpoint }${ this.meta.objectStoragePort ? `:${this.meta.objectStoragePort}` : '' }/${ this.meta.objectStorageBucket }` :
+				this.config.objectStorage?.objectStorageBaseUrl
+					? `${ this.config.objectStorage.objectStorageUseSSL ? 'https' : 'http' }://${ this.config.objectStorage.objectStorageEndpoint }${ this.config.objectStorage.objectStoragePort ? `:${this.config.objectStorage.objectStoragePort}` : '' }/${ this.config.objectStorage.objectStorageBucket }` :
+					this.config.objectStorage?.objectStorageBaseUrl;
 
 			// for original
 			const key = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/${randomUUID()}${ext}`;
