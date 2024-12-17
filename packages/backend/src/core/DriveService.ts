@@ -170,10 +170,11 @@ export class DriveService {
 			}
 
 			const baseUrl = this.meta.objectStorageBaseUrl
-				?? `${ this.meta.objectStorageUseSSL ? 'https' : 'http' }://${ this.meta.objectStorageEndpoint }${ this.meta.objectStoragePort ? `:${this.meta.objectStoragePort}` : '' }/${ this.meta.objectStorageBucket }`;
+				? `${ this.meta.objectStorageUseSSL ? 'https' : 'http' }://${ this.meta.objectStorageEndpoint }${ this.meta.objectStoragePort ? `:${this.meta.objectStoragePort}` : '' }/${ this.meta.objectStorageBucket }` : this.config.objectStorage?.objectStorageBaseUrl
+					? `${ this.config.objectStorage.objectStorageUseSSL ? 'https' : 'http' }://${ this.config.objectStorage.objectStorageEndpoint }${ this.config.objectStorage.objectStoragePort ? `:${this.config.objectStorage.objectStoragePort}` : '' }/${ this.config.objectStorage.objectStorageBucket }` : '';
 
 			// for original
-			const key = `${this.meta.objectStoragePrefix}/${randomUUID()}${ext}`;
+			const key = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/${randomUUID()}${ext}`;
 			const url = `${ baseUrl }/${ key }`;
 
 			// for alts
@@ -190,7 +191,7 @@ export class DriveService {
 			];
 
 			if (alts.webpublic) {
-				webpublicKey = `${this.meta.objectStoragePrefix}/webpublic-${randomUUID()}.${alts.webpublic.ext}`;
+				webpublicKey = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/webpublic-${randomUUID()}.${alts.webpublic.ext}`;
 				webpublicUrl = `${ baseUrl }/${ webpublicKey }`;
 
 				this.registerLogger.info(`uploading webpublic: ${webpublicKey}`);
@@ -198,7 +199,7 @@ export class DriveService {
 			}
 
 			if (alts.thumbnail) {
-				thumbnailKey = `${this.meta.objectStoragePrefix}/thumbnail-${randomUUID()}.${alts.thumbnail.ext}`;
+				thumbnailKey = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/thumbnail-${randomUUID()}.${alts.thumbnail.ext}`;
 				thumbnailUrl = `${ baseUrl }/${ thumbnailKey }`;
 
 				this.registerLogger.info(`uploading thumbnail: ${thumbnailKey}`);
@@ -376,7 +377,7 @@ export class DriveService {
 		if (!FILE_TYPE_BROWSERSAFE.includes(type)) type = 'application/octet-stream';
 
 		const params = {
-			Bucket: this.meta.objectStorageBucket,
+			Bucket: this.meta.objectStorageBucket ? this.meta.objectStorageBucket : this.config.objectStorage?.objectStorageBucket,
 			Key: key,
 			Body: stream,
 			ContentType: type,
@@ -389,7 +390,7 @@ export class DriveService {
 			// 許可されているファイル形式でしか拡張子をつけない
 			ext ? correctFilename(filename, ext) : filename,
 		);
-		if (this.meta.objectStorageSetPublicRead) params.ACL = 'public-read';
+		if (this.meta.objectStorageSetPublicRead || this.config.objectStorage?.objectStorageSetPublicRead) params.ACL = 'public-read';
 
 		await this.s3Service.upload(this.meta, params)
 			.then(
@@ -818,7 +819,7 @@ export class DriveService {
 	public async deleteObjectStorageFile(key: string) {
 		try {
 			const param = {
-				Bucket: this.meta.objectStorageBucket,
+				Bucket: this.meta.objectStorageBucket ? this.meta.objectStorageBucket : this.config.objectStorage?.objectStorageBucket,
 				Key: key,
 			} as DeleteObjectCommandInput;
 
