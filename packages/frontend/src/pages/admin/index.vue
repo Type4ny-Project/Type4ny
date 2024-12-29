@@ -237,6 +237,11 @@ const menuDef = computed(() => [{
 		text: i18n.ts.performance,
 		to: '/admin/performance',
 		active: currentPage.value?.route.name === 'performance',
+	}, {
+		icon: 'ti ti-adjustments',
+		text: i18n.ts.other,
+		to: '/admin/other-settings',
+		active: currentPage.value?.route.name === 'other-settings',
 	}],
 }, {
 	title: i18n.ts.info,

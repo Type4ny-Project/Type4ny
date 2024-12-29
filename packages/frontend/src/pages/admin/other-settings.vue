@@ -95,10 +95,7 @@ async function init() {
 	enableChartsForFederatedInstances.value = meta.enableChartsForFederatedInstances;
 	isManaged.value = meta.isManaged;
 	requestEmojiAllOk.value = meta.requestEmojiAllOk;
-	DiscordWebhookUrl.value = meta.DiscordWebhookUrl;
-	DiscordWebhookUrlWordBlock.value = meta.DiscordWebhookUrlWordBlock;
 	EmojiBotToken.value = meta.EmojiBotToken;
-	ApiBase.value = meta.ApiBase;
 }
 
 function save() {
