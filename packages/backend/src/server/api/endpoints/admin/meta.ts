@@ -794,8 +794,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
-				maxLocalUsers: 0,
-				nowLocalUsers: 0,
+				...(envOption.managed ? {
+					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
+					maxLocalUsers: this.config.maxLocalUsers,
+
+				} : {
+					nowLocalUsers: 0,
+					maxLocalUsers: 0,
+				}),
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {
@@ -816,8 +822,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageUseProxy: false,
 					objectStorageSetPublicRead: false,
 					objectStorageS3ForcePathStyle: false,
-					maxLocalUsers: this.config.maxLocalUsers,
-					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
 					summalyProxy: 'Masked',
 					deeplAuthKey: 'Masked',
 					isManaged: true,
