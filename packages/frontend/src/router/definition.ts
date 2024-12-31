@@ -498,6 +498,10 @@ const routes: RouteDef[] = [{
 		path: '/system-webhook',
 		name: 'system-webhook',
 		component: page(() => import('@/pages/admin/system-webhook.vue')),
+	},{
+		path: '/other-settings',
+		name: 'other-settings',
+		component: page(() => import('@/pages/admin/other-settings.vue')),
 	}, {
 		path: '/',
 		component: page(() => import('@/pages/_empty_.vue')),
