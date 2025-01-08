@@ -794,6 +794,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
+				isManaged: envOption.managed,
 				...(envOption.managed ? {
 					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
 					maxLocalUsers: this.config.maxLocalUsers,
@@ -824,7 +825,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageS3ForcePathStyle: false,
 					summalyProxy: 'Masked',
 					deeplAuthKey: 'Masked',
-					isManaged: true,
 				};
 			}
 		});
