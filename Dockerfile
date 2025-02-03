@@ -14,7 +14,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	&& apt-get install -yqq --no-install-recommends \
 	build-essential
 
-RUN npm install -g pnpm@8.4.0 && pnpm install
+RUN corepack enable
+RUN corepack prepare pnpm@9.4.0 --activate
 
 WORKDIR /type4ny
 
@@ -48,7 +49,8 @@ RUN apt-get update \
 	&& apt-get install -yqq --no-install-recommends \
 	build-essential
  
-RUN npm install -g pnpm@8.4.0 && pnpm install
+RUN corepack enable
+RUN corepack prepare pnpm@9.4.0 --activate
 
 WORKDIR /type4ny
 
@@ -74,7 +76,8 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 	ffmpeg tini curl libjemalloc-dev libjemalloc2 \
 	&& ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so \
-	&& npm install -g pnpm@8.4.0 && pnpm install \
+	&& corepack enable \
+  && corepack prepare pnpm@9.4.0 --activate \
 	&& groupadd -g "${GID}" type4ny \
 	&& useradd -l -u "${UID}" -g "${GID}" -m -d /type4ny type4ny \
 	&& find / -type d -path /sys -prune -o -type d -path /proc -prune -o -type f -perm /u+s -ignore_readdir_race -exec chmod u-s {} \; \
@@ -87,7 +90,9 @@ WORKDIR /type4ny
 
 # add package.json to add pnpm
 COPY --chown=type4ny:type4ny ./package.json ./package.json
-RUN npm install -g pnpm@8.4.0 && pnpm install
+
+RUN corepack enable
+RUN corepack prepare pnpm@9.4.0 --activate
 
 COPY --chown=type4ny:type4ny --from=target-builder /type4ny/node_modules ./node_modules
 COPY --chown=type4ny:type4ny --from=target-builder /type4ny/packages/backend/node_modules ./packages/backend/node_modules
