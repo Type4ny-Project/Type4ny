@@ -703,6 +703,10 @@ export const defaultStore = markRaw(
 			where: 'device',
 			default: true,
 		},
+	showSoftWordMutedWord: {
+		where: 'device',
+		default: false,
+	},
 
 		sound_masterVolume: {
 			where: 'device',

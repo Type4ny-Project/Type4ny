@@ -1,10 +1,12 @@
 # syntax = docker/dockerfile:1.4
 
-ARG NODE_VERSION=22.11.0-bullseye
+ARG NODE_VERSION=22.11.0-bookworm
 
 # build assets & compile TypeScript
 
 FROM --platform=$BUILDPLATFORM node:${NODE_VERSION} AS native-builder
+
+ENV COREPACK_DEFAULT_TO_LATEST=0
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 	--mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -44,6 +46,8 @@ RUN rm -rf .git/
 # build native dependencies for target platform
 
 FROM --platform=$TARGETPLATFORM node:${NODE_VERSION} AS target-builder
+
+ENV COREPACK_DEFAULT_TO_LATEST=0
 
 RUN apt-get update \
 	&& apt-get install -yqq --no-install-recommends \

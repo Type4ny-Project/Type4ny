@@ -32,6 +32,7 @@ import MkCustomEmojiEditRemote from '@/components/MkCustomEmojiEditRemote.vue';
 import { selectFile } from '@/scripts/select-file';
 import * as os from '@/os';
 import { misskeyApi } from '@/scripts/misskey-api.js';
+import { getProxiedImageUrl } from '@/scripts/media-proxy.js';
 import { i18n } from '@/i18n';
 import { definePageMetadata } from '@/scripts/page-metadata';
 

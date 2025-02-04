@@ -11,7 +11,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import * as Misskey from 'misskey-js';
-import { toUnicode } from 'punycode/';
+import { toUnicode } from 'punycode.js';
 import { host as hostRaw } from '@@/js/config.js';
 import { defaultStore } from '@/store.js';
 

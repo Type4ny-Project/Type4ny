@@ -4,13 +4,21 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div
-	ref="thumbnail"
-	:class="[
-		$style.root,
-		{ [$style.sensitiveHighlight]: highlightWhenSensitive && file.isSensitive },
-	]"
+	v-panel
+	:class="[$style.root, {
+		[$style.sensitiveHighlight]: highlightWhenSensitive && file.isSensitive,
+		[$style.large]: large,
+	}]"
 >
-	<ImgWithBlurhash v-if="isThumbnailAvailable" :hash="file.blurhash" :src="file.thumbnailUrl" :alt="file.name" :title="file.name" :cover="fit !== 'contain'"/>
+	<ImgWithBlurhash
+		v-if="isThumbnailAvailable"
+		:hash="file.blurhash"
+		:src="file.thumbnailUrl"
+		:alt="file.name"
+		:title="file.name"
+		:cover="fit !== 'contain'"
+		:forceBlurhash="forceBlurhash"
+	/>
 	<i v-else-if="is === 'image'" class="ti ti-photo" :class="$style.icon"></i>
 	<i v-else-if="is === 'video'" class="ti ti-video" :class="$style.icon"></i>
 	<i v-else-if="is === 'audio' || is === 'midi'" class="ti ti-file-music" :class="$style.icon"></i>
@@ -33,6 +41,8 @@ const props = defineProps<{
 	file: Misskey.entities.DriveFile;
 	fit: 'cover' | 'contain';
 	highlightWhenSensitive?: boolean;
+	forceBlurhash?: boolean;
+	large?: boolean;
 }>();
 
 const is = computed(() => {
@@ -59,7 +69,7 @@ const is = computed(() => {
 
 const isThumbnailAvailable = computed(() => {
 	return props.file.thumbnailUrl
-		? (is.value === 'image' as const || is.value === 'video')
+		? (is.value === 'image' || is.value === 'video')
 		: false;
 });
 </script>
@@ -99,5 +109,9 @@ const isThumbnailAvailable = computed(() => {
 	margin: auto;
 	font-size: 32px;
 	color: #777;
+}
+
+.large .icon {
+	font-size: 40px;
 }
 </style>

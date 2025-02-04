@@ -50,6 +50,9 @@ type Source = {
 	redisForJobQueue?: RedisOptionsSource;
 	redisForTimelines?: RedisOptionsSource;
 	redisForReactions?: RedisOptionsSource;
+	fulltextSearch?: {
+		provider?: FulltextSearchProvider;
+	};
 	meilisearch?: {
 		host: string;
 		port: string;
@@ -123,6 +126,13 @@ type Source = {
 	deactivateAntennaThreshold?: number;
 	maxLocalUsers?: number;
 	pidFile: string;
+
+	logging?: {
+		sql?: {
+			disableQueryTruncation? : boolean,
+			enableQueryParamLogging? : boolean,
+		}
+	}
 };
 
 export type Config = {
@@ -150,6 +160,9 @@ export type Config = {
 				pass: string;
 		  }[]
 		| undefined;
+	fulltextSearch?: {
+		provider?: FulltextSearchProvider;
+	};
 	meilisearch:
 		| {
 				host: string;
@@ -183,6 +196,12 @@ export type Config = {
 	inboxJobMaxAttempts: number | undefined;
 	proxyRemoteFiles: boolean | undefined;
 	signToActivityPubGet: boolean | undefined;
+	logging?: {
+		sql?: {
+			disableQueryTruncation? : boolean,
+			enableQueryParamLogging? : boolean,
+		}
+	}
 
 	version: string;
 	publishTarballInsteadOfProvideRepositoryUrl: boolean;
@@ -234,6 +253,8 @@ export type Config = {
 	};
 	pidFile: string;
 };
+
+export type FulltextSearchProvider = 'sqlLike' | 'sqlPgroonga' | 'meilisearch';
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
@@ -310,6 +331,7 @@ export function loadConfig(): Config {
 		adminPassword: config.adminPassword,
 		rootUserName: config.rootUserName,
 		rootPassword: config.rootPassword,
+		fulltextSearch: config.fulltextSearch,
 		meilisearch: config.meilisearch,
 		redis,
 		redisForPubsub: config.redisForPubsub
@@ -367,6 +389,7 @@ export function loadConfig(): Config {
 		maxReactionsLimit: config.maxReactionsLimit ?? 3,
 		objectStorage: config.objectStorage ?? {},
 		pidFile: config.pidFile,
+		logging: config.logging,
 	};
 }
 

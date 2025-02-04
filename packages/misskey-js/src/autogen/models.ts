@@ -35,6 +35,7 @@ export type EmojiSimple = components['schemas']['EmojiSimple'];
 export type EmojiRequestSimple = components['schemas']['EmojiRequestSimple'];
 export type EmojiDetailed = components['schemas']['EmojiDetailed'];
 export type EmojiRequestDetailed = components['schemas']['EmojiRequestDetailed'];
+export type EmojiDetailedAdmin = components['schemas']['EmojiDetailedAdmin'];
 export type Flash = components['schemas']['Flash'];
 export type Signin = components['schemas']['Signin'];
 export type RoleCondFormulaLogics = components['schemas']['RoleCondFormulaLogics'];
