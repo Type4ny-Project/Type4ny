@@ -5588,6 +5588,10 @@ export interface Locale extends ILocale {
      * CWに絵文字を挿入
      */
     "cwInsertEmoji": string;
+    /**
+     * サーバーと一緒にリアクションもミュートする
+     */
+    "reactionAndServerMute": string;
     "_accountSettings": {
         /**
          * コンテンツの表示にログインを必須にする
