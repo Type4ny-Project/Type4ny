@@ -1865,6 +1865,7 @@ declare namespace entities {
         UsersAchievementsRequest,
         UsersAchievementsResponse,
         UsersUpdateMemoRequest,
+		PointSendRequest,
         FetchRssRequest,
         FetchRssResponse,
         FetchExternalResourcesRequest,
@@ -3525,6 +3526,8 @@ type UsersShowResponse = operations['users___show']['responses']['200']['content
 // @public (undocumented)
 type UsersUpdateMemoRequest = operations['users___update-memo']['requestBody']['content']['application/json'];
 
+// @public (undocumented)
+type PointSendRequest = operations['point___send']['requestBody']['content']['application/json']
 // Warnings were encountered during analysis:
 //
 // src/entities.ts:50:2 - (ae-forgotten-export) The symbol "ModerationLogPayloads" needs to be exported by the entry point index.d.ts

@@ -394,6 +394,7 @@ import * as ep___users_search from './endpoints/users/search.js';
 import * as ep___users_show from './endpoints/users/show.js';
 import * as ep___users_achievements from './endpoints/users/achievements.js';
 import * as ep___users_updateMemo from './endpoints/users/update-memo.js';
+import * as ep___point_send from './endpoints/point/send.js';
 import * as ep___fetchRss from './endpoints/fetch-rss.js';
 import * as ep___fetchExternalResources from './endpoints/fetch-external-resources.js';
 import * as ep___retention from './endpoints/retention.js';
@@ -801,6 +802,7 @@ const $users_search: Provider = { provide: 'ep:users/search', useClass: ep___use
 const $users_show: Provider = { provide: 'ep:users/show', useClass: ep___users_show.default };
 const $users_achievements: Provider = { provide: 'ep:users/achievements', useClass: ep___users_achievements.default };
 const $users_updateMemo: Provider = { provide: 'ep:users/update-memo', useClass: ep___users_updateMemo.default };
+const $point_send: Provider = { provide: 'ep:point/send', useClass: ep___point_send.default };
 const $fetchRss: Provider = { provide: 'ep:fetch-rss', useClass: ep___fetchRss.default };
 const $fetchExternalResources: Provider = { provide: 'ep:fetch-external-resources', useClass: ep___fetchExternalResources.default };
 const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention.default };
@@ -1211,6 +1213,7 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$users_show,
 		$users_achievements,
 		$users_updateMemo,
+		$point_send,
 		$fetchRss,
 		$fetchExternalResources,
 		$retention,
@@ -1612,6 +1615,7 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$users_show,
 		$users_achievements,
 		$users_updateMemo,
+		$point_send,
 		$fetchRss,
 		$fetchExternalResources,
 		$retention,
