@@ -3772,6 +3772,8 @@ export type components = {
         }[];
       isBot?: boolean;
       isCat?: boolean;
+      getPoints?: number | null;
+      loginBonusIsVisible?: boolean;
       requireSigninToViewContents?: boolean;
       makeNotesFollowersOnlyBefore?: number | null;
       makeNotesHiddenBefore?: number | null;
@@ -3786,7 +3788,10 @@ export type components = {
       emojis: {
         [key: string]: string;
       };
-      /** @enum {string} */
+      /**
+       * Format: url
+       * @enum {string|null}
+       */
       onlineStatus: 'unknown' | 'online' | 'active' | 'offline';
       badgeRoles?: ({
           name: string;
@@ -4118,6 +4123,10 @@ export type components = {
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
+      updatedAt?: string | null;
+      updatedAtHistory?: string[] | null;
+      noteEditHistory?: unknown[];
+      /** Format: date-time */
       deletedAt?: string | null;
       text: string | null;
       cw?: string | null;
@@ -4336,7 +4345,7 @@ export type components = {
       /** @enum {string} */
       type: 'achievementEarned';
       /** @enum {string} */
-      achievement: 'notes1' | 'notes10' | 'notes100' | 'notes500' | 'notes1000' | 'notes5000' | 'notes10000' | 'notes20000' | 'notes30000' | 'notes40000' | 'notes50000' | 'notes60000' | 'notes70000' | 'notes80000' | 'notes90000' | 'notes100000' | 'login3' | 'login7' | 'login15' | 'login30' | 'login60' | 'login100' | 'login200' | 'login300' | 'login400' | 'login500' | 'login600' | 'login700' | 'login800' | 'login900' | 'login1000' | 'passedSinceAccountCreated1' | 'passedSinceAccountCreated2' | 'passedSinceAccountCreated3' | 'loggedInOnBirthday' | 'loggedInOnNewYearsDay' | 'noteClipped1' | 'noteFavorited1' | 'myNoteFavorited1' | 'profileFilled' | 'markedAsCat' | 'following1' | 'following10' | 'following50' | 'following100' | 'following300' | 'followers1' | 'followers10' | 'followers50' | 'followers100' | 'followers300' | 'followers500' | 'followers1000' | 'collectAchievements30' | 'viewAchievements3min' | 'iLoveMisskey' | 'foundTreasure' | 'client30min' | 'client60min' | 'noteDeletedWithin1min' | 'postedAtLateNight' | 'postedAt0min0sec' | 'selfQuote' | 'htl20npm' | 'viewInstanceChart' | 'outputHelloWorldOnScratchpad' | 'open3windows' | 'driveFolderCircularReference' | 'reactWithoutRead' | 'clickedClickHere' | 'justPlainLucky' | 'setNameToSyuilo' | 'cookieClicked' | 'brainDiver' | 'smashTestNotificationButton' | 'tutorialCompleted' | 'bubbleGameExplodingHead' | 'bubbleGameDoubleExplodingHead';
+      achievement: 'notes1' | 'notes10' | 'notes100' | 'notes500' | 'notes1000' | 'notes5000' | 'notes10000' | 'notes20000' | 'notes30000' | 'notes40000' | 'notes50000' | 'notes60000' | 'notes70000' | 'notes80000' | 'notes90000' | 'notes100000' | 'login3' | 'login7' | 'login15' | 'login30' | 'login60' | 'login100' | 'login200' | 'login300' | 'login400' | 'login500' | 'login600' | 'login700' | 'login800' | 'login900' | 'login1000' | 'passedSinceAccountCreated1' | 'passedSinceAccountCreated2' | 'passedSinceAccountCreated3' | 'loggedInOnBirthday' | 'loggedInOnNewYearsDay' | 'noteClipped1' | 'noteFavorited1' | 'myNoteFavorited1' | 'profileFilled' | 'markedAsCat' | 'following1' | 'following10' | 'following50' | 'following100' | 'following300' | 'followers1' | 'followers10' | 'followers50' | 'followers100' | 'followers300' | 'followers500' | 'followers1000' | 'collectAchievements30' | 'viewAchievements3min' | 'iLoveType4ny' | 'foundTreasure' | 'client30min' | 'client60min' | 'noteDeletedWithin1min' | 'postedAtLateNight' | 'postedAt0min0sec' | 'selfQuote' | 'htl20npm' | 'viewInstanceChart' | 'outputHelloWorldOnScratchpad' | 'open3windows' | 'driveFolderCircularReference' | 'reactWithoutRead' | 'clickedClickHere' | 'justPlainLucky' | 'setNameToSyuilo' | 'cookieClicked' | 'brainDiver' | 'smashTestNotificationButton' | 'tutorialCompleted' | 'bubbleGameExplodingHead' | 'bubbleGameDoubleExplodingHead';
     }) | ({
       /** Format: id */
       id: string;
@@ -4619,6 +4628,8 @@ export type components = {
       isFollowing?: boolean;
       isFavorited?: boolean;
       pinnedNotes?: components['schemas']['Note'][];
+      isLocalOnly: boolean | null;
+      collaboratorUsers: components['schemas']['User'][] | null;
     };
     QueueCount: {
       waiting: number;
@@ -4743,6 +4754,14 @@ export type components = {
       localOnly?: boolean;
       isSensitive?: boolean;
       roleIdsThatCanBeUsedThisEmojiAsReaction?: string[];
+      draft: boolean | null;
+    };
+    EmojiRequestSimple: {
+      aliases: string[];
+      name: string;
+      category: string | null;
+      url: string;
+      isSensitive?: boolean;
     };
     EmojiDetailed: {
       /** Format: id */
@@ -4754,6 +4773,7 @@ export type components = {
       host: string | null;
       url: string;
       license: string | null;
+      draft: boolean | null;
       isSensitive: boolean;
       localOnly: boolean;
       roleIdsThatCanBeUsedThisEmojiAsReaction: string[];
@@ -4780,6 +4800,18 @@ export type components = {
           id: string;
           name: string;
         }[];
+    };
+    EmojiRequestDetailed: {
+      /** Format: id */
+      id: string;
+      aliases: string[];
+      name: string;
+      category: string | null;
+      url: string;
+      license: string | null;
+      isSensitive: boolean;
+      localOnly: boolean;
+      fileId: string;
     };
     Flash: {
       /**
@@ -4910,6 +4942,9 @@ export type components = {
       inviteExpirationTime: number;
       canManageCustomEmojis: boolean;
       canManageAvatarDecorations: boolean;
+      canScheduleNote: boolean;
+      canEditNote: boolean;
+      canRequestCustomEmojis: boolean;
       canSearchNotes: boolean;
       canUseTranslator: boolean;
       canHideAds: boolean;
@@ -5029,6 +5064,9 @@ export type components = {
       hcaptchaSiteKey: string | null;
       enableMcaptcha: boolean;
       mcaptchaSiteKey: string | null;
+      backgroundImageUrls: {
+          url: string;
+        }[];
       mcaptchaInstanceUrl: string | null;
       enableRecaptcha: boolean;
       recaptchaSiteKey: string | null;
@@ -5039,10 +5077,15 @@ export type components = {
       /** @default /assets/ai.png */
       mascotImageUrl: string;
       bannerUrl: string | null;
+      bannerDark: string | null;
+      bannerLight: string | null;
       serverErrorImageUrl: string | null;
       infoImageUrl: string | null;
       notFoundImageUrl: string | null;
       iconUrl: string | null;
+      iconDark: string | null;
+      iconLight: string | null;
+      googleAnalyticsId: string | null;
       maxNoteTextLength: number;
       ads: {
           /**
@@ -5073,6 +5116,7 @@ export type components = {
       serverRules: string[];
       themeColor: string | null;
       policies: components['schemas']['RolePolicies'];
+      pointName: string | null;
       /**
        * @default local
        * @enum {string}
@@ -5112,7 +5156,7 @@ export type components = {
       latestSentAt: string | null;
       latestStatus: number | null;
       name: string;
-      on: ('abuseReport' | 'abuseReportResolved' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
+      on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
       url: string;
       secret: string;
     };
@@ -6214,6 +6258,7 @@ export type operations = {
           description: string;
           url: string;
           roleIdsThatCanBeUsedThisDecoration?: string[];
+          category?: string | null;
         };
       };
     };
@@ -6409,6 +6454,7 @@ export type operations = {
           description?: string;
           url?: string;
           roleIdsThatCanBeUsedThisDecoration?: string[];
+          category?: string | null;
         };
       };
     };
@@ -7282,6 +7328,8 @@ export type operations = {
         'application/json': {
           /** @default null */
           query?: string | null;
+          /** @default null */
+          draft?: boolean | null;
           /** @default 10 */
           limit?: number;
           /** Format: misskey:id */
@@ -7645,6 +7693,7 @@ export type operations = {
           isSensitive?: boolean;
           localOnly?: boolean;
           roleIdsThatCanBeUsedThisEmojiAsReaction?: string[];
+          Request?: boolean;
         };
       };
     };
@@ -8305,7 +8354,6 @@ export type operations = {
             truemailAuthKey: string | null;
             enableChartsForRemoteUser: boolean;
             enableChartsForFederatedInstances: boolean;
-            enableStatsForFederatedInstances: boolean;
             enableServerMachineStats: boolean;
             enableIdenticonGeneration: boolean;
             manifestJsonOverride: string;
@@ -8343,14 +8391,24 @@ export type operations = {
             tosUrl: string | null;
             uri: string;
             version: string;
+            enableGDPRMode: boolean;
+            DiscordWebhookUrl: string | null;
+            DiscordWebhookUrlWordBlock: string | null;
+            enableProxyCheckio: boolean;
+            proxyCheckioApiKey: string | null;
             urlPreviewEnabled: boolean;
             urlPreviewTimeout: number;
             urlPreviewMaximumContentLength: number;
             urlPreviewRequireContentLength: boolean;
             urlPreviewUserAgent: string | null;
             urlPreviewSummaryProxyUrl: string | null;
-            federation: string;
-            federationHosts: string[];
+            iconLight: string | null;
+            iconDark: string | null;
+            bannerLight: string | null;
+            bannerDark: string | null;
+            maxLocalUsers: number | null;
+            nowLocalUsers: number | null;
+            isManaged: boolean | null;
           };
         };
       };
@@ -10017,7 +10075,7 @@ export type operations = {
         'application/json': {
           isActive: boolean;
           name: string;
-          on: ('abuseReport' | 'abuseReportResolved' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
+          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
           url: string;
           secret: string;
         };
@@ -10127,7 +10185,7 @@ export type operations = {
       content: {
         'application/json': {
           isActive?: boolean;
-          on?: ('abuseReport' | 'abuseReportResolved' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
+          on?: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
         };
       };
     };
@@ -10239,7 +10297,7 @@ export type operations = {
           /** Format: misskey:id */
           webhookId: string;
           /** @enum {string} */
-          type: 'abuseReport' | 'abuseReportResolved' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged';
+          type: 'abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged';
           override?: {
             url?: string;
             secret?: string;
@@ -10305,7 +10363,7 @@ export type operations = {
           id: string;
           isActive: boolean;
           name: string;
-          on: ('abuseReport' | 'abuseReportResolved' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
+          on: ('abuseReport' | 'abuseReportResolved' | 'customEmojiRequest' | 'customEmojiRequestResolved' | 'userRegistered' | 'userCreated' | 'inactiveModeratorsWarning' | 'inactiveModeratorsInvitationOnlyChanged')[];
           url: string;
           secret: string;
         };
@@ -10580,12 +10638,14 @@ export type operations = {
           mascotImageUrl?: string | null;
           bannerUrl?: string | null;
           serverErrorImageUrl?: string | null;
+          googleAnalyticsId?: string | null;
           infoImageUrl?: string | null;
           notFoundImageUrl?: string | null;
           iconUrl?: string | null;
           app192IconUrl?: string | null;
           app512IconUrl?: string | null;
           backgroundImageUrl?: string | null;
+          backgroundImageUrls?: unknown[] | null;
           logoImageUrl?: string | null;
           name?: string | null;
           shortName?: string | null;
@@ -10620,6 +10680,8 @@ export type operations = {
           maintainerName?: string | null;
           maintainerEmail?: string | null;
           langs?: string[];
+          DiscordWebhookUrl?: string | null;
+          DiscordWebhookUrlWordBlock?: string | null;
           deeplAuthKey?: string | null;
           deeplIsPro?: boolean;
           enableEmail?: boolean;
@@ -10640,6 +10702,7 @@ export type operations = {
           inquiryUrl?: string | null;
           useObjectStorage?: boolean;
           objectStorageBaseUrl?: string | null;
+          requestEmojiAllOk?: boolean | null;
           objectStorageBucket?: string | null;
           objectStoragePrefix?: string | null;
           objectStorageEndpoint?: string | null;
@@ -10660,7 +10723,6 @@ export type operations = {
           truemailAuthKey?: string | null;
           enableChartsForRemoteUser?: boolean;
           enableChartsForFederatedInstances?: boolean;
-          enableStatsForFederatedInstances?: boolean;
           enableServerMachineStats?: boolean;
           enableIdenticonGeneration?: boolean;
           serverRules?: string[];
@@ -10679,15 +10741,22 @@ export type operations = {
           mediaSilencedHosts?: string[] | null;
           /** @description [Deprecated] Use "urlPreviewSummaryProxyUrl" instead. */
           summalyProxy?: string | null;
-          urlPreviewEnabled?: boolean;
-          urlPreviewTimeout?: number;
-          urlPreviewMaximumContentLength?: number;
-          urlPreviewRequireContentLength?: boolean;
+          urlPreviewEnabled?: boolean | null;
+          urlPreviewTimeout?: number | null;
+          urlPreviewMaximumContentLength?: number | null;
+          urlPreviewRequireContentLength?: boolean | null;
           urlPreviewUserAgent?: string | null;
           urlPreviewSummaryProxyUrl?: string | null;
-          /** @enum {string} */
-          federation?: 'all' | 'none' | 'specified';
-          federationHosts?: string[];
+          EmojiBotToken?: string | null;
+          ApiBase?: string | null;
+          enableGDPRMode?: boolean | null;
+          enableProxyCheckio?: boolean | null;
+          proxyCheckioApiKey?: string | null;
+          iconLight?: string | null;
+          iconDark?: string | null;
+          bannerLight?: string | null;
+          bannerDark?: string | null;
+          pointName?: string | null;
         };
       };
     };
@@ -12015,6 +12084,8 @@ export type operations = {
           color?: string;
           isSensitive?: boolean | null;
           allowRenoteToExternal?: boolean | null;
+          isLocalOnly?: boolean | null;
+          collaboratorIds?: string[];
         };
       };
     };
@@ -12682,6 +12753,10 @@ export type operations = {
           color?: string;
           isSensitive?: boolean | null;
           allowRenoteToExternal?: boolean | null;
+          isLocalOnly?: boolean | null;
+          collaboratorIds?: string[];
+          /** Format: misskey:id */
+          transferAdminUserId?: string | null;
         };
       };
     };
@@ -18852,7 +18927,7 @@ export type operations = {
       content: {
         'application/json': {
           /** @enum {string} */
-          name: 'notes1' | 'notes10' | 'notes100' | 'notes500' | 'notes1000' | 'notes5000' | 'notes10000' | 'notes20000' | 'notes30000' | 'notes40000' | 'notes50000' | 'notes60000' | 'notes70000' | 'notes80000' | 'notes90000' | 'notes100000' | 'login3' | 'login7' | 'login15' | 'login30' | 'login60' | 'login100' | 'login200' | 'login300' | 'login400' | 'login500' | 'login600' | 'login700' | 'login800' | 'login900' | 'login1000' | 'passedSinceAccountCreated1' | 'passedSinceAccountCreated2' | 'passedSinceAccountCreated3' | 'loggedInOnBirthday' | 'loggedInOnNewYearsDay' | 'noteClipped1' | 'noteFavorited1' | 'myNoteFavorited1' | 'profileFilled' | 'markedAsCat' | 'following1' | 'following10' | 'following50' | 'following100' | 'following300' | 'followers1' | 'followers10' | 'followers50' | 'followers100' | 'followers300' | 'followers500' | 'followers1000' | 'collectAchievements30' | 'viewAchievements3min' | 'iLoveMisskey' | 'foundTreasure' | 'client30min' | 'client60min' | 'noteDeletedWithin1min' | 'postedAtLateNight' | 'postedAt0min0sec' | 'selfQuote' | 'htl20npm' | 'viewInstanceChart' | 'outputHelloWorldOnScratchpad' | 'open3windows' | 'driveFolderCircularReference' | 'reactWithoutRead' | 'clickedClickHere' | 'justPlainLucky' | 'setNameToSyuilo' | 'cookieClicked' | 'brainDiver' | 'smashTestNotificationButton' | 'tutorialCompleted' | 'bubbleGameExplodingHead' | 'bubbleGameDoubleExplodingHead';
+          name: 'notes1' | 'notes10' | 'notes100' | 'notes500' | 'notes1000' | 'notes5000' | 'notes10000' | 'notes20000' | 'notes30000' | 'notes40000' | 'notes50000' | 'notes60000' | 'notes70000' | 'notes80000' | 'notes90000' | 'notes100000' | 'login3' | 'login7' | 'login15' | 'login30' | 'login60' | 'login100' | 'login200' | 'login300' | 'login400' | 'login500' | 'login600' | 'login700' | 'login800' | 'login900' | 'login1000' | 'passedSinceAccountCreated1' | 'passedSinceAccountCreated2' | 'passedSinceAccountCreated3' | 'loggedInOnBirthday' | 'loggedInOnNewYearsDay' | 'noteClipped1' | 'noteFavorited1' | 'myNoteFavorited1' | 'profileFilled' | 'markedAsCat' | 'following1' | 'following10' | 'following50' | 'following100' | 'following300' | 'followers1' | 'followers10' | 'followers50' | 'followers100' | 'followers300' | 'followers500' | 'followers1000' | 'collectAchievements30' | 'viewAchievements3min' | 'iLoveType4ny' | 'foundTreasure' | 'client30min' | 'client60min' | 'noteDeletedWithin1min' | 'postedAtLateNight' | 'postedAt0min0sec' | 'selfQuote' | 'htl20npm' | 'viewInstanceChart' | 'outputHelloWorldOnScratchpad' | 'open3windows' | 'driveFolderCircularReference' | 'reactWithoutRead' | 'clickedClickHere' | 'justPlainLucky' | 'setNameToSyuilo' | 'cookieClicked' | 'brainDiver' | 'smashTestNotificationButton' | 'tutorialCompleted' | 'bubbleGameExplodingHead' | 'bubbleGameDoubleExplodingHead';
         };
       };
     };
@@ -19916,8 +19991,8 @@ export type operations = {
           untilId?: string;
           /** @default true */
           markAsRead?: boolean;
-          includeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'pollVote' | 'groupInvited')[];
-          excludeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'pollVote' | 'groupInvited')[];
+          includeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'loginBonus' | 'pollVote' | 'groupInvited')[];
+          excludeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'loginBonus' | 'pollVote' | 'groupInvited')[];
         };
       };
     };
@@ -19984,8 +20059,8 @@ export type operations = {
           untilId?: string;
           /** @default true */
           markAsRead?: boolean;
-          includeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'reaction:grouped' | 'renote:grouped' | 'pollVote' | 'groupInvited')[];
-          excludeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'reaction:grouped' | 'renote:grouped' | 'pollVote' | 'groupInvited')[];
+          includeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'loginBonus' | 'reaction:grouped' | 'renote:grouped' | 'pollVote' | 'groupInvited')[];
+          excludeTypes?: ('note' | 'follow' | 'mention' | 'reply' | 'renote' | 'quote' | 'reaction' | 'pollEnded' | 'receiveFollowRequest' | 'followRequestAccepted' | 'roleAssigned' | 'achievementEarned' | 'exportCompleted' | 'login' | 'app' | 'test' | 'loginBonus' | 'reaction:grouped' | 'renote:grouped' | 'pollVote' | 'groupInvited')[];
         };
       };
     };
@@ -21005,7 +21080,6 @@ export type operations = {
           autoAcceptFollowed?: boolean;
           noCrawle?: boolean;
           preventAiLearning?: boolean;
-          requireSigninToViewContents?: boolean;
           makeNotesFollowersOnlyBefore?: number | null;
           makeNotesHiddenBefore?: number | null;
           isBot?: boolean;
@@ -21018,6 +21092,7 @@ export type operations = {
           followingVisibility?: 'public' | 'followers' | 'private';
           /** @enum {string} */
           followersVisibility?: 'public' | 'followers' | 'private';
+          loginBonusIsVisible?: boolean | null;
           /** Format: misskey:id */
           pinnedPageId?: string | null;
           mutedWords?: (string[] | string)[];
@@ -22458,6 +22533,9 @@ export type operations = {
             expiresAt?: number | null;
             expiredAfter?: number | null;
           }) | null;
+          schedule?: {
+            scheduledAt?: string;
+          } | null;
         };
       };
     };
@@ -22466,7 +22544,9 @@ export type operations = {
       200: {
         content: {
           'application/json': {
-            createdNote: components['schemas']['Note'];
+            createdNote: components['schemas']['Note'] | null;
+            scheduledNoteId?: string | null;
+            scheduledNote?: Record<string, never> | null;
           };
         };
       };
@@ -23238,6 +23318,7 @@ export type operations = {
         'application/json': {
           /** Format: misskey:id */
           noteId: string;
+          reaction?: string;
         };
       };
     };
@@ -27155,6 +27236,7 @@ export type operations = {
         'application/json': {
           /** Format: misskey:id */
           userId?: string;
+          publicAll?: boolean;
         };
       };
     };
@@ -27868,6 +27950,7 @@ export type operations = {
           /** Format: misskey:id */
           userId: string;
           comment: string;
+          noteIds?: string[];
         };
       };
     };

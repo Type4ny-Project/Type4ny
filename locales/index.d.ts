@@ -5609,10 +5609,6 @@ export interface Locale extends ILocale {
      */
     "acknowledgeNotesAndEnable": string;
     /**
-     * CWに絵文字を挿入
-     */
-    "cwInsertEmoji": string;
-    /**
      * このサーバーはホワイトリスト連合で運用されています。管理者が指定したサーバー以外とやり取りすることはできません。
      */
     "federationSpecified": string;
@@ -5620,6 +5616,14 @@ export interface Locale extends ILocale {
      * このサーバーは連合が無効化されています。他のサーバーのユーザーとやり取りすることはできません。
      */
     "federationDisabled": string;
+    /**
+     * CWに絵文字を挿入
+     */
+    "cwInsertEmoji": string;
+    /**
+     * サーバーと一緒にリアクションもミュートする
+     */
+    "reactionAndServerMute": string;
     "_accountSettings": {
         /**
          * コンテンツの表示にログインを必須にする

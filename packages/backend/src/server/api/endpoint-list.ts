@@ -397,3 +397,21 @@ export * as 'users/search-by-username-and-host' from './endpoints/users/search-b
 export * as 'users/show' from './endpoints/users/show.js';
 export * as 'users/update-memo' from './endpoints/users/update-memo.js';
 export * as 'v2/admin/emoji/list' from './endpoints/v2/admin/emoji/list.js';
+
+export * as 'admin/accounts/present-points' from './endpoints/admin/accounts/present-points.js';
+export * as 'emoji/speedtest' from './endpoints/admin/emoji/speedtest.js';
+export * as 'users/user/stats' from './endpoints/users/stats.js';
+export * as 'notes/any-local-timeline' from './endpoints/notes/any-local-timeline.js';
+export * as 'notes/update' from './endpoints/notes/update.js';
+export * as 'notes/schedule/list' from './endpoints/notes/schedule/list.js';
+export * as 'notes/schedule/delete' from './endpoints/notes/schedule/delete.js';
+export * as 'emoji-requests' from './endpoints/emoji-requests.js';
+export * as 'admin/emoji/list-request' from './endpoints/admin/emoji/list-request.js';
+export * as 'admin/emoji/set-issensitive-bulk' from './endpoints/admin/emoji/set-issensitive-bulk.js';
+export * as 'admin/emoji/add-request' from './endpoints/admin/emoji/add-request.js';
+export * as 'admin/emoji/set-localonly-bulk' from './endpoints/admin/emoji/set-localonly-bulk.js';
+export * as 'admin/inbox-rule/edit' from './endpoints/admin/inbox-rule/edit.js';
+export * as 'admin/inbox-rule/set' from './endpoints/admin/inbox-rule/set.js';
+export * as 'admin/inbox-rule/delete' from './endpoints/admin/inbox-rule/delete.js';
+export * as 'admin/inbox-rule/list' from './endpoints/admin/inbox-rule/list.js';
+export * as 'users/lists/list-favorite' from './endpoints/users/lists/list-favorite.js';
