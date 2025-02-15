@@ -23,7 +23,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { toRefs, Ref, computed } from 'vue';
+import { toRefs } from 'vue';
+import type { Ref, computed } from 'vue';
 import { i18n } from '@/i18n.js';
 import { defaultStore } from '@/store.js';
 

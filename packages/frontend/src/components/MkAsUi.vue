@@ -63,14 +63,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, Ref, ref, computed } from 'vue';
+import { defineAsyncComponent, ref, computed } from 'vue';
+import type { Ref } from 'vue';
 import * as os from '@/os.js';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkSelect from '@/components/MkSelect.vue';
-import { AsUiComponent, AsUiRoot, AsUiPostFormButton } from '@/scripts/aiscript/ui.js';
+import type { AsUiComponent, AsUiRoot, AsUiPostFormButton } from '@/scripts/aiscript/ui.js';
 import MkFolder from '@/components/MkFolder.vue';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 

@@ -38,8 +38,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { GetFormResultType } from '@/scripts/form.js';
 import { i18n } from '@/i18n.js';
 import { useInterval } from '@@/js/use-interval.js';
 
@@ -206,7 +207,7 @@ defineExpose<WidgetComponentExpose>({
 .meter {
 	width: 100%;
 	overflow: hidden;
-	background: var(--MI_THEME-X11);
+	background: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 	border-radius: 8px;
 }
 

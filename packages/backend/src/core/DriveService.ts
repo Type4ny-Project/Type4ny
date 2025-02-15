@@ -178,7 +178,8 @@ export class DriveService {
 			// 		this.config.objectStorage?.objectStorageBaseUrl;
 
 			// for original
-			const key = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/${randomUUID()}${ext}`;
+			const prefix = this.meta.objectStoragePrefix ? `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/` : '';
+			const key = `${prefix}${randomUUID()}${ext}`;
 			const url = `${ baseUrl }/${ key }`;
 
 			// for alts
@@ -195,7 +196,7 @@ export class DriveService {
 			];
 
 			if (alts.webpublic) {
-				webpublicKey = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/webpublic-${randomUUID()}.${alts.webpublic.ext}`;
+				webpublicKey = `${prefix}webpublic-${randomUUID()}.${alts.webpublic.ext}`;
 				webpublicUrl = `${ baseUrl }/${ webpublicKey }`;
 
 				this.registerLogger.info(`uploading webpublic: ${webpublicKey}`);
@@ -203,7 +204,7 @@ export class DriveService {
 			}
 
 			if (alts.thumbnail) {
-				thumbnailKey = `${this.meta.objectStoragePrefix ? this.meta.objectStoragePrefix : this.config.objectStorage?.objectStoragePrefix}/thumbnail-${randomUUID()}.${alts.thumbnail.ext}`;
+				thumbnailKey = `${prefix}thumbnail-${randomUUID()}.${alts.thumbnail.ext}`;
 				thumbnailUrl = `${ baseUrl }/${ thumbnailKey }`;
 
 				this.registerLogger.info(`uploading thumbnail: ${thumbnailKey}`);

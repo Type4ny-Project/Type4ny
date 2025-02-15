@@ -129,8 +129,8 @@ type Source = {
 
 	logging?: {
 		sql?: {
-			disableQueryTruncation? : boolean,
-			enableQueryParamLogging? : boolean,
+			disableQueryTruncation?: boolean,
+			enableQueryParamLogging?: boolean,
 		}
 	}
 };
@@ -198,8 +198,8 @@ export type Config = {
 	signToActivityPubGet: boolean | undefined;
 	logging?: {
 		sql?: {
-			disableQueryTruncation? : boolean,
-			enableQueryParamLogging? : boolean,
+			disableQueryTruncation?: boolean,
+			enableQueryParamLogging?: boolean,
 		}
 	}
 

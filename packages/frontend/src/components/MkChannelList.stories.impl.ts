@@ -2,8 +2,8 @@
  * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
- 
-import { StoryObj } from '@storybook/vue3';
+
+import type { StoryObj } from '@storybook/vue3';
 import { HttpResponse, http } from 'msw';
 import { action } from '@storybook/addon-actions';
 import { channel } from '../../.storybook/fakes.js';

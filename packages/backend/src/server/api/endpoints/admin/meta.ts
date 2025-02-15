@@ -649,6 +649,19 @@ export const meta = {
 			maxLocalUsers: { type: 'number', nullable: true },
 			nowLocalUsers: { type: 'number', nullable: true },
 			isManaged: { type: 'boolean', nullable: true },
+			federation: {
+				type: 'string',
+				enum: ['all', 'specified', 'none'],
+				optional: false, nullable: false,
+			},
+			federationHosts: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+					optional: false, nullable: false,
+				},
+			},
 		},
 	},
 } as const;

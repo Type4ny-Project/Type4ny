@@ -10,7 +10,8 @@ import lightTheme from '@@/themes/l-TypeLightEmerald.json5';
 import darkTheme from '@@/themes/d-TypeDarkEmerald.json5';
 import type { SoundType } from '@/scripts/sound.js';
 import type { Ast } from '@syuilo/aiscript';
-import { DEFAULT_DEVICE_KIND, type DeviceKind } from '@/scripts/device-kind.js';
+import { DEFAULT_DEVICE_KIND } from '@/scripts/device-kind.js';
+import type { DeviceKind } from '@/scripts/device-kind.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { Storage } from '@/pizzax.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
@@ -704,6 +705,10 @@ export const defaultStore = markRaw(
 			default: true,
 		},
 	showSoftWordMutedWord: {
+		where: 'device',
+		default: false,
+	},
+	confirmOnReact: {
 		where: 'device',
 		default: false,
 	},

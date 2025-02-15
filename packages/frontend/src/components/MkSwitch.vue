@@ -27,7 +27,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { toRefs, Ref, ref, computed, watch } from 'vue';
+import { toRefs } from 'vue';
+import type { Ref, ref, computed, watch } from 'vue';
 import XButton from '@/components/MkSwitch.button.vue';
 import { defaultStore } from '@/store.js';
 

@@ -41,6 +41,7 @@ import { lookup } from '@/scripts/lookup.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { lookupUser, lookupUserByEmail, lookupFile } from '@/scripts/admin-lookup.js';
+import type { PageMetadata } from '@/scripts/page-metadata.js';
 import { useRouter } from '@/router/supplier.js';
 import { PageMetadata, definePageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
 import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store.js';
