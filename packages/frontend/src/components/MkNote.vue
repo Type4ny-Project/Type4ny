@@ -403,11 +403,11 @@ import {
 	inject,
 	onMounted,
 	provide,
-	Ref,
 	ref,
 	shallowRef,
 	watch,
-} from 'vue';import type { Ref } from 'vue';
+} from 'vue';
+import type { Ref } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import { isLink } from '@@/js/is-link.js';

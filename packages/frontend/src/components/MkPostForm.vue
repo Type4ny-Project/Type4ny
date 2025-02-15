@@ -901,8 +901,8 @@ function isAnnoying(text: string): boolean {
 		text.includes('$[x4') ||
 		text.includes('$[scale') ||
 		text.includes('$[position') ||
-		text.value.includes('$[shake') ||
-		text.value.includes('$[twitch');
+		text.includes('$[shake') ||
+		text.includes('$[twitch');
 }
 
 async function post(ev?: MouseEvent) {

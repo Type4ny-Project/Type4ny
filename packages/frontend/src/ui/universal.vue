@@ -134,20 +134,15 @@ import { defaultStore } from '@/store.js';
 import { navbarItemDef } from '@/navbar.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
-import { provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
 import type { PageMetadata } from '@/scripts/page-metadata.js';
-import { deviceKind } from '@/scripts/device-kind.js';
-import { miLocalStorage } from '@/local-storage.js';
-import { useScrollPositionManager } from '@/nirax.js';
-import { mainRouter } from '@/router/main.js';
-import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata';
+import { provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata';
 import { deviceKind } from '@/scripts/device-kind';
 import { miLocalStorage } from '@/local-storage';
 import { useScrollPositionManager } from '@/nirax';
+import { mainRouter } from '@/router/main.js';
 
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
 const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
 let gaming = ref();
 // gaming.valueに新しい値を代入する
 if (darkMode.value && gamingMode.value) {
