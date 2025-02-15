@@ -11,8 +11,7 @@ import { deepClone } from './clone.js';
 import type { BundledTheme } from 'shiki/themes';
 import { globalEvents } from '@/events.js';
 import { miLocalStorage } from '@/local-storage.js';
-import lTypeLightEmerald from '@/themes/l-TypeLightEmerald.json5';
-import dTypeDarkEmerald from '@/themes/d-TypeDarkEmerald.json5';
+
 export type Theme = {
 	id: string;
 	name: string;
@@ -42,6 +41,7 @@ export const getBuiltinThemes = () => Promise.all(
 		'l-cherry',
 		'l-sushi',
 		'l-u0',
+		'l-TypeLightEmerald',
 
 		'd-dark',
 		'd-persimmon',
@@ -49,7 +49,6 @@ export const getBuiltinThemes = () => Promise.all(
 		'd-future',
 		'd-botanical',
 		'd-TypeDarkEmerald',
-		'l-TypeLightEmerald',
 		'd-cherry',
 		'd-ice',
 		'd-u0',

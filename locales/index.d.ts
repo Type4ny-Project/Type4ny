@@ -5617,14 +5617,6 @@ export interface Locale extends ILocale {
      */
     "federationDisabled": string;
     /**
-     * リアクションする際に確認する
-     */
-    "confirmOnReact": string;
-    /**
-     * " {emoji} " をリアクションしますか？
-     */
-    "reactAreYouSure": ParameterizedString<"emoji">;
-    /**
      * CWに絵文字を挿入
      */
     "cwInsertEmoji": string;
@@ -5632,6 +5624,14 @@ export interface Locale extends ILocale {
      * サーバーと一緒にリアクションもミュートする
      */
     "reactionAndServerMute": string;
+    /**
+     * リアクションする際に確認する
+     */
+    "confirmOnReact": string;
+    /**
+     * " {emoji} " をリアクションしますか？
+     */
+    "reactAreYouSure": ParameterizedString<"emoji">;
     "_accountSettings": {
         /**
          * コンテンツの表示にログインを必須にする

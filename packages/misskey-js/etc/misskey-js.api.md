@@ -7,7 +7,7 @@
 import type { AuthenticationResponseJSON } from '@simplewebauthn/types';
 import { EventEmitter } from 'eventemitter3';
 import { Options } from 'reconnecting-websocket';
-import type { PublicKeyCredentialRequestOptionsJSON as PublicKeyCredentialRequestOptionsJSON_2 } from '@simplewebauthn/types';
+import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types';
 import _ReconnectingWebSocket from 'reconnecting-websocket';
 
 // Warning: (ae-forgotten-export) The symbol "components" needs to be exported by the entry point index.d.ts
@@ -82,6 +82,9 @@ type AdminAccountsFindByEmailRequest = operations['admin___accounts___find-by-em
 
 // @public (undocumented)
 type AdminAccountsFindByEmailResponse = operations['admin___accounts___find-by-email']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminAccountsPresentPointsRequest = operations['admin___accounts___present-points']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type AdminAdCreateRequest = operations['admin___ad___create']['requestBody']['content']['application/json'];
@@ -168,6 +171,9 @@ type AdminEmojiAddAliasesBulkRequest = operations['admin___emoji___add-aliases-b
 type AdminEmojiAddRequest = operations['admin___emoji___add']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiAddRequestRequest = operations['admin___emoji___add-request']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiAddResponse = operations['admin___emoji___add']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
@@ -195,6 +201,12 @@ type AdminEmojiListRemoteResponse = operations['admin___emoji___list-remote']['r
 type AdminEmojiListRequest = operations['admin___emoji___list']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiListRequestRequest = operations['admin___emoji___list-request']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminEmojiListRequestResponse = operations['admin___emoji___list-request']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiListResponse = operations['admin___emoji___list']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
@@ -207,7 +219,13 @@ type AdminEmojiSetAliasesBulkRequest = operations['admin___emoji___set-aliases-b
 type AdminEmojiSetCategoryBulkRequest = operations['admin___emoji___set-category-bulk']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminEmojiSetIssensitiveBulkRequest = operations['admin___emoji___set-issensitive-bulk']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminEmojiSetLicenseBulkRequest = operations['admin___emoji___set-license-bulk']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminEmojiSetLocalonlyBulkRequest = operations['admin___emoji___set-localonly-bulk']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type AdminEmojiUpdateRequest = operations['admin___emoji___update']['requestBody']['content']['application/json'];
@@ -238,6 +256,27 @@ type AdminGetUserIpsRequest = operations['admin___get-user-ips']['requestBody'][
 
 // @public (undocumented)
 type AdminGetUserIpsResponse = operations['admin___get-user-ips']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleDeleteRequest = operations['admin___inbox-rule___delete']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleDeleteResponse = operations['admin___inbox-rule___delete']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleEditRequest = operations['admin___inbox-rule___edit']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleEditResponse = operations['admin___inbox-rule___edit']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleListResponse = operations['admin___inbox-rule___list']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleSetRequest = operations['admin___inbox-rule___set']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type AdminInboxRuleSetResponse = operations['admin___inbox-rule___set']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type AdminInviteCreateRequest = operations['admin___invite___create']['requestBody']['content']['application/json'];
@@ -1130,10 +1169,16 @@ type EmojiRequestDetailed = components['schemas']['EmojiRequestDetailed'];
 type EmojiRequestSimple = components['schemas']['EmojiRequestSimple'];
 
 // @public (undocumented)
+type EmojiRequestsResponse = operations['emoji-requests']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type EmojiResponse = operations['emoji']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type EmojiSimple = components['schemas']['EmojiSimple'];
+
+// @public (undocumented)
+type EmojiSpeedtestRequest = operations['emoji___speedtest']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type EmojisResponse = operations['emojis']['responses']['200']['content']['application/json'];
@@ -1258,6 +1303,7 @@ declare namespace entities {
         AdminAccountsDeleteRequest,
         AdminAccountsFindByEmailRequest,
         AdminAccountsFindByEmailResponse,
+        AdminAccountsPresentPointsRequest,
         AdminAdCreateRequest,
         AdminAdCreateResponse,
         AdminAdDeleteRequest,
@@ -1287,6 +1333,7 @@ declare namespace entities {
         AdminEmojiAddRequest,
         AdminEmojiAddResponse,
         AdminEmojiAddAliasesBulkRequest,
+        AdminEmojiAddRequestRequest,
         AdminEmojiCopyRequest,
         AdminEmojiCopyResponse,
         AdminEmojiDeleteRequest,
@@ -1296,10 +1343,14 @@ declare namespace entities {
         AdminEmojiListResponse,
         AdminEmojiListRemoteRequest,
         AdminEmojiListRemoteResponse,
+        AdminEmojiListRequestRequest,
+        AdminEmojiListRequestResponse,
         AdminEmojiRemoveAliasesBulkRequest,
         AdminEmojiSetAliasesBulkRequest,
         AdminEmojiSetCategoryBulkRequest,
+        AdminEmojiSetIssensitiveBulkRequest,
         AdminEmojiSetLicenseBulkRequest,
+        AdminEmojiSetLocalonlyBulkRequest,
         AdminEmojiUpdateRequest,
         AdminFederationDeleteAllFilesRequest,
         AdminFederationRefreshRemoteInstanceMetadataRequest,
@@ -1310,6 +1361,13 @@ declare namespace entities {
         AdminGetTableStatsResponse,
         AdminGetUserIpsRequest,
         AdminGetUserIpsResponse,
+        AdminInboxRuleDeleteRequest,
+        AdminInboxRuleDeleteResponse,
+        AdminInboxRuleEditRequest,
+        AdminInboxRuleEditResponse,
+        AdminInboxRuleListResponse,
+        AdminInboxRuleSetRequest,
+        AdminInboxRuleSetResponse,
         AdminInviteCreateRequest,
         AdminInviteCreateResponse,
         AdminInviteListRequest,
@@ -1497,6 +1555,8 @@ declare namespace entities {
         EmailAddressAvailableResponse,
         EmojiRequest,
         EmojiResponse,
+        EmojiRequestsResponse,
+        EmojiSpeedtestRequest,
         EmojisResponse,
         EndpointRequest,
         EndpointResponse,
@@ -1667,6 +1727,8 @@ declare namespace entities {
         MyAppsResponse,
         NotesRequest,
         NotesResponse,
+        NotesAnyLocalTimelineRequest,
+        NotesAnyLocalTimelineResponse,
         NotesChildrenRequest,
         NotesChildrenResponse,
         NotesClipsRequest,
@@ -1682,6 +1744,8 @@ declare namespace entities {
         NotesFeaturedResponse,
         NotesGlobalTimelineRequest,
         NotesGlobalTimelineResponse,
+        NotesHomeLocalTimelineRequest,
+        NotesHomeLocalTimelineResponse,
         NotesHybridTimelineRequest,
         NotesHybridTimelineResponse,
         NotesLocalTimelineRequest,
@@ -1699,6 +1763,9 @@ declare namespace entities {
         NotesRenotesResponse,
         NotesRepliesRequest,
         NotesRepliesResponse,
+        NotesScheduleDeleteRequest,
+        NotesScheduleListRequest,
+        NotesScheduleListResponse,
         NotesSearchRequest,
         NotesSearchResponse,
         NotesSearchByTagRequest,
@@ -1714,6 +1781,7 @@ declare namespace entities {
         NotesTranslateRequest,
         NotesTranslateResponse,
         NotesUnrenoteRequest,
+        NotesUpdateRequest,
         NotesUserListTimelineRequest,
         NotesUserListTimelineResponse,
         NotificationsCreateRequest,
@@ -1796,6 +1864,8 @@ declare namespace entities {
         UsersListsGetMembershipsResponse,
         UsersListsListRequest,
         UsersListsListResponse,
+        UsersListsListFavoriteRequest,
+        UsersListsListFavoriteResponse,
         UsersListsPullRequest,
         UsersListsPushRequest,
         UsersListsShowRequest,
@@ -1822,6 +1892,8 @@ declare namespace entities {
         UsersShowRequest,
         UsersShowResponse,
         UsersUpdateMemoRequest,
+        UsersUserStatsRequest,
+        UsersUserStatsResponse,
         V2AdminEmojiListRequest,
         V2AdminEmojiListResponse,
         Error_2 as Error,
@@ -2681,6 +2753,12 @@ type NoteFavorite = components['schemas']['NoteFavorite'];
 type NoteReaction = components['schemas']['NoteReaction'];
 
 // @public (undocumented)
+type NotesAnyLocalTimelineRequest = operations['notes___any-local-timeline']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesAnyLocalTimelineResponse = operations['notes___any-local-timeline']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type NotesChildrenRequest = operations['notes___children']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -2724,6 +2802,12 @@ type NotesGlobalTimelineRequest = operations['notes___global-timeline']['request
 
 // @public (undocumented)
 type NotesGlobalTimelineResponse = operations['notes___global-timeline']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
+type NotesHomeLocalTimelineRequest = operations['notes___home-local-timeline']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesHomeLocalTimelineResponse = operations['notes___home-local-timeline']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type NotesHybridTimelineRequest = operations['notes___hybrid-timeline']['requestBody']['content']['application/json'];
@@ -2783,6 +2867,15 @@ type NotesRequest = operations['notes']['requestBody']['content']['application/j
 type NotesResponse = operations['notes']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type NotesScheduleDeleteRequest = operations['notes___schedule___delete']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesScheduleListRequest = operations['notes___schedule___list']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesScheduleListResponse = operations['notes___schedule___list']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type NotesSearchByTagRequest = operations['notes___search-by-tag']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -2826,6 +2919,9 @@ type NotesTranslateResponse = operations['notes___translate']['responses']['200'
 
 // @public (undocumented)
 type NotesUnrenoteRequest = operations['notes___unrenote']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type NotesUpdateRequest = operations['notes___update']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
 type NotesUserListTimelineRequest = operations['notes___user-list-timeline']['requestBody']['content']['application/json'];
@@ -3117,12 +3213,12 @@ type SigninFlowResponse = {
 } | {
     finished: false;
     next: 'passkey';
-    authRequest: PublicKeyCredentialRequestOptionsJSON_2;
+    authRequest: PublicKeyCredentialRequestOptionsJSON;
 };
 
 // @public (undocumented)
 type SigninWithPasskeyInitResponse = {
-    option: PublicKeyCredentialRequestOptionsJSON_2;
+    option: PublicKeyCredentialRequestOptionsJSON;
     context: string;
 };
 
@@ -3348,6 +3444,12 @@ type UsersListsGetMembershipsRequest = operations['users___lists___get-membershi
 type UsersListsGetMembershipsResponse = operations['users___lists___get-memberships']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type UsersListsListFavoriteRequest = operations['users___lists___list-favorite']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type UsersListsListFavoriteResponse = operations['users___lists___list-favorite']['responses']['200']['content']['application/json'];
+
+// @public (undocumented)
 type UsersListsListRequest = operations['users___lists___list']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -3436,6 +3538,12 @@ type UsersShowResponse = operations['users___show']['responses']['200']['content
 
 // @public (undocumented)
 type UsersUpdateMemoRequest = operations['users___update-memo']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type UsersUserStatsRequest = operations['users___user___stats']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
+type UsersUserStatsResponse = operations['users___user___stats']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
 type V2AdminEmojiListRequest = operations['v2___admin___emoji___list']['requestBody']['content']['application/json'];

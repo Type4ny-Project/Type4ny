@@ -17,6 +17,7 @@ import type {
 	AdminAccountsDeleteRequest,
 	AdminAccountsFindByEmailRequest,
 	AdminAccountsFindByEmailResponse,
+	AdminAccountsPresentPointsRequest,
 	AdminAdCreateRequest,
 	AdminAdCreateResponse,
 	AdminAdDeleteRequest,
@@ -46,6 +47,7 @@ import type {
 	AdminEmojiAddRequest,
 	AdminEmojiAddResponse,
 	AdminEmojiAddAliasesBulkRequest,
+	AdminEmojiAddRequestRequest,
 	AdminEmojiCopyRequest,
 	AdminEmojiCopyResponse,
 	AdminEmojiDeleteRequest,
@@ -55,10 +57,14 @@ import type {
 	AdminEmojiListResponse,
 	AdminEmojiListRemoteRequest,
 	AdminEmojiListRemoteResponse,
+	AdminEmojiListRequestRequest,
+	AdminEmojiListRequestResponse,
 	AdminEmojiRemoveAliasesBulkRequest,
 	AdminEmojiSetAliasesBulkRequest,
 	AdminEmojiSetCategoryBulkRequest,
+	AdminEmojiSetIssensitiveBulkRequest,
 	AdminEmojiSetLicenseBulkRequest,
+	AdminEmojiSetLocalonlyBulkRequest,
 	AdminEmojiUpdateRequest,
 	AdminFederationDeleteAllFilesRequest,
 	AdminFederationRefreshRemoteInstanceMetadataRequest,
@@ -69,6 +75,13 @@ import type {
 	AdminGetTableStatsResponse,
 	AdminGetUserIpsRequest,
 	AdminGetUserIpsResponse,
+	AdminInboxRuleDeleteRequest,
+	AdminInboxRuleDeleteResponse,
+	AdminInboxRuleEditRequest,
+	AdminInboxRuleEditResponse,
+	AdminInboxRuleListResponse,
+	AdminInboxRuleSetRequest,
+	AdminInboxRuleSetResponse,
 	AdminInviteCreateRequest,
 	AdminInviteCreateResponse,
 	AdminInviteListRequest,
@@ -256,6 +269,8 @@ import type {
 	EmailAddressAvailableResponse,
 	EmojiRequest,
 	EmojiResponse,
+	EmojiRequestsResponse,
+	EmojiSpeedtestRequest,
 	EmojisResponse,
 	EndpointRequest,
 	EndpointResponse,
@@ -426,6 +441,8 @@ import type {
 	MyAppsResponse,
 	NotesRequest,
 	NotesResponse,
+	NotesAnyLocalTimelineRequest,
+	NotesAnyLocalTimelineResponse,
 	NotesChildrenRequest,
 	NotesChildrenResponse,
 	NotesClipsRequest,
@@ -441,6 +458,8 @@ import type {
 	NotesFeaturedResponse,
 	NotesGlobalTimelineRequest,
 	NotesGlobalTimelineResponse,
+	NotesHomeLocalTimelineRequest,
+	NotesHomeLocalTimelineResponse,
 	NotesHybridTimelineRequest,
 	NotesHybridTimelineResponse,
 	NotesLocalTimelineRequest,
@@ -458,6 +477,9 @@ import type {
 	NotesRenotesResponse,
 	NotesRepliesRequest,
 	NotesRepliesResponse,
+	NotesScheduleDeleteRequest,
+	NotesScheduleListRequest,
+	NotesScheduleListResponse,
 	NotesSearchRequest,
 	NotesSearchResponse,
 	NotesSearchByTagRequest,
@@ -473,6 +495,7 @@ import type {
 	NotesTranslateRequest,
 	NotesTranslateResponse,
 	NotesUnrenoteRequest,
+	NotesUpdateRequest,
 	NotesUserListTimelineRequest,
 	NotesUserListTimelineResponse,
 	NotificationsCreateRequest,
@@ -555,6 +578,8 @@ import type {
 	UsersListsGetMembershipsResponse,
 	UsersListsListRequest,
 	UsersListsListResponse,
+	UsersListsListFavoriteRequest,
+	UsersListsListFavoriteResponse,
 	UsersListsPullRequest,
 	UsersListsPushRequest,
 	UsersListsShowRequest,
@@ -581,6 +606,8 @@ import type {
 	UsersShowRequest,
 	UsersShowResponse,
 	UsersUpdateMemoRequest,
+	UsersUserStatsRequest,
+	UsersUserStatsResponse,
 	V2AdminEmojiListRequest,
 	V2AdminEmojiListResponse,
 } from './entities.js';
@@ -595,6 +622,7 @@ export type Endpoints = {
 	'admin/accounts/create': { req: AdminAccountsCreateRequest; res: AdminAccountsCreateResponse };
 	'admin/accounts/delete': { req: AdminAccountsDeleteRequest; res: EmptyResponse };
 	'admin/accounts/find-by-email': { req: AdminAccountsFindByEmailRequest; res: AdminAccountsFindByEmailResponse };
+	'admin/accounts/present-points': { req: AdminAccountsPresentPointsRequest; res: EmptyResponse };
 	'admin/ad/create': { req: AdminAdCreateRequest; res: AdminAdCreateResponse };
 	'admin/ad/delete': { req: AdminAdDeleteRequest; res: EmptyResponse };
 	'admin/ad/list': { req: AdminAdListRequest; res: AdminAdListResponse };
@@ -617,16 +645,20 @@ export type Endpoints = {
 	'admin/drive/show-file': { req: AdminDriveShowFileRequest; res: AdminDriveShowFileResponse };
 	'admin/emoji/add': { req: AdminEmojiAddRequest; res: AdminEmojiAddResponse };
 	'admin/emoji/add-aliases-bulk': { req: AdminEmojiAddAliasesBulkRequest; res: EmptyResponse };
+	'admin/emoji/add-request': { req: AdminEmojiAddRequestRequest; res: EmptyResponse };
 	'admin/emoji/copy': { req: AdminEmojiCopyRequest; res: AdminEmojiCopyResponse };
 	'admin/emoji/delete': { req: AdminEmojiDeleteRequest; res: EmptyResponse };
 	'admin/emoji/delete-bulk': { req: AdminEmojiDeleteBulkRequest; res: EmptyResponse };
 	'admin/emoji/import-zip': { req: AdminEmojiImportZipRequest; res: EmptyResponse };
 	'admin/emoji/list': { req: AdminEmojiListRequest; res: AdminEmojiListResponse };
 	'admin/emoji/list-remote': { req: AdminEmojiListRemoteRequest; res: AdminEmojiListRemoteResponse };
+	'admin/emoji/list-request': { req: AdminEmojiListRequestRequest; res: AdminEmojiListRequestResponse };
 	'admin/emoji/remove-aliases-bulk': { req: AdminEmojiRemoveAliasesBulkRequest; res: EmptyResponse };
 	'admin/emoji/set-aliases-bulk': { req: AdminEmojiSetAliasesBulkRequest; res: EmptyResponse };
 	'admin/emoji/set-category-bulk': { req: AdminEmojiSetCategoryBulkRequest; res: EmptyResponse };
+	'admin/emoji/set-issensitive-bulk': { req: AdminEmojiSetIssensitiveBulkRequest; res: EmptyResponse };
 	'admin/emoji/set-license-bulk': { req: AdminEmojiSetLicenseBulkRequest; res: EmptyResponse };
+	'admin/emoji/set-localonly-bulk': { req: AdminEmojiSetLocalonlyBulkRequest; res: EmptyResponse };
 	'admin/emoji/update': { req: AdminEmojiUpdateRequest; res: EmptyResponse };
 	'admin/federation/delete-all-files': { req: AdminFederationDeleteAllFilesRequest; res: EmptyResponse };
 	'admin/federation/refresh-remote-instance-metadata': { req: AdminFederationRefreshRemoteInstanceMetadataRequest; res: EmptyResponse };
@@ -636,6 +668,10 @@ export type Endpoints = {
 	'admin/get-index-stats': { req: EmptyRequest; res: AdminGetIndexStatsResponse };
 	'admin/get-table-stats': { req: EmptyRequest; res: AdminGetTableStatsResponse };
 	'admin/get-user-ips': { req: AdminGetUserIpsRequest; res: AdminGetUserIpsResponse };
+	'admin/inbox-rule/delete': { req: AdminInboxRuleDeleteRequest; res: AdminInboxRuleDeleteResponse };
+	'admin/inbox-rule/edit': { req: AdminInboxRuleEditRequest; res: AdminInboxRuleEditResponse };
+	'admin/inbox-rule/list': { req: EmptyRequest; res: AdminInboxRuleListResponse };
+	'admin/inbox-rule/set': { req: AdminInboxRuleSetRequest; res: AdminInboxRuleSetResponse };
 	'admin/invite/create': { req: AdminInviteCreateRequest; res: AdminInviteCreateResponse };
 	'admin/invite/list': { req: AdminInviteListRequest; res: AdminInviteListResponse };
 	'admin/meta': { req: EmptyRequest; res: AdminMetaResponse };
@@ -754,6 +790,8 @@ export type Endpoints = {
 	'drive/stream': { req: DriveStreamRequest; res: DriveStreamResponse };
 	'email-address/available': { req: EmailAddressAvailableRequest; res: EmailAddressAvailableResponse };
 	'emoji': { req: EmojiRequest; res: EmojiResponse };
+	'emoji-requests': { req: EmptyRequest; res: EmojiRequestsResponse };
+	'emoji/speedtest': { req: EmojiSpeedtestRequest; res: EmptyResponse };
 	'emojis': { req: EmptyRequest; res: EmojisResponse };
 	'endpoint': { req: EndpointRequest; res: EndpointResponse };
 	'endpoints': { req: EmptyRequest; res: EndpointsResponse };
@@ -871,6 +909,7 @@ export type Endpoints = {
 	'mute/list': { req: MuteListRequest; res: MuteListResponse };
 	'my/apps': { req: MyAppsRequest; res: MyAppsResponse };
 	'notes': { req: NotesRequest; res: NotesResponse };
+	'notes/any-local-timeline': { req: NotesAnyLocalTimelineRequest; res: NotesAnyLocalTimelineResponse };
 	'notes/children': { req: NotesChildrenRequest; res: NotesChildrenResponse };
 	'notes/clips': { req: NotesClipsRequest; res: NotesClipsResponse };
 	'notes/conversation': { req: NotesConversationRequest; res: NotesConversationResponse };
@@ -880,6 +919,7 @@ export type Endpoints = {
 	'notes/favorites/delete': { req: NotesFavoritesDeleteRequest; res: EmptyResponse };
 	'notes/featured': { req: NotesFeaturedRequest; res: NotesFeaturedResponse };
 	'notes/global-timeline': { req: NotesGlobalTimelineRequest; res: NotesGlobalTimelineResponse };
+	'notes/home-local-timeline': { req: NotesHomeLocalTimelineRequest; res: NotesHomeLocalTimelineResponse };
 	'notes/hybrid-timeline': { req: NotesHybridTimelineRequest; res: NotesHybridTimelineResponse };
 	'notes/local-timeline': { req: NotesLocalTimelineRequest; res: NotesLocalTimelineResponse };
 	'notes/mentions': { req: NotesMentionsRequest; res: NotesMentionsResponse };
@@ -890,6 +930,8 @@ export type Endpoints = {
 	'notes/reactions/delete': { req: NotesReactionsDeleteRequest; res: EmptyResponse };
 	'notes/renotes': { req: NotesRenotesRequest; res: NotesRenotesResponse };
 	'notes/replies': { req: NotesRepliesRequest; res: NotesRepliesResponse };
+	'notes/schedule/delete': { req: NotesScheduleDeleteRequest; res: EmptyResponse };
+	'notes/schedule/list': { req: NotesScheduleListRequest; res: NotesScheduleListResponse };
 	'notes/search': { req: NotesSearchRequest; res: NotesSearchResponse };
 	'notes/search-by-tag': { req: NotesSearchByTagRequest; res: NotesSearchByTagResponse };
 	'notes/show': { req: NotesShowRequest; res: NotesShowResponse };
@@ -899,6 +941,7 @@ export type Endpoints = {
 	'notes/timeline': { req: NotesTimelineRequest; res: NotesTimelineResponse };
 	'notes/translate': { req: NotesTranslateRequest; res: NotesTranslateResponse };
 	'notes/unrenote': { req: NotesUnrenoteRequest; res: EmptyResponse };
+	'notes/update': { req: NotesUpdateRequest; res: EmptyResponse };
 	'notes/user-list-timeline': { req: NotesUserListTimelineRequest; res: NotesUserListTimelineResponse };
 	'notifications/create': { req: NotificationsCreateRequest; res: EmptyResponse };
 	'notifications/flush': { req: EmptyRequest; res: EmptyResponse };
@@ -956,6 +999,7 @@ export type Endpoints = {
 	'users/lists/favorite': { req: UsersListsFavoriteRequest; res: EmptyResponse };
 	'users/lists/get-memberships': { req: UsersListsGetMembershipsRequest; res: UsersListsGetMembershipsResponse };
 	'users/lists/list': { req: UsersListsListRequest; res: UsersListsListResponse };
+	'users/lists/list-favorite': { req: UsersListsListFavoriteRequest; res: UsersListsListFavoriteResponse };
 	'users/lists/pull': { req: UsersListsPullRequest; res: EmptyResponse };
 	'users/lists/push': { req: UsersListsPushRequest; res: EmptyResponse };
 	'users/lists/show': { req: UsersListsShowRequest; res: UsersListsShowResponse };
@@ -972,6 +1016,7 @@ export type Endpoints = {
 	'users/search-by-username-and-host': { req: UsersSearchByUsernameAndHostRequest; res: UsersSearchByUsernameAndHostResponse };
 	'users/show': { req: UsersShowRequest; res: UsersShowResponse };
 	'users/update-memo': { req: UsersUpdateMemoRequest; res: EmptyResponse };
+	'users/user/stats': { req: UsersUserStatsRequest; res: UsersUserStatsResponse };
 	'v2/admin/emoji/list': { req: V2AdminEmojiListRequest; res: V2AdminEmojiListResponse };
 };
 
