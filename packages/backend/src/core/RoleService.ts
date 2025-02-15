@@ -65,6 +65,7 @@ export type RolePolicies = {
 	listPinnedLimit: number;
 	localTimelineAnyLimit: number;
 	loginBonusGrantEnabled: boolean;
+	canSendPoints: boolean;
 	canImportAntennas: boolean;
 	canImportBlocking: boolean;
 	canImportFollowing: boolean;
@@ -111,6 +112,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	listPinnedLimit: 2,
 	localTimelineAnyLimit: 3,
 	loginBonusGrantEnabled: true,
+	canSendPoints: false,
 };
 
 @Injectable()
@@ -423,6 +425,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			listPinnedLimit: calc('listPinnedLimit', vs => Math.max(...vs)),
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),
 			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),
+			canSendPoints: calc('canSendPoints', vs => vs.some(v => v === true)),
 		};
 	}
 

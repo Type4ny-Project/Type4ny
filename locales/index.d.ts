@@ -7358,6 +7358,10 @@ export interface Locale extends ILocale {
              */
             "loginBonusGrantEnabled": string;
             /**
+             * ポイントの送信
+             */
+            "canSendPoints": string;
+            /**
              * 絵文字ピッカーのプロファイルの上限数(最大5)
              */
             "emojiPickerProfileLimit": string;

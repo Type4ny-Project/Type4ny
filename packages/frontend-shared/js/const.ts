@@ -109,6 +109,7 @@ export const ROLE_POLICIES = [
 	'listPinnedLimit',
 	'localTimelineAnyLimit',
 	'loginBonusGrantEnabled',
+	'canSendPoints',
 	'canImportAntennas',
 	'canImportBlocking',
 	'canImportFollowing',
