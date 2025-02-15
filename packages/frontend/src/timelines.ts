@@ -12,6 +12,7 @@ export const basicTimelineTypes = [
 	'social',
 	'global',
 	'media',
+	'homeLocal',
 ] as const;
 
 export type BasicTimelineType = typeof basicTimelineTypes[number];
@@ -32,6 +33,8 @@ export function basicTimelineIconClass(timeline: BasicTimelineType): string {
 			return 'ti ti-whirl';
 		case 'media':
 			return 'ti ti-photo';
+		default:
+			return 'ti ti-home';
 	}
 }
 

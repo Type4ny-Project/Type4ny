@@ -145,6 +145,11 @@ function connectChannel() {
 		connection = stream.useChannel('channel', { channelId: props.channel });
 	} else if (props.src === 'role' && props.role) {
 		connection = stream.useChannel('roleTimeline', { roleId: props.role });
+	} else if (props.src === 'homeLocal') {
+		connection = stream.useChannel('homeLocalTimeline', {
+			withRenotes: props.withRenotes,
+			withFiles: props.onlyFiles ? true : undefined,
+		});
 	}
 
 	if (props.src !== 'directs' && props.src !== 'mentions') {
@@ -170,6 +175,7 @@ function updatePaginationQuery() {
 		list: 'notes/user-list-timeline',
 		channel: 'channels/timeline',
 		role: 'roles/notes',
+		homeLocal: 'notes/home-local-timeline',
 	};
 
 	const queries = {
@@ -184,6 +190,7 @@ function updatePaginationQuery() {
 		list: { withRenotes: props.withRenotes, withFiles: props.onlyFiles ? true : undefined, listId: props.list },
 		channel: { channelId: props.channel },
 		role: { roleId: props.role },
+		homeLocal: { withRenotes: props.withRenotes, withFiles: props.onlyFiles ? true : undefined },
 	};
 	if (props.src.startsWith('remoteLocalTimeline')) {
 		paginationQuery = {
