@@ -419,6 +419,30 @@ export const packedNotificationSchema = {
 			type: {
 				type: 'string',
 				optional: false, nullable: false,
+				enum: ['acceptPoints'],
+			},
+			getPoint: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
+			user: {
+				type: 'object',
+				ref: 'UserLite',
+				optional: false, nullable: false,
+			},
+			userId: {
+				type: 'string',
+				optional: false, nullable: false,
+				format: 'id',
+			},
+		},
+	}, {
+		type: 'object',
+		properties: {
+			...baseSchema.properties,
+			type: {
+				type: 'string',
+				optional: false, nullable: false,
 				enum: ['test'],
 			},
 		},

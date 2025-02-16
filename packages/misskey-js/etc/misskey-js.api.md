@@ -1865,7 +1865,7 @@ declare namespace entities {
         UsersAchievementsRequest,
         UsersAchievementsResponse,
         UsersUpdateMemoRequest,
-		PointSendRequest,
+        PointSendRequest,
         FetchRssRequest,
         FetchRssResponse,
         FetchExternalResourcesRequest,
@@ -2999,6 +2999,9 @@ type PingResponse = operations['ping']['responses']['200']['content']['applicati
 type PinnedUsersResponse = operations['pinned-users']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type PointSendRequest = operations['point___send']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type PromoReadRequest = operations['promo___read']['requestBody']['content']['application/json'];
 
 // Warning: (ae-forgotten-export) The symbol "AllNullRecord" needs to be exported by the entry point index.d.ts
@@ -3526,8 +3529,6 @@ type UsersShowResponse = operations['users___show']['responses']['200']['content
 // @public (undocumented)
 type UsersUpdateMemoRequest = operations['users___update-memo']['requestBody']['content']['application/json'];
 
-// @public (undocumented)
-type PointSendRequest = operations['point___send']['requestBody']['content']['application/json']
 // Warnings were encountered during analysis:
 //
 // src/entities.ts:50:2 - (ae-forgotten-export) The symbol "ModerationLogPayloads" needs to be exported by the entry point index.d.ts

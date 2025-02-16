@@ -59,11 +59,11 @@ export type MiNotification = {
 	createdAt: string;
 	loginBonus: number;
 } | {
-	type: 'sendPoint';
+	type: 'acceptPoints';
 	id: string;
 	createdAt: string;
 	getPoint: number;
-	senderId: MiUser['id'];
+	notifierId: MiUser['id'];
 } | {
 	type: 'pollEnded';
 	id: string;

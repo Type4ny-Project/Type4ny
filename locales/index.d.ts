@@ -10019,6 +10019,10 @@ export interface Locale extends ILocale {
          */
         "loginbonus": string;
         /**
+         * {sender}から{point}{pointName}をもらいました
+         */
+        "acceptPoints": ParameterizedString<"sender" | "point" | "pointName">;
+        /**
          * 通知テスト
          */
         "testNotification": string;
@@ -10119,6 +10123,10 @@ export interface Locale extends ILocale {
              * ログインボーナス
              */
             "loginBonus": string;
+            /**
+             * {pointName}獲得
+             */
+            "acceptPoints": ParameterizedString<"pointName">;
             /**
              * エクスポートが完了した
              */

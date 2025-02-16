@@ -589,6 +589,7 @@ export type UsersShowResponse = operations['users___show']['responses']['200']['
 export type UsersAchievementsRequest = operations['users___achievements']['requestBody']['content']['application/json'];
 export type UsersAchievementsResponse = operations['users___achievements']['responses']['200']['content']['application/json'];
 export type UsersUpdateMemoRequest = operations['users___update-memo']['requestBody']['content']['application/json'];
+export type PointSendRequest = operations['point___send']['requestBody']['content']['application/json'];
 export type FetchRssRequest = operations['fetch-rss']['requestBody']['content']['application/json'];
 export type FetchRssResponse = operations['fetch-rss']['responses']['200']['content']['application/json'];
 export type FetchExternalResourcesRequest = operations['fetch-external-resources']['requestBody']['content']['application/json'];

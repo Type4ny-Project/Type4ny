@@ -52,10 +52,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				getPoints: user.getPoints + ps.points,
 			});
 
-			this.notificationService.createNotification(user.id, 'sendPoint', {
+			this.notificationService.createNotification(user.id, 'acceptPoints', {
 				getPoint: ps.points,
-				senderId: sender.id,
-			});
+			}, sender.id);
 
 			return {};
 		});

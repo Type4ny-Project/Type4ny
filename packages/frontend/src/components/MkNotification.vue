@@ -55,8 +55,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 					[$style.t_achievementEarned]:
 						notification.type === 'achievementEarned' || notification.type === 'loginBonus',
 					[$style.t_exportCompleted]: notification.type === 'exportCompleted',
-				[$style.t_login]: notification.type === 'login',
-				[$style.t_roleAssigned]:
+					[$style.t_login]: notification.type === 'login',
+					[$style.t_acceptPoints]: notification.type === 'acceptPoints',
+					[$style.t_roleAssigned]:
 						notification.type === 'roleAssigned' &&
 						notification.role.iconUrl == null,
 				},
@@ -88,6 +89,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 			></i>
 			<i
 				v-else-if="notification.type === 'loginBonus'"
+				class="ti ti-medal"
+			></i>
+			<i
+				v-else-if="notification.type === 'acceptPoints'"
 				class="ti ti-medal"
 			></i>
 <i v-else-if="notification.type === 'exportCompleted'" class="ti ti-archive"></i>
@@ -140,7 +145,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 						notification.type === 'quote' ||
 						notification.type === 'reaction' ||
 						notification.type === 'receiveFollowRequest' ||
-						notification.type === 'followRequestAccepted'
+						notification.type === 'followRequestAccepted' ||
+						notification.type === 'acceptPoints'
 				"
 				v-user-preview="notification.user.id"
 				:class="$style.headerName"
@@ -295,6 +301,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 					i18n.tsx.nPointGets({
 						getPoint: notification.loginBonus,
 						pointName: instance?.pointName ?? i18n.ts.point,
+					})
+				}}
+			</div>
+			<div
+				v-else-if="notification.type === 'acceptPoints'"
+				:class="$style.text"
+			>
+				{{
+					i18n.tsx._notification.acceptPoints({
+						point: notification.getPoint,
+						pointName: instance?.pointName ?? i18n.ts.point,
+						sender: notification.user.username,
 					})
 				}}
 			</div>
@@ -488,6 +506,7 @@ function getActualReactedUsersCount(
 	--eventReactionHeart: var(--MI_THEME-love);
 	--eventReaction: #e99a0b;
 	--eventAchievement: #cb9a11;
+	--eventAcceptPoints: #cb9a11;
 	--eventLogin: #007aff;
 	--eventOther: #88a6b7;
 }
@@ -609,6 +628,12 @@ function getActualReactedUsersCount(
 .t_roleAssigned {
 	padding: 3px;
 	background: var(--eventOther);
+	pointer-events: none;
+}
+
+.t_acceptPoints {
+	padding: 3px;
+	background: var(--eventAcceptPoints);
 	pointer-events: none;
 }
 
