@@ -304,6 +304,10 @@ export const packedRolePoliciesSchema = {
 			type: 'boolean',
 			optional: false, nullable: false,
 		},
+		canSendPoints: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
 	},
 } as const;
 

@@ -471,6 +471,28 @@ export interface Locale extends ILocale {
      */
     "point": string;
     /**
+     * {pointName}を送る
+     */
+    "sendPoints": ParameterizedString<"pointName">;
+    /**
+     * {name}に{pointName}を送る
+     */
+    "sendPointsTo": ParameterizedString<"name" | "pointName">;
+    /**
+     * {name}に{points}{pointName}を送信します。
+     * よろしいですか？
+     * ※送信後は取り消すことができません。
+     */
+    "sendPointsConfirm": ParameterizedString<"name" | "points" | "pointName">;
+    /**
+     * {pointName}が足りません
+     */
+    "notEnoughPoints": ParameterizedString<"pointName">;
+    /**
+     * {pointName}は数字で入力してください
+     */
+    "pointsMustBeNumber": ParameterizedString<"pointName">;
+    /**
      * フォローされています
      */
     "followsYou": string;
