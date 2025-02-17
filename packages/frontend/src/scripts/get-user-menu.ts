@@ -13,7 +13,7 @@ import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { defaultStore, userActions } from '@/store.js';
-import { $i, iAmModerator } from '@/account.js';
+import { $i, iAmModerator, refreshAccount } from '@/account.js';
 import { notesSearchAvailable, canSearchNonLocalNotes } from '@/scripts/check-permissions.js';
 import { IRouter } from '@/nirax.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
@@ -368,7 +368,7 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 				action: async () => {
 					const { canceled, result } = await os.inputNumber({
 						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-						title: i18n.tsx.sendPointsTo({ name: user.username ?? user.name, pointName: pointName }),
+						title: i18n.tsx.sendPointsTo({ name: user.name ?? user.username, pointName: pointName }),
 					});
 					if (canceled) return;
 					if (!result) return;
@@ -391,10 +391,11 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 					os.confirm({
 						type: 'warning',
 						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-						text: i18n.tsx.sendPointsConfirm({ name: user.username ?? user.name, pointName: instance.pointName ?? i18n.ts.point, points: points }),
+						text: i18n.tsx.sendPointsConfirm({ name: user.name ?? user.username, pointName: instance.pointName ?? i18n.ts.point, points: points }),
 					}).then(async ({ canceled }) => {
 						if (canceled) return;
 						await misskeyApi('point/send', { userId: user.id, points });
+						await refreshAccount();
 					});
 				},
 			});
