@@ -32,7 +32,12 @@ export const meta = {
 			code: 'CANNOT_SEND_POINTS',
 			id: 'f1cf2616-db7b-3f97-5a14-06a0a0005f8f',
 		},
-	}
+		recipientIsYou: {
+			message: 'recipient is you.',
+			code: 'RECIPIENT_IS_ME',
+			id: '24095319-69ee-8033-b0a2-9ad6928bbcb8',
+		},
+	},
 
 } as const;
 
@@ -67,6 +72,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			//送れるかどうかチェック
 			if (sender.getPoints < ps.points) {
 				throw new ApiError(meta.errors.notEnoughPoints);
+			}
+
+			// 受信者が自分ならエラー
+			if (sender.id === user.id) {
+				throw new ApiError(meta.errors.recipientIsYou);
+			}
+
+			// 送るポイントが0以下の場合はエラー
+			if (ps.points <= 0) {
+				throw new ApiError(meta.errors.cannotSendPoints);
 			}
 
 			//ポイントを送る
