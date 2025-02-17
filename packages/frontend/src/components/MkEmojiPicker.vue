@@ -124,11 +124,13 @@ import * as Misskey from 'misskey-js';
 import {
 	emojilist,
 	emojiCharByCategory,
-	UnicodeEmojiDef,
 	unicodeEmojiCategories as categories,
 	getEmojiName,
-	CustomEmojiFolderTree,
 	getUnicodeEmoji,
+} from '@@/js/emojilist.js';
+import type {
+	UnicodeEmojiDef,
+	CustomEmojiFolderTree,
 } from '@@/js/emojilist.js';
 import XSection from '@/components/MkEmojiPicker.section.vue';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
@@ -597,7 +599,7 @@ defineExpose({
 
 						&:disabled {
 							cursor: not-allowed;
-							background: linear-gradient(-45deg, transparent 0% 48%, var(--MI_THEME-X6) 48% 52%, transparent 52% 100%);
+							background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 							opacity: 1;
 
 							> .emoji {
@@ -632,7 +634,7 @@ defineExpose({
 
 						&:disabled {
 							cursor: not-allowed;
-							background: linear-gradient(-45deg, transparent 0% 48%, var(--MI_THEME-X6) 48% 52%, transparent 52% 100%);
+							background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 							opacity: 1;
 
 							> .emoji {
@@ -754,7 +756,7 @@ left: 0;*/
 
 					&:disabled {
 						cursor: not-allowed;
-						background: linear-gradient(-45deg, transparent 0% 48%, var(--MI_THEME-X6) 48% 52%, transparent 52% 100%);
+						background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 						opacity: 1;
 
 						> .emoji {

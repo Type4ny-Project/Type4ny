@@ -39,7 +39,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, nextTick, ref, watch, computed, toRefs, VNode, useSlots, VNodeChild } from 'vue';
+import { onMounted, nextTick, ref, watch, computed, toRefs, useSlots } from 'vue';
+import type { VNode, VNodeChild } from 'vue';
 import { useInterval } from '@@/js/use-interval.js';
 import type { MenuItem } from '@/types/menu.js';
 import MkButton from '@/components/MkButton.vue';

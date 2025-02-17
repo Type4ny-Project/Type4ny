@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<XWidgets/>
 	</div>
 
-	<button v-if="(!isDesktop || pageMetadata?.needWideArea) && !isMobile" :class="$style.widgetButton" class="_button" @click="widgetsShowing = true">
+	<button v-if="!isDesktop && !pageMetadata?.needWideArea && !isMobile" :class="$style.widgetButton" class="_button" @click="widgetsShowing = true">
 		<i class="ti ti-apps"></i>
 	</button>
 
@@ -121,7 +121,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, provide, onMounted, computed, ref, watch, shallowRef, Ref } from 'vue';
+import { defineAsyncComponent, provide, onMounted, computed, ref, watch, shallowRef } from 'vue';
+import type { Ref } from 'vue';
 import { instanceName } from '@@/js/config.js';
 import { CURRENT_STICKY_BOTTOM } from '@@/js/const.js';
 import { isLink } from '@@/js/is-link.js';
@@ -133,15 +134,15 @@ import { defaultStore } from '@/store.js';
 import { navbarItemDef } from '@/navbar.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
-import { mainRouter } from '@/router/main.js';
-import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata';
+import type { PageMetadata } from '@/scripts/page-metadata.js';
+import { provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata';
 import { deviceKind } from '@/scripts/device-kind';
 import { miLocalStorage } from '@/local-storage';
 import { useScrollPositionManager } from '@/nirax';
+import { mainRouter } from '@/router/main.js';
 
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
 const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
 let gaming = ref();
 // gaming.valueに新しい値を代入する
 if (darkMode.value && gamingMode.value) {

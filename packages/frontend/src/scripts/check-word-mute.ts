@@ -4,40 +4,39 @@
  */
 import * as Misskey from 'misskey-js';
 
-export function checkWordMute(note: Misskey.entities.Note, me: Misskey.entities.UserLite | null | undefined, mutedWords: Array<string | string[]>): boolean {
+export function checkWordMute(note: Misskey.entities.Note, me: Misskey.entities.UserLite | null | undefined, mutedWords: Array<string | string[]>): Array<string | string[]> | false {
 	// 自分自身
 	if (me && (note.userId === me.id)) return false;
 
 	if (mutedWords.length > 0) {
 		const text = ((note.cw ?? '') + '\n' + (note.text ?? '')).trim();
-		if (!text) return false;
 
-		const filteredFilters = mutedWords.map(filter => {
+		if (text === '') return false;
+
+		const matched = mutedWords.filter(filter => {
 			if (Array.isArray(filter)) {
-				// 空でないキーワードのセットを作成
-				const cleaned = filter.filter(keyword => keyword !== '');
-				return cleaned.length > 0 ? new Set(cleaned) : null;
-			} else {
-				// 正規表現を事前にコンパイル
-				const regexp = filter.match(/^\/(.+)\/(.*)$/);
-				return regexp ? new RegExp(regexp[1], regexp[2]) : null;
-			}
-		}).filter(Boolean); // nullを除外
+				// Clean up
+				const filteredFilter = filter.filter(keyword => keyword !== '');
+				if (filteredFilter.length === 0) return false;
 
-		// テキストをフィルタでチェック
-		for (const filter of filteredFilters) {
-			if (filter instanceof Set) {
-				// セットの場合、全てのキーワードが含まれているかチェック
-				if ([...filter].every(keyword => text.includes(keyword))) {
-					return true;
-				}
-			} else if (filter instanceof RegExp) {
-				// 正規表現の場合
-				if (filter.test(text)) {
-					return true;
+				return filteredFilter.every(keyword => text.includes(keyword));
+			} else {
+				// represents RegExp
+				const regexp = filter.match(/^\/(.+)\/(.*)$/);
+
+				// This should never happen due to input sanitisation.
+				if (!regexp) return false;
+
+				try {
+					return new RegExp(regexp[1], regexp[2]).test(text);
+				} catch (err) {
+					// This should never happen due to input sanitisation.
+					return false;
 				}
 			}
-		}
+		});
+
+		if (matched.length > 0) return matched;
 	}
 
 	return false;

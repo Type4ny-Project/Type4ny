@@ -60,8 +60,10 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, Ref } from 'vue';
-import { CustomEmojiFolderTree, getEmojiName } from '@@/js/emojilist.js';
+import { ref, computed } from 'vue';
+import type { Ref } from 'vue';
+import { getEmojiName } from '@@/js/emojilist.js';
+import type { CustomEmojiFolderTree } from '@@/js/emojilist.js';
 import { i18n } from '@/i18n.js';
 import { customEmojis } from '@/custom-emojis.js';
 import MkEmojiPickerSection from '@/components/MkEmojiPicker.section.vue';

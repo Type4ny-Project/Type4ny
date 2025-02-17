@@ -29,7 +29,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref, shallowRef } from 'vue';
+import { ref, shallowRef } from 'vue';
+import type { Ref } from 'vue';
 import MkSwitch from './MkSwitch.vue';
 import MkInfo from './MkInfo.vue';
 import MkButton from './MkButton.vue';
@@ -37,7 +38,7 @@ import MkModalWindow from '@/components/MkModalWindow.vue';
 import { notificationTypes } from '@@/js/const.js';
 import { i18n } from '@/i18n.js';
 
-type TypesMap = Record<typeof notificationTypes[number], Ref<boolean>>
+type TypesMap = Record<typeof notificationTypes[number], Ref<boolean>>;
 
 const emit = defineEmits<{
 	(ev: 'done', v: { excludeTypes: string[] }): void,

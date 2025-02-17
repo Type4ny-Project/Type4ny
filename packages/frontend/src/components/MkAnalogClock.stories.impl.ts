@@ -2,8 +2,8 @@
  * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
- 
-import { StoryObj } from '@storybook/vue3';
+
+import type { StoryObj } from '@storybook/vue3';
 import isChromatic from 'chromatic/isChromatic';
 import MkAnalogClock from './MkAnalogClock.vue';
 export const Default = {

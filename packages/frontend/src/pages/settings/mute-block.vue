@@ -9,14 +9,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<template #icon><i class="ti ti-message-off"></i></template>
 		<template #label>{{ i18n.ts.wordMute }}</template>
 
-		<XWordMute :muted="$i.mutedWords" @save="saveMutedWords"/>
+		<div class="_gaps_m">
+			<MkInfo>{{ i18n.ts.wordMuteDescription }}</MkInfo>
+			<MkSwitch v-model="showSoftWordMutedWord">{{ i18n.ts.showMutedWord }}</MkSwitch>
+			<XWordMute :muted="$i.mutedWords" @save="saveMutedWords"/>
+		</div>
 	</MkFolder>
 
 	<MkFolder>
 		<template #icon><i class="ti ti-message-off"></i></template>
 		<template #label>{{ i18n.ts.hardWordMute }}</template>
 
-		<XWordMute :muted="$i.hardMutedWords" @save="saveHardMutedWords"/>
+		<div class="_gaps_m">
+			<MkInfo>{{ i18n.ts.hardWordMuteDescription }}</MkInfo>
+			<XWordMute :muted="$i.hardMutedWords" @save="saveHardMutedWords"/>
+		</div>
 	</MkFolder>
 
     <MkFolder>
@@ -36,7 +43,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</MkFolder>
 
-	<MkFolder>
+	<MkFolder v-if="instance.federation !== 'none'">
       <template #icon><i class="ti ti-planet-off"></i></template>
       <template #label>{{ i18n.ts.instanceMute }}</template>
 
@@ -160,13 +167,15 @@ import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { infoImageUrl } from '@/instance.js';
+import { instance, infoImageUrl } from '@/instance.js';
 import { signinRequired } from '@/account.js';
+import MkInfo from '@/components/MkInfo.vue';
 import MkFolder from '@/components/MkFolder.vue';
+import MkSwitch from '@/components/MkSwitch.vue';
+import { defaultStore } from '@/store';
+import { reloadAsk } from '@/scripts/reload-ask.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
-import { defaultStore } from '@/store.js';
 
 const $i = signinRequired();
 
@@ -188,6 +197,14 @@ const blockingPagination = {
 const expandedRenoteMuteItems = ref([]);
 const expandedMuteItems = ref([]);
 const expandedBlockItems = ref([]);
+
+const showSoftWordMutedWord = computed(defaultStore.makeGetterSetter('showSoftWordMutedWord'));
+
+watch([
+	showSoftWordMutedWord,
+], async () => {
+	await reloadAsk({ reason: i18n.ts.reloadToApplySetting, unison: true });
+});
 
 const mutedReactions = ref<string[]>(defaultStore.state.mutedReactions);
 
@@ -278,11 +295,11 @@ async function toggleBlockItem(item) {
 }
 
 async function saveMutedWords(mutedWords: (string | string[])[]) {
-	await misskeyApi('i/update', { mutedWords });
+	await os.apiWithDialog('i/update', { mutedWords });
 }
 
 async function saveHardMutedWords(hardMutedWords: (string | string[])[]) {
-	await misskeyApi('i/update', { hardMutedWords });
+	await os.apiWithDialog('i/update', { hardMutedWords });
 }
 
 async function saveMutedUsers(mutedUsers: { user: Misskey.entities.UserLite; words: (string | string[])}[]) {

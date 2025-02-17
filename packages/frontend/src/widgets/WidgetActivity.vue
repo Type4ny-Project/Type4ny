@@ -20,10 +20,11 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentProps, WidgetComponentEmits, WidgetComponentExpose } from './widget.js';
 import XCalendar from './WidgetActivity.calendar.vue';
 import XChart from './WidgetActivity.chart.vue';
-import { GetFormResultType } from '@/scripts/form.js';
+import type { GetFormResultType } from '@/scripts/form.js';
 import { misskeyApiGet } from '@/scripts/misskey-api.js';
 import MkContainer from '@/components/MkContainer.vue';
 import { $i } from '@/account.js';

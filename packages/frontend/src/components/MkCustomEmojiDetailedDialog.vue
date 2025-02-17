@@ -56,7 +56,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import * as Misskey from 'misskey-js';
-import { defineProps, shallowRef } from 'vue';
+import { shallowRef } from 'vue';
 import MkLink from '@/components/MkLink.vue';
 import { i18n } from '@/i18n.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
@@ -84,7 +84,7 @@ function cancel() {
 .emojiImgWrapper {
   max-width: 100%;
   height: 40cqh;
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--MI_THEME-X5) 8px, var(--MI_THEME-X5) 14px);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05)) 8px, light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05)) 14px);
   border-radius: var(--MI-radius);
   margin: auto;
   overflow-y: hidden;
@@ -100,7 +100,7 @@ function cancel() {
   display: inline-block;
   word-break: break-all;
   padding: 3px 10px;
-  background-color: var(--MI_THEME-X5);
+  background-color: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
   border: solid 1px var(--MI_THEME-divider);
   border-radius: var(--MI-radius);
 }

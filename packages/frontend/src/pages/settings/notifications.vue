@@ -82,7 +82,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { shallowRef, computed, ref } from 'vue';
-import XNotificationConfig, { type NotificationConfig } from './notifications.notification-config.vue';
+import XNotificationConfig from './notifications.notification-config.vue';
+import type { NotificationConfig } from './notifications.notification-config.vue';
 import FormLink from '@/components/form/link.vue';
 import FormSection from '@/components/form/section.vue';
 import MkFolder from '@/components/MkFolder.vue';
@@ -104,7 +105,7 @@ const loginBonusEnabled = ref($i.notificationRecieveConfig.loginBonus ?? true);
 
 const nonConfigurableNotificationTypes = ['note', 'roleAssigned', 'followRequestAccepted', 'test', 'exportCompleted'] satisfies (typeof notificationTypes[number])[] as string[];
 
-const onlyOnOrOffNotificationTypes = ['app', 'achievementEarned', 'login'] satisfies (typeof notificationTypes[number])[] as string[];
+const onlyOnOrOffNotificationTypes = ['app', 'achievementEarned', 'login', 'createToken'] satisfies (typeof notificationTypes[number])[] as string[];
 
 const allowButton = shallowRef<InstanceType<typeof MkPushNotificationAllowButton>>();
 const pushRegistrationInServer = computed(() => allowButton.value?.pushRegistrationInServer);

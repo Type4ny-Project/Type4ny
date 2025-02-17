@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<XOverview/>
 		</MkSpacer>
 		<XEmojis v-else-if="tab === 'emojis'"/>
-		<MkSpacer v-else-if="tab === 'federation'" :contentMax="1000" :marginMin="20">
+		<MkSpacer v-else-if="instance.federation !== 'none' && tab === 'federation'" :contentMax="1000" :marginMin="20">
 			<XFederation/>
 		</MkSpacer>
 		<MkSpacer v-else-if="tab === 'charts'" :contentMax="1000" :marginMin="20">
@@ -23,6 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
+import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { claimAchievement } from '@/scripts/achievements.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
@@ -47,46 +48,37 @@ watch(tab, () => {
 		claimAchievement('viewInstanceChart');
 	}
 });
-let bannerUrl = ref(defaultStore.state.bannerUrl);
-let iconUrl = ref(defaultStore.state.iconUrl);
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-
-if (darkMode.value) {
-	bannerUrl.value = bannerDark;
-	iconUrl.value = iconDark;
-} else {
-	bannerUrl.value = bannerLight;
-	iconUrl.value = iconLight;
-}
-
-watch(darkMode, () => {
-	if (darkMode.value) {
-		bannerUrl.value = bannerDark;
-		iconUrl.value = iconDark;
-	} else {
-		bannerUrl.value = bannerLight;
-		iconUrl.value = iconLight;
-	}
-});
 
 const headerActions = computed(() => []);
 
-const headerTabs = computed(() => [{
-	key: 'overview',
-	title: i18n.ts.overview,
-}, {
-	key: 'emojis',
-	title: i18n.ts.customEmojis,
-	icon: 'ti ti-icons',
-}, {
-	key: 'federation',
-	title: i18n.ts.federation,
-	icon: 'ti ti-whirl',
-}, {
-	key: 'charts',
-	title: i18n.ts.charts,
-	icon: 'ti ti-chart-line',
-}]);
+const headerTabs = computed(() => {
+	const items = [];
+
+	items.push({
+		key: 'overview',
+		title: i18n.ts.overview,
+	}, {
+		key: 'emojis',
+		title: i18n.ts.customEmojis,
+		icon: 'ti ti-icons',
+	});
+
+	if (instance.federation !== 'none') {
+		items.push({
+			key: 'federation',
+			title: i18n.ts.federation,
+			icon: 'ti ti-whirl',
+		});
+	}
+
+	items.push({
+		key: 'charts',
+		title: i18n.ts.charts,
+		icon: 'ti ti-chart-line',
+	});
+
+	return items;
+});
 
 definePageMetadata(() => ({
 	title: i18n.ts.instanceInfo,

@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script setup lang="ts">
-import { computed, ModelRef } from 'vue';
+import { computed } from 'vue';
 
 withDefaults(defineProps<{
 	buffer?: number;
@@ -26,8 +26,8 @@ withDefaults(defineProps<{
 const emit = defineEmits<{
 	(ev: 'dragEnded', value: number): void;
 }>();
- 
-const model = defineModel({ required: true }) as ModelRef<string | number>;
+
+const model = defineModel<string | number>({ required: true });
 const modelValue = computed({
 	get: () => typeof model.value === 'number' ? model.value : parseFloat(model.value),
 	set: v => { model.value = v; },

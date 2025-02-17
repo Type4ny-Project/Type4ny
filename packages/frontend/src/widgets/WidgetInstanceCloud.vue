@@ -19,8 +19,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { shallowRef } from 'vue';
 import * as Misskey from 'misskey-js';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { GetFormResultType } from '@/scripts/form.js';
 import MkContainer from '@/components/MkContainer.vue';
 import MkTagCloud from '@/components/MkTagCloud.vue';
 import * as os from '@/os.js';

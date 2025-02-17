@@ -33,7 +33,7 @@ import { packedClipSchema } from '@/models/json-schema/clip.js';
 import { packedFederationInstanceSchema } from '@/models/json-schema/federation-instance.js';
 import { packedQueueCountSchema } from '@/models/json-schema/queue.js';
 import { packedGalleryPostSchema } from '@/models/json-schema/gallery-post.js';
-import { packedEmojiDetailedSchema, packedEmojiRequestSimpleSchema, packedEmojiSimpleSchema, packedEmojiRequestDetailedSchema } from '@/models/json-schema/emoji.js';
+import { packedEmojiDetailedSchema, packedEmojiRequestSimpleSchema, packedEmojiSimpleSchema, packedEmojiRequestDetailedSchema,packedEmojiDetailedAdminSchema } from '@/models/json-schema/emoji.js';
 import { packedFlashSchema } from '@/models/json-schema/flash.js';
 import { packedAnnouncementSchema } from '@/models/json-schema/announcement.js';
 import { packedSigninSchema } from '@/models/json-schema/signin.js';
@@ -96,6 +96,7 @@ export const refs = {
 	EmojiSimple: packedEmojiSimpleSchema,
 	EmojiRequestSimple: packedEmojiRequestSimpleSchema,
 	EmojiDetailed: packedEmojiDetailedSchema,
+	EmojiDetailedAdmin: packedEmojiDetailedAdminSchema,
 	EmojiRequestDetailed: packedEmojiRequestDetailedSchema,
 	Flash: packedFlashSchema,
 	Signin: packedSigninSchema,
@@ -140,7 +141,7 @@ type OfSchema = {
 	readonly anyOf?: ReadonlyArray<Schema>;
 	readonly oneOf?: ReadonlyArray<Schema>;
 	readonly allOf?: ReadonlyArray<Schema>;
-}
+};
 
 export interface Schema extends OfSchema {
 	readonly type?: TypeStringef;
@@ -214,7 +215,7 @@ type ObjectSchemaTypeDef<p extends Schema> =
 	:
 	p['anyOf'] extends ReadonlyArray<Schema> ? never : // see CONTRIBUTING.md
 	p['allOf'] extends ReadonlyArray<Schema> ? UnionToIntersection<UnionSchemaType<p['allOf']>> :
-	any
+	any;
 
 type ObjectSchemaType<p extends Schema> = NullOrUndefined<p, ObjectSchemaTypeDef<p>>;
 

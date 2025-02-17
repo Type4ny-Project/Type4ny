@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <XColumn :column="column" :isStacked="isStacked" :menu="menu" :refresher="async () => { await notificationsComponent?.reload() }">
-	<template #header><i class="ti ti-bell" style="margin-right: 8px;"></i>{{ column.name }}</template>
+	<template #header><i class="ti ti-bell" style="margin-right: 8px;"></i>{{ column.name || i18n.ts._deck._columns.notifications }}</template>
 
 	<XNotifications ref="notificationsComponent" :excludeTypes="props.column.excludeTypes"/>
 </XColumn>
@@ -13,7 +13,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { defineAsyncComponent, shallowRef } from 'vue';
 import XColumn from './column.vue';
-import { updateColumn, Column } from './deck-store.js';
+import { updateColumn } from './deck-store.js';
+import type { Column } from './deck-store.js';
 import XNotifications from '@/components/MkNotifications.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';

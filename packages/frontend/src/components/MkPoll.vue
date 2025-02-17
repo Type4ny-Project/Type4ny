@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<div :class="$style.bg" :style="{ 'width': `${showResult ? (choice.votes / total * 100) : 0}%` }"></div>
 			<span :class="$style.fg">
 				<template v-if="choice.isVoted"><i class="ti ti-check" style="margin-right: 4px; color: var(--MI_THEME-accent);"></i></template>
-				<Mfm :text="choice.text" :plain="true"/>
+				<Mfm :text="choice.text" :plain="true" :author="author" :emojiUrls="emojiUrls"/>
 				<span v-if="showResult" style="margin-left: 4px; opacity: 0.7;">({{ i18n.tsx._poll.votesCount({ n: choice.votes }) }})</span>
 			</span>
 		</li>
@@ -41,6 +41,8 @@ const props = defineProps<{
 	noteId: string;
 	poll: NonNullable<Misskey.entities.Note['poll']>;
 	readOnly?: boolean;
+	emojiUrls?: Record<string, string>;
+	author?: Misskey.entities.UserLite;
 }>();
 
 const remaining = ref(-1);

@@ -13,14 +13,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { toUnicode } from 'punycode';
+import { toUnicode } from 'punycode.js';
 import { computed, ref, watch } from 'vue';
 import { host as localHost } from '@@/js/config.js';
 import tinycolor from 'tinycolor2';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
-import { MkABehavior } from '@/components/global/MkA.vue';
+import type { MkABehavior } from '@/components/global/MkA.vue';
 
 const gamingType = defaultStore.state.gamingType;
 
