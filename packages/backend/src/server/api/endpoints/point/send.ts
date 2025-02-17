@@ -9,12 +9,31 @@ import type { UsersRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { NotificationService } from '@/core/NotificationService.js';
 import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../../error.js';
 
 export const meta = {
 	tag: ['point'],
 	requireCredential: true,
 	kind: 'write:points',
 	secure: true,
+	errors: {
+		userIsNotFound: {
+			message: 'user is not found.',
+			code: 'USER_IS_NOT_FOUND',
+			id: '87472165-2e39-fcb9-352b-98c24a6d825e',
+		},
+		notEnoughPoints: {
+			message: 'not enough points.',
+			code: 'NOT_ENOUGH_POINTS',
+			id: '10e9f46d-9f1f-7a4b-801b-5fe88e4bb1aa',
+		},
+		cannotSendPoints: {
+			message: 'cannot send points.',
+			code: 'CANNOT_SEND_POINTS',
+			id: 'f1cf2616-db7b-3f97-5a14-06a0a0005f8f',
+		},
+	}
+
 } as const;
 
 export const paramDef = {
@@ -39,15 +58,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const user = await this.usersRepository.findOneBy({ id: ps.userId });
 
 			if (sender == null || user == null) {
-				throw new Error('user not found');
+				throw new ApiError(meta.errors.userIsNotFound);
 			}
 
 			if ((await this.roleService.getUserPolicies(sender.id)).canSendPoints === false) {
-				throw new Error('cannot send points');
+				throw new ApiError(meta.errors.cannotSendPoints);
 			}
 			//送れるかどうかチェック
 			if (sender.getPoints < ps.points) {
-				throw new Error('not enough points');
+				throw new ApiError(meta.errors.notEnoughPoints);
 			}
 
 			//ポイントを送る
