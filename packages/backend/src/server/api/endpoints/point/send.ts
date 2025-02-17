@@ -8,6 +8,7 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import type { UsersRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { NotificationService } from '@/core/NotificationService.js';
+import { RoleService } from '@/core/RoleService.js';
 
 export const meta = {
 	tag: ['point'],
@@ -26,11 +27,12 @@ export const paramDef = {
 } as const;
 
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
 		private notificationService: NotificationService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const sender = await this.usersRepository.findOneBy({ id: me.id });
@@ -38,6 +40,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (sender == null || user == null) {
 				throw new Error('user not found');
+			}
+
+			if ((await this.roleService.getUserPolicies(sender.id)).canSendPoints === false) {
+				throw new Error('cannot send points');
 			}
 			//送れるかどうかチェック
 			if (sender.getPoints < ps.points) {
