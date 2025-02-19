@@ -105,11 +105,9 @@ export class CustomEmojiService implements OnApplicationShutdown {
 			.where('webhook.isActive = :isActive', { isActive: true })
 			.andWhere('webhook.on @> :eventName', { eventName: `{${eventType}}` })
 			.getMany();
-		console.log({ emoji, user: (me ? me : null) });
 		activeSystemWebhooksWithCustomEmojiRequest.forEach(it => this.systemWebhookService.enqueueSystemWebhook(
-			it.id,
 			eventType,
-			{ emoji, user: (me ? me : null) },
+			{ emoji, user: me ?? null },
 		));
 	}
 	@bindThis
@@ -204,20 +202,20 @@ export class CustomEmojiService implements OnApplicationShutdown {
 	public async update(data: (
 		{ id: MiEmoji['id'], name?: string; } | { name: string; id?: MiEmoji['id'], }
 		) & {
-		originalUrl?: string;
-		publicUrl?: string;
-		fileType?: string;
-		category?: string | null;
-		aliases?: string[];
-		license?: string | null;
-		isSensitive?: boolean;
-		localOnly?: boolean;
-		roleIdsThatCanBeUsedThisEmojiAsReaction?: MiRole['id'][];
-	}, moderator?: MiUser): Promise<
+			originalUrl?: string;
+			publicUrl?: string;
+			fileType?: string;
+			category?: string | null;
+			aliases?: string[];
+			license?: string | null;
+			isSensitive?: boolean;
+			localOnly?: boolean;
+			roleIdsThatCanBeUsedThisEmojiAsReaction?: MiRole['id'][];
+		}, moderator?: MiUser): Promise<
 		null
 		| 'NO_SUCH_EMOJI'
 		| 'SAME_NAME_EMOJI_EXISTS'
-	> {
+		> {
 		const emoji = data.id
 			? await this.getEmojiById(data.id)
 			: await this.getEmojiByName(data.name!);

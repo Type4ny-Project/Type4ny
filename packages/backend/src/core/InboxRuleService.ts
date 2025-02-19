@@ -6,8 +6,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { bindThis } from '@/decorators.js';
 import type { MiRemoteUser } from '@/models/User.js';
 import { IdService } from '@/core/IdService.js';
-import { isCreate, isNote } from '@/core/activitypub/type.js';
-import type { IObject, IPost } from '@/core/activitypub/type.js';
+import { isNote } from '@/core/activitypub/type.js';
+import type { IActivity } from '@/core/activitypub/type.js';
 import type { InstancesRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { UtilityService } from '@/core/UtilityService.js';
@@ -35,7 +35,7 @@ export class InboxRuleService {
 	}
 
 	@bindThis
-	async evalCond(activity: IObject, user: MiRemoteUser, value: InboxRuleCondFormulaValue): Promise<boolean> {
+	async evalCond(activity: IActivity, user: MiRemoteUser, value: InboxRuleCondFormulaValue): Promise<boolean> {
 		const instanceUnpack = await this.instancesRepository
 			.findOneBy({ host: this.utilityService.toPuny(user.host) });
 		if (!instanceUnpack) {
@@ -105,27 +105,29 @@ export class InboxRuleService {
 				}
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
-					if (isNote(activity.object)) {
-						return activity.object?.tag
-							? activity.object?.tag?.filter(t => t.type === 'Mention').length >= value.value
-							: false;
+					if (typeof activity.object === 'string') return false;
+					if (isNote(activity.object) && Array.isArray(activity.object.tag)) {
+						return activity.object.tag.filter((t: any) => t.type === 'Mention').length >= value.value;
 					}
 					return false;
 				}
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
+					if (typeof activity.object === 'string') return false;
 					if (isNote(activity.object)) {
-						return activity.object?.attachment?.length ? activity.object?.attachment.length >= value.value : false;
+						return activity.object.attachment?.length ? activity.object.attachment.length >= value.value : false;
 					}
 					return false;
 				}
 				case 'thisActivityIsNote': {
+					if (typeof activity.object === 'string') return false;
 					return isNote(activity.object);
 				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
+					if (typeof activity.object === 'string') return false;
 					if (isNote(activity.object)) {
-						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object?.content : '', [value.value]);
+						return this.utilityService.isKeyWordIncluded(typeof activity.object.content === 'string' ? activity.object.content : '', [value.value]);
 					}
 					return false;
 				}

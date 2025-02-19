@@ -32,6 +32,8 @@ function generateAbuseReport(override?: Partial<MiAbuseUserReport>): AbuseReport
 		reporterHost: null,
 		resolvedAs: null,
 		moderationNote: 'foo',
+		notes: [],
+		noteIds: [],
 		...override,
 	};
 
@@ -88,6 +90,7 @@ function generateDummyUser(override?: Partial<MiUser>): MiUser {
 		uri: null,
 		followersUri: null,
 		token: null,
+		getPoints: 0,
 		...override,
 	};
 }
@@ -130,6 +133,9 @@ function generateDummyNote(override?: Partial<MiNote>): MiNote {
 		replyUserHost: null,
 		renoteUserId: null,
 		renoteUserHost: null,
+		updatedAt: null,
+		updatedAtHistory: [],
+		noteEditHistory: [],
 		...override,
 	};
 }
@@ -469,7 +475,7 @@ export class WebhookTestService {
 			}
 			default: {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const _exhaustiveAssertion: never = params.type;
+				const _exhaustiveAssertion: never = params.type as never;
 				return;
 			}
 		}

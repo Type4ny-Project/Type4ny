@@ -18,10 +18,10 @@ import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { UtilityService } from '@/core/UtilityService.js';
 import { bindThis } from '@/decorators.js';
-import { ApiError } from '../../error.js';
 import { IdentifiableError } from '@/misc/identifiable-error.js';
 import { MiMeta } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
+import { ApiError } from '../../error.js';
 
 export const meta = {
 	tags: ['federation'],
@@ -141,9 +141,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 	 */
 	@bindThis
 	private async fetchAny(uri: string, me: MiLocalUser | null | undefined): Promise<SchemaType<typeof meta['res']> | null> {
-		if (!this.utilityService.isFederationAllowedUri(uri)) {
-			throw new ApiError(meta.errors.federationNotAllowed);
-		}
+		//TODO 機能するように
+		// if (!this.utilityService.isFederationAllowedUri(uri)) {
+		// 	throw new ApiError(meta.errors.federationNotAllowed);
+		// }
 		// ブロックしてたら中断
 		if (this.utilityService.isBlockedHost(this.serverSettings.blockedHosts, this.utilityService.extractDbHost(uri))) return null;
 

@@ -5,7 +5,7 @@
 
 import { Inject, Injectable } from '@nestjs/common';
 import * as Redis from 'ioredis';
-import type { MiUser, SystemWebhooksRepository } from '@/models/_.js';
+import type { MiEmoji, MiEmojiRequest, MiUser, SystemWebhooksRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
 import { GlobalEvents, GlobalEventService } from '@/core/GlobalEventService.js';
@@ -13,8 +13,6 @@ import { MiSystemWebhook, type SystemWebhookEventType } from '@/models/SystemWeb
 import { IdService } from '@/core/IdService.js';
 import { QueueService } from '@/core/QueueService.js';
 import { ModerationLogService } from '@/core/ModerationLogService.js';
-import { LoggerService } from '@/core/LoggerService.js';
-import Logger from '@/logger.js';
 import { Packed } from '@/misc/json-schema.js';
 import { AbuseReportResolveType } from '@/models/AbuseUserReport.js';
 import { ModeratorInactivityRemainingTime } from '@/queue/processors/CheckModeratorsActivityProcessorService.js';
@@ -37,12 +35,18 @@ export type AbuseReportPayload = {
 	resolvedAs: AbuseReportResolveType | null;
 };
 
+export type CustomEmojiRequestPayload = {
+	emoji: MiEmoji | MiEmojiRequest;
+	user: MiUser | null
+};
+
 export type InactiveModeratorsWarningPayload = {
 	remainingTime: ModeratorInactivityRemainingTime;
 };
 
 export type SystemWebhookPayload<T extends SystemWebhookEventType> =
 	T extends 'abuseReport' | 'abuseReportResolved' ? AbuseReportPayload :
+	T extends 'customEmojiRequest' | 'customEmojiRequestResolved' ? CustomEmojiRequestPayload :
 	T extends 'userCreated' ? Packed<'UserLite'> :
 	T extends 'userRegistered' ? { username: string, email: string | null, host: string | null } :
 	T extends 'inactiveModeratorsWarning' ? InactiveModeratorsWarningPayload :
