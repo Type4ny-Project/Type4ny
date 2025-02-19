@@ -14,10 +14,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 			<div class="_gaps_m" style="padding: 32px;">
 				<div>{{ i18n.ts.intro }}</div>
-				<MkInput v-model="setupPassword" type="password" data-cy-admin-initial-password>
-					<template #label>{{ i18n.ts.initialPasswordForSetup }} <div v-tooltip:dialog="i18n.ts.initialPasswordForSetupDescription" class="_button _help"><i class="ti ti-help-circle"></i></div></template>
-					<template #prefix><i class="ti ti-lock"></i></template>
-				</MkInput>
 				<MkInput v-model="username" pattern="^[a-zA-Z0-9_]{1,20}$" :spellcheck="false" required data-cy-admin-username>
 					<template #label>{{ i18n.ts.username }}</template>
 					<template #prefix>@</template>
@@ -51,7 +47,6 @@ import MkAnimBg from '@/components/MkAnimBg.vue';
 
 const username = ref('');
 const password = ref('');
-const setupPassword = ref('');
 const submitting = ref(false);
 
 function submit() {
@@ -61,7 +56,6 @@ function submit() {
 	misskeyApi('admin/accounts/create', {
 		username: username.value,
 		password: password.value,
-		setupPassword: setupPassword.value === '' ? null : setupPassword.value,
 	}).then(res => {
 		return login(res.token);
 	}).catch((err) => {
