@@ -415,3 +415,4 @@ export * as 'admin/inbox-rule/set' from './endpoints/admin/inbox-rule/set.js';
 export * as 'admin/inbox-rule/delete' from './endpoints/admin/inbox-rule/delete.js';
 export * as 'admin/inbox-rule/list' from './endpoints/admin/inbox-rule/list.js';
 export * as 'users/lists/list-favorite' from './endpoints/users/lists/list-favorite.js';
+export * as 'point/send' from './endpoints/point/send.js';
