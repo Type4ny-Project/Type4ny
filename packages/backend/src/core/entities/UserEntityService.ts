@@ -491,7 +491,7 @@ export class UserEntityService implements OnModuleInit {
 			isBot: user.isBot,
 			isCat: user.isCat,
 			makeNotesFollowersOnlyBefore: (user.host && user.makeNotesFollowersOnlyBefore) ?? undefined,
-			makeNotesHiddenBefore: (user.host && user.makeNotesHiddenBefore )?? undefined,
+			makeNotesHiddenBefore: (user.host && user.makeNotesHiddenBefore ) ?? undefined,
 			instance: user.host ? this.federatedInstanceService.federatedInstanceCache.fetch(user.host).then(instance => instance ? {
 				name: instance.name,
 				softwareName: instance.softwareName,

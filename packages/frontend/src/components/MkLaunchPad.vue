@@ -123,13 +123,25 @@ function close() {
         color: white;
       }
 
-			&:hover {
-				color: var(--MI_THEME-accent);
+			&::before {
+				content: "";
+				display: block;
+				height: 100%;
+				aspect-ratio: 1;
+				margin: auto;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				border-radius: 16px;
+				opacity: 0;
 				background: var(--MI_THEME-accentedBg);
-				text-decoration: none;
+				transition: opacity 0.2s ease;
 			}
 
 			> .icon {
+				opacity: 0.7;
 				font-size: 24px;
 				height: 24px;
 			}
@@ -139,6 +151,15 @@ function close() {
 				font-size: 0.8em;
 				line-height: 1.5em;
 				text-align: center;
+			}
+
+			&:hover, &.active, &:focus {
+				text-decoration: none;
+				color: var(--MI_THEME-accent);
+
+				&::before {
+					opacity: 1;
+				}
 			}
 
 			> .indicatorWithValue {

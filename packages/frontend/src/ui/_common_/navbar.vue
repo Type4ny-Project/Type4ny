@@ -949,7 +949,6 @@ function more(ev: MouseEvent) {
 			opacity: 0;
 			background: var(--MI_THEME-accentedBg);
 			transition: opacity 0.2s ease;
-
 		}
 
 		&:hover, &.active, &:focus {

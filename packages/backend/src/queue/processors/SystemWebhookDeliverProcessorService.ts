@@ -36,7 +36,7 @@ export class SystemWebhookDeliverProcessorService {
 	public async process(job: Bull.Job<SystemWebhookDeliverJobData>): Promise<string> {
 		try {
 			this.logger.debug(`delivering ${job.data.webhookId}`);
-			this.logger.debug(				JSON.stringify({
+			this.logger.debug(JSON.stringify({
 				server: this.config.url,
 				hookId: job.data.webhookId,
 				eventId: job.data.eventId,

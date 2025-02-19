@@ -152,28 +152,28 @@ type CondFormulaValueServerIsSilenced = {
 };
 
 type CondFormulaValueServerPubLessThanOrEq = {
-	type : 'serverPubLessThanOrEq'
+	type: 'serverPubLessThanOrEq'
 	value: number;
-}
+};
 
 type CondFormulaValueServerPubMoreThanOrEq = {
-	type : 'serverPubMoreThanOrEq'
+	type: 'serverPubMoreThanOrEq'
 	value: number;
-}
+};
 
 type CondFormulaValueServerSubLessThanOrEq = {
-	type : 'serverSubLessThanOrEq'
+	type: 'serverSubLessThanOrEq'
 	value: number;
-}
+};
 
 type CondFormulaValueServerSubMoreThanOrEq = {
-	type : 'serverSubMoreThanOrEq'
+	type: 'serverSubMoreThanOrEq'
 	value: number;
-}
+};
 
 type CondFormulaThisActivityIsNote = {
-	type : 'thisActivityIsNote'
-}
+	type: 'thisActivityIsNote'
+};
 
 export type InboxRuleCondFormulaValue = { id: string } & (
 	CondFormulaValueAnd |
@@ -207,7 +207,7 @@ export type InboxRuleCondFormulaValue = { id: string } & (
 export type InboxRuleAction = {
 	type: 'reject' | 'messageRewrite';
 	rewrite?: string | null | undefined;
-}
+};
 
 import { PrimaryColumn, Entity, Column } from 'typeorm';
 import { id } from './util/id.js';

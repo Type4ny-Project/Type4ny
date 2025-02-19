@@ -6,9 +6,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
 import { IsNull } from 'typeorm';
-import ProxyCheck from 'proxycheck-ts';
 import { DI } from '@/di-symbols.js';
-import type { RegistrationTicketsRepository, UsedUsernamesRepository, UserPendingsRepository, UserProfilesRepository, UsersRepository, MiRegistrationTicket, MiMeta ,SystemWebhooksRepository,} from '@/models/_.js';
+import type { RegistrationTicketsRepository, UsedUsernamesRepository, UserPendingsRepository, UserProfilesRepository, UsersRepository, MiRegistrationTicket, MiMeta, SystemWebhooksRepository } from '@/models/_.js';
 import type { Config } from '@/config.js';
 import { CaptchaService } from '@/core/CaptchaService.js';
 import { IdService } from '@/core/IdService.js';
@@ -125,7 +124,6 @@ export class SignupApiService {
 			.andWhere('webhook.on @> :eventName', { eventName: '{userRegistered}' })
 			.getMany();
 		activeSystemWebhooksWithUserRegistered.forEach(it => this.systemWebhookService.enqueueSystemWebhook(
-			it.id,
 			'userRegistered',
 			{
 				username,

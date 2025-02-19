@@ -114,8 +114,8 @@ export type EndedPollNotificationJobData = {
 };
 
 export type ScheduleNotePostJobData = {
-  scheduledNoteId: MiNote['id'];
-}
+	scheduledNoteId: MiNote['id'];
+};
 
 type MinimumUser = {
 	id: MiUser['id'];

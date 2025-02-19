@@ -819,16 +819,15 @@ export class ApInboxService {
 		if (isActor(object)) {
 			await this.apPersonService.updatePerson(actor.uri, resolver, object);
 			return 'ok: Person updated';
-			// eslint-disable-next-line brace-style
-		} /*else if (getApType(object) === 'Question') {
-			await this.apQuestionService.updateQuestion(object, actor, resolver).catch(err => console.error(err));
-			return 'ok: Question updated';
-		}*/ else if (getApType(object) === 'Note' || getApType(object) === 'Question') {
+		} else if (getApType(object) === 'Note' || getApType(object) === 'Question') {
 			await this.updateNote(resolver, actor, object, false, activity);
 			return 'ok: Note updated';
 		} else {
 			return `skip: Unknown type: ${getApType(object)}`;
-		}
+		} /*else if (getApType(object) === 'Question') {
+			await this.apQuestionService.updateQuestion(object, actor, resolver).catch(err => console.error(err));
+			return 'ok: Question updated';
+		}*/
 	}
 
 	@bindThis
