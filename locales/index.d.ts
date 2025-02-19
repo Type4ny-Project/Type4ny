@@ -479,6 +479,28 @@ export interface Locale extends ILocale {
      */
     "point": string;
     /**
+     * {pointName}を送る
+     */
+    "sendPoints": ParameterizedString<"pointName">;
+    /**
+     * {name}に{pointName}を送る
+     */
+    "sendPointsTo": ParameterizedString<"name" | "pointName">;
+    /**
+     * {name}に{points}{pointName}を送信します。
+     * よろしいですか？
+     * ※送信後は取り消すことができません。
+     */
+    "sendPointsConfirm": ParameterizedString<"name" | "points" | "pointName">;
+    /**
+     * {pointName}が足りません
+     */
+    "notEnoughPoints": ParameterizedString<"pointName">;
+    /**
+     * {pointName}は数字で入力してください
+     */
+    "pointsMustBeNumber": ParameterizedString<"pointName">;
+    /**
      * フォローされています
      */
     "followsYou": string;
@@ -7398,6 +7420,10 @@ export interface Locale extends ILocale {
              */
             "loginBonusGrantEnabled": string;
             /**
+             * ポイントの送信
+             */
+            "canSendPoints": string;
+            /**
              * 絵文字ピッカーのプロファイルの上限数(最大5)
              */
             "emojiPickerProfileLimit": string;
@@ -10043,6 +10069,10 @@ export interface Locale extends ILocale {
          */
         "loginbonus": string;
         /**
+         * {sender}から{point}{pointName}をもらいました
+         */
+        "acceptPoints": ParameterizedString<"sender" | "point" | "pointName">;
+        /**
          * 通知テスト
          */
         "testNotification": string;
@@ -10151,6 +10181,10 @@ export interface Locale extends ILocale {
              * ログインボーナス
              */
             "loginBonus": string;
+            /**
+             * {pointName}獲得
+             */
+            "acceptPoints": ParameterizedString<"pointName">;
             /**
              * エクスポートが完了した
              */

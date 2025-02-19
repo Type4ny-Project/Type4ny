@@ -514,6 +514,7 @@ export type PagesUnlikeRequest = operations['pages___unlike']['requestBody']['co
 export type PagesUpdateRequest = operations['pages___update']['requestBody']['content']['application/json'];
 export type PingResponse = operations['ping']['responses']['200']['content']['application/json'];
 export type PinnedUsersResponse = operations['pinned-users']['responses']['200']['content']['application/json'];
+export type PointSendRequest = operations['point___send']['requestBody']['content']['application/json'];
 export type PromoReadRequest = operations['promo___read']['requestBody']['content']['application/json'];
 export type RenoteMuteCreateRequest = operations['renote-mute___create']['requestBody']['content']['application/json'];
 export type RenoteMuteDeleteRequest = operations['renote-mute___delete']['requestBody']['content']['application/json'];

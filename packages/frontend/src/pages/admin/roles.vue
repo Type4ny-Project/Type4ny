@@ -165,6 +165,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 									<template #label>{{ i18n.ts.enable }}</template>
 								</MkSwitch>
 							</MkFolder>
+							<MkFolder v-if="matchQuery([i18n.ts._role._options.canSendPoints, 'canSendPoints'])" class="_margin">
+								<template #label>{{ i18n.ts._role._options.canSendPoints }}</template>
+								<template #suffix>{{ policies.canSendPoints ? i18n.ts.yes : i18n.ts.no }}</template>
+								<MkSwitch v-model="policies.canSendPoints">
+									<template #label>{{ i18n.ts.enable }}</template>
+								</MkSwitch>
+							</MkFolder>
 						</MkFoldableSection>
 						<MkFoldableSection>
 							<template #header>カスタム絵文字系</template>

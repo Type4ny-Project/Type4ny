@@ -50,6 +50,7 @@ export const notificationTypes = [
 	'app',
 	'test',
 	'loginBonus',
+	'acceptPoints',
 ] as const;
 
 export const groupedNotificationTypes = [

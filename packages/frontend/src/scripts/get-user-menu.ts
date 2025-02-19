@@ -13,17 +13,21 @@ import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { defaultStore, userActions } from '@/store.js';
-import { $i, iAmModerator } from '@/account.js';
+import { $i, iAmModerator, refreshAccount } from '@/account.js';
 import { notesSearchAvailable, canSearchNonLocalNotes } from '@/scripts/check-permissions.js';
 import type { IRouter } from '@/nirax.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
 import { mainRouter } from '@/router/main.js';
 import { genEmbedCode } from '@/scripts/get-embed-code.js';
+import { instance } from '@/instance.js';
+import { parse } from 'path';
 
 export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter = mainRouter) {
 	const meId = $i ? $i.id : null;
 
 	const cleanups = [] as (() => void)[];
+
+	const pointName = instance.pointName ?? i18n.ts.point;
 
 	async function toggleMute() {
 		if (user.isMuted) {
@@ -353,6 +357,46 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 							os.apiWithDialog('admin/roles/assign', { roleId: r.id, userId: user.id, expiresAt });
 						},
 					}));
+				},
+			});
+		}
+
+		if ( $i.policies.canSendPoints) {
+			menuItems.push({
+				icon: 'ti ti-coin',
+				text: i18n.tsx.sendPoints({ pointName: instance.pointName ?? i18n.ts.point }),
+				action: async () => {
+					const { canceled, result } = await os.inputNumber({
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+						title: i18n.tsx.sendPointsTo({ name: user.name ?? user.username, pointName: pointName }),
+					});
+					if (canceled) return;
+					if (!result) return;
+					const points = result;
+					if (points <= 0) {
+						await os.alert({
+							type: 'error',
+							text: i18n.ts.pointsMustBePositive,
+						});
+						return;
+					}
+
+					if (($i?.getPoints != null && points >= $i.getPoints) || ($i?.getPoints == null)) {
+						await os.alert({
+							type: 'error',
+							text: i18n.tsx.notEnoughPoints({ pointName: pointName }),
+						});
+						return;
+					}
+					os.confirm({
+						type: 'warning',
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+						text: i18n.tsx.sendPointsConfirm({ name: user.name ?? user.username, pointName: instance.pointName ?? i18n.ts.point, points: points }),
+					}).then(async ({ canceled }) => {
+						if (canceled) return;
+						await misskeyApi('point/send', { userId: user.id, points });
+						await refreshAccount();
+					});
 				},
 			});
 		}
