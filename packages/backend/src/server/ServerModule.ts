@@ -38,6 +38,7 @@ import { DriveChannelService } from './api/stream/channels/drive.js';
 import { GlobalTimelineChannelService } from './api/stream/channels/global-timeline.js';
 import { HashtagChannelService } from './api/stream/channels/hashtag.js';
 import { HomeTimelineChannelService } from './api/stream/channels/home-timeline.js';
+import { HomeLocalTimelineChannelService } from './api/stream/channels/home-local-timeline.js';
 import { HybridTimelineChannelService } from './api/stream/channels/hybrid-timeline.js';
 import { LocalTimelineChannelService } from './api/stream/channels/local-timeline.js';
 import { QueueStatsChannelService } from './api/stream/channels/queue-stats.js';
@@ -87,6 +88,7 @@ import { SigninWithPasskeyApiService } from './api/SigninWithPasskeyApiService.j
 		ReversiChannelService,
 		ReversiGameChannelService,
 		HomeTimelineChannelService,
+		HomeLocalTimelineChannelService,
 		HybridTimelineChannelService,
 		LocalTimelineChannelService,
 		QueueStatsChannelService,
