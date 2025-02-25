@@ -89,6 +89,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			googleAnalyticsMeasurementId: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			swPublickey: {
 				type: 'string',
 				optional: false,
@@ -710,6 +714,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				enableTurnstile: instance.enableTurnstile,
 				turnstileSiteKey: instance.turnstileSiteKey,
 				enableTestcaptcha: instance.enableTestcaptcha,
+				googleAnalyticsMeasurementId: instance.googleAnalyticsMeasurementId,
 				swPublickey: instance.swPublicKey,
 				themeColor: instance.themeColor,
 				requestEmojiAllOk: instance.requestEmojiAllOk,
