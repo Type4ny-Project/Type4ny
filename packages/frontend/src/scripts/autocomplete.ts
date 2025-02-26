@@ -4,9 +4,9 @@
  */
 
 import { nextTick, ref, defineAsyncComponent } from 'vue';
-import type { Ref } from 'vue';
 import getCaretCoordinates from 'textarea-caret';
 import { toASCII } from 'punycode.js';
+import type { Ref } from 'vue';
 import { popup } from '@/os.js';
 
 export type SuggestionType = 'user' | 'hashtag' | 'emoji' | 'mfmTag' | 'mfmParam';
@@ -105,8 +105,14 @@ export class Autocomplete {
 		let opened = false;
 
 		if (isMention && this.onlyType.includes('user')) {
-			const username = text.substring(mentionIndex + 1);
-			if (username !== '' && username.match(/^[a-zA-Z0-9_]+$/)) {
+			// ユーザのサジェスト中に@を入力すると、その位置から新たにユーザ名を取りなおそうとしてしまう
+			// この動きはリモートユーザのサジェストを阻害するので、@を検知したらその位置よりも前の@を探し、
+			// ホスト名を含むリモートのユーザ名を全て拾えるようにする
+			const mentionIndexAlt = text.lastIndexOf('@', mentionIndex - 1);
+			const username = mentionIndexAlt === -1
+				? text.substring(mentionIndex + 1)
+				: text.substring(mentionIndexAlt + 1);
+			if (username !== '' && username.match(/^[a-zA-Z0-9_@.]+$/)) {
 				this.open('user', username);
 				opened = true;
 			} else if (username === '') {
