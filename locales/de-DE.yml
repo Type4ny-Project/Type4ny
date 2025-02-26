@@ -1383,6 +1383,9 @@ _initialTutorial:
     title: "Was sind Notizen?"
     description: "Beiträge auf Misskey heißen \"Notizen\". Notizen werden chronologisch in der Chronik angeordnet und in Echtzeit aktualisiert."
     reply: "Klicke auf diesen Button, um auf eine Nachricht zu antworten. Es ist auch möglich, auf Antworten zu antworten und die Unterhaltung wie einen Thread fortzusetzen."
+    renote: "Du kannst diese Notiz in deiner eigenen Chronik teilen. Du kannst sie auch mit deinen Kommentaren zitieren."
+    reaction: "Du kannst der Notiz Reaktionen hinzufügen. Weitere Einzelheiten werden auf der nächsten Seite erläutert."
+    menu: "Du kannst Details zu Notizen anzeigen, Links kopieren und verschiedene andere Aktionen durchführen."
   _reaction:
     title: "Was sind Reaktionen?"
     description: "Auf Notizen kann mit verschiedenen Emojis reagiert werden. Reaktionen ermöglichen es dir, Nuancen auszudrücken, die mit einem einfachen „Gefällt mir“ vielleicht nicht ausgedrückt werden können."
@@ -1401,13 +1404,21 @@ _initialTutorial:
     _visibility:
       description: "Du kannst einschränken, wer deine Notiz sehen kann."
       public: "Deine Notiz wird für alle Nutzer sichtbar sein."
+      direct: "Die Notiz wird nur für den angegebenen Benutzer veröffentlicht und der Empfänger wird benachrichtigt. Kann anstelle von Direktnachrichten verwendet werden."
       doNotSendConfidencialOnDirect1: "Sei vorsichtig, wenn du sensible Informationen verschickst!"
+      doNotSendConfidencialOnDirect2: "Die Administratoren des Servers können den Inhalt der Notiz sehen. Sei vorsichtig mit sensiblen Informationen, wenn du Direktnachrichten an Benutzer auf nicht vertrauenswürdigen Servern sendest."
+      localOnly: "Wenn du eine Notiz mit dieser Einstellung veröffentlichst, wird sie nicht an andere Server weitergeleitet. Benutzer auf anderen Servern können diese Notizen nicht direkt sehen, unabhängig von den obigen Anzeigeeinstellungen."
     _cw:
       title: "Inhaltswarnung"
+      description: "Anstelle des Textes wird das angezeigt, was du im Abschnitt „Anmerkungen“ angibst. Drücke auf „Inhalt anzeigen“, um den vollständigen Text zu sehen."
       _exampleNote:
+        cw: "Das wird dich bestimmt hungrig machen!"
         note: "Ich hatte gerade einen Donut mit Schokoladenüberzug 🍩😋"
   _howToMakeAttachmentsSensitive:
+    title: "Wie markiert man Anhänge als sensibel?"
     tryThisFile: "Versuche, das angehängte Bild als sensibel zu markieren!"
+    _exampleNote:
+      note: "Ups, ich habe es vergeigt, den Natto-Deckel zu öffnen..."
     method: "Um einen Anhang als sensibel zu kennzeichnen, klicke auf das Vorschaubild der Datei, um das Menü zu öffnen, und klicke auf „Als sensibel markieren“."
     sensitiveSucceeded: "Wenn du Dateien anhängst, stelle bitte die Sensibilität entsprechend der Serverrichtlinien ein."
     doItToContinue: "Markiere die angehängte Datei als sensibel, um fortzufahren."
@@ -1431,6 +1442,7 @@ _serverSettings:
   fanoutTimelineDescription: "Ist diese Option aktiviert, kann eine erhebliche Verbesserung im Abrufen von Chroniken und eine Reduzierung der Datenbankbelastung erzielt werden, im Gegenzug zu einer Steigerung in der Speichernutzung von Redis. Bei geringem Serverspeicher oder Serverinstabilität kann diese Option deaktiviert werden."
   fanoutTimelineDbFallback: "Auf die Datenbank zurückfallen"
   fanoutTimelineDbFallbackDescription: "Ist diese Option aktiviert, wird die Chronik auf zusätzliche Abfragen in der Datenbank zurückgreifen, wenn sich die Chronik nicht im Cache befindet. Eine Deaktivierung führt zu geringerer Serverlast, aber schränkt den Zeitraum der abrufbaren Chronik ein. "
+  reactionsBufferingDescription: "Wenn diese Option aktiviert ist, kann sie die Leistung beim Erstellen von Reaktionen erheblich verbessern und die Belastung der Datenbank verringern. Allerdings steigt die Speichernutzung von Redis."
   openRegistrationWarning: "Das Aktivieren von Registrierungen ist riskant. Es wird empfohlen, sie nur dann zu aktivieren, wenn der Server ständig überwacht wird und im Falle eines Problems sofort reagiert werden kann."
   thisSettingWillAutomaticallyOffWhenModeratorsInactive: "Wenn über einen bestimmten Zeitraum keine Moderatorenaktivität festgestellt wird, wird diese Einstellung automatisch deaktiviert, um Spam zu verhindern."
 _accountMigration:
@@ -1835,6 +1847,7 @@ _plugin:
   installWarn: "Installiere bitte nur vertrauenswürdige Plugins."
   manage: "Plugins verwalten"
   viewSource: "Quelltext anzeigen"
+  viewLog: "Protokoll anzeigen"
 _preferencesBackups:
   list: "Erstellte Backups"
   saveNew: "Neu erstellen"
@@ -1864,6 +1877,8 @@ _aboutType4ny:
   contributors: "Hauptmitwirkende"
   allContributors: "Alle Mitwirkenden"
   source: "Quellcode"
+  original: "Original"
+  thisIsModifiedVersion: "{name} verwendet eine modifizierte Version des ursprünglichen Misskey."
   translation: "Misskey übersetzen"
   donate: "An Misskey spenden"
   morePatrons: "Wir schätzen ebenso die Unterstützung vieler anderer hier nicht gelisteter Personen sehr. Danke! 🥰"
@@ -1989,6 +2004,8 @@ _soundSettings:
   driveFileTypeWarn: "Diese Datei wird nicht unterstützt"
   driveFileTypeWarnDescription: "Bitte wähle eine Audiodatei"
   driveFileDurationWarn: "Audio zu lang."
+  driveFileDurationWarnDescription: "Lange Töne kann die Verwendung von Misskey stören. Trotzdem fortfahren?"
+  driveFileError: "Audio konnte nicht geladen werden. Bitte ändere die Einstellung."
 _ago:
   future: "Zukunft"
   justNow: "Gerade eben"
@@ -2000,6 +2017,10 @@ _ago:
   monthsAgo: "vor {n} Monat(en)"
   yearsAgo: "vor {n} Jahr(en)"
   invalid: "Ungültig"
+_timeIn:
+  seconds: "In {n}s"
+  minutes: "In {n} Min."
+  hours: "In {n} Std."
 _time:
   second: "Sekunde(n)"
   minute: "Minute(n)"
@@ -2105,6 +2126,7 @@ _auth:
   permissionAsk: "Diese Anwendung fordert folgende Berechtigungen"
   pleaseGoBack: "Bitte kehre zur Anwendung zurück"
   callback: "Es wird zur Anwendung zurückgekehrt"
+  accepted: "Zugriff gewährt"
   denied: "Zugriff verweigert"
   pleaseLogin: "Bitte logge dich ein, um Apps zu authorisieren."
 _antennaSources:
@@ -2215,6 +2237,7 @@ _profile:
   changeBanner: "Banner ändern"
   verifiedLinkDescription: "Gibst du hier eine URL ein, die einen Link zu deinem Profile enthält, wird neben diesem Feld ein Icon zur Besitzbestätigung angezeigt."
   avatarDecorationMax: "Du kannst bis zu {max} Dekorationen hinzufügen."
+  followedMessage: "Nachricht, wenn dir jemand folgt"
   followedMessageDescription: "Du kannst eine kurze Nachricht festlegen, die dem Empfänger angezeigt wird, wenn er dir folgt."
 _exportOrImport:
   allNotes: "Alle Notizen"
@@ -2343,8 +2366,11 @@ _notification:
   sendTestNotification: "Testbenachrichtigung senden"
   notificationWillBeDisplayedLikeThis: "Benachrichtigungen sehen so aus"
   reactedBySomeUsers: "{n} Benutzer haben eine Reaktion geschickt"
+  likedBySomeUsers: "{n} Benutzer mochten deine Notiz"
   renotedBySomeUsers: "Renote von {n} Benutzern"
   followedBySomeUsers: "Von {n} Benutzern gefolgt"
+  flushNotification: "Benachrichtigungen löschen"
+  exportOfXCompleted: "Der Export von {x} ist abgeschlossen"
   login: "Neue Anmeldung erfolgt"
   _types:
     all: "Alle"
@@ -2360,7 +2386,9 @@ _notification:
     followRequestAccepted: "Akzeptierte Follow-Anfragen"
     roleAssigned: "Rolle zugewiesen"
     achievementEarned: "Errungenschaft freigeschaltet"
-    login: "Anmelden"
+    exportCompleted: "Der Export ist abgeschlossen"
+    login: "Anmeldung"
+    test: "Test-Benachrichtigungen"
     app: "Benachrichtigungen von Apps"
   _actions:
     followBack: "folgt dir nun auch"
@@ -2370,6 +2398,7 @@ _deck:
   alwaysShowMainColumn: "Hauptspalte immer zeigen"
   columnAlign: "Spaltenausrichtung"
   addColumn: "Spalte hinzufügen"
+  newNoteNotificationSettings: "Benachrichtigungseinstellungen für neue Notizen"
   configureColumn: "Spalteneinstellungen"
   swapLeft: "Mit linker Spalte tauschen"
   swapRight: "Mit rechter Spalte tauschen"
@@ -2408,6 +2437,7 @@ _drivecleaner:
   orderByCreatedAtAsc: "Aufsteigendes Erstelldatum"
 _webhookSettings:
   createWebhook: "Webhook erstellen"
+  modifyWebhook: "Webhook bearbeiten"
   name: "Name"
   secret: "Secret"
   trigger: "Auslöser"
@@ -2420,12 +2450,22 @@ _webhookSettings:
     renote: "Wenn du ein Renote erhältst"
     reaction: "Wenn du eine Reaktion erhältst"
     mention: "Wenn du erwähnt wirst"
+  deleteConfirm: "Bist du sicher, dass du den Webhook löschen willst?"
 _abuseReport:
   _notificationRecipient:
     createRecipient: "Meldungsempfänger hinzufügen"
+    modifyRecipient: "Bearbeite einen Empfänger für Meldungen"
+    recipientType: "Art der Benachrichtigung"
     _recipientType:
       mail: "Email"
+      webhook: "Webhook"
+      _captions:
+        mail: "Die Benachrichtigung wird bei Eingang einer Meldung an die E-Mail-Adressen der Moderatoren gesendet"
+        webhook: "Sendet eine Benachrichtigung an den System Webhook, wenn eine Meldung eingegangen ist oder gelöst wurde"
     keywords: "Schlüsselwort"
+    notifiedUser: "Zu benachrichtigender Benutzer"
+    notifiedWebhook: "Zu verwendender Webhook"
+    deleteConfirm: "Bist du sicher, dass du den Empfänger der Benachrichtigung entfernen möchtest?"
 _moderationLogTypes:
   createRole: "Rolle erstellt"
   deleteRole: "Rolle gelöscht"
@@ -2465,6 +2505,7 @@ _moderationLogTypes:
   createSystemWebhook: "System-Webhook erstellt"
   updateSystemWebhook: "System-Webhook aktualisiert"
   deleteSystemWebhook: "System-Webhook gelöscht"
+  deleteAccount: "Benutzerkonto gelöscht"
   deletePage: "Seite gelöscht"
   deleteGalleryPost: "Galeriebeitrag gelöscht"
 _fileViewer:
