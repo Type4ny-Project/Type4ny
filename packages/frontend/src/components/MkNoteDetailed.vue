@@ -287,7 +287,7 @@ import { CodeDiff } from "v-code-diff";
 
 const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note;
-	initialTab: string;
+	initialTab?: string;
 }>(), {
 	initialTab: 'replies',
 });
