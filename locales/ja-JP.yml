@@ -2833,6 +2833,7 @@ _moderationLogTypes:
   deleteInboxRule: "Inboxのルールを削除"
   inboxRejected: "Inboxで拒否"
   rejectedWithTheRule: "というルールで拒否されました。"
+  updateProxyAccountDescription: "プロキシアカウントの説明を更新"
 
 _fileViewer:
   title: "ファイルの詳細"

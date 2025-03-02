@@ -64,6 +64,8 @@ import {
 	MiRoleAssignment,
 	MiSignin,
 	MiSwSubscription,
+	MiSystemAccount,
+	MiSystemWebhook,
 	MiUsedUsername,
 	MiUser,
 	MiUserIp,
@@ -79,7 +81,8 @@ import {
 	MiUserSecurityKey,
 	MiWebhook,
 	MiScheduledNote,
-	MiBubbleGameRecord, MiInboxRule,
+	MiBubbleGameRecord,
+	MiInboxRule,
 } from './_.js';
 import type { Provider } from '@nestjs/common';
 import type { DataSource } from 'typeorm';
@@ -303,6 +306,12 @@ const $blockingsRepository: Provider = {
 const $swSubscriptionsRepository: Provider = {
 	provide: DI.swSubscriptionsRepository,
 	useFactory: (db: DataSource) => db.getRepository(MiSwSubscription).extend(miRepository as MiRepository<MiSwSubscription>),
+	inject: [DI.db],
+};
+
+const $systemAccountsRepository: Provider = {
+	provide: DI.systemAccountsRepository,
+	useFactory: (db: DataSource) => db.getRepository(MiSystemAccount),
 	inject: [DI.db],
 };
 
@@ -556,6 +565,7 @@ const $reversiGamesRepository: Provider = {
 		$renoteMutingsRepository,
 		$blockingsRepository,
 		$swSubscriptionsRepository,
+		$systemAccountsRepository,
 		$hashtagsRepository,
 		$abuseUserReportsRepository,
 		$abuseReportNotificationRecipientRepository,
@@ -630,6 +640,7 @@ const $reversiGamesRepository: Provider = {
 		$renoteMutingsRepository,
 		$blockingsRepository,
 		$swSubscriptionsRepository,
+		$systemAccountsRepository,
 		$hashtagsRepository,
 		$abuseUserReportsRepository,
 		$abuseReportNotificationRecipientRepository,

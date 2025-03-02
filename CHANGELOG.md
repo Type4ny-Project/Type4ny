@@ -1,3 +1,16 @@
+## Unreleased
+
+### General
+- Enhance: プロキシアカウントをシステムアカウントとして作成するように
+- Fix: システムアカウントが削除できる問題を修正
+
+### Client
+-
+
+### Server
+- Fix: 特定のケースでActivityPubの処理がデッドロックになることがあるのを修正
+
+
 ## 2025.2.1
 
 ### General

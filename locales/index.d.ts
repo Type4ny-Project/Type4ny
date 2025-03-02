@@ -10703,6 +10703,10 @@ export interface Locale extends ILocale {
          */
         "deleteGalleryPost": string;
         /**
+         * プロキシアカウントの説明を更新
+         */
+        "updateProxyAccountDescription": string;
+        /**
          * Inboxのルールを設定
          */
         "setInboxRule": string;

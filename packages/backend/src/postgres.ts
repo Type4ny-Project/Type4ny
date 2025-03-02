@@ -85,6 +85,7 @@ import { MiReversiGame } from '@/models/ReversiGame.js';
 import { Config } from '@/config.js';
 import MisskeyLogger from '@/logger.js';
 import { bindThis } from '@/decorators.js';
+import { MiSystemAccount } from './models/SystemAccount.js';
 
 pg.types.setTypeParser(20, Number);
 
@@ -212,6 +213,7 @@ export const entities = [
 	MiEmojiRequest,
 	MiHashtag,
 	MiSwSubscription,
+	MiSystemAccount,
 	MiAbuseUserReport,
 	MiAbuseReportNotificationRecipient,
 	MiRegistrationTicket,

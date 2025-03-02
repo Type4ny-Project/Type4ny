@@ -15,6 +15,18 @@ export class MiMeta {
 	})
 	public id: string;
 
+	@Column({
+		...id(),
+		nullable: true,
+	})
+	public rootUserId: MiUser['id'] | null;
+
+	@ManyToOne(type => MiUser, {
+		onDelete: 'SET NULL',
+		nullable: true,
+	})
+	public rootUser: MiUser | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,
@@ -200,18 +212,6 @@ export class MiMeta {
 		default: true,
 	})
 	public cacheRemoteSensitiveFiles: boolean;
-
-	@Column({
-		...id(),
-		nullable: true,
-	})
-	public proxyAccountId: MiUser['id'] | null;
-
-	@ManyToOne((type) => MiUser, {
-		onDelete: 'SET NULL',
-	})
-	@JoinColumn()
-	public proxyAccount: MiUser | null;
 
 	@Column('boolean', {
 		default: false,
