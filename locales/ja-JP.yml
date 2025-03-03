@@ -1409,6 +1409,8 @@ cwInsertEmoji: "CWに絵文字を挿入"
 reactionAndServerMute: "サーバーと一緒にリアクションもミュートする"
 confirmOnReact: "リアクションする際に確認する"
 reactAreYouSure: "\" {emoji} \" をリアクションしますか？"
+markAsSensitiveConfirm: "このメディアをセンシティブとして設定しますか？"
+unmarkAsSensitiveConfirm: "このメディアのセンシティブ指定を解除しますか？"
 
 _accountSettings:
   requireSigninToViewContents: "コンテンツの表示にログインを必須にする"
