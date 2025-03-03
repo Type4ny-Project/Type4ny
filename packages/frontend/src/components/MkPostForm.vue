@@ -1325,10 +1325,12 @@ defineExpose({
   position: relative;
   container-type: inline-size;
 
-  &.modal {
-    width: 100%;
-    max-width: 520px;
-  }
+	&.modal {
+		width: 100%;
+		max-width: 520px;
+		overflow-x: clip;
+		overflow-y: auto;
+	}
 }
 
 //#region header
