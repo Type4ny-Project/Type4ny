@@ -7,7 +7,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	<img :class="$style.icon" :src="avatarUrl" alt="">
 	<span>
 		<span>@{{ username }}</span>
-		<span v-if="(host != localHost) || defaultStore.state.showFullAcct" :class="$style.host">@{{ toUnicode(host) }}</span>
+		<span v-if="(host != localHost)" :class="$style.host">@{{ toUnicode(host) }}</span>
 	</span>
 </MkA>
 </template>
@@ -17,10 +17,10 @@ import { toUnicode } from 'punycode.js';
 import { computed, ref, watch } from 'vue';
 import { host as localHost } from '@@/js/config.js';
 import tinycolor from 'tinycolor2';
+import type { MkABehavior } from '@/components/global/MkA.vue';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
-import type { MkABehavior } from '@/components/global/MkA.vue';
 
 const gamingType = defaultStore.state.gamingType;
 
@@ -45,7 +45,6 @@ const avatarUrl = computed(() => defaultStore.state.disableShowingAnimatedImages
 	? getStaticImageUrl(`/avatar/@${props.username}@${props.host}`)
 	: `/avatar/@${props.username}@${props.host}`,
 );
-//const bgCss = `background:${bg.toRgbString()}; ${result}` ;
 </script>
 
 <style lang="scss" module>
