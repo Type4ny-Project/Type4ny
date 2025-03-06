@@ -53,6 +53,8 @@ export class S3Service {
 				tls: objectStorageConfig.objectStorageUseSSL ?? false,
 				forcePathStyle: objectStorageConfig.objectStorageEndpoint ? objectStorageConfig.objectStorageS3ForcePathStyle : false, // AWS with endPoint omitted
 				requestHandler: new NodeHttpHandler(handlerOption),
+				requestChecksumCalculation: 'WHEN_REQUIRED',
+				responseChecksumValidation: 'WHEN_REQUIRED',
 			});
 		} else {
 			const u = meta.objectStorageEndpoint
@@ -67,18 +69,19 @@ export class S3Service {
 				handlerOption.httpAgent = agent as http.Agent;
 			}
 
-			return new S3Client({
-				endpoint: meta.objectStorageEndpoint ? u : undefined,
-				credentials: (meta.objectStorageAccessKey !== null && meta.objectStorageSecretKey !== null) ? {
-					accessKeyId: meta.objectStorageAccessKey,
-					secretAccessKey: meta.objectStorageSecretKey,
-				} : undefined,
-				region: meta.objectStorageRegion ? meta.objectStorageRegion : undefined, // 空文字列もundefinedにするため ?? は使わない
-				tls: meta.objectStorageUseSSL,
-				forcePathStyle: meta.objectStorageEndpoint ? meta.objectStorageS3ForcePathStyle : false, // AWS with endPoint omitted
-				requestHandler: new NodeHttpHandler(handlerOption),
-			});
-		}
+		return new S3Client({
+			endpoint: meta.objectStorageEndpoint ? u : undefined,
+			credentials: (meta.objectStorageAccessKey !== null && meta.objectStorageSecretKey !== null) ? {
+				accessKeyId: meta.objectStorageAccessKey,
+				secretAccessKey: meta.objectStorageSecretKey,
+			} : undefined,
+			region: meta.objectStorageRegion ? meta.objectStorageRegion : undefined, // 空文字列もundefinedにするため ?? は使わない
+			tls: meta.objectStorageUseSSL,
+			forcePathStyle: meta.objectStorageEndpoint ? meta.objectStorageS3ForcePathStyle : false, // AWS with endPoint omitted
+			requestHandler: new NodeHttpHandler(handlerOption),
+			requestChecksumCalculation: 'WHEN_REQUIRED',
+			responseChecksumValidation: 'WHEN_REQUIRED',
+		});}
 	}
 
 	@bindThis
