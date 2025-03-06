@@ -26,7 +26,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			[$style.exceeded]: props.modelValue.length > 16,
 		}]"
 	>
-		{{ 16 - props.modelValue.length }}/16
+		{{ props.modelValue.length }}/16
 	</p>
 </div>
 </template>
