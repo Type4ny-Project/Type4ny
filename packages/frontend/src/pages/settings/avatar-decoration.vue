@@ -4,35 +4,36 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div>
-	<div v-if="!loading" class="_gaps">
-		<MkInfo>{{ i18n.tsx._profile.avatarDecorationMax({ max: $i.policies.avatarDecorationLimit }) }} ({{ i18n.tsx.remainingN({ n: $i.policies.avatarDecorationLimit - $i.avatarDecorations.length }) }})</MkInfo>
+<SearchMarker path="/settings/avatar-decoration" :label="i18n.ts.avatarDecorations" :keywords="['avatar', 'icon', 'decoration']" icon="ti ti-sparkles">
+	<div>
+		<div v-if="!loading" class="_gaps">
+			<MkInfo>{{ i18n.tsx._profile.avatarDecorationMax({ max: $i.policies.avatarDecorationLimit }) }} ({{ i18n.tsx.remainingN({ n: $i.policies.avatarDecorationLimit - $i.avatarDecorations.length }) }})</MkInfo>
 
-		<MkAvatar :class="$style.avatar" :user="$i" forceShowDecoration/>
+			<MkAvatar :class="$style.avatar" :user="$i" forceShowDecoration/>
 
-		<div v-if="$i.avatarDecorations.length > 0" v-panel :class="$style.current" class="_gaps_s">
-			<div>{{ i18n.ts.inUse }}</div>
+			<div v-if="$i.avatarDecorations.length > 0" v-panel :class="$style.current" class="_gaps_s">
+				<div>{{ i18n.ts.inUse }}</div>
 
-			<div :class="$style.decorations">
-				<XDecoration
-					v-for="(avatarDecoration, i) in $i.avatarDecorations"
-					:decoration="avatarDecorations.find(d => d.id === avatarDecoration.id)"
-					:angle="avatarDecoration.angle"
-					:flipH="avatarDecoration.flipH"
-					:offsetX="avatarDecoration.offsetX"
-					:offsetY="avatarDecoration.offsetY"
-					:active="true"
-					@click="openDecoration(avatarDecoration, i)"
-				/>
+				<div :class="$style.decorations">
+					<XDecoration
+						v-for="(avatarDecoration, i) in $i.avatarDecorations"
+						:decoration="avatarDecorations.find(d => d.id === avatarDecoration.id)"
+						:angle="avatarDecoration.angle"
+						:flipH="avatarDecoration.flipH"
+						:offsetX="avatarDecoration.offsetX"
+						:offsetY="avatarDecoration.offsetY"
+						:active="true"
+						@click="openDecoration(avatarDecoration, i)"
+					/>
+				</div>
+
+				<MkButton danger @click="detachAllDecorations">{{ i18n.ts.detachAll }}</MkButton>
 			</div>
-
-			<MkButton danger @click="detachAllDecorations">{{ i18n.ts.detachAll }}</MkButton>
-		</div>
-		<MkInput v-model="q" :placeholder="i18n.ts.search"/>
-		<div v-if="searchResult.length > 0" :class="$style.decorations">
+<MkInput v-model="q" :placeholder="i18n.ts.search"/>
+			<div v-if="searchResult.length > 0" :class="$style.decorations">
 			<span> {{ i18n.ts.searchResult }}</span><br>
-			<XDecoration
-				v-for="avatarDecoration in searchResult"
+				<XDecoration
+					v-for="avatarDecoration in searchResult"
 				:key="avatarDecoration.name"
 				:decoration="avatarDecoration"
 				@click="openDecoration(avatarDecoration)"
@@ -44,19 +45,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<div :class="$style.decorations">
 					<div v-for="avatarDecoration in avatarDecorations.filter(ad => ad.category === category)">
 						<XDecoration
-							:key="avatarDecoration.id"
-							:decoration="avatarDecoration"
-							@click="openDecoration(avatarDecoration)"
-						/>
-					</div>
+					:key="avatarDecoration.id"
+					:decoration="avatarDecoration"
+					@click="openDecoration(avatarDecoration)"
+				/></div>
 				</div>
 			</MkFoldableSection>
+			</div>
+		</div>
+		<div v-else>
+			<MkLoading/>
 		</div>
 	</div>
-	<div v-else>
-		<MkLoading/>
-	</div>
-</div>
+</SearchMarker>
 </template>
 
 <script lang="ts" setup>
