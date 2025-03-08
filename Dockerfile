@@ -80,14 +80,12 @@ RUN apt-get update \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists
 
+# add package.json to add pnpm
+COPY ./package.json ./package.json
+RUN node -e "console.log(JSON.parse(require('node:fs').readFileSync('./package.json')).packageManager)" | xargs npm install -g
+
 USER type4ny
 WORKDIR /type4ny
-
-# add package.json to add pnpm
-COPY --chown=type4ny:type4ny ./package.json ./package.json
-
-RUN corepack enable
-RUN corepack prepare pnpm@9.4.0 --activate
 
 COPY --chown=type4ny:type4ny --from=target-builder /type4ny/node_modules ./node_modules
 COPY --chown=type4ny:type4ny --from=target-builder /type4ny/packages/backend/node_modules ./packages/backend/node_modules
