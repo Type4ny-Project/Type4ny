@@ -265,7 +265,6 @@ import number from '@/filters/number.js';
 import * as os from '@/os.js';
 import { misskeyApi, misskeyApiGet } from '@/utility/misskey-api.js';
 import * as sound from '@/utility/sound.js';
-import { noteViewInterruptors } from '@/store.js';
 import { reactionPicker } from '@/utility/reaction-picker.js';
 import { extractUrlFromMfm } from '@/utility/extract-url-from-mfm.js';
 import { $i } from '@/account.js';
@@ -284,6 +283,7 @@ import MkButton from '@/components/MkButton.vue';
 import { infoImageUrl, isEnabledUrlPreview } from '@/instance.js';
 import { getAppearNote } from '@/utility/get-appear-note.js';
 import { prefer } from '@/preferences.js';
+import { noteViewInterruptors } from '@/plugin.js';
 import { CodeDiff } from "v-code-diff";
 
 const props = withDefaults(defineProps<{

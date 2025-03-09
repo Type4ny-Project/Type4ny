@@ -13,7 +13,6 @@ import { i18n } from '@/i18n.js';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
-import { userActions } from '@/store.js';
 import { $i, iAmModerator, refreshAccount } from '@/account.js';
 import { notesSearchAvailable, canSearchNonLocalNotes } from '@/utility/check-permissions.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
@@ -22,6 +21,7 @@ import { genEmbedCode } from '@/utility/get-embed-code.js';
 import { instance } from '@/instance.js';
 import { parse } from 'path';
 import { prefer } from '@/preferences.js';
+import { userActions } from '@/plugin.js';
 
 export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter = mainRouter) {
 	const meId = $i ? $i.id : null;

@@ -17,41 +17,7 @@ import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
 import { instance } from '@/instance.js';
 
-interface PostFormAction {
-	title: string;
-	handler: <T>(form: T, update: (key: unknown, value: unknown) => void) => void;
-}
-
-interface UserAction {
-	title: string;
-	handler: (user: Misskey.entities.UserDetailed) => void;
-}
-
-interface NoteAction {
-	title: string;
-	handler: (note: Misskey.entities.Note) => void;
-}
-
-interface NoteViewInterruptor {
-	handler: (note: Misskey.entities.Note) => unknown;
-}
-
-interface NotePostInterruptor {
-	handler: (note: FIXME) => unknown;
-}
-
-interface PageViewInterruptor {
-	handler: (page: Misskey.entities.Page) => unknown;
-}
-
-export const postFormActions: PostFormAction[] = [];
-export const userActions: UserAction[] = [];
-export const noteActions: NoteAction[] = [];
-export const noteViewInterruptors: NoteViewInterruptor[] = [];
-export const notePostInterruptors: NotePostInterruptor[] = [];
-export const pageViewInterruptors: PageViewInterruptor[] = [];
 export const { bannerDark, bannerLight, iconDark, iconLight } = instance;
-
 /**
  * 「状態」を管理するストア(not「設定」)
  */

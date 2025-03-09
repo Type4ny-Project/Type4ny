@@ -107,18 +107,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { inject, watch, nextTick, onMounted, defineAsyncComponent, provide, shallowRef, ref, computed } from 'vue';
-import type { ShallowRef } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { toASCII } from 'punycode.js';
 import { host, url } from '@@/js/config.js';
+import type { ShallowRef } from 'vue';
 import type { PostFormProps } from '@/types/post-form.js';
-import MkNoteSimple from '@/components/MkNoteSimple.vue';
+import type { PollEditorModelValue } from '@/components/MkPollEditor.vue';
 import MkNotePreview from '@/components/MkNotePreview.vue';
 import XPostFormAttaches from '@/components/MkPostFormAttaches.vue';
 import MkPollEditor from '@/components/MkPollEditor.vue';
-import type { PollEditorModelValue } from '@/components/MkPollEditor.vue';
+import MkNoteSimple from '@/components/MkNoteSimple.vue';
 import { erase, unique } from '@/utility/array.js';
 import { extractMentions } from '@/utility/extract-mentions.js';
 import { formatTimeString } from '@/utility/format-time-string.js';
@@ -127,14 +127,10 @@ import * as os from '@/os.js';
 import * as noteDrafts from '@/scripts/note-drafts.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { selectFiles } from '@/utility/select-file.js';
-import { dateTimeFormat } from '@/scripts/intl-const.js';
 import {
 	store,
-	notePostInterruptors,
-	postFormActions,
 	bannerDark,
 	bannerLight,
-	defaultStore,
 	iconDark,
 	iconLight
 } from '@/store.js';
@@ -150,6 +146,7 @@ import { claimAchievement } from '@/utility/achievements.js';
 import { emojiPicker } from '@/utility/emoji-picker.js';
 import { mfmFunctionPicker } from '@/utility/mfm-function-picker.js';
 import { prefer } from '@/preferences.js';
+import { notePostInterruptors, postFormActions } from '@/plugin.js';
 import { listSchedulePost } from '@/os.js';
 import MkScheduleEditor from '@/components/MkScheduleEditor.vue';
 
