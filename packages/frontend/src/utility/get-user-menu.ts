@@ -21,7 +21,7 @@ import { genEmbedCode } from '@/utility/get-embed-code.js';
 import { instance } from '@/instance.js';
 import { parse } from 'path';
 import { prefer } from '@/preferences.js';
-import { userActions } from '@/plugin.js';
+import { getPluginHandlers } from '@/plugin.js';
 
 export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter = mainRouter) {
 	const meId = $i ? $i.id : null;
@@ -487,20 +487,8 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 			},
 		});
 	}
-/*
-	if ($i && meId === user.id) {
-		menuItems.push({ type: 'divider' }, {
-			icon: 'ti ti-pencil',
-			text: i18n.ts.profileCardView,
-			action: () => {
-				const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkProfileCard.vue')), {
-				}, {
-					closed: () => dispose(),
-				});
-			},
-		});
-	}
-*/
+
+	const userActions = getPluginHandlers('user_action');
 	if (userActions.length > 0) {
 		menuItems.push({ type: 'divider' }, ...userActions.map(action => ({
 			icon: 'ti ti-plug',
