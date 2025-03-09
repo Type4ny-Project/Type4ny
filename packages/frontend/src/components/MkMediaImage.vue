@@ -53,8 +53,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { watch, ref, computed } from 'vue';
 import * as Misskey from 'misskey-js';
 import type { MenuItem } from '@/types/menu.js';
-import { copyToClipboard } from '@/scripts/copy-to-clipboard';
-import { getStaticImageUrl } from '@/scripts/media-proxy.js';
+import { copyToClipboard } from '@/utility/copy-to-clipboard';
+import { getStaticImageUrl } from '@/utility/media-proxy.js';
 import bytes from '@/filters/bytes.js';
 import ImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
 import { i18n } from '@/i18n.js';

@@ -35,10 +35,10 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { defineAsyncComponent, inject } from 'vue';
 import * as Misskey from 'misskey-js';
 import type { MenuItem } from '@/types/menu';
-import { copyToClipboard } from '@/scripts/copy-to-clipboard';
+import { copyToClipboard } from '@/utility/copy-to-clipboard';
 import MkDriveFileThumbnail from '@/components/MkDriveFileThumbnail.vue';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';
 

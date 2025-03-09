@@ -23,15 +23,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, ref, watch } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import type { GetFormResultType } from '@/scripts/form';
+import type { GetFormResultType } from '@/utility/form';
 import { host } from '@@/js/config';
 import { instance } from '@/instance';
-import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store';
+import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store';
 
 const name = 'instanceInfo';
-let bannerUrl = ref(defaultStore.state.bannerUrl);
-let iconUrl = ref(defaultStore.state.iconUrl);
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
+let bannerUrl = ref(store.state.bannerUrl);
+let iconUrl = ref(store.state.iconUrl);
+const darkMode = computed(store.makeGetterSetter('darkMode'));
 if (darkMode.value) {
 	bannerUrl.value = bannerDark;
 	iconUrl.value = iconDark;

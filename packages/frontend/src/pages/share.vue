@@ -38,9 +38,9 @@ import MkButton from '@/components/MkButton.vue';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { postMessageToParentWindow } from '@/scripts/post-message.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { definePageMetadata } from '@/utility/page-metadata.js';
+import { postMessageToParentWindow } from '@/utility/post-message.js';
 import { i18n } from '@/i18n.js';
 
 const urlParams = new URLSearchParams(window.location.search);

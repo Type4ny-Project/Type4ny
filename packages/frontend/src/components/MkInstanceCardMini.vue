@@ -17,8 +17,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkMiniChart from '@/components/MkMiniChart.vue';
-import { misskeyApiGet } from '@/scripts/misskey-api.js';
-import { getProxiedImageUrlNullable } from '@/scripts/media-proxy.js';
+import { misskeyApiGet } from '@/utility/misskey-api.js';
+import { getProxiedImageUrlNullable } from '@/utility/media-proxy.js';
 
 const props = defineProps<{
 	instance: Misskey.entities.FederationInstance;

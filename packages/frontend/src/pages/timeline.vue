@@ -50,14 +50,14 @@ const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vu
 
 import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { definePageMetadata } from '@/utility/page-metadata.js';
 import { antennasCache, userFavoriteListsCache, userListsCache, favoritedChannelsCache } from '@/cache.js';
-import { deviceKind } from '@/scripts/device-kind.js';
-import { deepMerge } from '@/scripts/merge.js';
+import { deviceKind } from '@/utility/device-kind.js';
+import { deepMerge } from '@/utility/merge.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { timelineHeaderItemDef } from '@/timeline-header.js';
 import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';

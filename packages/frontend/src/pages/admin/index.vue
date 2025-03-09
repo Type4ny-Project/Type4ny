@@ -37,14 +37,15 @@ import MkSuperMenu from '@/components/MkSuperMenu.vue';
 import type { SuperMenuDef } from '@/components/MkSuperMenu.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import { instance } from '@/instance.js';
-import { lookup } from '@/scripts/lookup.js';
+import { lookup } from '@/utility/lookup.js';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { lookupUser, lookupUserByEmail, lookupFile } from '@/scripts/admin-lookup.js';
-import type { PageMetadata } from '@/scripts/page-metadata.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { lookupUser, lookupUserByEmail, lookupFile } from '@/utility/admin-lookup.js';
+import { definePageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/utility/page-metadata.js';
+import type { PageMetadata } from '@/utility/page-metadata.js';
 import { useRouter } from '@/router/supplier.js';
 import { definePageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
-import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store.js';
+import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store.js';
 
 const isEmpty = (x: string | null) => x == null || x === '';
 
@@ -70,7 +71,7 @@ const noEmailServer = computed(() => !instance.enableEmail);
 const noInquiryUrl = computed(() => isEmpty(instance.inquiryUrl));
 const thereIsUnresolvedAbuseReport = ref(false);
 const currentPage = computed(() => router.currentRef.value.child);
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
+const darkMode = computed(store.makeGetterSetter('darkMode'));
 let iconUrl = ref();
 if (darkMode.value) {
 	iconUrl.value = iconDark;

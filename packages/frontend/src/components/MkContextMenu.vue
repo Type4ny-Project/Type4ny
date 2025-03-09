@@ -20,7 +20,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { onMounted, onBeforeUnmount, shallowRef, ref } from 'vue';
 import MkMenu from './MkMenu.vue';
 import type { MenuItem } from '@/types/menu.js';
-import contains from '@/scripts/contains.js';
+import contains from '@/utility/contains.js';
 import { prefer } from '@/preferences.js';
 import * as os from '@/os.js';
 

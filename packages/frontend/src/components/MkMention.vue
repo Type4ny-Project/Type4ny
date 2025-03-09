@@ -19,7 +19,7 @@ import { host as localHost } from '@@/js/config.js';
 import tinycolor from 'tinycolor2';
 import type { MkABehavior } from '@/components/global/MkA.vue';
 import { $i } from '@/account.js';
-import { getStaticImageUrl } from '@/scripts/media-proxy.js';
+import { getStaticImageUrl } from '@/utility/media-proxy.js';
 import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;

@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { defineAsyncComponent } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
-import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm.js';
+import { extractUrlFromMfm } from '@/utility/extract-url-from-mfm.js';
 import { isEnabledUrlPreview } from '@/instance.js';
 
 const MkUrlPreview = defineAsyncComponent(() => import('@/components/MkUrlPreview.vue'));

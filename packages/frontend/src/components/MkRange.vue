@@ -26,7 +26,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
-import { isTouchUsing } from '@/scripts/touch.js';
+import { isTouchUsing } from '@/utility/touch.js';
 import * as os from '@/os.js';
 import { defaultStore } from '@/store.js';
 

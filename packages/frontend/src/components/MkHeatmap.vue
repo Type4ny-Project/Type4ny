@@ -15,11 +15,11 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { onMounted, nextTick, watch, shallowRef, ref } from 'vue';
 import { Chart } from 'chart.js';
 import * as Misskey from 'misskey-js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { store } from '@/store.js';
-import { useChartTooltip } from '@/scripts/use-chart-tooltip.js';
-import { alpha } from '@/scripts/color.js';
-import { initChart } from '@/scripts/init-chart.js';
+import { useChartTooltip } from '@/utility/use-chart-tooltip.js';
+import { alpha } from '@/utility/color.js';
+import { initChart } from '@/utility/init-chart.js';
 
 initChart();
 

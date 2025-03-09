@@ -30,7 +30,7 @@ import { ref, computed, watch } from 'vue';
 import { shallowRef } from 'vue';
 import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
-import { deviceKind } from '@/scripts/device-kind.js';
+import { deviceKind } from '@/utility/device-kind.js';
 import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;

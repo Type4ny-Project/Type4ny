@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { defineAsyncComponent, shallowRef } from 'vue';
-import { useTooltip } from '@/scripts/use-tooltip.js';
+import { useTooltip } from '@/utility/use-tooltip.js';
 import * as os from '@/os.js';
 
 const props = defineProps<{

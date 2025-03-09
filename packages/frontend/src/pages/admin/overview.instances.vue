@@ -21,7 +21,7 @@ import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { useInterval } from '@@/js/use-interval.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import MkInstanceCardMini from '@/components/MkInstanceCardMini.vue';
 import { prefer } from '@/preferences.js';
 

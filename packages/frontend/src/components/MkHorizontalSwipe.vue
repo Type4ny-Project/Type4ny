@@ -27,7 +27,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref, shallowRef, computed, nextTick, watch } from 'vue';
 import type { Tab } from '@/components/global/MkPageHeader.tabs.vue';
-import { isHorizontalSwipeSwiping as isSwiping } from '@/scripts/touch.js';
+import { isHorizontalSwipeSwiping as isSwiping } from '@/utility/touch.js';
 import { prefer } from '@/preferences.js';
 
 const rootEl = shallowRef<HTMLDivElement>();

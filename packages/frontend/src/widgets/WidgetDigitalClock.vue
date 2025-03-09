@@ -16,8 +16,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { computed } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import type { GetFormResultType } from '@/scripts/form.js';
-import { timezones } from '@/scripts/timezones.js';
+import type { GetFormResultType } from '@/utility/form.js';
+import { timezones } from '@/utility/timezones.js';
 import MkDigitalClock from '@/components/MkDigitalClock.vue';
 
 const name = 'digitalClock';

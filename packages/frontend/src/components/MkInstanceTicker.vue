@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div :class="$style.root" :style="themeColorStyle">
-	<img v-if="faviconUrl && !defaultStore.state.enableUltimateDataSaverMode" :class="$style.icon" :src="faviconUrl"/>
+	<img v-if="faviconUrl && !store.state.enableUltimateDataSaverMode" :class="$style.icon" :src="faviconUrl"/>
 	<div :class="$style.name">{{ instanceName }}</div>
 </div>
 </template>
@@ -15,8 +15,8 @@ import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import { instanceName as localInstanceName } from '@@/js/config';
 import { instance as localInstance } from '@/instance';
-import { getProxiedImageUrlNullable } from '@/scripts/media-proxy';
-import { defaultStore } from '@/store';
+import { getProxiedImageUrlNullable } from '@/utility/media-proxy';
+import { store } from '@/store';
 
 const props = defineProps<{
 	host: string | null;

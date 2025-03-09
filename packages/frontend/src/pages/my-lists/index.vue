@@ -71,7 +71,7 @@ import { onActivated, computed } from 'vue';
 import MkAvatars from '@/components/MkAvatars.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { definePageMetadata } from '@/utility/page-metadata.js';
 import { userFavoriteListsCache, userListsCache } from '@/cache.js';
 import { infoImageUrl } from '@/instance.js';
 import { signinRequired } from '@/account.js';

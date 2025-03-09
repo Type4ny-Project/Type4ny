@@ -111,14 +111,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { ref, shallowRef, computed, watch, onDeactivated, onActivated, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import type { MenuItem } from '@/types/menu.js';
-import type { Keymap } from '@/scripts/hotkey.js';
-import { copyToClipboard } from '@/scripts/copy-to-clipboard';
+import type { Keymap } from '@/utility/hotkey.js';
+import { copyToClipboard } from '@/utility/copy-to-clipboard';
 import bytes from '@/filters/bytes.js';
 import { hms } from '@/filters/hms.js';
 import { i18n } from '@/i18n.js';
 import * as os from '@/os.js';
-import { exitFullscreen, requestFullscreen } from '@/scripts/fullscreen.js';
-import hasAudio from '@/scripts/media-has-audio.js';
+import { exitFullscreen, requestFullscreen } from '@/utility/fullscreen.js';
+import hasAudio from '@/utility/media-has-audio.js';
 import MkMediaRange from '@/components/MkMediaRange.vue';
 import { $i, iAmModerator } from '@/account.js';
 import { prefer } from '@/preferences.js';

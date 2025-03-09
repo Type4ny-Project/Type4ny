@@ -24,7 +24,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import * as Misskey from 'misskey-js';
 import { shallowRef } from 'vue';
-import type { OpenOnRemoteOptions } from '@/scripts/please-login.js';
+import type { OpenOnRemoteOptions } from '@/utility/please-login.js';
 import MkSignin from '@/components/MkSignin.vue';
 import MkModal from '@/components/MkModal.vue';
 import { i18n } from '@/i18n.js';

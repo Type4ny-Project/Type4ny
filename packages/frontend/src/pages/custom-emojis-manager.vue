@@ -29,12 +29,12 @@ import { computed, defineAsyncComponent, ref } from 'vue';
 import MkCustomEmojiEditRequest from '@/components/MkCustomEmojiEditRequest.vue';
 import MkCustomEmojiEditLocal from '@/components/MkCustomEmojiEditLocal.vue';
 import MkCustomEmojiEditRemote from '@/components/MkCustomEmojiEditRemote.vue';
-import { selectFile } from '@/scripts/select-file';
+import { selectFile } from '@/utility/select-file';
 import * as os from '@/os';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { getProxiedImageUrl } from '@/scripts/media-proxy.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { getProxiedImageUrl } from '@/utility/media-proxy.js';
 import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import { definePageMetadata } from '@/utility/page-metadata';
 
 const tab = ref('request');
 const emojisPaginationComponent = ref<any>(null);

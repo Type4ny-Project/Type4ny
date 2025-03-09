@@ -29,7 +29,7 @@ import XContainer from '../page-editor.container.vue';
 import XBlocks from '../page-editor.blocks.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { deepClone } from '@/scripts/clone.js';
+import { deepClone } from '@/utility/clone.js';
 import MkButton from '@/components/MkButton.vue';
 import { getPageBlockList } from '@/pages/page-editor/common.js';
 

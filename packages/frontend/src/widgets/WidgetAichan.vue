@@ -12,7 +12,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { onMounted, onUnmounted, shallowRef } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentProps, WidgetComponentEmits, WidgetComponentExpose } from './widget.js';
-import type { GetFormResultType } from '@/scripts/form.js';
+import type { GetFormResultType } from '@/utility/form.js';
 
 const name = 'ai';
 
