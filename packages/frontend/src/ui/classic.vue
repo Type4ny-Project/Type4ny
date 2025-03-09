@@ -142,20 +142,18 @@ if (window.innerWidth < 1024) {
 
 document.documentElement.style.overflowY = 'scroll';
 
-store.loaded.then(() => {
-	if (store.state.widgets.length === 0) {
-		store.set('widgets', [{
-			name: 'calendar',
-			id: 'a', place: null, data: {},
-		}, {
-			name: 'notifications',
-			id: 'b', place: null, data: {},
-		}, {
-			name: 'trends',
-			id: 'c', place: null, data: {},
-		}]);
-	}
-});
+if (prefer.s.widgets.length === 0) {
+	prefer.set('widgets', [{
+		name: 'calendar',
+		id: 'a', place: null, data: {},
+	}, {
+		name: 'notifications',
+		id: 'b', place: null, data: {},
+	}, {
+		name: 'trends',
+		id: 'c', place: null, data: {},
+	}]);
+}
 
 onMounted(() => {
 	window.addEventListener('resize', () => {
