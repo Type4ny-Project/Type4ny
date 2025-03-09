@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { onMounted, nextTick, shallowRef, ref } from 'vue';
 import { Chart } from 'chart.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import { useChartTooltip } from '@/scripts/use-chart-tooltip.js';
 import { alpha } from '@/scripts/color.js';
 import { initChart } from '@/scripts/init-chart.js';
@@ -74,7 +74,7 @@ async function renderChart() {
 
 	await nextTick();
 
-	const color = defaultStore.state.darkMode ? '#b4e900' : '#86b300';
+	const color = store.state.darkMode ? '#b4e900' : '#86b300';
 
 	const getYYYYMMDD = (date: Date) => {
 		const y = date.getFullYear().toString().padStart(2, '0');

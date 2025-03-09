@@ -14,15 +14,15 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			[$style.gamingLight]: gamingType === 'light',
 			[$style.reacted]: note.myReactions?.includes(reaction),
 			[$style.canToggle]: canToggle,
-			[$style.small]: defaultStore.state.reactionsDisplaySize === 'small',
-			[$style.large]: defaultStore.state.reactionsDisplaySize === 'large',
+			[$style.small]: prefer.s.reactionsDisplaySize === 'small',
+			[$style.large]: prefer.s.reactionsDisplaySize === 'large',
 		},
 	]"
 	@click="toggleReaction()"
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		:class="defaultStore.state.limitWidthOfReaction ? $style.limitWidth : ''"
+		:class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''"
 		:reaction="reaction"
 		:emojiUrl="
 			note.reactionEmojis[reaction.substring(1, reaction.length - 1)]
@@ -53,11 +53,11 @@ import { useTooltip } from '@/scripts/use-tooltip.js';
 import { $i } from '@/account.js';
 import MkReactionEffect from '@/components/MkReactionEffect.vue';
 import { claimAchievement } from '@/scripts/achievements.js';
-import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import * as sound from '@/scripts/sound.js';
 import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
 import { customEmojisMap } from '@/custom-emojis.js';
+import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;
 
@@ -157,7 +157,7 @@ async function toggleReaction() {
 			}
 		});
 	} else {
-		if (defaultStore.state.confirmOnReact) {
+		if (prefer.s.confirmOnReact) {
 			const confirm = await os.confirm({
 				type: 'question',
 				text: i18n.tsx.reactAreYouSure({ emoji: props.reaction.replace('@.', '') }),
@@ -240,7 +240,7 @@ async function menu(ev) {
 function anime() {
 	if (
 		document.hidden ||
-		!defaultStore.state.animation ||
+		!prefer.s.animation ||
 		buttonEl.value == null
 	) return;
 

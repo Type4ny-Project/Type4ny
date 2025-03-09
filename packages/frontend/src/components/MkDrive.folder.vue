@@ -23,7 +23,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<template v-if="!hover"><i :class="$style.icon" class="ti ti-folder ti-fw"></i></template>
 		{{ folder.name }}
 	</p>
-	<p v-if="defaultStore.state.uploadFolder == folder.id" :class="$style.upload">
+	<p v-if="prefer.s.uploadFolder == folder.id" :class="$style.upload">
 		{{ i18n.ts.uploadFolder }}
 	</p>
 	<button v-if="selectMode" class="_button" :class="$style.checkboxWrapper" @click.prevent.stop="checkboxClicked">
@@ -39,9 +39,9 @@ import type { MenuItem } from '@/types/menu.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
-import { defaultStore } from '@/store.js';
 import { claimAchievement } from '@/scripts/achievements.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
+import { prefer } from '@/preferences.js';
 
 const props = withDefaults(defineProps<{
 	folder: Misskey.entities.DriveFolder;
@@ -333,8 +333,8 @@ function deleteFolder() {
 			await misskeyApi('drive/folders/delete', {
 				folderId: props.folder.id,
 			}).then(() => {
-				if (defaultStore.state.uploadFolder === props.folder.id) {
-					defaultStore.set('uploadFolder', null);
+				if (prefer.s.uploadFolder === props.folder.id) {
+					prefer.set('uploadFolder', null);
 				}
 			}).catch(err => {
 				switch (err.id) {
@@ -357,7 +357,7 @@ function deleteFolder() {
 }
 
 function setAsUploadFolder() {
-	defaultStore.set('uploadFolder', props.folder.id);
+	prefer.set('uploadFolder', props.folder.id);
 }
 
 function onContextmenu(ev: MouseEvent) {
@@ -386,7 +386,7 @@ function onContextmenu(ev: MouseEvent) {
 		danger: true,
 		action: deleteFolder,
 	}];
-	if (defaultStore.state.devMode) {
+	if (prefer.s.devMode) {
 		menu = menu.concat([{ type: 'divider' }, {
 			icon: 'ti ti-id',
 			text: i18n.ts.copyFolderId,

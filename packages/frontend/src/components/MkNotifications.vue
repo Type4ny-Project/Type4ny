@@ -25,17 +25,17 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { onUnmounted, onDeactivated, onMounted, computed, shallowRef, onActivated } from 'vue';
 import * as Misskey from 'misskey-js';
+import type { notificationTypes } from '@@/js/const.js';
 import MkPagination from '@/components/MkPagination.vue';
 import XNotification from '@/components/MkNotification.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkNote from '@/components/MkNote.vue';
 import { useStream } from '@/stream.js';
 import { i18n } from '@/i18n.js';
-import type { notificationTypes } from '@@/js/const.js';
 import { infoImageUrl } from '@/instance.js';
-import { defaultStore } from '@/store.js';
 import { filterMutedNotification } from '@/scripts/filter-muted-notification.js';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
+import { prefer } from '@/preferences.js';
 
 const props = defineProps<{
 	excludeTypes?: typeof notificationTypes[number][];
@@ -43,7 +43,7 @@ const props = defineProps<{
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
-const pagination = computed(() => defaultStore.reactiveState.useGroupedNotifications.value ? {
+const pagination = computed(() => prefer.r.useGroupedNotifications.value ? {
 	endpoint: 'i/notifications-grouped' as const,
 	limit: 20,
 	params: computed(() => ({

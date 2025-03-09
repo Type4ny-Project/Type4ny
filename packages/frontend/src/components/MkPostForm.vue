@@ -129,13 +129,14 @@ import { misskeyApi } from '@/scripts/misskey-api.js';
 import { selectFiles } from '@/scripts/select-file.js';
 import { dateTimeFormat } from '@/scripts/intl-const.js';
 import {
+	store,
+	notePostInterruptors,
+	postFormActions,
 	bannerDark,
 	bannerLight,
 	defaultStore,
 	iconDark,
-	iconLight,
-	notePostInterruptors,
-	postFormActions,
+	iconLight
 } from '@/store.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { i18n } from '@/i18n.js';
@@ -148,13 +149,14 @@ import { miLocalStorage } from '@/local-storage.js';
 import { claimAchievement } from '@/scripts/achievements.js';
 import { emojiPicker } from '@/scripts/emoji-picker.js';
 import { mfmFunctionPicker } from '@/scripts/mfm-function-picker.js';
-import MkScheduleEditor from '@/components/MkScheduleEditor.vue';
+import { prefer } from '@/preferences.js';
 import { listSchedulePost } from '@/os.js';
+import MkScheduleEditor from '@/components/MkScheduleEditor.vue';
 
 const $i = signinRequired();
 
 const modal = inject('modal');
-const gamingType = defaultStore.state.gamingType;
+const gamingType = prefer.s.gamingType;
 
 const props = withDefaults(defineProps<PostFormProps & {
 	fixed?: boolean;
@@ -196,20 +198,18 @@ let schedule = ref<{
 const useCw = ref<boolean>(!!props.initialCw);
 const renote = ref(props.renote);
 const reply = ref(props.reply);
-const showPreview = ref(defaultStore.state.showPreview);
-watch(showPreview, () => defaultStore.set('showPreview', showPreview.value));
-const showAddMfmFunction = ref(defaultStore.state.enableQuickAddMfmFunction);
-watch(showAddMfmFunction, () => defaultStore.set('enableQuickAddMfmFunction', showAddMfmFunction.value));
+const showPreview = ref(store.state.showPreview);
+watch(showPreview, () => store.set('showPreview', showPreview.value));
+const showAddMfmFunction = ref(prefer.s.enableQuickAddMfmFunction);
+watch(showAddMfmFunction, () => prefer.set('enableQuickAddMfmFunction', showAddMfmFunction.value));
 const cw = ref<string | null>(props.initialCw ?? null);
-const localOnly = ref(props.initialLocalOnly ?? (defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : false));
-
-const visibility = ref(props.initialVisibility ?? (defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility));
+const localOnly = ref(props.initialLocalOnly ?? (prefer.s.rememberNoteVisibility ? store.state.localOnly : prefer.s.defaultNoteLocalOnly));
+const visibility = ref(props.initialVisibility ?? (prefer.s.rememberNoteVisibility ? store.state.visibility : prefer.s.defaultNoteVisibility));
 const visibleUsers = ref<Misskey.entities.UserDetailed[]>([]);
 if (props.initialVisibleUsers) {
 	props.initialVisibleUsers.forEach(u => pushVisibleUser(u));
 }
-const reactionAcceptance = ref(defaultStore.state.reactionAcceptance);
-const autocomplete = ref(null);
+const reactionAcceptance = ref(store.state.reactionAcceptance);
 const draghover = ref(false);
 const quoteId = ref<string | null>(null);
 const hasNotSpecifiedMentions = ref(false);
@@ -288,8 +288,8 @@ const canPost = computed((): boolean => {
 		(!poll.value || poll.value.choices.length >= 2);
 });
 
-const withHashtags = computed(defaultStore.makeGetterSetter('postFormWithHashtags'));
-const hashtags = computed(defaultStore.makeGetterSetter('postFormHashtags'));
+const withHashtags = computed(store.makeGetterSetter('postFormWithHashtags'));
+const hashtags = computed(store.makeGetterSetter('postFormHashtags'));
 
 const bottomItemActionDef = ref({
 	attachFile: {
@@ -378,13 +378,13 @@ const bottomItemDef = {
 watch(visibility, () => {
 	switch (visibility.value) {
 		case 'public':
-			localOnly.value = props.initialLocalOnly ?? defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : false;
+			localOnly.value = props.initialLocalOnly ?? prefer.s.rememberNoteVisibility ? store.state.localOnly : false;
 			break;
 		case 'home':
-			localOnly.value = props.initialLocalOnly ?? defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : false;
+			localOnly.value = props.initialLocalOnly ?? prefer.s.rememberNoteVisibility ? store.state.localOnly : false;
 			break;
 		case 'followers':
-			localOnly.value = props.initialLocalOnly ?? defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : false;
+			localOnly.value = props.initialLocalOnly ?? prefer.s.rememberNoteVisibility ? store.state.localOnly : false;
 			break;
 	}
 
@@ -472,7 +472,7 @@ function initialize() {
 	}
 
 	// keep cw when reply
-	if (defaultStore.state.keepCw && reply.value && reply.value.cw) {
+	if (prefer.s.keepCw && reply.value && reply.value.cw) {
 		useCw.value = true;
 		cw.value = reply.value.cw;
 	}
@@ -584,7 +584,7 @@ function replaceFile(file: Misskey.entities.DriveFile, newFile: Misskey.entities
 }
 
 function upload(file: File, name?: string): void {
-	if (props.mock) return; uploadFile(file, defaultStore.state.uploadFolder, name).then(res => {
+	if (props.mock) return; uploadFile(file, prefer.s.uploadFolder, name).then(res => {
 		files.value.push(res);
 	});
 }
@@ -606,8 +606,8 @@ function setVisibility() {
 	}, {
 		changeVisibility: v => {
 			visibility.value = v;
-			if (defaultStore.state.rememberNoteVisibility) {
-				defaultStore.set('visibility', visibility.value);
+			if (prefer.s.rememberNoteVisibility) {
+				store.set('visibility', visibility.value);
 			}
 		},
 		closed: () => dispose(),
@@ -645,8 +645,8 @@ async function toggleLocalOnly() {
 	}
 
 	localOnly.value = !localOnly.value;
-	if (defaultStore.state.rememberNoteVisibility) {
-		defaultStore.set('localOnly', localOnly.value);
+	if (prefer.s.rememberNoteVisibility) {
+		store.set('localOnly', localOnly.value);
 	}
 }
 
@@ -714,6 +714,8 @@ function onCompositionEnd(ev: CompositionEvent) {
 	justEndedComposition.value = true;
 }
 
+const pastedFileName = 'yyyy-MM-dd HH-mm-ss [{{number}}]';
+
 async function onPaste(ev: ClipboardEvent) {
 	if (props.mock) return; if (!ev.clipboardData) return;
 
@@ -722,7 +724,7 @@ async function onPaste(ev: ClipboardEvent) {
 			const file = item.getAsFile(); if (!file) continue;
 			const lio = file.name.lastIndexOf('.');
 			const ext = lio >= 0 ? file.name.slice(lio) : '';
-			const formatted = `${formatTimeString(new Date(file.lastModified), defaultStore.state.pastedFileName).replace(/{{number}}/g, `${i + 1}`)}${ext}`;
+			const formatted = `${formatTimeString(new Date(file.lastModified), pastedFileName).replace(/{{number}}/g, `${i + 1}`)}${ext}`;
 			upload(file, formatted);
 		}
 	}
@@ -756,7 +758,7 @@ async function onPaste(ev: ClipboardEvent) {
 				return;
 			}
 
-			const fileName = formatTimeString(new Date(), defaultStore.state.pastedFileName).replace(/{{number}}/g, '0');
+			const fileName = formatTimeString(new Date(), pastedFileName).replace(/{{number}}/g, '0');
 			const file = new File([paste], `${fileName}.txt`, { type: 'text/plain' });
 			upload(file, `${fileName}.txt`);
 		});
@@ -820,7 +822,7 @@ function onDrop(ev: DragEvent): void {
 async function saveDraft(auto = true) {
 	if (props.instant || props.mock) return;
 
-	if (auto && defaultStore.state.draftSavingBehavior !== 'auto') return;
+	if (auto && prefer.s.draftSavingBehavior !== 'auto') return;
 
 	if (!auto) {
 		// 手動での保存の場合は自動保存したものを削除した上で保存
@@ -925,7 +927,7 @@ async function post(ev?: MouseEvent) {
 	} if (ev) {
 		const el = (ev.currentTarget ?? ev.target) as HTMLElement | null;
 
-		if (el && defaultStore.state.animation) {
+		if (el && prefer.s.animation) {
 			const rect = el.getBoundingClientRect();
 			const x = rect.left + (el.offsetWidth / 2);
 			const y = rect.top + (el.offsetHeight / 2);
@@ -1108,7 +1110,7 @@ function cancel() {
 }
 
 async function closed() {
-	if (defaultStore.state.draftSavingBehavior === 'manual' && (text.value !== '' || files.value.length > 0)) {
+	if (prefer.s.draftSavingBehavior === 'manual' && (text.value !== '' || files.value.length > 0)) {
 		os.confirm({
 			type: 'question',
 			text: i18n.ts.saveConfirm,
@@ -1267,7 +1269,7 @@ onMounted(() => {
 		await noteDrafts.migrate($i.id);
 
 		// 書きかけの投稿を復元
-		if (!props.instant && !props.mention && !props.specified && !props.mock && !defaultStore.state.disableNoteDrafting) {
+		if (!props.instant && !props.mention && !props.specified && !props.mock && !prefer.s.disableNoteDrafting) {
 			const draft = await noteDrafts.get(draftType.value, $i.id, 'default', draftAuxId.value as string);
 			if (draft) applyDraft(draft, true);
 		}

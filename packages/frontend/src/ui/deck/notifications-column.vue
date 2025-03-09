@@ -13,8 +13,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { defineAsyncComponent, shallowRef } from 'vue';
 import XColumn from './column.vue';
-import { updateColumn } from './deck-store.js';
-import type { Column } from './deck-store.js';
+import { updateColumn } from '@/deck.js';
+import type { Column } from '@/deck.js';
 import XNotifications from '@/components/MkNotifications.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';

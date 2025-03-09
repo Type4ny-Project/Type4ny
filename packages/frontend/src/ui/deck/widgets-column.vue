@@ -16,8 +16,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref } from 'vue';
 import XColumn from './column.vue';
-import { addColumnWidget, removeColumnWidget, setColumnWidgets, updateColumnWidget } from './deck-store.js';
-import type { Column } from './deck-store.js';
+import { addColumnWidget, removeColumnWidget, setColumnWidgets, updateColumnWidget } from '@/deck.js';
+import type { Column } from '@/deck.js';
 import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 

@@ -37,7 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkInfo v-if="channel.isArchived" warn>{{ i18n.ts.thisChannelArchived }}</MkInfo>
 
 				<!-- スマホ・タブレットの場合、キーボードが表示されると投稿が見づらくなるので、デスクトップ場合のみ自動でフォーカスを当てる -->
-				<MkPostForm v-if="$i && defaultStore.reactiveState.showFixedPostFormInChannel.value" :channel="channel" class="post-form _panel" fixed :autofocus="deviceKind === 'desktop'"/>
+				<MkPostForm v-if="$i && prefer.r.showFixedPostFormInChannel.value" :channel="channel" class="post-form _panel" fixed :autofocus="deviceKind === 'desktop'"/>
 				<MkTimeline :key="channelId" src="channel" :channel="channelId" @before="before" @after="after" @note="miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.id}`, Date.now())"/>
 			</div>
 			<div v-else-if="tab === 'featured'" key="featured">
@@ -74,8 +74,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed, watch, ref, defineAsyncComponent } from 'vue';
 import * as Misskey from 'misskey-js';
-const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
-
+import type { PageHeaderItem } from '@/types/page-header.js';
+import MkPostForm from '@/components/MkPostForm.vue';
 import { url } from '@@/js/config.js';
 import MkTimeline from '@/components/MkTimeline.vue';
 import XChannelFollowButton from '@/components/MkChannelFollowButton.vue';
@@ -89,12 +89,11 @@ import MkNotes from '@/components/MkNotes.vue';
 import { favoritedChannelsCache } from '@/cache.js';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
-import { defaultStore } from '@/store.js';
+import { prefer } from '@/preferences.js';
 import MkNote from '@/components/MkNote.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
-import type { PageHeaderItem } from '@/types/page-header.js';
 import { isSupportShare } from '@/scripts/navigator.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import { notesSearchAvailable } from '@/scripts/check-permissions.js';

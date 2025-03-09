@@ -18,10 +18,10 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</div>
 	</header>
 	<Transition
-		:enterActiveClass="defaultStore.state.animation ? $style.transition_toggle_enterActive : ''"
-		:leaveActiveClass="defaultStore.state.animation ? $style.transition_toggle_leaveActive : ''"
-		:enterFromClass="defaultStore.state.animation ? $style.transition_toggle_enterFrom : ''"
-		:leaveToClass="defaultStore.state.animation ? $style.transition_toggle_leaveTo : ''"
+		:enterActiveClass="prefer.s.animation ? $style.transition_toggle_enterActive : ''"
+		:leaveActiveClass="prefer.s.animation ? $style.transition_toggle_leaveActive : ''"
+		:enterFromClass="prefer.s.animation ? $style.transition_toggle_enterFrom : ''"
+		:leaveToClass="prefer.s.animation ? $style.transition_toggle_leaveTo : ''"
 		@enter="enter"
 		@afterEnter="afterEnter"
 		@leave="leave"
@@ -39,7 +39,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
-import { defaultStore } from '@/store.js';
+import { prefer } from '@/preferences.js';
 import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{

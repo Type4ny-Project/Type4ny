@@ -132,11 +132,15 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { openInstanceMenu } from './common.js';
 import * as os from '@/os';
 import { navbarItemDef } from '@/navbar.js';
-import { $i, openAccountMenu as openAccountMenu_ } from '@/account';
-import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store';
+import { $i, openAccountMenu as openAccountMenu_ } from '@/account.js';
+import { bannerDark, bannerLight, defaultStore, iconDark, iconLight, store } from '@/store.js';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
-const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
+import { getHTMLElementOrNull } from '@/scripts/get-dom-node-or-null.js';
+import { useRouter } from '@/router/supplier.js';
+import { prefer } from '@/preferences.js';
+
+const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 
 function hexToRgb(hex) {
 	hex = hex.replace(/^#/, '');
@@ -147,27 +151,25 @@ function hexToRgb(hex) {
 	return `${r},${g},${b}`;
 }
 
-document.documentElement.style.setProperty('--homeColor', hexToRgb(defaultStore.state.homeColor));
-document.documentElement.style.setProperty('--followerColor', hexToRgb(defaultStore.state.followerColor));
-document.documentElement.style.setProperty('--specifiedColor', hexToRgb(defaultStore.state.specifiedColor));
-document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(defaultStore.state.localOnlyColor));
-document.documentElement.style.setProperty('--gamingspeed', defaultStore.state.numberOfGamingSpeed + 's');
-import { getHTMLElementOrNull } from '@/scripts/get-dom-node-or-null.js';
-import { useRouter } from '@/router/supplier.js';
+document.documentElement.style.setProperty('--homeColor', hexToRgb(prefer.state.homeColor));
+document.documentElement.style.setProperty('--followerColor', hexToRgb(prefer.state.followerColor));
+document.documentElement.style.setProperty('--specifiedColor', hexToRgb(prefer.state.specifiedColor));
+document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.state.localOnlyColor));
+document.documentElement.style.setProperty('--gamingspeed', prefer.state.numberOfGamingSpeed + 's');
 
 const router = useRouter();
 
 const forceIconOnly = ref(window.innerWidth <= 1279);
 const iconOnly = computed(() => {
-	return forceIconOnly.value || (defaultStore.reactiveState.menuDisplay.value === 'sideIcon');
+	return forceIconOnly.value || (store.reactiveState.menuDisplay.value === 'sideIcon');
 });
-let bannerUrl = computed(defaultStore.makeGetterSetter('bannerUrl'));
+let bannerUrl = computed(store.makeGetterSetter('bannerUrl'));
 let iconUrl = ref();
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+let gamingType = computed(store.makeGetterSetter('gamingType'));
 
-const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'));
+const gamingMode = computed(store.makeGetterSetter('gamingMode'));
+const darkMode = computed(store.makeGetterSetter('darkMode'));
+const enablehanntenn = computed(store.makeGetterSetter('enablehanntenn'));
 
 if (darkMode.value) {
 	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
@@ -207,7 +209,7 @@ watch([darkMode, gamingMode], () => {
 	}
 });
 
-const menu = computed(() => defaultStore.state.menu);
+const menu = computed(() => prefer.s.menu);
 const otherMenuItemIndicated = computed(() => {
 	for (const def in navbarItemDef) {
 		if (menu.value.includes(def)) continue;
@@ -222,12 +224,12 @@ function calcViewState() {
 
 window.addEventListener('resize', calcViewState);
 
-watch(defaultStore.reactiveState.menuDisplay, () => {
+watch(store.reactiveState.menuDisplay, () => {
 	calcViewState();
 });
 
 function toggleIconOnly() {
-	defaultStore.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
+	store.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
 }
 
 function openAccountMenu(ev: MouseEvent) {

@@ -212,8 +212,8 @@ import { signinRequired } from '@/account.js';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
-import { defaultStore } from '@/store';
 import { reloadAsk } from '@/scripts/reload-ask.js';
+import { prefer } from '@/preferences.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
 
@@ -238,7 +238,7 @@ const expandedRenoteMuteItems = ref([]);
 const expandedMuteItems = ref([]);
 const expandedBlockItems = ref([]);
 
-const showSoftWordMutedWord = computed(defaultStore.makeGetterSetter('showSoftWordMutedWord'));
+const showSoftWordMutedWord = prefer.model('showSoftWordMutedWord');
 
 watch([
 	showSoftWordMutedWord,
@@ -246,7 +246,7 @@ watch([
 	await reloadAsk({ reason: i18n.ts.reloadToApplySetting, unison: true });
 });
 
-const mutedReactions = ref<string[]>(defaultStore.state.mutedReactions);
+const mutedReactions = ref<string[]>(store.state.mutedReactions);
 
 watch(mutedReactions, () => {
 	defaultStore.set('mutedReactions', mutedReactions.value);

@@ -38,13 +38,13 @@ import * as Misskey from 'misskey-js';
 import { i18n } from '@/i18n.js';
 import { notePage } from '@/filters/note.js';
 import { userPage } from '@/filters/user.js';
-const mock = inject<boolean>('mock', false);
-import { defaultStore } from '@/store.js';
 
 defineProps<{
 	note: Misskey.entities.Note & {isSchedule? : boolean};
   scheduled?: boolean;
 }>();
+
+const mock = inject<boolean>('mock', false);
 </script>
 
 <style lang="scss" module>

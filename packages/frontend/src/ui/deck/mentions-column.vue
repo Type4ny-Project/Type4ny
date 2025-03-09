@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref } from 'vue';
 import XColumn from './column.vue';
-import type { Column } from './deck-store.js';
+import type { Column } from '@/deck.js';
 import MkNotes from '@/components/MkNotes.vue';
 import { i18n } from '../../i18n.js';
 

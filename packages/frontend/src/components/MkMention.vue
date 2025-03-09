@@ -19,8 +19,8 @@ import { host as localHost } from '@@/js/config.js';
 import tinycolor from 'tinycolor2';
 import type { MkABehavior } from '@/components/global/MkA.vue';
 import { $i } from '@/account.js';
-import { defaultStore } from '@/store.js';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
+import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;
 
@@ -41,7 +41,7 @@ const isMe = $i && (
 const bg = tinycolor(getComputedStyle(document.documentElement).getPropertyValue(isMe ? '--mentionMe' : '--mention'));
 bg.setAlpha(0.1);
 
-const avatarUrl = computed(() => defaultStore.state.disableShowingAnimatedImages || defaultStore.state.dataSaver.avatar
+const avatarUrl = computed(() => prefer.s.disableShowingAnimatedImages || prefer.s.dataSaver.avatar
 	? getStaticImageUrl(`/avatar/@${props.username}@${props.host}`)
 	: `/avatar/@${props.username}@${props.host}`,
 );

@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <div :class="$style.root">
 	<div
-		v-for="x in defaultStore.reactiveState.statusbars.value" :key="x.id" :class="[$style.item, { [$style.black]: x.black,
+		v-for="x in prefer.r.statusbars.value" :key="x.id" :class="[$style.item, { [$style.black]: x.black,
 			[$style.verySmall]: x.size === 'verySmall',
 			[$style.small]: x.size === 'small',
 			[$style.large]: x.size === 'large',
@@ -23,7 +23,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { defineAsyncComponent } from 'vue';
 import { instance } from '@/instance.js';
-import { defaultStore } from '@/store.js';
+import { prefer } from '@/preferences.js';
 const XRss = defineAsyncComponent(() => import('./statusbar-rss.vue'));
 const XFederation = defineAsyncComponent(() => import('./statusbar-federation.vue'));
 const XUserList = defineAsyncComponent(() => import('./statusbar-user-list.vue'));

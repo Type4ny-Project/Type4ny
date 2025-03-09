@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		$style.root,
 		{
 			[$style.showActionsOnlyHover]:
-				defaultStore.state.showNoteActionsOnlyHover,
+				prefer.s.showNoteActionsOnlyHover,
 		},
 		{
 			[$style.home]:
@@ -30,7 +30,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				defaultStore.state.showVisibilityColor && note.localOnly && note.visibility === 'public',
 		},
 		{
-			[$style.skipRender]: defaultStore.state.skipNoteRender
+			[$style.skipRender]: prefer.s.skipNoteRender
 		}
 	]"
 	:tabindex="isDeleted ? '-1' : '0'"
@@ -326,7 +326,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<p
 						v-if="
 							(appearNote.reactionAcceptance === 'likeOnly' ||
-								defaultStore.state.showReactionsCount) &&
+								prefer.s.showReactionsCount) &&
 								appearNote.reactionCount > 0
 						"
 						:class="$style.footerButtonCount"
@@ -335,7 +335,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</p>
 				</button>
 				<button
-					v-if="defaultStore.state.showClipButtonInNoteFooter"
+					v-if="prefer.s.showClipButtonInNoteFooter"
 					ref="clipButton"
 					:class="$style.footerButton"
 					class="_button"
@@ -407,13 +407,15 @@ import {
 	shallowRef,
 	watch,
 } from 'vue';
-import type { Ref } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import { isLink } from '@@/js/is-link.js';
 import { shouldCollapsed } from '@@/js/collapsed.js';
 import { host } from '@@/js/config.js';
+import type { Ref } from 'vue';
 import type { MenuItem } from '@/types/menu.js';
+import type { OpenOnRemoteOptions } from '@/scripts/please-login.js';
+import type { Keymap } from '@/scripts/hotkey.js';
 import MkNoteSub from '@/components/MkNoteSub.vue';
 import MkNoteHeader from '@/components/MkNoteHeader.vue';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
@@ -426,7 +428,6 @@ import MkUsersTooltip from '@/components/MkUsersTooltip.vue';
 import MkUrlPreview from '@/components/MkUrlPreview.vue';
 import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
 import { pleaseLogin } from '@/scripts/please-login.js';
-import type { OpenOnRemoteOptions } from '@/scripts/please-login.js';
 import { checkWordMute } from '@/scripts/check-word-mute.js';
 import { notePage } from '@/filters/note.js';
 import { userPage } from '@/filters/user.js';
@@ -434,7 +435,7 @@ import number from '@/filters/number.js';
 import * as os from '@/os.js';
 import * as sound from '@/scripts/sound.js';
 import { misskeyApi, misskeyApiGet } from '@/scripts/misskey-api.js';
-import { defaultStore, noteViewInterruptors } from '@/store.js';
+import { noteViewInterruptors } from '@/store.js';
 import { reactionPicker } from '@/scripts/reaction-picker.js';
 import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm.js';
 import { $i } from '@/account.js';
@@ -454,9 +455,9 @@ import { getNoteSummary } from '@/scripts/get-note-summary.js';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
 import { showMovedDialog } from '@/scripts/show-moved-dialog.js';
 import { isEnabledUrlPreview } from '@/instance.js';
-import type { Keymap } from '@/scripts/hotkey.js';
 import { focusNext, focusPrev } from '@/scripts/focus.js';
 import { getAppearNote } from '@/scripts/get-appear-note.js';
+import { prefer } from '@/preferences.js';
 
 const props = withDefaults(
 	defineProps<{
@@ -538,21 +539,13 @@ const muted = ref(checkMute(appearNote.value, $i?.mutedWords));
 const hardMuted = ref(
 	props.withHardMute && checkMute(appearNote.value, $i?.hardMutedWords, true, defaultStore.state.userWordMute),
 );
-const showSoftWordMutedWord = computed(() => defaultStore.state.showSoftWordMutedWord);
+const showSoftWordMutedWord = computed(() => prefer.s.showSoftWordMutedWord);
 const translation = ref<Misskey.entities.NotesTranslateResponse | null>(null);
 const translating = ref(false);
-const showTicker =
-	defaultStore.state.instanceTicker === 'always' ||
-	(defaultStore.state.instanceTicker === 'remote' &&
-		appearNote.value.user.instance);
-const canRenote = computed(
-	() =>
-		['public', 'home'].includes(appearNote.value.visibility) ||
-		(appearNote.value.visibility === 'followers' &&
-			appearNote.value.userId === $i?.id),
-);
+const showTicker = (prefer.s.instanceTicker === 'always') || (prefer.s.instanceTicker === 'remote' && appearNote.value.user.instance);
+const canRenote = computed(() => ['public', 'home'].includes(appearNote.value.visibility) || (appearNote.value.visibility === 'followers' && appearNote.value.userId === $i?.id));
 const renoteCollapsed = ref(
-	defaultStore.state.collapseRenotes &&
+	prefer.s.collapseRenotes &&
 		isRenote &&
 		(($i &&
 			($i.id === note.value.userId || $i.id === appearNote.value.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
@@ -620,7 +613,7 @@ const keymap = {
 	},
 	c: () => {
 		if (renoteCollapsed.value) return;
-		if (!defaultStore.state.showClipButtonInNoteFooter) return;
+		if (!prefer.s.showClipButtonInNoteFooter) return;
 		clip();
 	},
 	o: () => {
@@ -770,7 +763,7 @@ function react(): void {
 			reaction: '❤️',
 		});
 		const el = reactButton.value;
-		if (el && defaultStore.state.animation) {
+		if (el && prefer.s.animation) {
 			const rect = el.getBoundingClientRect();
 			const x = rect.left + el.offsetWidth / 2;
 			const y = rect.top + el.offsetHeight / 2;
@@ -785,7 +778,7 @@ function react(): void {
 	} else {
 		blur();
 		reactionPicker.show(reactButton.value ?? null, note.value, async (reaction) => {
-			if (defaultStore.state.confirmOnReact) {
+			if (prefer.s.confirmOnReact) {
 				const confirm = await os.confirm({
 					type: 'question',
 					text: i18n.tsx.reactAreYouSure({ emoji: reaction.replace('@.', '') }),
@@ -838,7 +831,7 @@ function onContextmenu(ev: MouseEvent): void {
 	if (ev.target && isLink(ev.target as HTMLElement)) return;
 	if (window.getSelection()?.toString() !== '') return;
 
-	if (defaultStore.state.useReactionPickerForContextMenu) {
+	if (prefer.s.useReactionPickerForContextMenu) {
 		ev.preventDefault();
 		react();
 	} else {

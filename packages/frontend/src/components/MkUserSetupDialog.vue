@@ -138,7 +138,7 @@ import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { host } from '@@/js/config.js';
 import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowButton.vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import * as os from '@/os.js';
 
 const gamingType = defaultStore.state.gamingType;
@@ -148,11 +148,11 @@ const emit = defineEmits<{
 }>();
 
 const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
- 
-const page = ref(defaultStore.state.accountSetupWizard);
+
+const page = ref(store.state.accountSetupWizard);
 
 watch(page, () => {
-	defaultStore.set('accountSetupWizard', page.value);
+	store.set('accountSetupWizard', page.value);
 });
 
 async function close(skip: boolean) {
@@ -165,11 +165,11 @@ async function close(skip: boolean) {
 	}
 
 	dialog.value?.close();
-	defaultStore.set('accountSetupWizard', -1);
+	store.set('accountSetupWizard', -1);
 }
 
 function setupComplete() {
-	defaultStore.set('accountSetupWizard', -1);
+	store.set('accountSetupWizard', -1);
 	dialog.value?.close();
 }
 
@@ -194,7 +194,7 @@ async function later(later: boolean) {
 	}
 
 	dialog.value?.close();
-	defaultStore.set('accountSetupWizard', 0);
+	store.set('accountSetupWizard', 0);
 }
 </script>
 

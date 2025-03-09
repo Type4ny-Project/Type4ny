@@ -30,8 +30,8 @@ import { ref, computed, watch } from 'vue';
 import { shallowRef } from 'vue';
 import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
-import { defaultStore } from '@/store.js';
 import { deviceKind } from '@/scripts/device-kind.js';
+import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;
 const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
@@ -53,7 +53,7 @@ const preferedModalType = (deviceKind === 'desktop' && props.src != null) ? 'pop
 
 const modal = shallowRef<InstanceType<typeof MkModal>>();
 
-const menu = defaultStore.state.menu;
+const menu = prefer.s.menu;
 
 const items = Object.keys(navbarItemDef).filter(k => !menu.includes(k)).map(k => navbarItemDef[k]).filter(def => def.show == null ? true : def.show).map(def => ({
 	type: def.to ? 'link' : 'button',

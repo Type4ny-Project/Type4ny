@@ -8,13 +8,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div :class="ui !== 'twilike' ? $style.tabsInner : $style.tabsInnerX">
 		<button
 			v-for="t in tabs" :ref="(el) => tabRefs[t.key] = (el as HTMLElement)" v-tooltip.noDelay="t.title"
-			class="_button" :class="[ui !== 'twilike' ? $style.tab : $style.tabX, { [$style.active]: t.key != null && t.key === props.tab, [$style.animate]: defaultStore.reactiveState.animation.value }]"
+			class="_button" :class="[ui !== 'twilike' ? $style.tab : $style.tabX, { [$style.active]: t.key != null && t.key === props.tab, [$style.animate]: prefer.s.animation }]"
 			@mousedown="(ev) => onTabMousedown(t, ev)" @click="(ev) => onTabClick(t, ev)"
 		>
 			<div :class="$style.tabInner">
 				<i v-if="t.icon" :class="[$style.tabIcon, t.icon]"></i>
 				<div
-					v-if="!t.iconOnly || (!defaultStore.reactiveState.animation.value && t.key === tab)"
+					v-if="!t.iconOnly || (!prefer.s.animation && t.key === tab)"
 					:class="$style.tabTitle"
 				>
 					{{ t.title }}
@@ -30,7 +30,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<div
 		ref="tabHighlightEl"
-		:class="[$style.tabHighlight, { [$style.animate]: defaultStore.reactiveState.animation.value , [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
+		:class="[$style.tabHighlight, { [$style.animate]: prefer.s.animation , [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 	></div>
 </div>
 </template>
@@ -41,23 +41,23 @@ export type Tab = {
 	onClick?: (ev: MouseEvent) => void;
 } & (
 	| {
-			iconOnly?: false;
-			title: string;
-			icon?: string;
-		}
+		iconOnly?: false;
+		title: string;
+		icon?: string;
+	}
 	| {
-			iconOnly: true;
-			icon: string;
-		}
+		iconOnly: true;
+		icon: string;
+	}
 );
 </script>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, watch, nextTick, shallowRef, ref, computed } from 'vue';
 import { ui } from '@@/js/config.js';
-import { defaultStore } from '@/store.js';
+import { prefer } from '@/preferences.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = prefer.s.gamingType;
 
 const props = withDefaults(defineProps<{
 	tabs?: Tab[];

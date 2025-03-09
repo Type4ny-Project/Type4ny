@@ -80,14 +80,15 @@ import { computed, defineAsyncComponent, ref, toRef, watch } from 'vue';
 import { openInstanceMenu } from './common.js';
 import * as os from '@/os';
 import { navbarItemDef } from '@/navbar.js';
-import { $i, openAccountMenu as openAccountMenu_ } from '@/account';
-import { bannerDark, bannerLight, defaultStore, iconDark, iconLight } from '@/store';
-import { i18n } from '@/i18n';
+import { $i, openAccountMenu as openAccountMenu_ } from '@/account.js';
+import { bannerDark, bannerLight, iconDark, iconLight, store } from '@/store';
+import { prefer } from '@/preferences.js';
+import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
-const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
-let bannerUrl = ref(defaultStore.state.bannerUrl);
-let iconUrl = ref(defaultStore.state.iconUrl);
+let gamingType = computed(store.makeGetterSetter('gamingType'));
+const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
+let bannerUrl = ref(store.state.bannerUrl);
+let iconUrl = ref(store.state.iconUrl);
 
 function hexToRgb(hex) {
 	// 16進数のカラーコードから "#" を除去
@@ -101,13 +102,13 @@ function hexToRgb(hex) {
 	return `${r},${g},${b}`;
 }
 
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
-document.documentElement.style.setProperty('--homeColor', hexToRgb(defaultStore.state.homeColor));
-document.documentElement.style.setProperty('--followerColor', hexToRgb(defaultStore.state.followerColor));
-document.documentElement.style.setProperty('--specifiedColor', hexToRgb(defaultStore.state.specifiedColor));
-document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(defaultStore.state.localOnlyColor));
-document.documentElement.style.setProperty('--gamingspeed', defaultStore.state.numberOfGamingSpeed + 's');
+const darkMode = computed(store.makeGetterSetter('darkMode'));
+const gamingMode = computed(store.makeGetterSetter('gamingMode'));
+document.documentElement.style.setProperty('--homeColor', hexToRgb(store.state.homeColor));
+document.documentElement.style.setProperty('--followerColor', hexToRgb(store.state.followerColor));
+document.documentElement.style.setProperty('--specifiedColor', hexToRgb(store.state.specifiedColor));
+document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(store.state.localOnlyColor));
+document.documentElement.style.setProperty('--gamingspeed', store.state.numberOfGamingSpeed + 's');
 
 let gaming = ref();
 if (darkMode.value) {
@@ -157,7 +158,7 @@ watch(gamingMode, () => {
 		gaming.value = '';
 	}
 });
-const menu = toRef(defaultStore.state, 'menu');
+const menu = toRef(prefer.s, 'menu');
 const otherMenuItemIndicated = computed(() => {
 	for (const def in navbarItemDef) {
 		if (menu.value.includes(def)) continue;
