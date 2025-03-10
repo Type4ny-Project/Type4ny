@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -149,7 +150,7 @@ const emit = defineEmits<{
 
 const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
 
-const page = ref(store.state.accountSetupWizard);
+const page = ref(store.s.accountSetupWizard);
 
 watch(page, () => {
 	store.set('accountSetupWizard', page.value);

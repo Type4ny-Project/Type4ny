@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div :class="[$style.spacer, store.reactiveState.darkMode.value ? $style.dark : $style.light]"></div>
+<div :class="[$style.spacer, store.r.darkMode.value ? $style.dark : $style.light]"></div>
 </template>
 
 <script lang="ts" setup>

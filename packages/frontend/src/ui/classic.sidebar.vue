@@ -101,7 +101,7 @@ function openAccountMenu(ev: MouseEvent) {
 	}, ev);
 }
 
-watch(store.reactiveState.menuDisplay, () => {
+watch(store.r.menuDisplay, () => {
 	calcViewState();
 });
 

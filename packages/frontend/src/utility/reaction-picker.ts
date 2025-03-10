@@ -22,7 +22,7 @@ class ReactionPicker {
 	}
 
 	public async init() {
-		const reactionsRef = store.reactiveState.reactions;
+		const reactionsRef = store.r.reactions;
 		await popup(MkEmojiPickerDialog, {
 			src: this.src,
 			pinnedEmojis: reactionsRef,

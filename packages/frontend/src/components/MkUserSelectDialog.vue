@@ -126,7 +126,7 @@ function ok() {
 
 	// 最近使ったユーザー更新
 	if (multipleSelected.value.length < 0) return;
-	let recents = store.state.recentlyUsedUsers;
+	let recents = store.s.recentlyUsedUsers;
 	recents = recents.filter(x => x !== selected.value?.id);
 	recents.unshift(selected.value?.id);
 	store.set('recentlyUsedUsers', recents.splice(0, 16));
@@ -139,7 +139,7 @@ function cancel() {
 
 onMounted(() => {
 	misskeyApi('users/show', {
-		userIds: store.state.recentlyUsedUsers,
+		userIds: store.s.recentlyUsedUsers,
 	}).then(foundUsers => {
 		let _users = foundUsers;
 		_users = _users.filter((u) => {

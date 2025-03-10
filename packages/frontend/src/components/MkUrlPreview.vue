@@ -37,7 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			data-transparent="true"
 
 			:style="{ position: 'relative', height: `${tweetHeight}px`, border: 0 ,borderRadius: '16px'}"
-			:src="`https://platform.twitter.com/embed/index.html?embedId=${embedId}&amp;hideCard=false&amp;hideThread=false&amp;lang=en&amp;theme=${store.state.darkMode ? 'dark' : 'light'}&amp;id=${tweetId}`"
+			:src="`https://platform.twitter.com/embed/index.html?embedId=${embedId}&amp;hideCard=false&amp;hideThread=false&amp;lang=en&amp;theme=${store.s.darkMode ? 'dark' : 'light'}&amp;id=${tweetId}`"
 			frameborder="0"
 			allowtransparency="true"
 		></iframe>
