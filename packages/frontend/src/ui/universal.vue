@@ -143,6 +143,7 @@ import { useScrollPositionManager } from '@/nirax.js';
 import { mainRouter } from '@/router/main.js';
 import { prefer } from '@/preferences.js';
 import { shouldSuggestRestoreBackup } from '@/preferences/utility.js';
+import { DI } from '@/di.js';
 
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
 const gamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
@@ -198,7 +199,7 @@ const widgetsShowing = ref(false);
 const navFooter = shallowRef<HTMLElement>();
 const contents = shallowRef<InstanceType<typeof MkStickyContainer>>();
 
-provide('router', mainRouter);
+provide(DI.router, mainRouter);
 provideMetadataReceiver((metadataGetter) => {
 	const info = metadataGetter();
 	pageMetadata.value = info;
