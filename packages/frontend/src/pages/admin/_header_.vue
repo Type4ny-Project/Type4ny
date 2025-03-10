@@ -127,7 +127,7 @@ const calcBg = () => {
 
 onMounted(() => {
 	calcBg();
-	globalEvents.on('themeChanged', calcBg);
+	globalEvents.on('themeChanging', calcBg);
 
 	watch(() => [props.tab, props.tabs], () => {
 		nextTick(() => {
@@ -147,7 +147,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	globalEvents.off('themeChanged', calcBg);
+	globalEvents.off('themeChanging', calcBg);
 });
 </script>
 
