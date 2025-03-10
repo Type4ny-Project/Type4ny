@@ -192,7 +192,7 @@ const darkThemeId = computed({
 	set(id) {
 		const t = themes.value.find(x => x.id === id);
 		if (t) { // テーマエディタでテーマを作成したときなどは、themesに反映されないため undefined になる
-			prefer.set('darkTheme', t);
+			prefer.commit('darkTheme', t);
 		}
 	},
 });
@@ -204,7 +204,7 @@ const lightThemeId = computed({
 	set(id) {
 		const t = themes.value.find(x => x.id === id);
 		if (t) { // テーマエディタでテーマを作成したときなどは、themesに反映されないため undefined になる
-			prefer.set('lightTheme', t);
+			prefer.commit('lightTheme', t);
 		}
 	},
 });

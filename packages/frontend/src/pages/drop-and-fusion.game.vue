@@ -934,7 +934,7 @@ function updateSettings<
 >(key: K, value: V) {
 	const changes: { [P in K]?: V } = {};
 	changes[key] = value;
-	prefer.set('game.dropAndFusion', {
+	prefer.commit('game.dropAndFusion', {
 		...prefer.s['game.dropAndFusion'],
 		...changes,
 	});

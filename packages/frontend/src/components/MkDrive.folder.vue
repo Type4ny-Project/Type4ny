@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -334,7 +335,7 @@ function deleteFolder() {
 				folderId: props.folder.id,
 			}).then(() => {
 				if (prefer.s.uploadFolder === props.folder.id) {
-					prefer.set('uploadFolder', null);
+					prefer.commit('uploadFolder', null);
 				}
 			}).catch(err => {
 				switch (err.id) {
@@ -357,7 +358,7 @@ function deleteFolder() {
 }
 
 function setAsUploadFolder() {
-	prefer.set('uploadFolder', props.folder.id);
+	prefer.commit('uploadFolder', props.folder.id);
 }
 
 function onContextmenu(ev: MouseEvent) {
