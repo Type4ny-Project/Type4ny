@@ -12,7 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-tooltip.noDelay.right="instance.name ?? i18n.ts.instance" class="_button" :class="$style.instance"
 				@click="openInstanceMenu"
 			>
-				<img :src="iconUrl ?? instance.faviconUrl ?? '/favicon.ico'" alt="" :class="$style.instanceIcon"/>
+				<img :src="iconUrl ?? instance.faviconUrl ?? '/favicon.ico'" alt="" :class="$style.instanceIcon" style="viewTransitionName: navbar-serverIcon;"/>
 			</button>
 		</div>
 		<div :class="$style.middle">
@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				:activeClass="$style.active" to="/" exact
 			>
-				<i :class="$style.itemIcon" class="ti ti-home ti-fw"></i><span :class="$style.itemText">{{
+				<i :class="$style.itemIcon" class="ti ti-home ti-fw" style="viewTransitionName: navbar-homeIcon;"></i><span :class="$style.itemText">{{
 					i18n.ts.timeline
 				}}</span>
 			</MkA>
@@ -37,7 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:to="navbarItemDef[item].to"
 					v-on="navbarItemDef[item].action ? { click: navbarItemDef[item].action } : {}"
 				>
-					<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]"></i><span :class="$style.itemText">{{ navbarItemDef[item].title }}</span>
+					<i class="ti-fw" :class="[$style.itemIcon, navbarItemDef[item].icon]" :style="{ viewTransitionName: 'navbar-item-' + item }"></i><span :class="$style.itemText">{{ navbarItemDef[item].title }}</span>
 					<span v-if="navbarItemDef[item].indicated" :class="$style.itemIndicator" class="_blink">
 						<span v-if="navbarItemDef[item].indicateValue" class="_indicateCounter" :class="[$style.itemIndicator ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">{{ navbarItemDef[item].indicateValue }}</span>
 						<i v-else class="_indicatorCircle"></i>
@@ -50,7 +50,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				:activeClass="$style.active" to="/admin"
 			>
-				<i :class="$style.itemIcon" class="ti ti-dashboard ti-fw"></i><span
+				<i :class="$style.itemIcon" class="ti ti-dashboard ti-fw" style="viewTransitionName: navbar-controlPanel;"></i><span
 					:class="$style.itemText"
 				>{{ i18n.ts.controlPanel }}</span>
 			</MkA>
@@ -59,7 +59,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:class="[$style.item, { [$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]"
 				@click="more"
 			>
-				<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw"></i><span :class="$style.itemText">{{ i18n.ts.more }}</span>
+				<i :class="$style.itemIcon" class="ti ti-grid-dots ti-fw" style="viewTransitionName: navbar-more;"></i><span :class="$style.itemText">{{ i18n.ts.more }}</span>
 				<span v-if="otherMenuItemIndicated" :class="$style.itemIndicator" class="_blink"><i class="_indicatorCircle"></i></span>
 			</button>
 			<MkA
@@ -68,7 +68,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:activeClass="$style.active"
 				to="/settings"
 			>
-				<i :class="$style.itemIcon" class="ti ti-settings ti-fw"></i><span
+				<i :class="$style.itemIcon" class="ti ti-settings ti-fw" style="viewTransitionName: navbar-settings;"></i><span
 					:class="$style.itemText"
 				>{{ i18n.ts.settings }}</span>
 			</MkA>
@@ -90,7 +90,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-if="$i != null"v-tooltip.noDelay.right="`${i18n.ts.account}: @${$i.username}`" class="_button"
 				:class="[$style.account]" @click="openAccountMenu"
 			>
-				<MkAvatar :user="$i" :class="$style.avatar"/>
+				<MkAvatar :user="$i" :class="$style.avatar" style="viewTransitionName: navbar-avatar;"/>
 				<MkAcct class="_nowrap" :class="$style.acct" :user="$i"/>
 			</button>
 		</div>
@@ -229,7 +229,13 @@ watch(store.r.menuDisplay, () => {
 });
 
 function toggleIconOnly() {
-	store.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
+	if (document.startViewTransition && prefer.s.animation) {
+		document.startViewTransition(() => {
+			store.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
+		});
+	} else {
+		store.set('menuDisplay', iconOnly.value ? 'sideFull' : 'sideIcon');
+	}
 }
 
 function openAccountMenu(ev: MouseEvent) {
