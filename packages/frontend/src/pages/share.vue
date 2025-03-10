@@ -39,7 +39,7 @@ const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vu
 
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
-import { definePageMetadata } from '@/utility/page-metadata.js';
+import { definePage } from '@/page.js';
 import { postMessageToParentWindow } from '@/utility/post-message.js';
 import { i18n } from '@/i18n.js';
 
@@ -200,7 +200,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.share,
 	icon: 'ti ti-share',
 }));

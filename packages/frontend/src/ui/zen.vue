@@ -23,8 +23,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { computed, provide, ref } from 'vue';
 import XCommon from './_common_/common.vue';
-import { provideMetadataReceiver, provideReactiveMetadata } from '@/utility/page-metadata.js';
-import type { PageMetadata } from '@/utility/page-metadata.js';
+import { provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
+import type { PageMetadata } from '@/page.js';
 import { instanceName, ui } from '@@/js/config.js';
 import { i18n } from '@/i18n.js';
 import { mainRouter } from '@/router/main.js';

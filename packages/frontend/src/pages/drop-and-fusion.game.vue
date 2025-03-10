@@ -200,7 +200,7 @@ import { apiUrl } from '@@/js/config.js';
 import type { Mono } from 'misskey-bubble-game';
 import { useInterval } from '@@/js/use-interval.js';
 import { apiUrl } from '@@/js/config.js';
-import { definePageMetadata } from '@/utility/page-metadata.js';
+import { definePage } from '@/page.js';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
 import * as os from '@/os.js';
 import MkNumber from '@/components/MkNumber.vue';
@@ -1305,7 +1305,7 @@ onDeactivated(() => {
 	bgmNodes?.soundSource.stop();
 });
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.bubbleGame,
 	icon: 'ti ti-apple',
 }));

@@ -29,7 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { onActivated, computed } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/utility/page-metadata.js';
+import { definePage } from '@/page.js';
 import { antennasCache } from '@/cache.js';
 import { infoImageUrl } from '@/instance.js';
 import { useRouter } from '@/router/supplier.js';
@@ -61,7 +61,7 @@ const headerActions = computed(() => [{
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.manageAntennas,
 	icon: 'ti ti-antenna',
 }));

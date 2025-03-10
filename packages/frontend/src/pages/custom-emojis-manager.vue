@@ -33,8 +33,25 @@ import { selectFile } from '@/utility/select-file';
 import * as os from '@/os';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { getProxiedImageUrl } from '@/utility/media-proxy.js';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/utility/page-metadata';
+import { i18n } from '@/i18n.js';
+import { definePage } from '@/page.js';
+
+const emojisPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
+
+const tab = ref('local');
+const query = ref<string | null>(null);
+const queryRemote = ref<string | null>(null);
+const host = ref<string | null>(null);
+const selectMode = ref(false);
+const selectedEmojis = ref<string[]>([]);
+
+const pagination = {
+	endpoint: 'admin/emoji/list' as const,
+	limit: 30,
+	params: computed(() => ({
+		query: (query.value && query.value !== '') ? query.value : null,
+	})),
+};
 
 const tab = ref('request');
 const emojisPaginationComponent = ref<any>(null);
@@ -219,7 +236,7 @@ const headerTabs = computed(() => [{
 	title: i18n.ts.remote,
 }]);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.customEmojis,
 	icon: 'ti ti-icons',
 }));

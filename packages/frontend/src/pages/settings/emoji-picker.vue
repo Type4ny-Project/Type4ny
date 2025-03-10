@@ -151,7 +151,7 @@ import MkSelect from '@/components/MkSelect.vue';
 import * as os from '@/os.js';
 import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/utility/page-metadata.js';
+import { definePage } from '@/page.js';
 import { deepClone } from '@/utility/clone.js';
 import { reactionPicker } from '@/utility/reaction-picker.js';
 import { emojiPicker } from '@/utility/emoji-picker.js';
@@ -294,7 +294,7 @@ async function setDefaultProfile() {
 	await prefer.set('pickerProfileDefault', nowProfileId.value);
 }
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.emojiPicker,
 	icon: 'ti ti-mood-happy',
 }));
