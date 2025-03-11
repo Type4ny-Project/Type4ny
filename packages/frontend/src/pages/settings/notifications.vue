@@ -5,44 +5,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div class="_gaps_m">
-	<MkFoldableSection>
-		<template #header>{{ i18n.ts.notificationSettings }}</template>
-		<div class="_gaps_m">
-			<MkSwitch v-model="useGroupedNotifications">{{ i18n.ts.useGroupedNotifications }}</MkSwitch>
+	<MkFeatureBanner icon="/client-assets/bell_3d.png" color="#ffff00">
+		<SearchKeyword>{{ i18n.ts._settings.notificationsBanner }}</SearchKeyword>
+	</MkFeatureBanner>
 
-			<MkRadios v-model="notificationPosition">
-				<template #label>{{ i18n.ts.position }}</template>
-				<option value="leftTop"><i class="ti ti-align-box-left-top"></i> {{ i18n.ts.leftTop }}</option>
-				<option value="rightTop"><i class="ti ti-align-box-right-top"></i> {{ i18n.ts.rightTop }}</option>
-				<option value="leftBottom"><i class="ti ti-align-box-left-bottom"></i> {{ i18n.ts.leftBottom }}</option>
-				<option value="rightBottom"><i class="ti ti-align-box-right-bottom"></i> {{ i18n.ts.rightBottom }}</option>
-			</MkRadios>
-
-			<MkRadios v-model="notificationStackAxis">
-				<template #label>{{ i18n.ts.stackAxis }}</template>
-				<option value="vertical"><i class="ti ti-carousel-vertical"></i> {{ i18n.ts.vertical }}</option>
-				<option value="horizontal"><i class="ti ti-carousel-horizontal"></i> {{ i18n.ts.horizontal }}</option>
-			</MkRadios>
-		</div>
-	</MkFoldableSection>
-	<MkFoldableSection>
-		<template #header>{{ i18n.ts.notificationRecieveConfig }}</template>
-		<FormSection first>
-			<div class="_gaps_s">
-				<MkFolder v-for="type in notificationTypes.filter(x => !nonConfigurableNotificationTypes.includes(x))" :key="type">
-					<template #label>{{ i18n.ts._notification._types[type] }}</template>
-					<template #suffix>
-						{{
-							$i.notificationRecieveConfig[type]?.type === 'never' ? i18n.ts.none :
-							$i.notificationRecieveConfig[type]?.type === 'following' ? i18n.ts.following :
-							$i.notificationRecieveConfig[type]?.type === 'follower' ? i18n.ts.followers :
-							$i.notificationRecieveConfig[type]?.type === 'mutualFollow' ? i18n.ts.mutualFollow :
-							$i.notificationRecieveConfig[type]?.type === 'followingOrFollower' ? i18n.ts.followingOrFollower :
-							$i.notificationRecieveConfig[type]?.type === 'list' ? i18n.ts.userList :
-							type === 'loginBonus' ? loginBonusEnabled ? i18n.ts.on : i18n.ts.off :
-							i18n.ts.all
-						}}
-					</template>
+	<FormSection first>
+		<template #label>{{ i18n.ts.notificationRecieveConfig }}</template>
+		<div class="_gaps_s">
+			<MkFolder v-for="type in notificationTypes.filter(x => !nonConfigurableNotificationTypes.includes(x))" :key="type">
+				<template #label>{{ i18n.ts._notification._types[type] }}</template>
+				<template #suffix>
+					{{
+						$i.notificationRecieveConfig[type]?.type === 'never' ? i18n.ts.none :
+						$i.notificationRecieveConfig[type]?.type === 'following' ? i18n.ts.following :
+						$i.notificationRecieveConfig[type]?.type === 'follower' ? i18n.ts.followers :
+						$i.notificationRecieveConfig[type]?.type === 'mutualFollow' ? i18n.ts.mutualFollow :
+						$i.notificationRecieveConfig[type]?.type === 'followingOrFollower' ? i18n.ts.followingOrFollower :
+						$i.notificationRecieveConfig[type]?.type === 'list' ? i18n.ts.userList :
+						$i.notificationRecieveConfig[type]?.type === 'loginBonus' ? loginBonusEnabled ? i18n.ts.on : i18n.ts.off :
+						i18n.ts.all
+					}}
+				</template>
 
 					<XNotificationConfig v-if="type !== 'loginBonus'" :userLists="userLists" :value="$i.notificationRecieveConfig[type] ?? { type: 'all' }" :configurableTypes="onlyOnOrOffNotificationTypes.includes(type) ? ['all', 'never'] : undefined"@update="(res) => updateReceiveConfig(type, res)"/>
 					<div v-else>
@@ -52,7 +35,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</MkFolder>
 			</div>
 		</FormSection>
-	</MkFoldableSection>
 	<FormSection>
 		<template #label>{{ i18n.ts.pushNotification }}</template>
 
@@ -82,6 +64,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { shallowRef, computed, ref } from 'vue';
+import { notificationTypes } from '@@/js/const.js';
 import XNotificationConfig from './notifications.notification-config.vue';
 import type { NotificationConfig } from './notifications.notification-config.vue';
 import FormLink from '@/components/form/link.vue';
@@ -94,7 +77,7 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
 import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowButton.vue';
-import { notificationTypes } from '@@/js/const.js';
+import MkFeatureBanner from '@/components/MkFeatureBanner.vue';
 import MkRadios from '@/components/MkRadios.vue';
 import MkButton from '@/components/MkButton.vue';
 import { defaultStore } from '@/store.js';
