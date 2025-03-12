@@ -335,16 +335,11 @@ function onMousedown(evt: MouseEvent): void {
 		}
 
 		&:not(:disabled):hover {
-
-			&::after {
-				opacity: 1; // hoverで疑似要素を表示する
-			}
+			background: linear-gradient(90deg, hsl(from var(--MI_THEME-buttonGradateA) h s calc(l + 5)), hsl(from var(--MI_THEME-buttonGradateB) h s calc(l + 5)));
 		}
 
 		&:not(:disabled):active {
-			&::after {
-				opacity: 1; // hoverで疑似要素を表示する
-			}
+			background: linear-gradient(90deg, hsl(from var(--MI_THEME-buttonGradateA) h s calc(l + 5)), hsl(from var(--MI_THEME-buttonGradateB) h s calc(l + 5)));
 		}
       &.gamingLight {
         background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
@@ -403,18 +398,18 @@ function onMousedown(evt: MouseEvent): void {
 
 	&.danger {
 		font-weight: bold;
-		color: #ff2a2a;
+		color: var(--MI_THEME-error);
 
 		&.primary {
 			color: #fff;
-			background: #ff2a2a;
+			background: var(--MI_THEME-error);
 
 			&:not(:disabled):hover {
-				background: #ff4242;
+				background: hsl(from var(--MI_THEME-error) h s calc(l + 10));
 			}
 
 			&:not(:disabled):active {
-				background: #d42e2e;
+				background: hsl(from var(--MI_THEME-error) h s calc(l - 10));
 			}
 		}
 	}
