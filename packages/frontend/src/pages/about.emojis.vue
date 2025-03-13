@@ -53,7 +53,7 @@ import MkInput from '@/components/MkInput.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { customEmojis, customEmojiCategories } from '@/custom-emojis.js';
 import { i18n } from '@/i18n.js';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { misskeyApiGet } from '@/scripts/misskey-api.js';
 import * as os from '@/os.js';

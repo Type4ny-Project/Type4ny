@@ -436,7 +436,7 @@ import { notePage } from '@/filters/note.js';
 import { userPage } from '@/filters/user.js';
 import { i18n } from '@/i18n.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
-import { signinRequired } from '@/account.js';
+import { signinRequired } from '@/i.js';
 import { infoImageUrl, instance } from '@/instance.js';
 
 const $i = signinRequired();

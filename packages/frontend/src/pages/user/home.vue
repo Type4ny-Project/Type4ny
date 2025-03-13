@@ -205,7 +205,7 @@ import { userPage } from '@/filters/user.js';
 import * as os from '@/os.js';
 import { useRouter } from '@/router/supplier.js';
 import { i18n } from '@/i18n.js';
-import { $i, iAmModerator } from '@/account.js';
+import { $i, iAmModerator } from '@/i.js';
 import { dateString } from '@/filters/date.js';
 import { confetti } from '@/utility/confetti.js';
 import { misskeyApi } from '@/utility/misskey-api.js';

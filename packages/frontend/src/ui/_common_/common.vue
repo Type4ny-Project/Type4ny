@@ -54,7 +54,7 @@ import { pendingApiRequestsCount } from '@/utility/misskey-api.js';
 import { filterMutedNotification } from '@/scripts/filter-muted-notification.js';
 import { uploads } from '@/utility/upload.js';
 import * as sound from '@/utility/sound.js';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 import { useStream } from '@/stream.js';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';

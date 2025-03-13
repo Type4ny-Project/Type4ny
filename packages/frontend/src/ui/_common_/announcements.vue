@@ -23,7 +23,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 </script>
 
 <style lang="scss" module>

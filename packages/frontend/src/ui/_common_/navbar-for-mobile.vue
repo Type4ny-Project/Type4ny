@@ -85,6 +85,9 @@ import { bannerDark, bannerLight, iconDark, iconLight, store } from '@/store';
 import { prefer } from '@/preferences.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
+import { openAccountMenu as openAccountMenu_ } from '@/accounts.js';
+import { $i } from '@/i.js';
+
 let gamingType = computed(store.makeGetterSetter('gamingType'));
 const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 let bannerUrl = ref(store.state.bannerUrl);

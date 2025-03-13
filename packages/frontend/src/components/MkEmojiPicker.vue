@@ -140,7 +140,7 @@ import { deviceKind } from '@/utility/device-kind.js';
 import { i18n } from '@/i18n.js';
 import { store } from '@/store.js';
 import { customEmojiCategories, customEmojis, customEmojisMap } from '@/custom-emojis.js';
-import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
+import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
 import { deepClone } from '@/utility/clone.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';

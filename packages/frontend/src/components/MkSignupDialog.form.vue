@@ -158,17 +158,16 @@ import * as Misskey from 'misskey-js';
 import * as config from '@@/js/config.js';
 import MkButton from './MkButton.vue';
 import MkInput from './MkInput.vue';
-import MkCaptcha from '@/components/MkCaptcha.vue';
 import type { Captcha } from '@/components/MkCaptcha.vue';
+import MkCaptcha from '@/components/MkCaptcha.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
-import { login } from '@/account.js';
 import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
-import { defaultStore } from '@/store.js';
+import { login } from '@/accounts.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
-
+const gamingType = store.state.gamingType;
 const props = withDefaults(defineProps<{
   autoSet?: boolean;
 }>(), {

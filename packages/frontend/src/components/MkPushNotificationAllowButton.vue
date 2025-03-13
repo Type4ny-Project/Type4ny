@@ -41,12 +41,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { $i, getAccounts } from '@/account.js';
+import { $i } from '@/i.js';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { apiWithDialog, promiseDialog } from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
+import { getAccounts } from '@/accounts.js';
 
 defineProps<{
 	primary?: boolean;
