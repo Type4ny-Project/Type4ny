@@ -446,9 +446,9 @@ import {
 	getNoteMenu,
 	getRenoteMenu,
 } from '@/utility/get-note-menu.js';
-import { useNoteCapture } from '@/utility/use-note-capture.js';
+import { useNoteCapture } from '@/use/use-note-capture.js';
 import { deepClone } from '@/utility/clone.js';
-import { useTooltip } from '@/utility/use-tooltip.js';
+import { useTooltip } from '@/use/use-tooltip.js';
 import { claimAchievement } from '@/utility/achievements.js';
 import { getNoteSummary } from '@/utility/get-note-summary.js';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
