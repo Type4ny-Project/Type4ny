@@ -154,11 +154,6 @@ const menuDef = computed<SuperMenuDef[]>(() => [{
 		to: '/settings/drive',
 		active: currentPage.value?.route.name === 'drive',
 	}, {
-		icon: 'ti ti-badges',
-		text: i18n.ts.roles,
-		to: '/settings/roles',
-		active: currentPage.value?.route.name === 'roles',
-	}, {
 		icon: 'ti ti-ban',
 		text: i18n.ts.muteAndBlock,
 		to: '/settings/mute-block',
