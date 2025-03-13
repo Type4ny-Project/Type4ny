@@ -117,12 +117,7 @@ const menuDef = computed<SuperMenuDef[]>(() => [{
 		text: i18n.ts.emojiPalette,
 		to: '/settings/emoji-palette',
 		active: currentPage.value?.route.name === 'emoji-palette',
-	}, {
-		icon: 'ti ti-device-desktop',
-		text: i18n.ts.appearance,
-		to: '/settings/appearance',
-		active: currentPage.value?.route.name === 'appearance', {
-		icon: 'ti ti-menu-2',
+	},{		icon: 'ti ti-menu-2',
 		text: i18n.ts.navbar,
 		to: '/settings/navbar',
 		active: currentPage.value?.route.name === 'navbar',
