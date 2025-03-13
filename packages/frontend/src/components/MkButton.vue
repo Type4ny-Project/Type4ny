@@ -91,6 +91,7 @@ const props = defineProps<{
   name?: string;
   value?: string;
 	disabled?: boolean;
+	iconOnly?: boolean;
 }>();
 
 const gamingType = defaultStore.state.gamingType;
@@ -183,6 +184,11 @@ function onMousedown(evt: MouseEvent): void {
 
 	&:not(:disabled):active {
 		background: var(--MI_THEME-buttonHoverBg);
+	}
+
+	&.iconOnly {
+		padding: 7px;
+		min-width: auto;
 	}
 
 	&.small {
