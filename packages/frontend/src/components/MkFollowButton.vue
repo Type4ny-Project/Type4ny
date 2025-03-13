@@ -77,7 +77,6 @@ import { i18n } from '@/i18n.js';
 import { claimAchievement } from '@/utility/achievements.js';
 import { pleaseLogin } from '@/utility/please-login.js';
 import { $i } from '@/account.js';
-import { store } from '@/store.js';
 import { prefer } from '@/preferences.js';
 
 const gamingType = defaultStore.state.gamingType;
@@ -155,11 +154,11 @@ async function onClick() {
 			} else {
 				await misskeyApi('following/create', {
 					userId: props.user.id,
-					withReplies: store.s.defaultWithReplies,
+					withReplies: prefer.s.defaultFollowWithReplies,
 				});
 				emit('update:user', {
 					...props.user,
-					withReplies: store.s.defaultWithReplies,
+					withReplies: prefer.s.defaultFollowWithReplies,
 				});
 				hasPendingFollowRequestFromYou.value = true;
 
