@@ -458,6 +458,7 @@ import { focusNext, focusPrev } from '@/utility/focus.js';
 import { getAppearNote } from '@/utility/get-appear-note.js';
 import { prefer } from '@/preferences.js';
 import { getPluginHandlers } from '@/plugin.js';
+import { DI } from '@/di.js';
 
 const props = withDefaults(
 	defineProps<{
@@ -471,7 +472,7 @@ const props = withDefaults(
 	},
 );
 
-provide('mock', props.mock);
+provide(DI.mock, props.mock);
 
 const emit = defineEmits<{
 	(ev: 'reaction', emoji: string): void;

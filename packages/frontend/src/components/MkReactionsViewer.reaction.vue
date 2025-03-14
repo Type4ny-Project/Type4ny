@@ -58,6 +58,7 @@ import * as sound from '@/utility/sound.js';
 import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
 import { customEmojisMap } from '@/custom-emojis.js';
 import { prefer } from '@/preferences.js';
+import { DI } from '@/di.js';
 
 const gamingType = defaultStore.state.gamingType;
 
@@ -70,7 +71,7 @@ const props = defineProps<{
 	};
 }>();
 
-const mock = inject<boolean>('mock', false);
+const mock = inject(DI.mock, false);
 
 const emit = defineEmits<{
 	(ev: 'reactionToggled', emoji: string, newCount: number): void;

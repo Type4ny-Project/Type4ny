@@ -21,6 +21,7 @@ import * as Misskey from 'misskey-js';
 import { inject, watch, ref } from 'vue';
 import XReaction from '@/components/MkReactionsViewer.reaction.vue';
 import { prefer } from '@/preferences.js';
+import { DI } from '@/di.js';
 import { $i } from '@/account.js';
 
 const props = withDefaults(defineProps<{
@@ -32,7 +33,7 @@ const props = withDefaults(defineProps<{
 	maxNumber: Infinity,
 });
 
-const mock = inject<boolean>('mock', false);
+const mock = inject(DI.mock, false);
 
 const emit = defineEmits<{
 	(ev: 'mockUpdateMyReaction', emoji: string, delta: number): void;
