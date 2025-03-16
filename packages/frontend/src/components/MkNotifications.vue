@@ -7,7 +7,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	<MkPagination ref="pagingComponent" :pagination="pagination" :filter="filterMutedNotification">
 		<template #empty>
 			<div class="_fullinfo">
-				<img :src="infoImageUrl" class="_ghost"/>
+				<img :src="infoImageUrl" draggable="false"/>
 				<div>{{ i18n.ts.noNotifications }}</div>
 			</div>
 		</template>

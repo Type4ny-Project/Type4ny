@@ -22,14 +22,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		:class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''"
-		:reaction="reaction"
-		:emojiUrl="
-			note.reactionEmojis[reaction.substring(1, reaction.length - 1)]
-		"
-	/>
-	<span
-		:class="[
+		style="pointer-events: none;" :class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="note.reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
+	<span :class="[
 			$style.count,
 			{
 				[$style.gamingDark]: gamingType === 'dark',

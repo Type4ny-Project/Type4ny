@@ -14,7 +14,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<MkAvatar v-for="user in users" :key="user.id" :user="user.followee" link preview></MkAvatar>
 		</div>
 		<div v-else :class="$style.bdayFFallback">
-			<img :src="infoImageUrl" class="_ghost" :class="$style.bdayFFallbackImage"/>
+			<img :src="infoImageUrl" draggable="false" :class="$style.bdayFFallbackImage"/>
 			<div>{{ i18n.ts.nothing }}</div>
 		</div>
 	</div>
