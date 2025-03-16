@@ -51,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { ref, computed, defineAsyncComponent, watch } from 'vue';
 import * as Misskey from 'misskey-js';
-import { signinRequired } from '@/i.js';
+import { ensureSignin } from '@/i.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
@@ -62,7 +62,7 @@ const avatarDecorations = ref<Misskey.entities.AdminAvatarDecorationsListRespons
 const select = ref(false);
 const selectItemsId = ref<string[]>([]);
 
-const $i = signinRequired();
+const $i = ensureSignin();
 
 async function save(avatarDecoration) {
 	if (avatarDecoration.id == null) {

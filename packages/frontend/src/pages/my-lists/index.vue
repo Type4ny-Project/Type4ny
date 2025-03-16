@@ -74,11 +74,11 @@ import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
 import { userFavoriteListsCache, userListsCache } from '@/cache.js';
 import { infoImageUrl } from '@/instance.js';
-import { signinRequired } from '@/i.js';
+import { ensureSignin } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 
-const $i = signinRequired();
+const $i = ensureSignin();
 
 const items = computed(() => userListsCache.value.value ?? []);
 const localList = await misskeyApi('users/lists/list', { publicAll: true });

@@ -72,7 +72,7 @@ import FormSection from '@/components/form/section.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import * as os from '@/os.js';
-import { signinRequired } from '@/i.js';
+import { ensureSignin } from '@/i.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
@@ -83,7 +83,7 @@ import MkButton from '@/components/MkButton.vue';
 import { defaultStore } from '@/store.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 
-const $i = signinRequired();
+const $i = ensureSignin();
 const loginBonusEnabled = ref($i.notificationRecieveConfig.loginBonus ?? true);
 
 const nonConfigurableNotificationTypes = ['note', 'roleAssigned', 'followRequestAccepted', 'test', 'exportCompleted'] satisfies (typeof notificationTypes[number])[] as string[];

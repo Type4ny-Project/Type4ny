@@ -214,7 +214,7 @@ import { definePage } from '@/page.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 import * as os from '@/os.js';
 import { instance, infoImageUrl } from '@/instance.js';
-import { signinRequired } from '@/i.js';
+import { ensureSignin } from '@/i.js';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
@@ -224,7 +224,7 @@ import MkFeatureBanner from '@/components/MkFeatureBanner.vue';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
 
-const $i = signinRequired();
+const $i = ensureSignin();
 
 const renoteMutingPagination = {
 	endpoint: 'renote-mute/list' as const,

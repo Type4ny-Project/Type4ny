@@ -68,13 +68,13 @@ import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
-import { signinRequired } from '@/i.js';
+import { ensureSignin } from '@/i.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { definePage } from '@/page.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import MkInput from '@/components/MkInput.vue';
 
-const $i = signinRequired();
+const $i = ensureSignin();
 const searchResult = ref([]);
 const loading = ref(true);
 const avatarDecorations = ref<Misskey.entities.GetAvatarDecorationsResponse & { category:string }>([]);
