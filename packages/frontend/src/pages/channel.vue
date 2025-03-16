@@ -209,7 +209,6 @@ const headerActions = computed(() => {
 					return;
 				}
 				copyToClipboard(`${url}/channels/${channel.value.id}`);
-				os.success();
 			},
 		});
 

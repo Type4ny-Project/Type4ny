@@ -925,7 +925,6 @@ function exportLog() {
 		l: DropAndFusionGame.serializeLogs(logs),
 	});
 	copyToClipboard(data);
-	os.success();
 }
 
 function updateSettings<

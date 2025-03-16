@@ -113,7 +113,6 @@ function fetchPost() {
 
 function copyLink() {
 	copyToClipboard(`${url}/gallery/${post.value.id}`);
-	os.success();
 }
 
 function share() {

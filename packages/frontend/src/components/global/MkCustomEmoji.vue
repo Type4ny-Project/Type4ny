@@ -108,7 +108,6 @@ function onClick(ev: MouseEvent) {
 			icon: 'ti ti-copy',
 			action: () => {
 				copyToClipboard(`:${props.name}:`);
-				os.success();
 			},
 		});
 
