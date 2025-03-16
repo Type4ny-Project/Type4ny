@@ -183,6 +183,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							:emojiUrls="appearNote.emojis"
 							:enableEmojiMenu="true"
 							:enableEmojiMenuReaction="true"
+							class="_selectable"
 						/>
 						<div
 							v-if="translating || translation"
@@ -190,16 +191,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 						>
 							<MkLoading v-if="translating" mini/>
 							<div v-else-if="translation">
-								<b>{{
-									i18n.tsx.translatedFrom({ x: translation.sourceLang })
-								}}:
-								</b>
-								<Mfm
-									:text="translation.text"
-									:author="appearNote.user"
-									:nyaize="'respect'"
-									:emojiUrls="appearNote.emojis"
-								/>
+								<b>{{ i18n.tsx.translatedFrom({ x: translation.sourceLang }) }}: </b>
+								<Mfm :text="translation.text" :author="appearNote.user" :nyaize="'respect'" :emojiUrls="appearNote.emojis" class="_selectable"/>
 							</div>
 						</div>
 					</div>

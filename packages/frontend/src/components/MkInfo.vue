@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div :class="[$style.root, { [$style.warn]: warn }]">
+<div :class="[$style.root, { [$style.warn]: warn }]" class="_selectable">
 	<i v-if="warn" class="ti ti-alert-triangle" :class="$style.i"></i>
 	<i v-else class="ti ti-info-circle" :class="$style.i"></i>
 	<div><slot></slot></div>

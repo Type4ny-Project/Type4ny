@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div>
+<div class="_selectable">
 	<div :class="$style.label" @click="focus"><slot name="label"></slot></div>
 	<div :class="[$style.input, { [$style.inline]: inline, [$style.disabled]: disabled, [$style.focused]: focused }]">
 		<div ref="prefixEl" :class="$style.prefix"><slot name="prefix"></slot></div>
@@ -44,13 +44,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, nextTick, ref, shallowRef, watch, computed, toRefs } from 'vue';
-import type { InputHTMLAttributes } from 'vue';
 import { debounce } from 'throttle-debounce';
 import { useInterval } from '@@/js/use-interval.js';
 import MkButton from '@/components/MkButton.vue';
+import type { InputHTMLAttributes } from 'vue';
+import type { SuggestionType } from '@/utility/autocomplete.js';
+import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 import { Autocomplete } from '@/utility/autocomplete.js';
-import type { SuggestionType } from '@/utility/autocomplete.js';
 
 const props = defineProps<{
 	modelValue: string | number | null;
