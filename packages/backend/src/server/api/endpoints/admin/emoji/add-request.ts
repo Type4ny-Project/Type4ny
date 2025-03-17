@@ -87,7 +87,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			let emoji;
 			if (requestEmojiAllOk) {
 				emoji = await this.customEmojiService.add({
-					driveFile,
+					originalUrl: driveFile.url,
+					publicUrl: driveFile.webpublicUrl ?? driveFile.url,
+					fileType: driveFile.webpublicType ?? driveFile.type,
 					name: ps.name,
 					category: ps.category ?? null,
 					aliases: ps.aliases ?? [],
