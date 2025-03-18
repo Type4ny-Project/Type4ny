@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <div :class="$style.root">
 	<div :class="$style.contents">
-		<div class="_pageContainer" style="flex: 1; min-height: 0;">
+		<div style="flex: 1; min-height: 0;">
 			<RouterView/>
 		</div>
 

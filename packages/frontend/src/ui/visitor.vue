@@ -17,7 +17,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<button v-if="!isRoot" :class="$style.homeButton" class="_button" @click="goHome">
 			<i class="ti ti-home"></i>
 		</button>
-		<div :class="$style.content" class="_pageContainer">
+		<div :class="$style.content">
 			<RouterView/>
 		</div>
 	</div>
