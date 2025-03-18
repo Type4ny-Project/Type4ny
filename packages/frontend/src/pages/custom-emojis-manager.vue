@@ -4,24 +4,22 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div>
-	<MkStickyContainer>
-		<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
-		<MkSpacer :contentMax="900">
-			<div class="ogwlenmc">
-				<div v-if="tab === 'local'" class="local">
-					<MkCustomEmojiEditLocal/>
-				</div>
+<MkStickyContainer>
+	<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
+	<MkSpacer :contentMax="900">
+		<div class="ogwlenmc">
+			<div v-if="tab === 'local'" class="local">
+				<MkCustomEmojiEditLocal/>
+					</div>
 				<div v-if="tab === 'request'" class="request">
 					<MkCustomEmojiEditRequest/>
 				</div>
 				<div v-else-if="tab === 'remote'" class="remote">
-					<MkCustomEmojiEditRemote/>
-				</div>
+				<MkCustomEmojiEditRemote/>
 			</div>
-		</MkSpacer>
-	</MkStickyContainer>
-</div>
+		</div>
+	</MkSpacer>
+</MkStickyContainer>
 </template>
 
 <script lang="ts" setup>

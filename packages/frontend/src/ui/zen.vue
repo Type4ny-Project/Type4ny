@@ -3,20 +3,22 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div :class="showBottom ? $style.rootWithBottom : $style.root">
-	<div style="container-type: inline-size;">
-		<RouterView/>
+<div :class="$style.root">
+	<div :class="$style.contents">
+		<div class="_pageContainer" style="flex: 1; min-height: 0;">
+			<RouterView/>
+		</div>
+
+		<!--
+			デッキUIが設定されている場合はデッキUIに戻れるようにする (ただし?zenが明示された場合は表示しない)
+			See https://github.com/misskey-dev/misskey/issues/10905
+		-->
+		<div v-if="showBottom" :class="$style.bottom">
+			<button v-tooltip="i18n.ts.goToType4ny" :class="['_button', '_shadow', $style.button]" @click="goToType4ny"><i class="ti ti-home"></i></button>
+		</div>
 	</div>
 
 	<XCommon/>
-</div>
-
-<!--
-	デッキUIが設定されている場合はデッキUIに戻れるようにする (ただし?zenが明示された場合は表示しない)
-	See https://github.com/misskey-dev/misskey/issues/10905
--->
-<div v-if="showBottom" :class="$style.bottom">
-	<button v-tooltip="i18n.ts.goToType4ny" :class="['_button', '_shadow', $style.button]" @click="goToType4ny"><i class="ti ti-home"></i></button>
 </div>
 </template>
 
@@ -53,19 +55,16 @@ provideReactiveMetadata(pageMetadata);
 function goToType4ny() {
 	window.location.href = '/';
 }
-
-document.documentElement.style.overflowY = 'scroll';
 </script>
 
 <style lang="scss" module>
 .root {
-	min-height: 100dvh;
-	box-sizing: border-box;
 }
 
-.rootWithBottom {
-	min-height: calc(100dvh - (60px + (var(--MI-margin) * 2) + env(safe-area-inset-bottom, 0px)));
-	box-sizing: border-box;
+.contents {
+	display: flex;
+	flex-direction: column;
+	height: 100dvh;
 }
 
 .bottom {
@@ -75,7 +74,6 @@ document.documentElement.style.overflowY = 'scroll';
 }
 
 .button {
-	position: fixed !important;
 	padding: 0;
 	aspect-ratio: 1;
 	width: 100%;

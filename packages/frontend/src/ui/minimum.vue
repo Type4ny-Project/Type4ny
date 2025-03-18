@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div :class="$style.root">
-	<div style="container-type: inline-size;">
+	<div class="_pageContainer" style="height: 100%;">
 		<RouterView/>
 	</div>
 
@@ -45,6 +45,5 @@ document.documentElement.style.overflowY = 'scroll';
 <style lang="scss" module>
 .root {
 	min-height: 100dvh;
-	box-sizing: border-box;
 }
 </style>

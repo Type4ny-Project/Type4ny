@@ -11,7 +11,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</template>
 	</template>
 
-	<div ref="contents">
+	<div class="_pageContainer" style="height: 100%;">
 		<RouterView @contextmenu.stop="onContextmenu"/>
 	</div>
 </XColumn>
@@ -19,7 +19,6 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { provide, shallowRef, ref } from 'vue';
-import { getScrollContainer } from '@@/js/scroll.js';
 import { isLink } from '@@/js/is-link.js';
 import XColumn from './column.vue';
 import type { Column } from '@/deck.js';
@@ -27,7 +26,6 @@ import type { PageMetadata } from '@/page.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
-import { useScrollPositionManager } from '@/nirax.js';
 import { mainRouter } from '@/router/main.js';
 import { prefer } from '@/preferences.js';
 import { DI } from '@/di.js';
@@ -37,7 +35,6 @@ defineProps<{
 	isStacked: boolean;
 }>();
 
-const contents = shallowRef<HTMLElement>();
 const pageMetadata = ref<null | PageMetadata>(null);
 
 provide(DI.router, mainRouter);
@@ -70,6 +67,4 @@ function onContextmenu(ev: MouseEvent) {
 		},
 	}], ev);
 }
-
-useScrollPositionManager(() => getScrollContainer(contents.value), mainRouter);
 </script>

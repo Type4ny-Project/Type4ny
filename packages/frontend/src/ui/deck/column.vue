@@ -360,7 +360,6 @@ function onDrop(ev) {
 
 		> .body {
 			background: var(--MI_THEME-bg) !important;
-			overflow-y: scroll !important;
 			scrollbar-color: var(--MI_THEME-scrollbarHandle) transparent;
 
 			&::-webkit-scrollbar-track {
