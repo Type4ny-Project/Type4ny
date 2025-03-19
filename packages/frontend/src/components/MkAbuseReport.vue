@@ -96,9 +96,10 @@ import { i18n } from '@/i18n.js';
 import { dateString } from '@/filters/date.js';
 import MkFolder from '@/components/MkFolder.vue';
 import RouterView from '@/components/global/RouterView.vue';
-import { useRouterFactory } from '@/router/supplier';
 import MkTextarea from '@/components/MkTextarea.vue';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
+import { createRouter } from '@/router.js';
+
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
 const props = defineProps<{
 	report: Misskey.entities.AdminAbuseUserReportsResponse[number];
@@ -108,10 +109,9 @@ const emit = defineEmits<{
 	(ev: 'resolved', reportId: string): void;
 }>();
 
-const routerFactory = useRouterFactory();
-const targetRouter = routerFactory(`/admin/user/${props.report.targetUserId}`);
+const targetRouter = createRouter(`/admin/user/${props.report.targetUserId}`);
 targetRouter.init();
-const reporterRouter = routerFactory(`/admin/user/${props.report.reporterId}`);
+const reporterRouter = createRouter(`/admin/user/${props.report.reporterId}`);
 reporterRouter.init();
 
 const moderationNote = ref(props.report.moderationNote ?? '');

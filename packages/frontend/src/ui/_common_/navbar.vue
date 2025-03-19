@@ -136,7 +136,7 @@ import { bannerDark, bannerLight, defaultStore, iconDark, iconLight, store } fro
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { getHTMLElementOrNull } from '@/utility/get-dom-node-or-null.js';
-import { useRouter } from '@/router/supplier.js';
+import { useRouter } from '@/router.js';
 import { prefer } from '@/preferences.js';
 import { openAccountMenu as openAccountMenu_ } from '@/accounts.js';
 import { $i } from '@/i.js';

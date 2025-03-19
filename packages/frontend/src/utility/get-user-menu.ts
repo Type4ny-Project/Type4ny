@@ -17,7 +17,7 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { $i, iAmModerator, refreshAccount } from '@/i.js';
 import { notesSearchAvailable, canSearchNonLocalNotes } from '@/utility/check-permissions.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
-import { mainRouter } from '@/router/main.js';
+import { mainRouter } from '@/router.js';
 import { genEmbedCode } from '@/utility/get-embed-code.js';
 import { instance } from '@/instance.js';
 import { parse } from 'path';

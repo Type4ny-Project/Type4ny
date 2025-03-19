@@ -47,7 +47,7 @@ import { $i } from '@/i.js';
 import { getDriveFileMenu, getDriveMultiFileMenu } from '@/utility/get-drive-file-menu.js';
 import { isTouchUsing } from '@/scripts/touch.js';
 import { deviceKind } from '@/utility/device-kind.js';
-import { useRouter } from '@/router/supplier.js';
+import { useRouter } from '@/router.js';
 
 const router = useRouter();
 

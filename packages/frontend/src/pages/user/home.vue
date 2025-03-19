@@ -214,6 +214,7 @@ import MkNotifyButton from '@/components/MkNotifyButton.vue';
 import MkRemoteInfoUpdate from '@/components/MkRemoteInfoUpdate.vue';
 import MkNotes from '@/components/MkNotes.vue';
 import MkLazy from '@/components/global/MkLazy.vue';
+import { useRouter } from '@/router.js';
 import { getStaticImageUrl } from '@/utility/media-proxy.js';
 import MkSparkle from '@/components/MkSparkle.vue';
 import { prefer } from '@/preferences.js';
