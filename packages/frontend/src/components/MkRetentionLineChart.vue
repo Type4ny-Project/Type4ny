@@ -7,7 +7,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, shallowRef } from 'vue';
+import { onMounted, useTemplateRef } from 'vue';
 import { Chart } from 'chart.js';
 import tinycolor from 'tinycolor2';
 import { store } from '@/store.js';
@@ -19,7 +19,7 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 
 initChart();
 
-const chartEl = shallowRef<HTMLCanvasElement | null>(null);
+const chartEl = useTemplateRef('chartEl');
 
 const { handler: externalTooltipHandler } = useChartTooltip();
 

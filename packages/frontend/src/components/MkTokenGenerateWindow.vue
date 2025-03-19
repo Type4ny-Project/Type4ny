@@ -46,7 +46,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { shallowRef, ref } from 'vue';
+import { useTemplateRef, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkInput from './MkInput.vue';
 import MkSwitch from './MkSwitch.vue';
@@ -76,7 +76,7 @@ const emit = defineEmits<{
 const defaultPermissions = Misskey.permissions.filter(p => !p.startsWith('read:admin') && !p.startsWith('write:admin'));
 const adminPermissions = Misskey.permissions.filter(p => p.startsWith('read:admin') || p.startsWith('write:admin'));
 
-const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
+const dialog = useTemplateRef('dialog');
 const name = ref(props.initialName);
 const permissionSwitches = ref({} as Record<(typeof Misskey.permissions)[number], boolean>);
 const permissionSwitchesForAdmin = ref({} as Record<(typeof Misskey.permissions)[number], boolean>);

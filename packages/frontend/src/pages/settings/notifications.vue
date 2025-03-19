@@ -63,7 +63,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { shallowRef, computed, ref } from 'vue';
+import { useTemplateRef, computed, ref } from 'vue';
 import { notificationTypes } from '@@/js/const.js';
 import XNotificationConfig from './notifications.notification-config.vue';
 import type { NotificationConfig } from './notifications.notification-config.vue';
@@ -90,7 +90,7 @@ const nonConfigurableNotificationTypes = ['note', 'roleAssigned', 'followRequest
 
 const onlyOnOrOffNotificationTypes = ['app', 'achievementEarned', 'login', 'createToken'] satisfies (typeof notificationTypes[number])[] as string[];
 
-const allowButton = shallowRef<InstanceType<typeof MkPushNotificationAllowButton>>();
+const allowButton = useTemplateRef('allowButton');
 const pushRegistrationInServer = computed(() => allowButton.value?.pushRegistrationInServer);
 const sendReadMessage = computed(() => pushRegistrationInServer.value?.sendReadMessage || false);
 const userLists = await misskeyApi('users/lists/list');

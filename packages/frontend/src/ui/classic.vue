@@ -45,7 +45,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, provide, ref, computed, shallowRef } from 'vue';
+import { defineAsyncComponent, onMounted, provide, ref, computed, useTemplateRef } from 'vue';
 import { instanceName } from '@@/js/config.js';
 import { isLink } from '@@/js/is-link.js';
 import XSidebar from './classic.sidebar.vue';
@@ -76,7 +76,7 @@ const fullView = ref(false);
 const globalHeaderHeight = ref(0);
 const wallpaper = miLocalStorage.getItem('wallpaper') != null;
 const showMenuOnTop = computed(() => store.s.menuDisplay === 'top');
-const live2d = shallowRef<HTMLIFrameElement>();
+const live2d = useTemplateRef('live2d');
 const widgetsLeft = ref<HTMLElement>();
 const widgetsRight = ref<HTMLElement>();
 

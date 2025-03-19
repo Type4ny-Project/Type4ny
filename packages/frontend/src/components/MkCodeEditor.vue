@@ -31,7 +31,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, toRefs, shallowRef, nextTick } from 'vue';
+import { ref, watch, toRefs, useTemplateRef, nextTick } from 'vue';
 import { debounce } from 'throttle-debounce';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
@@ -60,7 +60,7 @@ const { modelValue } = toRefs(props);
 const v = ref<string>(modelValue.value ?? '');
 const focused = ref(false);
 const changed = ref(false);
-const inputEl = shallowRef<HTMLTextAreaElement>();
+const inputEl = useTemplateRef('inputEl');
 
 const focus = () => inputEl.value?.focus();
 

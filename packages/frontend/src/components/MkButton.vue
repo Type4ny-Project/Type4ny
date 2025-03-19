@@ -67,8 +67,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, shallowRef, computed } from 'vue';
-import { defaultStore } from '@/store.js';
+import { nextTick, onMounted, useTemplateRef, computed } from 'vue';
+import { store } from '@/store.js';
 
 const props = defineProps<{
   type?: 'button' | 'submit' | 'reset';
@@ -94,14 +94,14 @@ const props = defineProps<{
 	iconOnly?: boolean;
 }>();
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.state.gamingType;
 
 const emit = defineEmits<{
   (ev: 'click', payload: MouseEvent): void;
 }>();
 
-const el = shallowRef<HTMLElement | null>(null);
-const ripples = shallowRef<HTMLElement | null>(null);
+const el = useTemplateRef('el');
+const ripples = useTemplateRef('ripples');
 
 onMounted(() => {
 	if (props.autofocus) {

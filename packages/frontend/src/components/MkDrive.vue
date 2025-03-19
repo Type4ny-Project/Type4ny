@@ -120,7 +120,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onActivated, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
+import { nextTick, onActivated, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkButton from './MkButton.vue';
 import type { MenuItem } from '@/types/menu.js';
@@ -154,8 +154,8 @@ const emit = defineEmits<{
   (ev: 'open-folder', v: Misskey.entities.DriveFolder): void;
 }>();
 
-const loadMoreFiles = shallowRef<InstanceType<typeof MkButton>>();
-const fileInput = shallowRef<HTMLInputElement>();
+const loadMoreFiles = useTemplateRef('loadMoreFiles');
+const fileInput = useTemplateRef('fileInput');
 
 const folder = ref<Misskey.entities.DriveFolder | null>(null);
 const files = ref<Misskey.entities.DriveFile[]>([]);

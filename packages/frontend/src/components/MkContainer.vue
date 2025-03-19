@@ -38,7 +38,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
+import { onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { prefer } from '@/preferences.js';
 import { i18n } from '@/i18n.js';
 
@@ -57,9 +57,9 @@ const props = withDefaults(defineProps<{
 	maxHeight: null,
 });
 
-const rootEl = shallowRef<HTMLElement>();
-const contentEl = shallowRef<HTMLElement>();
-const headerEl = shallowRef<HTMLElement>();
+const rootEl = useTemplateRef('rootEl');
+const contentEl = useTemplateRef('contentEl');
+const headerEl = useTemplateRef('headerEl');
 const showBody = ref(props.expanded);
 const ignoreOmit = ref(false);
 const omitted = ref(false);

@@ -8,7 +8,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, shallowRef } from 'vue';
+import { defineAsyncComponent, useTemplateRef } from 'vue';
 import { useTooltip } from '@/use/use-tooltip.js';
 import * as os from '@/os.js';
 
@@ -19,7 +19,7 @@ const props = defineProps<{
 	withTooltip?: boolean;
 }>();
 
-const elRef = shallowRef();
+const elRef = useTemplateRef('elRef');
 
 if (props.withTooltip) {
 	useTooltip(elRef, (showing) => {

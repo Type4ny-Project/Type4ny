@@ -18,7 +18,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, shallowRef, watch } from 'vue';
+import { onMounted, ref, shallowRef, watch, useTemplateRef } from 'vue';
 import * as Misskey from 'misskey-js';
 import XColumn from './column.vue';
 import type { Column } from '@/deck.js';
@@ -39,7 +39,7 @@ const props = defineProps<{
 	isStacked: boolean;
 }>();
 
-const timeline = shallowRef<InstanceType<typeof MkTimeline>>();
+const timeline = useTemplateRef('timeline');
 const channel = shallowRef<Misskey.entities.Channel>();
 const soundSetting = ref<SoundStore>(props.column.soundSetting ?? { type: null, volume: 1 });
 

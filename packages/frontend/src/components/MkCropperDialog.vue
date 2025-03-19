@@ -30,7 +30,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, shallowRef, ref } from 'vue';
+import { onMounted, useTemplateRef, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import Cropper from 'cropperjs';
 import tinycolor from 'tinycolor2';
@@ -55,8 +55,8 @@ const props = defineProps<{
 }>();
 
 const imgUrl = getProxiedImageUrl(props.file.url, undefined, true);
-const dialogEl = shallowRef<InstanceType<typeof MkModalWindow>>();
-const imgEl = shallowRef<HTMLImageElement>();
+const dialogEl = useTemplateRef('dialogEl');
+const imgEl = useTemplateRef('imgEl');
 let cropper: Cropper | null = null;
 const loading = ref(true);
 

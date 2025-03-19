@@ -22,9 +22,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, provide, inject, ref, watch, useTemplateRef } from 'vue';
-import type { Ref } from 'vue';
-
 import { CURRENT_STICKY_BOTTOM, CURRENT_STICKY_TOP } from '@@/js/const.js';
+import type { Ref } from 'vue';
 
 const rootEl = useTemplateRef('rootEl');
 const headerEl = useTemplateRef('headerEl');

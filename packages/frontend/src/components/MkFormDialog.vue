@@ -70,7 +70,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { reactive, shallowRef } from 'vue';
+import { reactive, useTemplateRef } from 'vue';
 import MkInput from './MkInput.vue';
 import MkTextarea from './MkTextarea.vue';
 import MkSwitch from './MkSwitch.vue';
@@ -98,7 +98,7 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
+const dialog = useTemplateRef('dialog');
 const values = reactive({});
 
 for (const item in props.form) {

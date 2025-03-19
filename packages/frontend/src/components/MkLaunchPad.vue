@@ -27,7 +27,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
-import { shallowRef } from 'vue';
+import { useTemplateRef } from 'vue';
 import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
 import { deviceKind } from '@/utility/device-kind.js';
@@ -51,7 +51,7 @@ const preferedModalType = (deviceKind === 'desktop' && props.src != null) ? 'pop
 	deviceKind === 'smartphone' ? 'drawer' :
 	'dialog';
 
-const modal = shallowRef<InstanceType<typeof MkModal>>();
+const modal = useTemplateRef('modal');
 
 const menu = prefer.s.menu;
 

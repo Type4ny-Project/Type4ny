@@ -21,7 +21,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, shallowRef, ref } from 'vue';
+import { onMounted, onUnmounted, useTemplateRef, ref } from 'vue';
 import MkModal from './MkModal.vue';
 
 const props = withDefaults(defineProps<{
@@ -46,9 +46,9 @@ const emit = defineEmits<{
 	(event: 'esc'): void;
 }>();
 
-const modal = shallowRef<InstanceType<typeof MkModal>>();
-const rootEl = shallowRef<HTMLElement>();
-const headerEl = shallowRef<HTMLElement>();
+const modal = useTemplateRef('modal');
+const rootEl = useTemplateRef('rootEl');
+const headerEl = useTemplateRef('headerEl');
 const bodyWidth = ref(0);
 const bodyHeight = ref(0);
 

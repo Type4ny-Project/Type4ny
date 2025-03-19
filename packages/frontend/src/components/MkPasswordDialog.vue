@@ -38,7 +38,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, shallowRef, ref } from 'vue';
+import { onMounted, useTemplateRef, ref } from 'vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkModalWindow from '@/components/MkModalWindow.vue';
@@ -53,8 +53,8 @@ const emit = defineEmits<{
 	(ev: 'cancelled'): void;
 }>();
 
-const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
-const passwordInput = shallowRef<InstanceType<typeof MkInput>>();
+const dialog = useTemplateRef('dialog');
+const passwordInput = useTemplateRef('passwordInput');
 const password = ref('');
 const isBackupCode = ref(false);
 const token = ref<string | null>(null);

@@ -56,14 +56,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import * as Misskey from 'misskey-js';
-import { shallowRef } from 'vue';
+import { useTemplateRef } from 'vue';
 import MkLink from '@/components/MkLink.vue';
 import { i18n } from '@/i18n.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkKeyValue from '@/components/MkKeyValue.vue';
 
 const props = defineProps<{
-  emoji: Misskey.entities.EmojiDetailed,
+	emoji: Misskey.entities.EmojiDetailed,
 }>();
 
 const emit = defineEmits<{
@@ -72,7 +72,7 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-const dialogEl = shallowRef<InstanceType<typeof MkModalWindow>>();
+const dialogEl = useTemplateRef('dialogEl');
 
 function cancel() {
 	emit('cancel');

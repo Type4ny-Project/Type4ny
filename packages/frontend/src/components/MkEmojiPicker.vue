@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -119,7 +120,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, computed, watch, onMounted } from 'vue';
+import { ref, useTemplateRef, computed, watch, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import {
 	emojilist,
@@ -164,8 +165,8 @@ const emit = defineEmits<{
 	(ev: 'esc'): void;
 }>();
 const profileMax = $i?.policies.emojiPickerProfileLimit;
-const searchEl = shallowRef<HTMLInputElement>();
-const emojisEl = shallowRef<HTMLDivElement>();
+const searchEl = useTemplateRef('searchEl');
+const emojisEl = useTemplateRef('emojisEl');
 
 const {
 	emojiPickerScale,

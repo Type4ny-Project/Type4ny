@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, shallowRef } from 'vue';
+import { onMounted, onUnmounted, useTemplateRef } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentProps, WidgetComponentEmits, WidgetComponentExpose } from './widget.js';
 import type { GetFormResultType } from '@/utility/form.js';
@@ -34,7 +34,7 @@ const { widgetProps, configure } = useWidgetPropsManager(name,
 	emit,
 );
 
-const live2d = shallowRef<HTMLIFrameElement>();
+const live2d = useTemplateRef('live2d');
 
 const touched = () => {
 	//if (this.live2d) this.live2d.changeExpression('gurugurume');

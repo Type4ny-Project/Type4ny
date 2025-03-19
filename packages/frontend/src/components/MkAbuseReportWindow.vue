@@ -56,7 +56,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkWindow from '@/components/MkWindow.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
@@ -86,7 +86,7 @@ const emit = defineEmits<{
 
 const abuseNotesId = ref(props.initialNoteId ? [props.initialNoteId] : []);
 const page = ref(0);
-const uiWindow = shallowRef<InstanceType<typeof MkWindow>>();
+const uiWindow = useTemplateRef('uiWindow');
 const comment = ref(props.initialComment ?? '');
 
 function pushAbuseReportNote(ev, id) {

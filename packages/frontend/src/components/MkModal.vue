@@ -41,7 +41,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { nextTick, normalizeClass, onMounted, onUnmounted, provide, watch, ref, shallowRef, computed } from 'vue';
+import { nextTick, normalizeClass, onMounted, onUnmounted, provide, watch, ref, useTemplateRef, computed } from 'vue';
 import type { Keymap } from '@/utility/hotkey.js';
 import * as os from '@/os.js';
 import { isTouchUsing } from '@/utility/touch.js';
@@ -99,8 +99,8 @@ const maxHeight = ref<number>();
 const fixed = ref(false);
 const transformOrigin = ref('center');
 const showing = ref(true);
-const modalRootEl = shallowRef<HTMLElement>();
-const content = shallowRef<HTMLElement>();
+const modalRootEl = useTemplateRef('modalRootEl');
+const content = useTemplateRef('content');
 const zIndex = os.claimZIndex(props.zPriority);
 const useSendAnime = ref(false);
 const type = computed<ModalTypes>(() => {

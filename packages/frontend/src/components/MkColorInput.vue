@@ -23,7 +23,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, toRefs } from 'vue';
+import { ref, useTemplateRef, toRefs } from 'vue';
 
 const props = defineProps<{
 	modelValue: string | null;
@@ -38,7 +38,7 @@ const emit = defineEmits<{
 
 const { modelValue } = toRefs(props);
 const v = ref(modelValue.value);
-const inputEl = shallowRef<HTMLElement>();
+const inputEl = useTemplateRef('inputEl');
 
 const onInput = () => {
 	emit('update:modelValue', v.value ?? '');

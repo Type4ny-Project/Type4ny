@@ -108,7 +108,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, computed, watch, onDeactivated, onActivated, onMounted } from 'vue';
+import { ref, useTemplateRef, computed, watch, onDeactivated, onActivated, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import type { MenuItem } from '@/types/menu.js';
 import type { Keymap } from '@/utility/hotkey.js';
@@ -298,8 +298,8 @@ async function toggleSensitive(file: Misskey.entities.DriveFile) {
 }
 
 // MediaControl: Video State
-const videoEl = shallowRef<HTMLVideoElement>();
-const playerEl = shallowRef<HTMLDivElement>();
+const videoEl = useTemplateRef('videoEl');
+const playerEl = useTemplateRef('playerEl');
 const isHoverring = ref(false);
 const controlsShowing = computed(() => {
 	if (!oncePlayed.value) return true;

@@ -53,9 +53,9 @@ export type Tab = {
 </script>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, watch, nextTick, shallowRef, ref, computed } from 'vue';
-import { ui } from '@@/js/config.js';
+import { nextTick, onMounted, onUnmounted, useTemplateRef, watch } from 'vue';
 import { prefer } from '@/preferences.js';
+import { ui } from '@@/js/config.js';
 
 const gamingType = prefer.s.gamingType;
 
@@ -72,9 +72,9 @@ const emit = defineEmits<{
 	(ev: 'tabClick', key: string);
 }>();
 
-const el = shallowRef<HTMLElement | null>(null);
+const el = useTemplateRef('el');
+const tabHighlightEl = useTemplateRef('tabHighlightEl');
 const tabRefs: Record<string, HTMLElement | null> = {};
-const tabHighlightEl = shallowRef<HTMLElement | null>(null);
 
 function onTabMousedown(tab: Tab, ev: MouseEvent): void {
 	// ユーザビリティの観点からmousedown時にはonClickは呼ばない

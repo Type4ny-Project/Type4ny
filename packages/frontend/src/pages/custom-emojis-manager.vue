@@ -34,7 +34,7 @@ import { getProxiedImageUrl } from '@/utility/media-proxy.js';
 import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
 
-const emojisPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
+const emojisPaginationComponent = useTemplateRef('emojisPaginationComponent');
 
 const tab = ref('local');
 const query = ref<string | null>(null);
