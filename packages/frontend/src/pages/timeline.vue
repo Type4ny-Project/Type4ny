@@ -62,14 +62,20 @@ import { miLocalStorage } from '@/local-storage.js';
 import { timelineHeaderItemDef } from '@/timeline-header.js';
 import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';
 import { prefer } from '@/preferences.js';
+import { useRouter } from '@/router.js';
 import { useScrollPositionManager } from '@/nirax.js';
 import { ui } from '@@/js/config.js';
-import { useRouter } from '@/router/supplier.js';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
+
 provide('shouldOmitHeaderTitle', true);
 
 const tlComponent = useTemplateRef('tlComponent');
 const rootEl = useTemplateRef('rootEl');
+
+const router = useRouter();
+router.useListener('same', () => {
+	top();
+});
 
 type TimelinePageSrc = BasicTimelineType | `list:${string}`;
 
@@ -152,7 +158,7 @@ function queueUpdated(q: number): void {
 }
 
 function top(): void {
-	if (rootEl.value) scroll(rootEl.value, { top: 0 });
+	if (rootEl.value) scroll(rootEl.value, { top: 0, behavior: 'smooth' });
 }
 
 async function chooseList(ev: MouseEvent): Promise<void> {
