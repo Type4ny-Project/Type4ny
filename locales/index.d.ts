@@ -5746,6 +5746,10 @@ export interface Locale extends ILocale {
      * 文字数
      */
     "textCount": string;
+    /**
+     * 情報
+     */
+    "information": string;
     "_emojiPalette": {
         /**
          * パレット
@@ -11019,20 +11023,12 @@ export interface Locale extends ILocale {
              * このプラグインをインストールしますか？
              */
             "title": string;
-            /**
-             * プラグイン情報
-             */
-            "metaTitle": string;
         };
         "_theme": {
             /**
              * このテーマをインストールしますか？
              */
             "title": string;
-            /**
-             * テーマ情報
-             */
-            "metaTitle": string;
         };
         "_meta": {
             /**
