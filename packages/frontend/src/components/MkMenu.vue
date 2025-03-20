@@ -365,10 +365,10 @@ function switchItem(item: MenuSwitch & { ref: any }) {
 
 function focusUp() {
 	if (disposed) return;
-	if (!itemsEl.value?.contains(document.activeElement)) return;
+	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
 	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
-	const activeIndex = focusableElements.findIndex(el => el === document.activeElement);
+	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
 	const targetIndex = (activeIndex !== -1 && activeIndex !== 0) ? (activeIndex - 1) : (focusableElements.length - 1);
 	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
@@ -377,10 +377,10 @@ function focusUp() {
 
 function focusDown() {
 	if (disposed) return;
-	if (!itemsEl.value?.contains(document.activeElement)) return;
+	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
 	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
-	const activeIndex = focusableElements.findIndex(el => el === document.activeElement);
+	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
 	const targetIndex = (activeIndex !== -1 && activeIndex !== (focusableElements.length - 1)) ? (activeIndex + 1) : 0;
 	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
@@ -407,9 +407,9 @@ const onGlobalMousedown = (ev: MouseEvent) => {
 
 const setupHandlers = () => {
 	if (!isNestingMenu) {
-		document.addEventListener('focusin', onGlobalFocusin, { passive: true });
+		window.document.addEventListener('focusin', onGlobalFocusin, { passive: true });
 	}
-	document.addEventListener('mousedown', onGlobalMousedown, { passive: true });
+	window.document.addEventListener('mousedown', onGlobalMousedown, { passive: true });
 };
 
 let disposed = false;
@@ -417,9 +417,9 @@ let disposed = false;
 const disposeHandlers = () => {
 	disposed = true;
 	if (!isNestingMenu) {
-		document.removeEventListener('focusin', onGlobalFocusin);
+		window.document.removeEventListener('focusin', onGlobalFocusin);
 	}
-	document.removeEventListener('mousedown', onGlobalMousedown);
+	window.document.removeEventListener('mousedown', onGlobalMousedown);
 };
 
 onMounted(() => {

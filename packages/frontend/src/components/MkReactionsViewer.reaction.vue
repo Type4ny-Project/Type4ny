@@ -234,7 +234,7 @@ async function menu(ev) {
 
 function anime() {
 	if (
-		document.hidden ||
+		window.document.hidden ||
 		!prefer.s.animation ||
 		buttonEl.value == null
 	) return;

@@ -170,7 +170,7 @@ const keymap = {
 // PlayerElもしくはその子要素にフォーカスがあるかどうか
 function hasFocus() {
 	if (!playerEl.value) return false;
-	return playerEl.value === document.activeElement || playerEl.value.contains(document.activeElement);
+	return playerEl.value === window.document.activeElement || playerEl.value.contains(window.document.activeElement);
 }
 
 // eslint-disable-next-line vue/no-setup-props-reactivity-loss
@@ -215,7 +215,7 @@ function showMenu(ev: MouseEvent) {
 				'2.0x': 2,
 			},
 		},
-		...(document.pictureInPictureEnabled ? [{
+		...(window.document.pictureInPictureEnabled ? [{
 			text: i18n.ts._mediaControls.pip,
 			icon: 'ti ti-picture-in-picture',
 			action: togglePictureInPicture,
@@ -383,8 +383,8 @@ function toggleFullscreen() {
 
 function togglePictureInPicture() {
 	if (videoEl.value) {
-		if (document.pictureInPictureElement) {
-			document.exitPictureInPicture();
+		if (window.document.pictureInPictureElement) {
+			window.document.exitPictureInPicture();
 		} else {
 			videoEl.value.requestPictureInPicture();
 		}

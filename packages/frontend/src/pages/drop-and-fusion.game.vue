@@ -951,7 +951,7 @@ function loadImage(url: string) {
 
 function getGameImageDriveFile() {
 	return new Promise<Misskey.entities.DriveFile | null>(res => {
-		const dcanvas = document.createElement('canvas');
+		const dcanvas = window.document.createElement('canvas');
 		dcanvas.width = game.GAME_WIDTH;
 		dcanvas.height = game.GAME_HEIGHT;
 		const ctx = dcanvas.getContext('2d');

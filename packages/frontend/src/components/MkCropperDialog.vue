@@ -121,7 +121,7 @@ onMounted(() => {
 	cropper = new Cropper(imgEl.value!, {
 	});
 
-	const computedStyle = getComputedStyle(document.documentElement);
+	const computedStyle = getComputedStyle(window.document.documentElement);
 
 	const selection = cropper.getCropperSelection()!;
 	selection.themeColor = tinycolor(computedStyle.getPropertyValue('--MI_THEME-accent')).toHexString();
