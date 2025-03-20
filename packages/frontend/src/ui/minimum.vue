@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div :class="$style.root">
-	<div style="height: 100%;">
-		<RouterView/>
-	</div>
+	<RouterView/>
 
 	<XCommon/>
 </div>
@@ -38,12 +36,11 @@ provideMetadataReceiver((metadataGetter) => {
 	}
 });
 provideReactiveMetadata(pageMetadata);
-
-document.documentElement.style.overflowY = 'scroll';
 </script>
 
 <style lang="scss" module>
 .root {
-	min-height: 100dvh;
+	position: relative;
+	height: 100dvh;
 }
 </style>
