@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
 	<MkSpacer :contentMax="550">
 		<MkLoading v-if="uiPhase === 'fetching'"/>
-		<MkExtensionInstaller v-else-if="uiPhase === 'confirm' && data" :extension="data" @confirm="install()" @cancel="close">
+		<MkExtensionInstaller v-else-if="uiPhase === 'confirm' && data" :extension="data" @confirm="install()" @cancel="close_()">
 			<template #additionalInfo>
 				<FormSection>
 					<div class="_gaps_s">
@@ -78,7 +78,7 @@ function close(): void {
 	window.close();
 }
 
-function goToType4ny(): void {
+function goToMisskey(): void {
 	location.href = '/';
 }
 
@@ -207,7 +207,7 @@ async function install() {
 				await installPlugin(data.value.raw, data.value.meta as AiScriptPluginMeta);
 				os.success();
 				window.setTimeout(() => {
-					close();
+					close_();
 				}, 3000);
 			} catch (err) {
 				errorKV.value = {
@@ -223,7 +223,7 @@ async function install() {
 			await installTheme(data.value.raw);
 			os.success();
 			window.setTimeout(() => {
-				close();
+				close_();
 			}, 3000);
 	}
 }
