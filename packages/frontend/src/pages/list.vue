@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</p>
 		</div>
 	</MkSpacer>
-	<MkSpacer v-else-if="list" :contentMax="700" :class="$style.main">
+	<MkSpacer v-else-if="list" :contentMax="700">
 		<MkButton v-if="list.isLiked" v-tooltip="i18n.ts.unlike" inline :class="$style.button" asLike primary @click="unlike()"><i class="ti ti-heart-off"></i><span v-if="list.likedCount > 0" class="count">{{ list.likedCount }}</span></MkButton>
 		<MkButton v-if="!list.isLiked" v-tooltip="i18n.ts.like" inline :class="$style.button" asLike @click="like()"><i class="ti ti-heart"></i><span v-if="1 > 0" class="count">{{ list.likedCount }}</span></MkButton>
 		<MkButton inline @click="create()"><i class="ti ti-download" :class="$style.import"></i>{{ i18n.ts.import }}</MkButton>
@@ -108,10 +108,6 @@ definePage(() => ({
 }));
 </script>
 <style lang="scss" module>
-.main {
-	min-height: calc(100cqh - (var(--MI-stickyTop, 0px) + var(--MI-stickyBottom, 0px)));
-}
-
 .userItem {
 	display: flex;
 }

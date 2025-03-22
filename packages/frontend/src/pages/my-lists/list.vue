@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
-	<MkSpacer :contentMax="700" :class="$style.main">
+	<MkSpacer :contentMax="700">
 		<div v-if="list" class="_gaps">
 			<div>{{ i18n.ts.settings }}</div>
 
@@ -203,10 +203,6 @@ definePage(() => ({
 </script>
 
 <style lang="scss" module>
-.main {
-	min-height: calc(100cqh - (var(--MI-stickyTop, 0px) + var(--MI-stickyBottom, 0px)));
-}
-
 .userItem {
 	display: flex;
 }
