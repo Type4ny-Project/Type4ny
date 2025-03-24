@@ -71,6 +71,7 @@ export type RolePolicies = {
 	canImportFollowing: boolean;
 	canImportMuting: boolean;
 	canImportUserLists: boolean;
+	canChat: boolean;
 };
 
 export const DEFAULT_POLICIES: RolePolicies = {
@@ -108,6 +109,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	canImportFollowing: true,
 	canImportMuting: true,
 	canImportUserLists: true,
+	canChat: true,
 	emojiPickerProfileLimit: 2,
 	listPinnedLimit: 2,
 	localTimelineAnyLimit: 3,
@@ -424,6 +426,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),
 			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),
 			canSendPoints: calc('canSendPoints', vs => vs.some(v => v === true)),
+			canChat: calc('canChat', vs => vs.some(v => v === true)),
 		};
 	}
 

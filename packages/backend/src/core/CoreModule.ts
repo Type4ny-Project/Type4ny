@@ -46,7 +46,6 @@ import { NoteCreateService } from './NoteCreateService.js';
 import { NoteUpdateService } from './NoteUpdateService.js';
 import { NoteDeleteService } from './NoteDeleteService.js';
 import { NotePiningService } from './NotePiningService.js';
-import { NoteReadService } from './NoteReadService.js';
 import { NotificationService } from './NotificationService.js';
 import { PollService } from './PollService.js';
 import { PushNotificationService } from './PushNotificationService.js';
@@ -77,6 +76,7 @@ import { ClipService } from './ClipService.js';
 import { FeaturedService } from './FeaturedService.js';
 import { FanoutTimelineService } from './FanoutTimelineService.js';
 import { ChannelFollowingService } from './ChannelFollowingService.js';
+import { ChatService } from './ChatService.js';
 import { RegistryApiService } from './RegistryApiService.js';
 import { ReversiService } from './ReversiService.js';
 
@@ -102,6 +102,7 @@ import { AppEntityService } from './entities/AppEntityService.js';
 import { AuthSessionEntityService } from './entities/AuthSessionEntityService.js';
 import { BlockingEntityService } from './entities/BlockingEntityService.js';
 import { ChannelEntityService } from './entities/ChannelEntityService.js';
+import { ChatEntityService } from './entities/ChatEntityService.js';
 import { ClipEntityService } from './entities/ClipEntityService.js';
 import { DriveFileEntityService } from './entities/DriveFileEntityService.js';
 import { DriveFolderEntityService } from './entities/DriveFolderEntityService.js';
@@ -188,7 +189,6 @@ const $NoteCreateService: Provider = { provide: 'NoteCreateService', useExisting
 const $NoteUpdateService: Provider = { provide: 'NoteUpdateService', useExisting: NoteUpdateService };
 const $NoteDeleteService: Provider = { provide: 'NoteDeleteService', useExisting: NoteDeleteService };
 const $NotePiningService: Provider = { provide: 'NotePiningService', useExisting: NotePiningService };
-const $NoteReadService: Provider = { provide: 'NoteReadService', useExisting: NoteReadService };
 const $NotificationService: Provider = { provide: 'NotificationService', useExisting: NotificationService };
 const $PollService: Provider = { provide: 'PollService', useExisting: PollService };
 const $SystemAccountService: Provider = { provide: 'SystemAccountService', useExisting: SystemAccountService };
@@ -225,6 +225,7 @@ const $FeaturedService: Provider = { provide: 'FeaturedService', useExisting: Fe
 const $FanoutTimelineService: Provider = { provide: 'FanoutTimelineService', useExisting: FanoutTimelineService };
 const $FanoutTimelineEndpointService: Provider = { provide: 'FanoutTimelineEndpointService', useExisting: FanoutTimelineEndpointService };
 const $ChannelFollowingService: Provider = { provide: 'ChannelFollowingService', useExisting: ChannelFollowingService };
+const $ChatService: Provider = { provide: 'ChatService', useExisting: ChatService };
 const $RegistryApiService: Provider = { provide: 'RegistryApiService', useExisting: RegistryApiService };
 const $ReversiService: Provider = { provide: 'ReversiService', useExisting: ReversiService };
 
@@ -251,6 +252,7 @@ const $AppEntityService: Provider = { provide: 'AppEntityService', useExisting: 
 const $AuthSessionEntityService: Provider = { provide: 'AuthSessionEntityService', useExisting: AuthSessionEntityService };
 const $BlockingEntityService: Provider = { provide: 'BlockingEntityService', useExisting: BlockingEntityService };
 const $ChannelEntityService: Provider = { provide: 'ChannelEntityService', useExisting: ChannelEntityService };
+const $ChatEntityService: Provider = { provide: 'ChatEntityService', useExisting: ChatEntityService };
 const $ClipEntityService: Provider = { provide: 'ClipEntityService', useExisting: ClipEntityService };
 const $DriveFileEntityService: Provider = { provide: 'DriveFileEntityService', useExisting: DriveFileEntityService };
 const $DriveFolderEntityService: Provider = { provide: 'DriveFolderEntityService', useExisting: DriveFolderEntityService };
@@ -340,7 +342,6 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NoteUpdateService,
 		NoteDeleteService,
 		NotePiningService,
-		NoteReadService,
 		NotificationService,
 		PollService,
 		SystemAccountService,
@@ -377,6 +378,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		FanoutTimelineService,
 		FanoutTimelineEndpointService,
 		ChannelFollowingService,
+		ChatService,
 		RegistryApiService,
 		ReversiService,
 
@@ -403,6 +405,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		AuthSessionEntityService,
 		BlockingEntityService,
 		ChannelEntityService,
+		ChatEntityService,
 		ClipEntityService,
 		DriveFileEntityService,
 		DriveFolderEntityService,
@@ -488,7 +491,6 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NoteUpdateService,
 		$NoteDeleteService,
 		$NotePiningService,
-		$NoteReadService,
 		$NotificationService,
 		$PollService,
 		$SystemAccountService,
@@ -525,6 +527,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$FanoutTimelineService,
 		$FanoutTimelineEndpointService,
 		$ChannelFollowingService,
+		$ChatService,
 		$RegistryApiService,
 		$ReversiService,
 
@@ -551,6 +554,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$AuthSessionEntityService,
 		$BlockingEntityService,
 		$ChannelEntityService,
+		$ChatEntityService,
 		$ClipEntityService,
 		$DriveFileEntityService,
 		$DriveFolderEntityService,
@@ -637,7 +641,6 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NoteUpdateService,
 		NoteDeleteService,
 		NotePiningService,
-		NoteReadService,
 		NotificationService,
 		PollService,
 		SystemAccountService,
@@ -674,6 +677,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		FanoutTimelineService,
 		FanoutTimelineEndpointService,
 		ChannelFollowingService,
+		ChatService,
 		RegistryApiService,
 		ReversiService,
 
@@ -699,6 +703,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		AuthSessionEntityService,
 		BlockingEntityService,
 		ChannelEntityService,
+		ChatEntityService,
 		ClipEntityService,
 		DriveFileEntityService,
 		DriveFolderEntityService,
@@ -784,7 +789,6 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NoteUpdateService,
 		$NoteDeleteService,
 		$NotePiningService,
-		$NoteReadService,
 		$NotificationService,
 		$PollService,
 		$SystemAccountService,
@@ -820,6 +824,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$FanoutTimelineService,
 		$FanoutTimelineEndpointService,
 		$ChannelFollowingService,
+		$ChatService,
 		$RegistryApiService,
 		$ReversiService,
 
@@ -845,6 +850,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$AuthSessionEntityService,
 		$BlockingEntityService,
 		$ChannelEntityService,
+		$ChatEntityService,
 		$ClipEntityService,
 		$DriveFileEntityService,
 		$DriveFolderEntityService,

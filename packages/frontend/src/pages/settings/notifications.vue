@@ -36,6 +36,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 		</FormSection>
 	<FormSection>
+		<div class="_gaps_m">
+			<FormLink @click="readAllNotifications">{{ i18n.ts.markAsReadAllNotifications }}</FormLink>
+		</div>
+	</FormSection>
+	<FormSection>
+		<div class="_gaps_m">
+			<FormLink @click="testNotification">{{ i18n.ts._notification.sendTestNotification }}</FormLink>
+			<FormLink @click="flushNotification">{{ i18n.ts._notification.flushNotification }}</FormLink>
+		</div>
+	</FormSection>
+	<FormSection>
 		<template #label>{{ i18n.ts.pushNotification }}</template>
 
 		<div class="_gaps_m">
@@ -95,12 +106,8 @@ const pushRegistrationInServer = computed(() => allowButton.value?.pushRegistrat
 const sendReadMessage = computed(() => pushRegistrationInServer.value?.sendReadMessage || false);
 const userLists = await misskeyApi('users/lists/list');
 
-const notificationPosition = computed(defaultStore.makeGetterSetter('notificationPosition'));
-const notificationStackAxis = computed(defaultStore.makeGetterSetter('notificationStackAxis'));
-const useGroupedNotifications = computed(defaultStore.makeGetterSetter('useGroupedNotifications'));
-
 async function readAllUnreadNotes() {
-	await misskeyApi('i/read-all-unread-notes');
+	await os.apiWithDialog('i/read-all-unread-notes');
 }
 
 async function readAllNotifications() {

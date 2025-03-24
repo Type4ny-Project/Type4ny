@@ -27,7 +27,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	:type="type"
 	:name="name"
 	:value="value"
-	:disabled="disabled"
+	:disabled="disabled || wait"
 	@click="emit('click', $event)"
 	@mousedown="onMousedown"
 >
@@ -422,6 +422,10 @@ function onMousedown(evt: MouseEvent): void {
 
 	&:disabled {
 		opacity: 0.5;
+	}
+
+	&.wait {
+		cursor: wait !important;
 	}
 
 	&:focus-visible {
