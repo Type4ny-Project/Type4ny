@@ -99,6 +99,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <i v-else-if="notification.type === 'exportCompleted'" class="ti ti-archive"></i>
 			<i v-else-if="notification.type === 'login'" class="ti ti-login-2"></i>
 			<i v-else-if="notification.type === 'createToken'" class="ti ti-key"></i>
+			<i v-else-if="notification.type === 'chatRoomInvitationReceived'" class="ti ti-messages"></i>
 			<template v-else-if="notification.type === 'roleAssigned'">
 				<img
 					v-if="notification.role.iconUrl"
@@ -127,6 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<span v-else-if="notification.type === 'roleAssigned'">{{
 				i18n.ts._notification.roleAssigned
 			}}</span>
+			<span v-else-if="notification.type === 'chatRoomInvitationReceived'">{{ i18n.ts._notification.chatRoomInvitationReceived }}</span>
 			<span v-else-if="notification.type === 'achievementEarned'">{{
 				i18n.ts._notification.achievementEarned
 			}}</span>
@@ -295,6 +297,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:class="$style.text"
 			>
 				{{ notification.role.name }}
+			</div>
+			<div v-else-if="notification.type === 'chatRoomInvitationReceived'" :class="$style.text">
+				{{ notification.invitation.room.name }}
 			</div>
 			<div
 				v-else-if="notification.type === 'loginBonus'"

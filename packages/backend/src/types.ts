@@ -24,6 +24,7 @@ import { MiInboxRule } from '@/models/InboxRule.js';
  * receiveFollowRequest - フォローリクエストされた
  * followRequestAccepted - 自分の送ったフォローリクエストが承認された
  * roleAssigned - ロールが付与された
+ * chatRoomInvitationReceived - チャットルームに招待された
  * achievementEarned - 実績を獲得
  * exportCompleted - エクスポートが完了
  * login - ログイン
@@ -43,6 +44,7 @@ export const notificationTypes = [
 	'receiveFollowRequest',
 	'followRequestAccepted',
 	'roleAssigned',
+	'chatRoomInvitationReceived',
 	'achievementEarned',
 	'exportCompleted',
 	'login',
