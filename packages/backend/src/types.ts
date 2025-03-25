@@ -139,6 +139,7 @@ export const moderationLogTypes = [
 	'setInboxRule',
 	'deleteInboxRule',
 	'inboxRejected',
+	'deleteChatRoom',
 	'updateProxyAccountDescription',
 ] as const;
 
@@ -395,6 +396,10 @@ export type ModerationLogPayloads = {
 		postUserId: string;
 		postUserUsername: string;
 		post: any;
+	};
+	deleteChatRoom: {
+		roomId: string;
+		room: any;
 	};
 	updateProxyAccountDescription: {
 		before: string | null;

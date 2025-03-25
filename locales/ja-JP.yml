@@ -2956,6 +2956,7 @@ _moderationLogTypes:
   deletePage: "ページを削除"
   deleteFlash: "Playを削除"
   deleteGalleryPost: "ギャラリーの投稿を削除"
+  deleteChatRoom: "チャットルームを削除"
   setInboxRule: "Inboxのルールを設定"
   deleteInboxRule: "Inboxのルールを削除"
   inboxRejected: "Inboxで拒否"
