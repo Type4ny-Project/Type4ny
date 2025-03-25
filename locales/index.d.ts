@@ -5817,6 +5817,10 @@ export interface Locale extends ILocale {
          */
         "inviteUser": string;
         /**
+         * 送信した招待
+         */
+        "sentInvitations": string;
+        /**
          * 参加
          */
         "join": string;
