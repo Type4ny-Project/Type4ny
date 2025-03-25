@@ -1511,6 +1511,15 @@ export type paths = {
      */
     post: operations['chat___messages___show'];
   };
+  '/chat/messages/unreact': {
+    /**
+     * chat/messages/unreact
+     * @description No description provided.
+     *
+     * **Credential required**: *Yes* / **Permission**: *write:chat*
+     */
+    post: operations['chat___messages___unreact'];
+  };
   '/chat/messages/user-timeline': {
     /**
      * chat/messages/user-timeline
@@ -15154,6 +15163,61 @@ export type operations = {
       200: {
         content: {
           'application/json': components['schemas']['ChatMessage'];
+        };
+      };
+      /** @description Client error */
+      400: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Authentication error */
+      401: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Forbidden error */
+      403: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description I'm Ai */
+      418: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
+  /**
+   * chat/messages/unreact
+   * @description No description provided.
+   *
+   * **Credential required**: *Yes* / **Permission**: *write:chat*
+   */
+  chat___messages___unreact: {
+    requestBody: {
+      content: {
+        'application/json': {
+          /** Format: misskey:id */
+          messageId: string;
+          reaction: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK (with results) */
+      200: {
+        content: {
+          'application/json': unknown;
         };
       };
       /** @description Client error */
