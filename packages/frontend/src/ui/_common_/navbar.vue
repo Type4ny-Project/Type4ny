@@ -74,6 +74,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkA>
 		</div>
 		<div :class="$style.bottom">
+			<button v-if="showWidgetButton" class="_button" :class="[$style.widget]" @click="() => emit('widgetButtonClick')">
+				<i class="ti ti-apps ti-fw"></i>
+			</button>
 			<button
 				v-tooltip.noDelay.right="i18n.ts.note" class="_button"
 				:class="[$style.post ,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
@@ -159,6 +162,14 @@ document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.s
 document.documentElement.style.setProperty('--gamingspeed', prefer.state.numberOfGamingSpeed + 's');
 
 const router = useRouter();
+
+const props = defineProps<{
+	showWidgetButton?: boolean;
+}>();
+
+const emit = defineEmits<{
+	(ev: 'widgetButtonClick'): void;
+}>();
 
 const forceIconOnly = ref(window.innerWidth <= 1279);
 const iconOnly = computed(() => {
@@ -852,7 +863,15 @@ function menuEdit() {
     backdrop-filter: var(--MI-blur, blur(8px));
   }
 
-  .post {
+  .widget {
+		display: block;
+		position: relative;
+		width: 100%;
+		height: 52px;
+		text-align: center;
+	}
+
+	.post {
     display: block;
     position: relative;
     width: 100%;
