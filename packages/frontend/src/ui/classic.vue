@@ -15,8 +15,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</div>
 
 		<main class="main" @contextmenu.stop="onContextmenu">
-			<div class="content" style="container-type: inline-size;">
-				<RouterView/>
+			<div class="content">
+				<StackingRouterView v-if="prefer.s['experimental.stackingRouterView']"/>
+				<RouterView v-else/>
 			</div>
 		</main>
 
@@ -316,5 +317,9 @@ onMounted(() => {
 		border: none;
 		pointer-events: none;
 	}
+}
+
+.content {
+	height: 100%;
 }
 </style>
