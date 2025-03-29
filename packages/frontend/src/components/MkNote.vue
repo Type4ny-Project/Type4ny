@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			:style="{ background: appearNote.channel.color }"
 		></div>
 		<MkAvatar
-			:class="$style.avatar"
+			:class="[$style.avatar, prefer.s.useStickyIcons ? $style.useSticky : null]"
 			:user="appearNote.user"
 			:link="!mock"
 			:preview="!mock"
@@ -1162,9 +1162,12 @@ function emitUpdReaction(emoji: string, delta: number) {
 	margin: 0 14px 0 0;
 	width: 58px;
 	height: 58px;
-	position: sticky !important;
-	top: calc(22px + var(--MI-stickyTop, 0px));
-	left: 0;
+
+	&.useSticky {
+		position: sticky !important;
+		top: calc(22px + var(--MI-stickyTop, 0px));
+		left: 0;
+	}
 }
 
 .main {
@@ -1353,7 +1356,10 @@ function emitUpdReaction(emoji: string, delta: number) {
 		margin: 0 10px 0 0;
 		width: 46px;
 		height: 46px;
-		top: calc(14px + var(--MI-stickyTop, 0px));
+
+		&.useSticky {
+			top: calc(14px + var(--MI-stickyTop, 0px));
+		}
 	}
 }
 
