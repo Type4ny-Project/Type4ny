@@ -13,34 +13,30 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</template>
 
 	<template #default="{ items: notes }">
-		<div :class="[$style.root, { [$style.noGap]: noGap }]">
-			<MkDateSeparatedList
-				ref="notes"
-				v-slot="{ item: note }"
-				:items="notes"
-				:direction="pagination.reversed ? 'up' : 'down'"
-				:reversed="pagination.reversed"
-				:noGap="noGap"
-				:ad="true"
-				:class="$style.notes"
-			>
-				<MkNote :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note" :withHardMute="true"/>
-			</MkDateSeparatedList>
+		<div :class="[$style.root, { [$style.noGap]: noGap, '_gaps': !noGap }]">
+			<template v-for="(note, i) in notes" :key="note.id">
+				<MkNote :class="$style.note" :note="note" :withHardMute="true"/>
+				<div v-if="note._shouldInsertAd_" :class="$style.ad">
+					<MkAd :prefer="['horizontal', 'horizontal-big']"/>
+				</div>
+			</template>
 		</div>
 	</template>
 </MkPagination>
 </template>
 
 <script lang="ts" setup>
-import { useTemplateRef } from 'vue';
+import { useTemplateRef, TransitionGroup } from 'vue';
 import type { Paging } from '@/components/MkPagination.vue';
 import MkNote from '@/components/MkNote.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 import { infoImageUrl } from '@/instance.js';
+import { prefer } from '@/preferences.js';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 const dateTextCache = new Map<string, string>();
-defineProps<{
+
+const props = defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
 	disableAutoLoad?: boolean;
@@ -55,9 +51,20 @@ defineExpose({
 
 <style lang="scss" module>
 .root {
+	container-type: inline-size;
+
 	&.noGap {
-		> .notes {
-			background: var(--MI_THEME-panel);
+		background: var(--MI_THEME-panel);
+
+		.note {
+			border-bottom: solid 0.5px var(--MI_THEME-divider);
+		}
+
+		.ad {
+			padding: 8px;
+			background-size: auto auto;
+			background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, var(--MI_THEME-bg) 8px, var(--MI_THEME-bg) 14px);
+			border-bottom: solid 0.5px var(--MI_THEME-divider);
 		}
 		.note{
 			&:not(:last-child) {
@@ -67,12 +74,11 @@ defineExpose({
 	}
 
 	&:not(.noGap) {
-		> .notes {
-			background: var(--MI_THEME-bg);
-			.note {
-				background: var(--MI_THEME-panel);
-				border-radius: var(--MI-radius);
-			}
+		background: var(--MI_THEME-bg);
+
+		.note {
+			background: var(--MI_THEME-panel);
+			border-radius: var(--MI-radius);
 		}
 	}
 }
