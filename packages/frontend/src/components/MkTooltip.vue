@@ -8,7 +8,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	:leaveActiveClass="prefer.s.animation ? $style.transition_tooltip_leaveActive : ''"
 	:enterFromClass="prefer.s.animation ? $style.transition_tooltip_enterFrom : ''"
 	:leaveToClass="prefer.s.animation ? $style.transition_tooltip_leaveTo : ''"
-	appear @afterLeave="emit('closed')"
+	appear :css="prefer.s.animation"
+	@afterLeave="emit('closed')"
 >
 	<div v-show="showing" ref="el" :class="$style.root" class="_acrylic _shadow" :style="{ zIndex, maxWidth: maxWidth + 'px' }">
 		<slot>
