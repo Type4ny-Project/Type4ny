@@ -49,6 +49,7 @@ import { deviceKind } from '@/utility/device-kind.js';
 import { focusTrap } from '@/utility/focus-trap.js';
 import { focusParent } from '@/utility/focus.js';
 import { prefer } from '@/preferences.js';
+import { DI } from '@/di.js';
 
 function getFixedContainer(el: Element | null): Element | null {
 	if (el == null || el.tagName === 'BODY') return null;
@@ -93,7 +94,7 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-provide('modal', true);
+provide(DI.inModal, true);
 
 const maxHeight = ref<number>();
 const fixed = ref(false);

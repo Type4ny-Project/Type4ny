@@ -156,7 +156,7 @@ import MkScheduleEditor from '@/components/MkScheduleEditor.vue';
 
 const $i = ensureSignin();
 
-const modal = inject('modal');
+const modal = inject(DI.inModal, false);
 const gamingType = prefer.s.gamingType;
 
 const props = withDefaults(defineProps<PostFormProps & {
