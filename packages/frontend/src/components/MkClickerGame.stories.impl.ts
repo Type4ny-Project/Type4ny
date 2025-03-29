@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { StoryObj } from '@storybook/vue3';
 import { HttpResponse, http } from 'msw';
 import { action } from '@storybook/addon-actions';
 import { expect, userEvent, within } from '@storybook/test';
 import { commonHandlers } from '../../.storybook/mocks.js';
 import MkClickerGame from './MkClickerGame.vue';
+import type { StoryObj } from '@storybook/vue3';
 
 function sleep(ms: number) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => window.setTimeout(resolve, ms));
 }
 
 export const Default = {

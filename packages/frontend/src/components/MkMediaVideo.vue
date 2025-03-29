@@ -338,7 +338,7 @@ const bufferedDataRatio = computed(() => {
 // MediaControl Events
 function onMouseOver() {
 	if (controlStateTimer) {
-		clearTimeout(controlStateTimer);
+		window.clearTimeout(controlStateTimer);
 	}
 	isHoverring.value = true;
 }
