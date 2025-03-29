@@ -60,7 +60,9 @@ export default [
 			// document ... window.documentと衝突 or 紛らわしい
 			// history ... window.historyと衝突 or 紛らわしい
 			// scroll ... window.scrollと衝突 or 紛らわしい
-			'id-denylist': ['warn', 'window', 'e', 'close', 'open', 'fetch', 'location', 'document', 'history', 'scroll'],
+			// setTimeout ... window.setTimeoutと衝突 or 紛らわしい
+			// setInterval ... window.setIntervalと衝突 or 紛らわしい
+			'id-denylist': ['warn', 'window', 'e', 'close', 'open', 'fetch', 'location', 'document', 'history', 'scroll', 'setTimeout', 'setInterval'],
 			'no-restricted-globals': [
 				'error',
 				{
@@ -90,6 +92,14 @@ export default [
 				{
 					'name': 'scroll',
 					'message': 'Use `window.scroll`.',
+				},
+				{
+					'name': 'setTimeout',
+					'message': 'Use `window.setTimeout`.',
+				},
+				{
+					'name': 'setInterval',
+					'message': 'Use `window.setInterval`.',
 				},
 				{
 					'name': 'name',
