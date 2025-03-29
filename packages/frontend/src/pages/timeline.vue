@@ -14,23 +14,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo"  class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
 				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :channel="channelInfo"  :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
 			<div v-if="queue > 0" :class="$style.new"><button class="_buttonPrimary" :class="$style.newButton" @click="top()">{{ i18n.ts.newNoteRecived }}</button></div>
-			<div :class="$style.tl">
-				<MkTimeline
-					ref="tlComponent"
-					:key="src + withRenotes + withReplies + onlyFiles + withSensitive"
-					:src="src.split(':')[0]"
-					:list="src.split(':')[1]"
-						:channel="src.split(':')[1]"
+			<MkTimeline
+				ref="tlComponent"
+				:key="src + withRenotes + withReplies + onlyFiles + withSensitive"
+				:class="$style.tl"
+				:src="src.split(':')[0]"
+				:list="src.split(':')[1]"
+				:channel="src.split(':')[1]"
 						:antenna="src.split(':')[1]"
 					:withRenotes="withRenotes"
-					:withReplies="withReplies"
-					:withSensitive="withSensitive"
-					:onlyFiles="onlyFiles"
-						:withCw="withCw"
-					:sound="true"
-					@queue="queueUpdated"
-				/>
-			</div>
+				:withReplies="withReplies"
+				:withSensitive="withSensitive"
+				:onlyFiles="onlyFiles":withCw="withCw"
+				:sound="true"
+				@queue="queueUpdated"
+			/>
 		</MkSpacer>
 	</MkStickyContainer>
 </div>
