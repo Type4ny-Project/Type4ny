@@ -146,13 +146,6 @@ export const navbarItemDef = reactive({
 					unisonReload();
 				},
 			}, {
-				text: i18n.ts.classic,
-				active: ui === 'classic',
-				action: () => {
-					miLocalStorage.setItem('ui', 'classic');
-					unisonReload();
-				},
-			}, {
 				text: 'twilike Preview',
 				active: ui === 'twilike',
 				action: () => {
