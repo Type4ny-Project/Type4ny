@@ -5754,6 +5754,18 @@ export interface Locale extends ILocale {
      * 圧縮
      */
     "compress": string;
+    /**
+     * 右
+     */
+    "right": string;
+    /**
+     * 下
+     */
+    "bottom": string;
+    /**
+     * 上
+     */
+    "top": string;
     "_chat": {
         /**
          * まだメッセージはありません
@@ -10709,6 +10721,18 @@ export interface Locale extends ILocale {
          * カラムの寄せ
          */
         "columnAlign": string;
+        /**
+         * カラム間のマージン
+         */
+        "columnGap": string;
+        /**
+         * デッキメニューの位置
+         */
+        "deckMenuPosition": string;
+        /**
+         * ナビゲーションバーの位置
+         */
+        "navbarPosition": string;
         /**
          * カラムを追加
          */
