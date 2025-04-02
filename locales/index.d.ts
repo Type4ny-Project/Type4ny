@@ -5770,6 +5770,10 @@ export interface Locale extends ILocale {
      * 上
      */
     "top": string;
+    /**
+     * 埋め込み
+     */
+    "embed": string;
     "_chat": {
         /**
          * まだメッセージはありません
