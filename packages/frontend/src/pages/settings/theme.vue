@@ -181,6 +181,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</template>
 		</div>
 
+		<SearchMarker :keywords="['sync', 'themes', 'devices']">
+			<MkSwitch :modelValue="themesSyncEnabled" @update:modelValue="changeThemesSyncEnabled">
+				<template #label><SearchLabel>{{ i18n.ts._settings.enableSyncThemesBetweenDevices }}</SearchLabel></template>
+			</MkSwitch>
+		</SearchMarker>
+
 		<FormSection>
 			<div class="_formLinksGrid">
 				<FormLink to="/settings/theme/manage">
@@ -288,6 +294,20 @@ watch(syncDeviceDarkMode, () => {
 		store.set('darkMode', isDeviceDarkmode());
 	}
 });
+
+const themesSyncEnabled = ref(prefer.isSyncEnabled('themes'));
+
+function changeThemesSyncEnabled(value: boolean) {
+	if (value) {
+		prefer.enableSync('themes').then((res) => {
+			if (res == null) return;
+			if (res.enabled) themesSyncEnabled.value = true;
+		});
+	} else {
+		prefer.disableSync('themes');
+		themesSyncEnabled.value = false;
+	}
+}
 
 const headerActions = computed(() => []);
 
