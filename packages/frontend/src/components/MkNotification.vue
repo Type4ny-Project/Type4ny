@@ -58,7 +58,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 					[$style.t_login]: notification.type === 'login',
 					[$style.t_acceptPoints]: notification.type === 'acceptPoints',
 					[$style.t_createToken]: notification.type === 'createToken',
-					[$style.t_roleAssigned]:
+					[$style.t_chatRoomInvitationReceived]: notification.type === 'chatRoomInvitationReceived',
+				[$style.t_roleAssigned]:
 						notification.type === 'roleAssigned' &&
 						notification.role.iconUrl == null,
 				},
@@ -655,6 +656,12 @@ function getActualReactedUsersCount(
 }
 
 .t_createToken {
+	padding: 3px;
+	background: var(--eventOther);
+	pointer-events: none;
+}
+
+.t_chatRoomInvitationReceived {
 	padding: 3px;
 	background: var(--eventOther);
 	pointer-events: none;
