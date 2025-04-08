@@ -5,16 +5,14 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <div :class="$style.root">
 	<div :class="$style.contents">
-		<div style="flex: 1; min-height: 0;">
-			<RouterView/>
-		</div>
-
 		<!--
 			デッキUIが設定されている場合はデッキUIに戻れるようにする (ただし?zenが明示された場合は表示しない)
 			See https://github.com/misskey-dev/misskey/issues/10905
 		-->
-		<div v-if="showBottom" :class="$style.bottom">
-			<button v-tooltip="i18n.ts.goToType4ny" :class="['_button', '_shadow', $style.button]" @click="goToType4ny"><i class="ti ti-home"></i></button>
+		<button v-if="showDeckNav" class="_buttonPrimary" :class="$style.deckNav" @click="goToDeck">{{ i18n.ts.goToDeck }}</button>
+
+		<div style="flex: 1; min-height: 0;">
+			<RouterView/>
 		</div>
 	</div>
 
@@ -36,7 +34,7 @@ const isRoot = computed(() => mainRouter.currentRoute.value.name === 'index');
 
 const pageMetadata = ref<null | PageMetadata>(null);
 
-const showBottom = !(new URLSearchParams(window.location.search)).has('zen') && ui === 'deck';
+const showDeckNav = !(new URLSearchParams(window.location.search)).has('zen') && ui === 'deck';
 
 provide(DI.router, mainRouter);
 provideMetadataReceiver((metadataGetter) => {
@@ -52,7 +50,7 @@ provideMetadataReceiver((metadataGetter) => {
 });
 provideReactiveMetadata(pageMetadata);
 
-function goToType4ny() {
+function goToDeck() {
 	window.location.href = '/';
 }
 </script>
@@ -67,10 +65,8 @@ function goToType4ny() {
 	height: 100dvh;
 }
 
-.bottom {
-	height: calc(60px + (var(--MI-margin) * 2) + env(safe-area-inset-bottom, 0px));
-	width: 100%;
-	margin-top: auto;
+.deckNav {
+	padding: 4px;
 }
 
 .button {
