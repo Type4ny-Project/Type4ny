@@ -418,13 +418,13 @@ antennas: "안테나"
 manageAntennas: "안테나 관리"
 name: "이름"
 antennaSource: "받을 소스"
-antennaKeywords: "받을 검색어"
-antennaExcludeKeywords: "제외할 검색어"
+antennaKeywords: "받을 키워드"
+antennaExcludeKeywords: "제외할 키워드"
 antennaExcludeBots: "봇 계정 제외"
 antennaKeywordsDescription: "공백으로 구분하는 경우 AND, 줄바꿈으로 구분하는 경우 OR로 지정됩니다"
 notifyAntenna: "새로운 노트를 알림"
 withFileAntenna: "파일이 첨부된 노트만"
-hideNotesInSensitiveChannel: "민감한 채널의 노트 숨기기"
+excludeNotesInSensitiveChannel: "민감한 채널의 노트 제외"
 enableServiceworker: "ServiceWorker 사용"
 antennaUsersDescription: "유저명을 한 줄에 한 명씩 적습니다"
 caseSensitive: "대소문자를 구분"
@@ -520,7 +520,7 @@ style: "스타일"
 drawer: "서랍"
 popup: "팝업"
 showNoteActionsOnlyHover: "마우스가 올라간 때에만 노트 동작 버튼을 표시하기"
-showReactionsCount: "노트의 반응 수를 표시하기"
+showReactionsCount: "노트의 리액션 수를 표시하기"
 noHistory: "기록이 없습니다"
 signinHistory: "로그인 기록"
 enableAdvancedMfm: "고급 MFM을 활성화"
@@ -754,8 +754,8 @@ repliedCount: "받은 답글 수"
 renotedCount: "받은 리노트 수"
 followingCount: "팔로우 수"
 followersCount: "팔로워 수"
-sentReactionsCount: "반응 수"
-receivedReactionsCount: "받은 반응 수"
+sentReactionsCount: "리액션 수"
+receivedReactionsCount: "받은 리액션 수"
 pollVotesCount: "투표 수"
 pollVotedCount: "받은 투표 수"
 yes: "예"
@@ -868,8 +868,8 @@ configure: "설정하기"
 postToGallery: "갤러리에 업로드"
 postToHashtag: "이 해시태그에 게시"
 gallery: "갤러리"
-recentPosts: "최근 포스트"
-popularPosts: "인기 포스트"
+recentPosts: "최근 게시물"
+popularPosts: "인기 게시물"
 shareWithNote: "노트로 공유"
 ads: "광고"
 expiration: "기한"
@@ -1056,7 +1056,7 @@ thisPostMayBeAnnoyingHome: "홈에 게시"
 thisPostMayBeAnnoyingCancel: "그만두기"
 thisPostMayBeAnnoyingIgnore: "이대로 게시"
 collapseRenotes: "이미 본 리노트를 간략화하기"
-collapseRenotesDescription: "반응이나 리노트를 한 노트를 접어서 표시합니다."
+collapseRenotesDescription: "리액션이나 리노트를 한 노트를 접어서 표시합니다."
 internalServerError: "내부 서버 오류"
 internalServerErrorDescription: "내부 서버에서 예기치 않은 오류가 발생했습니다."
 copyErrorInfo: "오류 정보 복사"
@@ -1080,8 +1080,8 @@ resetPasswordConfirm: "비밀번호를 재설정하시겠습니까?"
 sensitiveWords: "민감한 단어"
 sensitiveWordsDescription: "설정한 단어가 포함된 노트의 공개 범위를 '홈'으로 강제합니다. 개행으로 구분하여 여러 개를 지정할 수 있습니다."
 sensitiveWordsDescription2: "공백으로 구분하면 AND 지정이 되며, 키워드를 슬래시로 둘러싸면 정규 표현식이 됩니다."
-prohibitedWords: "금지 워드"
-prohibitedWordsDescription: "설정된 워드가 포함되는 노트를 작성하려고 하면, 에러가 발생하도록 합니다. 줄바꿈으로 구분지어 복수 설정할 수 있습니다."
+prohibitedWords: "금지 단어"
+prohibitedWordsDescription: "설정된 단어가 포함되는 노트를 작성하려고 하면, 오류가 발생하도록 합니다. 줄바꿈으로 구분지어 복수 설정할 수 있습니다."
 prohibitedWordsDescription2: "공백으로 구분하면 AND 지정이 되며, 키워드를 슬래시로 둘러싸면 정규 표현식이 됩니다."
 hiddenTags: "숨긴 해시태그"
 hiddenTagsDescription: "설정한 태그를 트렌드에 표시하지 않도록 합니다. 줄 바꿈으로 하나씩 나눠서 설정할 수 있습니다."
@@ -1616,53 +1616,53 @@ _achievements:
   _types:
     _notes1:
       title: "미스키 계정 만들었어요"
-      description: "첫 노트를 작성했습니다"
+      description: "첫 노트를 게시했다"
       flavor: "Misskey에 어서 오세요!"
     _notes10:
       title: "몇 가지 노트"
-      description: "10개의 노트를 작성했습니다"
+      description: "10개의 노트를 게시했다"
     _notes100:
       title: "많은 노트"
-      description: "100개의 노트를 작성했습니다"
+      description: "100개의 노트를 게시했다"
     _notes500:
       title: "노트 범벅"
-      description: "500개의 노트를 작성했습니다"
+      description: "500개의 노트를 게시했다"
     _notes1000:
       title: "노트가 산더미"
-      description: "1,000개의 노트를 작성했습니다"
+      description: "1,000개의 노트를 게시했다"
     _notes5000:
       title: "솟아나는 노트"
-      description: "5,000개의 노트를 작성했습니다"
+      description: "5,000개의 노트를 게시했다"
     _notes10000:
       title: "슈퍼 노트"
-      description: "10,000개의 노트를 작성했습니다"
+      description: "10,000개의 노트를 게시했다"
     _notes20000:
-      title: "노트가 필요해요"
-      description: "20,000개의 노트를 작성했습니다"
+      title: "노트가 더 필요해요"
+      description: "20,000개의 노트를 게시했다"
     _notes30000:
       title: "노트노트노트"
-      description: "30,000개의 노트를 작성했습니다"
+      description: "30,000개의 노트를 게시했다"
     _notes40000:
       title: "노트 공장"
-      description: "40,000개의 노트를 작성했습니다"
+      description: "40,000개의 노트를 게시했다"
     _notes50000:
       title: "노트 행성"
-      description: "50,000개의 노트를 작성했습니다"
+      description: "50,000개의 노트를 게시했다"
     _notes60000:
       title: "노트 퀘이사"
-      description: "60,000개의 노트를 작성했습니다"
+      description: "60,000개의 노트를 게시했다"
     _notes70000:
       title: "노트 블랙홀"
-      description: "70,000개의 노트를 작성했습니다"
+      description: "70,000개의 노트를 게시했다"
     _notes80000:
       title: "노트 은하"
-      description: "80,000개의 노트를 작성했습니다"
+      description: "80,000개의 노트를 게시했다"
     _notes90000:
       title: "노트 우주"
-      description: "90,000개의 노트를 작성했습니다"
+      description: "90,000개의 노트를 게시했다"
     _notes100000:
       title: "ALL YOUR NOTE ARE BELONG TO US"
-      description: "100,000개의 노트를 작성했습니다"
+      description: "100,000개의 노트를 게시했다"
       flavor: "이렇게나 쓸 게 있어요?"
     _login3:
       title: "초보자 I"
@@ -1687,175 +1687,175 @@ _achievements:
       flavor: "그 유저, 미스키스트이다"
     _login200:
       title: "단골 I"
-      description: "총 200일간 로그인했습니다"
+      description: "총 로그인한 날이 200일"
     _login300:
       title: "단골 II"
-      description: "총 300일간 로그인했습니다"
+      description: "총 로그인한 날이 300일"
     _login400:
       title: "단골 III"
-      description: "총 400일간 로그인했습니다"
+      description: "총 로그인한 날이 400일"
     _login500:
       title: "베테랑 I"
-      description: "총 500일간 로그인했습니다"
+      description: "총 로그인한 날이 500일"
       flavor: "제군, 나는 노트가 좋다"
     _login600:
       title: "베테랑 II"
-      description: "총 600일간 로그인했습니다"
+      description: "총 로그인한 날이 600일"
     _login700:
       title: "베테랑 III"
-      description: "총 700일간 로그인했습니다"
+      description: "총 로그인한 날이 700일"
     _login800:
       title: "노트 마스터 I"
-      description: "총 800일간 로그인했습니다"
+      description: "총 로그인한 날이 800일"
     _login900:
       title: "노트 마스터 II"
-      description: "총 900일간 로그인했습니다"
+      description: "총 로그인한 날이 900일"
     _login1000:
       title: "노트 마스터 III"
-      description: "총 1,000일간 로그인했습니다"
+      description: "총 로그인한 날이 1,000일"
       flavor: "Misskey를 사용해 주셔서 감사합니다!"
     _noteClipped1:
       title: "클립할 수밖에 없었어"
-      description: "처음으로 노트를 클립했습니다"
+      description: "처음으로 노트를 클립했다"
     _noteFavorited1:
       title: "별을 바라보는 자"
-      description: "처음으로 노트를 즐겨찾기했습니다"
+      description: "처음으로 노트를 즐겨찾기했다"
     _myNoteFavorited1:
       title: "별을 원하는 자"
-      description: "다른 사람이 당신의 노트를 즐겨찾기했습니다"
+      description: "다른 사람이 당신의 노트를 즐겨찾기했다"
     _profileFilled:
       title: "준비 완료"
-      description: "프로필 설정을 완료했습니다"
+      description: "프로필 설정을 완료했다"
     _markedAsCat:
       title: "나는 고양이다냥!"
-      description: "계정을 고양이로 설정했습니다냥"
+      description: "계정을 고양이로 설정했다냥"
       flavor: "냐냐냐냐냐냐아아아아앙!"
     _following1:
       title: "첫 팔로우"
-      description: "유저를 처음으로 팔로우했습니다"
+      description: "유저를 처음으로 팔로우했다"
     _following10:
       title: "팔로우, 팔로우"
-      description: "10명의 유저를 팔로우했습니다"
+      description: "10명의 유저를 팔로우했다"
     _following50:
       title: "친구 잔뜩"
-      description: "50명의 유저를 팔로우했습니다"
+      description: "50명의 유저를 팔로우했다"
     _following100:
       title: "주소록 한 권으론 부족해"
-      description: "100명의 유저를 팔로우했습니다"
+      description: "100명의 유저를 팔로우했다"
     _following300:
       title: "친구가 넘쳐나"
-      description: "300명의 유저를 팔로우했습니다"
+      description: "300명의 유저를 팔로우했다"
     _followers1:
       title: "첫 팔로워"
-      description: "유저가 처음으로 팔로잉했습니다"
+      description: "유저가 처음으로 팔로잉했다"
     _followers10:
       title: "팔로우 미!"
-      description: "10명의 유저가 팔로우했습니다"
+      description: "10명의 유저가 팔로우했다"
     _followers50:
       title: "이곳저곳"
-      description: "50명의 유저가 팔로우했습니다"
+      description: "50명의 유저가 팔로우했다"
     _followers100:
       title: "인기왕"
-      description: "100명의 유저가 팔로우했습니다"
+      description: "100명의 유저가 팔로우했다"
     _followers300:
       title: "줄 좀 서봐요"
-      description: "100명의 유저가 팔로우했습니다"
+      description: "100명의 유저가 팔로우했다"
     _followers500:
       title: "기지국"
-      description: "500명의 유저가 팔로우했습니다"
+      description: "500명의 유저가 팔로우했다"
     _followers1000:
       title: "유명인사"
-      description: "1,000명의 유저가 팔로우했습니다"
+      description: "1,000명의 유저가 팔로우했다"
     _collectAchievements30:
       title: "도전 과제 콜렉터"
-      description: "30개의 도전과제를 획득했습니다"
+      description: "30개의 도전과제를 획득했다"
     _viewAchievements3min:
       title: "저 도전과제 좋아해요"
-      description: "도전 과제 목록을 3분 이상 쳐다봤습니다"
+      description: "도전 과제 목록을 3분 이상 쳐다봤다"
     _iLoveType4ny:
       title: "I Love Misskey"
-      description: "\"I ❤ #Misskey\"를 포스트했습니다"
+      description: "\"I ❤ #Misskey\"를 게시했다"
       flavor: "Misskey를 이용해 주셔서 감사합니다! ― 개발 팀"
     _foundTreasure:
       title: "보물찾기"
-      description: "숨겨진 보물을 발견했습니다"
+      description: "숨겨진 보물을 발견했다"
     _client30min:
       title: "잠시 쉬어요"
-      description: "클라이언트를 시작하고 30분이 경과하였습니다"
+      description: "클라이언트를 시작하고 30분이 경과했다"
     _client60min:
       title: "No \"Miss\" in Misskey"
-      description: "클라이언트를 시작하고 60분이 경과하였습니다"
+      description: "클라이언트를 시작하고 60분이 경과했다"
     _noteDeletedWithin1min:
       title: "있었는데요 없었습니다"
-      description: "노트를 포스트한 후 1분 이내에 삭제했습니다"
+      description: "노트를 게시한 후 1분 이내에 삭제했다"
     _postedAtLateNight:
       title: "올빼미"
-      description: "한밤중에 노트를 포스트했습니다"
+      description: "한밤중에 노트를 게시했다"
       flavor: "잠 좀 자세요. 걱정돼요."
     _postedAt0min0sec:
       title: "정각"
-      description: "0분 0초 정각에 노트를 작성했습니다"
+      description: "0분 0초 정각에 노트를 게시했다"
       flavor: "째깍 째깍 째깍 땡!"
     _selfQuote:
       title: "혼잣말"
-      description: "자기 노트를 인용했습니다"
+      description: "자기 노트를 인용했다"
     _htl20npm:
       title: "타임라인 폭주 중"
-      description: "1분 사이에 홈 타임라인에 노트가 20개 넘게 생성되었습니다"
+      description: "1분 사이에 홈 타임라인에 노트가 20개 넘게 생성되었다"
     _viewInstanceChart:
       title: "애널리스트"
-      description: "서버의 차트를 열었습니다"
+      description: "서버의 차트를 열었다"
     _outputHelloWorldOnScratchpad:
       title: "Hello, world!"
-      description: "스크래치패드에서 hello world를 출력했습니다"
+      description: "스크래치패드에서 hello world를 출력했다"
     _open3windows:
       title: "멀티 윈도우"
-      description: "3개 이상의 창을 열었습니다"
+      description: "3개 이상의 창을 열었다"
     _driveFolderCircularReference:
       title: "순환 참조"
-      description: "드라이브 폴더에 스스로를 넣게 했습니다"
+      description: "드라이브 폴더에 스스로를 넣게 했다"
     _reactWithoutRead:
       title: "읽고 답하긴 하시는 건가요?"
-      description: "100자가 넘는 노트를 작성한 지 3초 안에 반응했어요"
+      description: "100자가 넘는 노트를 작성한 지 3초 안에 리액션했다"
     _clickedClickHere:
-      title: "여기를 누르세요"
-      description: "여기를 눌렀습니다"
+      title: "여길 눌러보세요"
+      description: "여기를 눌렀다"
     _justPlainLucky:
       title: "그냥 운이 좋았어"
-      description: "매 10초마다 0.01%의 확률로 달성됩니다"
+      description: "매 10초마다 0.01%의 확률로 달성된다"
     _setNameToSyuilo:
       title: "신 콤플렉스"
-      description: "이름을 syuilo로 설정했습니다"
+      description: "이름을 syuilo로 설정했다"
     _passedSinceAccountCreated1:
       title: "1주년"
-      description: "계정을 생성하고 1년이 지났습니다"
+      description: "계정을 생성하고 1년이 지났다"
     _passedSinceAccountCreated2:
       title: "2주년"
-      description: "계정을 생성하고 2년이 지났습니다"
+      description: "계정을 생성하고 2년이 지났다"
     _passedSinceAccountCreated3:
       title: "3주년"
-      description: "계정을 생성하고 3년이 지났습니다"
+      description: "계정을 생성하고 3년이 지났다"
     _loggedInOnBirthday:
       title: "생일 축하합니다!"
-      description: "생일에 로그인했습니다"
+      description: "생일에 로그인했다"
     _loggedInOnNewYearsDay:
       title: "새해 복 많이 받으세요"
-      description: "새해 첫 날에 로그인했습니다"
+      description: "새해 첫 날에 로그인했다"
       flavor: "올해에도 저희 서버에 관심을 가져 주셔서 감사합니다"
     _cookieClicked:
       title: "쿠키를 클릭하는 게임"
-      description: "쿠키를 클릭했습니다"
-      flavor: "소프트웨어 착각하지 않으셨나요?"
+      description: "쿠키를 클릭했다"
+      flavor: "소프트웨어 착각하지 않았어?"
     _brainDiver:
       title: "Brain Diver"
-      description: "Brain Diver로의 링크를 첨부했습니다"
+      description: "Brain Diver로의 링크를 첨부했다"
       flavor: "Misskey-Misskey La-Tu-Ma"
     _smashTestNotificationButton:
       title: "테스트 과잉"
-      description: "매우 짧은 시간 안에 알림 테스트를 여러 번 수행했습니다"
+      description: "매우 짧은 시간 안에 알림 테스트를 여러 번 수행했다"
     _tutorialCompleted:
       title: "Misskey 입문자 과정 수료증"
-      description: "튜토리얼을 완료했습니다"
+      description: "튜토리얼을 완료했다"
     _bubbleGameExplodingHead:
       title: "🤯"
       description: "버블 게임에서 가장 큰 물건을 내놓았다"
@@ -2565,7 +2565,7 @@ _notification:
   checkNotificationBehavior: "알림 표시를 체크하기"
   sendTestNotification: "테스트 알림 보내기"
   notificationWillBeDisplayedLikeThis: "알림이 이렇게 표시됩니다"
-  reactedBySomeUsers: "{n}명이 반응했습니다"
+  reactedBySomeUsers: "{n}명이 리액션했습니다"
   likedBySomeUsers: "{n}명이 좋아요를 했습니다"
   renotedBySomeUsers: "{n}명이 리노트했습니다"
   followedBySomeUsers: "{n}명에게 팔로우됨"
@@ -2729,7 +2729,7 @@ _moderationLogTypes:
   deleteAccount: "계정을 삭제"
   deletePage: "페이지를 삭제"
   deleteFlash: "Play를 삭제"
-  deleteGalleryPost: "갤러리 포스트를 삭제"
+  deleteGalleryPost: "갤러리 게시물을 삭제"
   deleteChatRoom: "채팅 룸 삭제"
   updateProxyAccountDescription: "프록시 계정의 설명 업데이트"
 _fileViewer:
@@ -2976,8 +2976,8 @@ _captcha:
       title: "CAPTCHA 검증을 실패했습니다."
       text: "설정이 올바른지 다시 한 번 확인해보세요."
     _unknown:
-      title: "CAPTCHA 에러"
-      text: "알 수 없는 에러가 발생했습니다."
+      title: "CAPTCHA 오류"
+      text: "알 수 없는 오류가 발생했습니다."
 _bootErrors:
   title: "로딩이 실패함"
   serverError: "잠시 기다렸다가 다시 로드해도 여전히 문제가 해결되지 않으면 아래 Error ID와 함께 서버 관리자에게 연락해 주세요."
