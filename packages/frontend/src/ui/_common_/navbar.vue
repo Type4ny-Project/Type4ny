@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					i18n.ts.timeline
 				}}</span>
 			</MkA>
-			<template v-for="item in menu">
+			<template v-for="item in prefer.r.menu.value">
 				<div v-if="item === '-'" :class="$style.divider"></div>
 				<component
 					:is="navbarItemDef[item].to ? 'MkA' : 'button'"
@@ -221,10 +221,9 @@ watch([darkMode, gamingMode], () => {
 	}
 });
 
-const menu = computed(() => prefer.s.menu);
 const otherMenuItemIndicated = computed(() => {
 	for (const def in navbarItemDef) {
-		if (menu.value.includes(def)) continue;
+		if (prefer.r.menu.value.includes(def)) continue;
 		if (navbarItemDef[def].indicated) return true;
 	}
 	return false;

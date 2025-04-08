@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				i18n.ts.timeline
 			}}</span>
 		</MkA>
-		<template v-for="item in menu">
+		<template v-for="item in prefer.r.menu.value">
 			<div v-if="item === '-'" :class="$style.divider"></div>
 			<component :is="navbarItemDef[item].to ? 'MkA' : 'button'" v-else-if="navbarItemDef[item] && (navbarItemDef[item].show !== false)" class="_button"
 								 :class="[$style.item, { [$style.active]: gaming === '' && navbarItemDef[item].active, [$style.gamingDark]: gaming === 'dark',[$style.gamingLight]: gaming === 'light' }]"
@@ -76,7 +76,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, ref, toRef, watch } from 'vue';
+import { computed, defineAsyncComponent, ref, toRef, watch  } from 'vue';
 import { openInstanceMenu } from './common.js';
 import * as os from '@/os';
 import { navbarItemDef } from '@/navbar.js';
@@ -164,7 +164,7 @@ watch(gamingMode, () => {
 const menu = toRef(prefer.s, 'menu');
 const otherMenuItemIndicated = computed(() => {
 	for (const def in navbarItemDef) {
-		if (menu.value.includes(def)) continue;
+		if (prefer.r.menu.value.includes(def)) continue;
 		if (navbarItemDef[def].indicated) return true;
 	}
 	return false;
