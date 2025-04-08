@@ -1883,7 +1883,7 @@ export interface Locale extends ILocale {
         "description": string;
     };
     /**
-     * センシティブなチャンネルのノートを非表示
+     * センシティブなチャンネルのノートを除外
      */
     "excludeNotesInSensitiveChannel": string;
     /**

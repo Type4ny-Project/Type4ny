@@ -4,30 +4,34 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div class="_gaps_m">
-	<MkFeatureBanner icon="/client-assets/bell_3d.png" color="#ffff00">
-		<SearchKeyword>{{ i18n.ts._settings.notificationsBanner }}</SearchKeyword>
-	</MkFeatureBanner>
+<SearchMarker path="/settings/notifications" :label="i18n.ts.notifications" :keywords="['notifications']" icon="ti ti-bell">
+	<div class="_gaps_m">
+		<MkFeatureBanner icon="/client-assets/bell_3d.png" color="#ffff00">
+			<SearchKeyword>{{ i18n.ts._settings.notificationsBanner }}</SearchKeyword>
+		</MkFeatureBanner>
 
-	<FormSection first>
-		<template #label>{{ i18n.ts.notificationRecieveConfig }}</template>
-		<div class="_gaps_s">
-			<MkFolder v-for="type in notificationTypes.filter(x => !nonConfigurableNotificationTypes.includes(x))" :key="type">
-				<template #label>{{ i18n.ts._notification._types[type] }}</template>
-				<template #suffix>
-					{{
-						$i.notificationRecieveConfig[type]?.type === 'never' ? i18n.ts.none :
-						$i.notificationRecieveConfig[type]?.type === 'following' ? i18n.ts.following :
-						$i.notificationRecieveConfig[type]?.type === 'follower' ? i18n.ts.followers :
-						$i.notificationRecieveConfig[type]?.type === 'mutualFollow' ? i18n.ts.mutualFollow :
-						$i.notificationRecieveConfig[type]?.type === 'followingOrFollower' ? i18n.ts.followingOrFollower :
-						$i.notificationRecieveConfig[type]?.type === 'list' ? i18n.ts.userList :
-						$i.notificationRecieveConfig[type]?.type === 'loginBonus' ? loginBonusEnabled ? i18n.ts.on : i18n.ts.off :
-						i18n.ts.all
-					}}
-				</template>
+		<FormSection first>
+			<template #label>{{ i18n.ts.notificationRecieveConfig }}</template>
+			<div class="_gaps_s">
+				<MkFolder v-for="type in notificationTypes.filter(x => !nonConfigurableNotificationTypes.includes(x))" :key="type">
+					<template #label>{{ i18n.ts._notification._types[type] }}</template>
+					<template #suffix>
+						{{
+							$i.notificationRecieveConfig[type]?.type === 'never' ? i18n.ts.none :
+							$i.notificationRecieveConfig[type]?.type === 'following' ? i18n.ts.following :
+							$i.notificationRecieveConfig[type]?.type === 'follower' ? i18n.ts.followers :
+							$i.notificationRecieveConfig[type]?.type === 'mutualFollow' ? i18n.ts.mutualFollow :
+							$i.notificationRecieveConfig[type]?.type === 'followingOrFollower' ? i18n.ts.followingOrFollower :
+							$i.notificationRecieveConfig[type]?.type === 'list' ? i18n.ts.userList :
+							$i.notificationRecieveConfig[type]?.type === 'loginBonus' ? loginBonusEnabled ? i18n.ts.on : i18n.ts.off :i18n.ts.all
+						}}
+					</template>
 
-					<XNotificationConfig v-if="type !== 'loginBonus'" :userLists="userLists" :value="$i.notificationRecieveConfig[type] ?? { type: 'all' }" :configurableTypes="onlyOnOrOffNotificationTypes.includes(type) ? ['all', 'never'] : undefined"@update="(res) => updateReceiveConfig(type, res)"/>
+					<XNotificationConfig
+						v-if="type !== 'loginBonus'":userLists="userLists"
+						:value="$i.notificationRecieveConfig[type] ?? { type: 'all' }"
+						:configurableTypes="onlyOnOrOffNotificationTypes.includes(type) ? ['all', 'never'] : undefined"
+						@update="(res) => updateReceiveConfig(type, res)"/>
 					<div v-else>
 						<MkSwitch v-model="loginBonusEnabled">{{ i18n.ts.loginBonusNotify }}</MkSwitch>
 						<MkButton inline primary @click="updateReceiveConfig(type,loginBonusEnabled)"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
@@ -35,32 +39,32 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</MkFolder>
 			</div>
 		</FormSection>
-	<FormSection>
-		<div class="_gaps_m">
-			<FormLink @click="readAllNotifications">{{ i18n.ts.markAsReadAllNotifications }}</FormLink>
-		</div>
-	</FormSection>
-	<FormSection>
-		<div class="_gaps_m">
-			<FormLink @click="testNotification">{{ i18n.ts._notification.sendTestNotification }}</FormLink>
-			<FormLink @click="flushNotification">{{ i18n.ts._notification.flushNotification }}</FormLink>
-		</div>
-	</FormSection>
-	<FormSection>
-		<template #label>{{ i18n.ts.pushNotification }}</template>
+		<FormSection>
+			<div class="_gaps_m">
+				<FormLink @click="readAllNotifications">{{ i18n.ts.markAsReadAllNotifications }}</FormLink>
+			</div>
+		</FormSection>
+		<FormSection>
+			<div class="_gaps_m">
+				<FormLink @click="testNotification">{{ i18n.ts._notification.sendTestNotification }}</FormLink>
+				<FormLink @click="flushNotification">{{ i18n.ts._notification.flushNotification }}</FormLink>
+			</div>
+		</FormSection>
+		<FormSection>
+			<template #label>{{ i18n.ts.pushNotification }}</template>
 
-		<div class="_gaps_m">
-			<MkPushNotificationAllowButton ref="allowButton"/>
-			<MkSwitch :disabled="!pushRegistrationInServer" :modelValue="sendReadMessage" @update:modelValue="onChangeSendReadMessage">
-				<template #label>{{ i18n.ts.sendPushNotificationReadMessage }}</template>
-				<template #caption>
-					<I18n :src="i18n.ts.sendPushNotificationReadMessageCaption">
-						<template #emptyPushNotificationMessage>{{ i18n.ts._notification.emptyPushNotificationMessage }}</template>
-					</I18n>
-				</template>
-			</MkSwitch>
-		</div>
-	</FormSection>
+			<div class="_gaps_m">
+				<MkPushNotificationAllowButton ref="allowButton"/>
+				<MkSwitch :disabled="!pushRegistrationInServer" :modelValue="sendReadMessage" @update:modelValue="onChangeSendReadMessage">
+					<template #label>{{ i18n.ts.sendPushNotificationReadMessage }}</template>
+					<template #caption>
+						<I18n :src="i18n.ts.sendPushNotificationReadMessageCaption">
+							<template #emptyPushNotificationMessage>{{ i18n.ts._notification.emptyPushNotificationMessage }}</template>
+						</I18n>
+					</template>
+				</MkSwitch>
+			</div>
+		</FormSection>
 	<FormSection>
 		<template #label>{{ i18n.ts.otherSettings }}</template>
 		<div class="_gaps_m">
@@ -71,6 +75,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</FormSection>
 </div>
+</SearchMarker>
 </template>
 
 <script lang="ts" setup>
