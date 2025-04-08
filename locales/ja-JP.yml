@@ -463,6 +463,7 @@ antennaExcludeBots: "Botアカウントを除外"
 antennaKeywordsDescription: "スペースで区切るとAND指定になり、改行で区切るとOR指定になります"
 notifyAntenna: "新しいノートを通知する"
 withFileAntenna: "ファイルが添付されたノートのみ"
+excludeNotesInSensitiveChannel: "センシティブなチャンネルのノートを除外"
 _antennaKeywordNullError:
   title: "受信キーワードがありません"
   description: "受信キーワードが入力されていません。"
