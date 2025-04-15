@@ -2580,6 +2580,7 @@ _widgets:
     chooseList: "リストを選択"
   clicker: "クリッカー"
   birthdayFollowings: "今日誕生日のユーザー"
+  chat: "チャット"
 
 nPointGets: "{getPoint}{pointName}ゲットしました！"
 pointName: "ログインボーナスのポイントの名前"
