@@ -238,7 +238,7 @@ export class ServerService implements OnApplicationShutdown {
 
 				if (user) {
 					reply.redirect(
-						user.avatarUrl ?? this.userEntityService.getIdenticonUrl(user),
+						(user.avatarId == null ? null : user.avatarUrl) ?? this.userEntityService.getIdenticonUrl(user),
 					);
 				} else {
 					reply.redirect('/static-assets/user-unknown.png');

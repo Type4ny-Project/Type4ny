@@ -589,7 +589,7 @@ export class ClientServerService {
 						profile,
 						me,
 						avatarUrl:
-							user.avatarUrl ?? this.userEntityService.getIdenticonUrl(user),
+							_user.avatarUrl,
 						sub: request.params.sub,
 						...(await this.generateCommonPugData(this.meta)),
 					clientCtx: htmlSafeJsonStringify({
