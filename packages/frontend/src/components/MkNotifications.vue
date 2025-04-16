@@ -23,8 +23,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 				tag="div"
 			>
 				<template v-for="(notification, i) in notifications" :key="notification.id">
-					<MkNote v-if="['reply', 'quote', 'mention'].includes(notification.type)" :class="$style.item" :note="notification.note" :withHardMute="true"/>
-					<XNotification v-else :class="$style.item" :notification="notification" :withTime="true" :full="true"/>
+					<MkNote v-if="['reply', 'quote', 'mention'].includes(notification.type)" :class="$style.item" :note="notification.note" :withHardMute="true" :data-scroll-anchor="notification.id"/>
+					<XNotification v-else :class="$style.item" :notification="notification" :withTime="true" :full="true" :data-scroll-anchor="notification.id"/>
 				</template>
 			</component>
 		</template>
