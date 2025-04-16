@@ -297,6 +297,9 @@ type AdminMetaResponse = operations['admin___meta']['responses']['200']['content
 type AdminPromoCreateRequest = operations['admin___promo___create']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
+type AdminQueueClearRequest = operations['admin___queue___clear']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type AdminQueueDeliverDelayedResponse = operations['admin___queue___deliver-delayed']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
@@ -1589,6 +1592,7 @@ declare namespace entities {
         AdminInviteListResponse,
         AdminMetaResponse,
         AdminPromoCreateRequest,
+        AdminQueueClearRequest,
         AdminQueueDeliverDelayedResponse,
         AdminQueueInboxDelayedResponse,
         AdminQueuePromoteRequest,
