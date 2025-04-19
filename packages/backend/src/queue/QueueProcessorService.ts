@@ -45,7 +45,7 @@ import { BakeBufferedReactionsProcessorService } from './processors/BakeBuffered
 import { CleanProcessorService } from './processors/CleanProcessorService.js';
 import { AggregateRetentionProcessorService } from './processors/AggregateRetentionProcessorService.js';
 import { QueueLoggerService } from './QueueLoggerService.js';
-import { QUEUE, baseQueueOptions } from './const.js';
+import { QUEUE, baseWorkerOptions } from './const.js';
 
 // ref. https://github.com/misskey-dev/misskey/pull/7635#issue-971097019
 function httpRelatedBackoff(attemptsMade: number) {
@@ -178,7 +178,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return processer(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.SYSTEM),
+				...baseWorkerOptions(this.config, QUEUE.SYSTEM),
 				autorun: false,
 			});
 
@@ -235,7 +235,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return processer(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.DB),
+				...baseWorkerOptions(this.config, QUEUE.DB),
 				autorun: false,
 			});
 
@@ -267,7 +267,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return this.deliverProcessorService.process(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.DELIVER),
+				...baseWorkerOptions(this.config, QUEUE.DELIVER),
 				autorun: false,
 				concurrency: this.config.deliverJobConcurrency ?? 128,
 				limiter: {
@@ -307,7 +307,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return this.inboxProcessorService.process(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.INBOX),
+				...baseWorkerOptions(this.config, QUEUE.INBOX),
 				autorun: false,
 				concurrency: this.config.inboxJobConcurrency ?? 16,
 				limiter: {
@@ -347,7 +347,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return this.userWebhookDeliverProcessorService.process(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.USER_WEBHOOK_DELIVER),
+				...baseWorkerOptions(this.config, QUEUE.USER_WEBHOOK_DELIVER),
 				autorun: false,
 				concurrency: 64,
 				limiter: {
@@ -387,7 +387,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return this.systemWebhookDeliverProcessorService.process(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.SYSTEM_WEBHOOK_DELIVER),
+				...baseWorkerOptions(this.config, QUEUE.SYSTEM_WEBHOOK_DELIVER),
 				autorun: false,
 				concurrency: 16,
 				limiter: {
@@ -437,7 +437,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return processer(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.RELATIONSHIP),
+				...baseWorkerOptions(this.config, QUEUE.RELATIONSHIP),
 				autorun: false,
 				concurrency: this.config.relationshipJobConcurrency ?? 16,
 				limiter: {
@@ -482,7 +482,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return processer(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.OBJECT_STORAGE),
+				...baseWorkerOptions(this.config, QUEUE.OBJECT_STORAGE),
 				autorun: false,
 				concurrency: 16,
 			});
@@ -522,7 +522,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 					return this.endedPollNotificationProcessorService.process(job);
 				}
 			}, {
-				...baseQueueOptions(this.config, QUEUE.ENDED_POLL_NOTIFICATION),
+				...baseWorkerOptions(this.config, QUEUE.ENDED_POLL_NOTIFICATION),
 				autorun: false,
 			});
 		}

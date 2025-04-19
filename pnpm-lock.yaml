@@ -178,6 +178,9 @@ importers:
       '@twemoji/parser':
         specifier: 15.1.1
         version: 15.1.1
+      '@types/redis-info':
+        specifier: 3.0.3
+        version: 3.0.3
       accepts:
         specifier: 1.3.8
         version: 1.3.8
@@ -379,6 +382,9 @@ importers:
       re2:
         specifier: 1.21.4
         version: 1.21.4(patch_hash=018babd22b7ce951bcd10d6246f1e541a7ac7ba212f7fa8985e774ece67d08e1)
+      redis-info:
+        specifier: 3.1.0
+        version: 3.1.0
       redis-lock:
         specifier: 0.1.4
         version: 0.1.4
@@ -4758,6 +4764,9 @@ packages:
 
   '@types/readdir-glob@1.1.1':
     resolution: {integrity: sha512-ImM6TmoF8bgOwvehGviEj3tRdRBbQujr1N+0ypaln/GWjaerOB26jb93vsRHmdMtvVQZQebOlqt2HROark87mQ==}
+
+  '@types/redis-info@3.0.3':
+    resolution: {integrity: sha512-VIkNy6JbYI/RLdbPHdm9JQvv6RVld2uE2/6Hdid38Qdq+zvDli2FTpImI8pC5zwp8xS8qVqfzlfyAub8xZEd5g==}
 
   '@types/rename@1.0.7':
     resolution: {integrity: sha512-E9qapfghUGfBMi3jNhsmCKPIp3f2zvNKpaX1BDGLGJNjzpgsZ/RTx7NaNksFjGoJ+r9NvWF1NSM5vVecnNjVmw==}
@@ -15332,6 +15341,8 @@ snapshots:
   '@types/readdir-glob@1.1.1':
     dependencies:
       '@types/node': 22.13.4
+
+  '@types/redis-info@3.0.3': {}
 
   '@types/rename@1.0.7': {}
 

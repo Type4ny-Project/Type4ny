@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+ * SPDX-FileCopyrightText: syuilo and misskey-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
@@ -20,9 +20,9 @@ export const paramDef = {
 	type: 'object',
 	properties: {
 		queue: { type: 'string', enum: QUEUE_TYPES },
-		state: { type: 'string', enum: ['*', 'completed', 'wait', 'active', 'paused', 'prioritized', 'delayed', 'failed'] },
+		jobId: { type: 'string' },
 	},
-	required: ['queue', 'state'],
+	required: ['queue', 'jobId'],
 } as const;
 
 @Injectable()
@@ -32,9 +32,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		private queueService: QueueService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			this.queueService.queueClear(ps.queue, ps.state);
-
-			this.moderationLogService.log(me, 'clearQueue');
+			this.queueService.queueRetryJob(ps.queue, ps.jobId);
 		});
 	}
 }
