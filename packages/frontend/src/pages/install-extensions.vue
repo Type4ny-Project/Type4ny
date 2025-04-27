@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithAnimBg>
-	<MkSpacer :contentMax="550" :marginMax="50">
+	<div class="_spacer" style="--MI_SPACER-w: 550" :marginMax="50px;">
 		<MkLoading v-if="uiPhase === 'fetching'"/>
 		<MkExtensionInstaller v-else-if="uiPhase === 'confirm' && data" :extension="data" @confirm="install()" @cancel="close_()">
 			<template #additionalInfo>
@@ -37,7 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkButton @click="goToType4ny()">{{ i18n.ts.goToType4ny }}</MkButton>
 			</div>
 		</div>
-	</MkSpacer>
+	</div>
 </PageWithAnimBg>
 </template>
 

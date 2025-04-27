@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 >
 	<template #header>{{ i18n.ts.notificationSetting }}</template>
 
-	<MkSpacer :marginMin="20" :marginMax="28">
+	<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
 		<div class="_gaps_m">
 			<MkInfo>{{ i18n.ts.notificationSettingDesc }}</MkInfo>
 			<div class="_buttons">
@@ -24,7 +24,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			</div>
 			<MkSwitch v-for="ntype in notificationTypes" :key="ntype" v-model="typesMap[ntype].value">{{ i18n.ts._notification._types[ntype] }}</MkSwitch>
 		</div>
-	</MkSpacer>
+	</div>
 </MkModalWindow>
 </template>
 

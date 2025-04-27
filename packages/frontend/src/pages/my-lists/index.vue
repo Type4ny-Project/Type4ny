@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
-	<MkSpacer :contentMax="700">
+	<div class="_spacer" style="--MI_SPACER-w: 700px;">
 		<MkFoldableSection style="margin-bottom: 32px;">
 			<template #header>{{ i18n.ts.favoriteLists }}</template>
 
@@ -61,7 +61,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</div>
 		</MkFoldableSection>
-	</MkSpacer>
+	</div>
 </PageWithHeader>
 </template>
 

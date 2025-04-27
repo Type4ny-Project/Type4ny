@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
-	<MkSpacer :contentMax="700">
+	<div class="_spacer" style="--MI_SPACER-w: 700px;">
 		<div v-if="channelId == null || channel != null" class="_gaps_m">
 			<MkInput v-model="name">
 				<template #label>{{ i18n.ts.name }}</template>
@@ -93,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</div>
 		</div>
-	</MkSpacer>
+	</div>
 </PageWithHeader>
 </template>
 

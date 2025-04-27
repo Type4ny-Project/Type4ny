@@ -44,9 +44,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 								</div>
 							</template>
 
-							<MkSpacer v-if="withSpacer" :marginMin="spacerMin" :marginMax="spacerMax">
+							<div v-if="withSpacer" class="_spacer" :style="{ '--MI_SPACER-min': props.spacerMin + 'px', '--MI_SPACER-max': props.spacerMax + 'px' }">
 								<slot></slot>
-							</MkSpacer>
+							</div>
 							<div v-else>
 								<slot></slot>
 							</div>

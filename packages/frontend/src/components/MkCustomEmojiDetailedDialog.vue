@@ -6,7 +6,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <MkModalWindow ref="dialogEl" @close="cancel()" @closed="emit('closed')">
 	<template #header>:{{ emoji.name }}:</template>
 	<template #default>
-		<MkSpacer>
+		<div class="_spacer">
 			<div style="display: flex; flex-direction: column; gap: 1em;">
 				<div :class="$style.emojiImgWrapper">
 					<MkCustomEmoji :name="emoji.name" :normal="true" :useOriginalSize="true" style="height: 100%;"></MkCustomEmoji>
@@ -49,7 +49,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 					</template>
 				</MkKeyValue>
 			</div>
-		</MkSpacer>
+		</div>
 	</template>
 </MkModalWindow>
 </template>

@@ -12,7 +12,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 >
 	<template #header>{{ i18n.ts.forgotPassword }}</template>
 
-	<MkSpacer :marginMin="20" :marginMax="28">
+	<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
 		<form v-if="instance.enableEmail" @submit.prevent="onSubmit">
 			<div class="_gaps_m">
 				<MkInput v-model="username" type="text" pattern="^[a-zA-Z0-9_]+$" :spellcheck="false" autofocus required>
@@ -33,7 +33,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<div v-else>
 			{{ i18n.ts._forgotPassword.contactAdmin }}
 		</div>
-	</MkSpacer>
+	</div>
 </MkModalWindow>
 </template>
 

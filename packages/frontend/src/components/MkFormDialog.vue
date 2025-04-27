@@ -18,7 +18,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		{{ title }}
 	</template>
 
-	<MkSpacer :marginMin="20" :marginMax="32">
+	<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 32px;">
 		<div v-if="Object.keys(form).filter(item => !form[item].hidden).length > 0" class="_gaps_m">
 			<template v-for="(v, k) in Object.fromEntries(Object.entries(form))">
 				<template v-if="typeof v.hidden == 'function' ? v.hidden(values) : v.hidden"></template>
@@ -65,7 +65,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<img :src="infoImageUrl" draggable="false"/>
 			<div>{{ i18n.ts.nothing }}</div>
 		</div>
-	</MkSpacer>
+	</div>
 </MkModalWindow>
 </template>
 

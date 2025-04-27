@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
-	<MkSpacer :contentMax="900">
+	<div class="_spacer" style="--MI_SPACER-w: 900px;">
 		<MkSwitch v-model="select">SelectMode</MkSwitch>
 		<MkButton @click="setCategoryBulk">Set Category</MkButton>
 		<MkButton @click="deletes">Delete</MkButton>
@@ -43,7 +43,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 		</div>
-	</MkSpacer>
+	</div>
 </PageWithHeader>
 </template>
 

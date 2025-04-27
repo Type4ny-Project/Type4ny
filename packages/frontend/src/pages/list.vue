@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
-	<MkSpacer v-if="error != null" :contentMax="1200">
+	<div class="_spacer" v-if="error != null" style="--MI_SPACER-w: 1200px;">
 		<div :class="$style.root">
 			<img :class="$style.img" :src="serverErrorImageUrl" draggable="false"/>
 			<p :class="$style.text">
@@ -13,8 +13,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 				{{ i18n.ts.nothing }}
 			</p>
 		</div>
-	</MkSpacer>
-	<MkSpacer v-else-if="list" :contentMax="700">
+	</div>
+	<div class="_spacer" v-else-if="list" style="--MI_SPACER-w: 700px;">
 		<MkButton v-if="list.isLiked" v-tooltip="i18n.ts.unlike" inline :class="$style.button" asLike primary @click="unlike()"><i class="ti ti-heart-off"></i><span v-if="list.likedCount > 0" class="count">{{ list.likedCount }}</span></MkButton>
 		<MkButton v-if="!list.isLiked" v-tooltip="i18n.ts.like" inline :class="$style.button" asLike @click="like()"><i class="ti ti-heart"></i><span v-if="1 > 0" class="count">{{ list.likedCount }}</span></MkButton>
 		<MkButton inline @click="create()"><i class="ti ti-download" :class="$style.import"></i>{{ i18n.ts.import }}</MkButton>
@@ -29,7 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</div>
 		</MkFolder>
-	</MkSpacer>
+	</div>
 </PageWithHeader>
 </template>
 
