@@ -246,10 +246,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</div>
 			<MkReactionsViewer
 				v-if="appearNote.reactionAcceptance !== 'likeOnly'"
-				:note="appearNote"
-				:maxNumber="16"
-				@mockUpdateMyReaction="emitUpdReaction"
-			>
+				style="margin-top: 6px;" :note="appearNote" :maxNumber="16" @mockUpdateMyReaction="emitUpdReaction">
 				<template #more>
 					<MkA
 						:to="`/notes/${appearNote.id}/reactions`"
