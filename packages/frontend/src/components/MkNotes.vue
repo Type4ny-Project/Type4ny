@@ -13,16 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</template>
 
 	<template #default="{ items: notes }">
-		<component
-			:is="prefer.s.animation ? TransitionGroup : 'div'"
-			:class="[$style.root, { [$style.noGap]: noGap, '_gaps': !noGap, [$style.reverse]: pagination.reversed }]"
-			:enterActiveClass="$style.transition_x_enterActive"
-			:leaveActiveClass="$style.transition_x_leaveActive"
-			:enterFromClass="$style.transition_x_enterFrom"
-			:leaveToClass="$style.transition_x_leaveTo"
-			:moveClass=" $style.transition_x_move"
-			tag="div"
-		>
+		<div :class="[$style.root, { [$style.noGap]: noGap, '_gaps': !noGap, [$style.reverse]: pagination.reversed }]">
 			<template v-for="(note, i) in notes" :key="note.id">
 				<div v-if="note._shouldInsertAd_" :class="[$style.noteWithAd, { '_gaps': !noGap }]" :data-scroll-anchor="note.id">
 					<MkNote :class="$style.note" :note="note" :withHardMute="true"/>
@@ -32,13 +23,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 				<MkNote v-else :class="$style.note" :note="note" :withHardMute="true" :data-scroll-anchor="note.id"/>
 			</template>
-		</component>
+		</div>
 	</template>
 </MkPagination>
 </template>
 
 <script lang="ts" setup>
-import { useTemplateRef, TransitionGroup } from 'vue';
+import { useTemplateRef } from 'vue';
 import type { Paging } from '@/components/MkPagination.vue';
 import MkNote from '@/components/MkNote.vue';
 import MkPagination from '@/components/MkPagination.vue';
@@ -62,20 +53,6 @@ defineExpose({
 </script>
 
 <style lang="scss" module>
-.transition_x_move,
-.transition_x_enterActive,
-.transition_x_leaveActive {
-	transition: opacity 0.3s cubic-bezier(0,.5,.5,1), transform 0.3s cubic-bezier(0,.5,.5,1) !important;
-}
-.transition_x_enterFrom,
-.transition_x_leaveTo {
-	opacity: 0;
-	transform: translateY(-50%);
-}
-.transition_x_leaveActive {
-	position: absolute;
-}
-
 .reverse {
 	display: flex;
 	flex-direction: column-reverse;
