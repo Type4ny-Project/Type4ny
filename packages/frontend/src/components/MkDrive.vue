@@ -54,6 +54,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		@contextmenu.stop="onContextmenu"
 	>
 		<div ref="contents">
+			<MkInfo v-if="!store.r.readDriveTip.value" closable @close="closeTip()"><div v-html="i18n.ts.driveAboutTip"></div></MkInfo>
 			<div v-show="folders.length > 0" ref="foldersContainer" :class="$style.folders">
 				<XFolder
 					v-for="(f, i) in folders"
@@ -117,6 +118,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { nextTick, onActivated, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkButton from './MkButton.vue';
+import MkInfo from './MkInfo.vue';
 import type { MenuItem } from '@/types/menu.js';
 import XNavFolder from '@/components/MkDrive.navFolder.vue';
 import XFolder from '@/components/MkDrive.folder.vue';
@@ -130,6 +132,7 @@ import { claimAchievement } from '@/utility/achievements.js';
 import number from '@/filters/number.js';
 import { prefer } from '@/preferences.js';
 import { chooseFileFromPc } from '@/utility/select-file.js';
+import { store } from '@/store.js';
 
 const props = withDefaults(defineProps<{
   initialFolder?: Misskey.entities.DriveFolder;
@@ -820,6 +823,10 @@ function showMenu(ev: MouseEvent) {
 
 function onContextmenu(ev: MouseEvent) {
 	os.contextMenu(getMenu(), ev);
+}
+
+function closeTip() {
+	store.set('readDriveTip', true);
 }
 
 onMounted(() => {
