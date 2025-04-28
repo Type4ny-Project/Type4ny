@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<div
 				v-for="(image, i) in images" :key="i"
 				:class="$style.img"
-				:style="`background-image: url(${thumbnail(image)})`"
+				:style="{ backgroundImage: `url(${thumbnail(image)})` }"
 			></div>
 		</div>
 	</div>
