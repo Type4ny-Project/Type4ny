@@ -6,6 +6,7 @@
 import { URL, domainToASCII } from 'node:url';
 import { Inject, Injectable } from '@nestjs/common';
 import RE2 from 're2';
+import semver from 'semver';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import { bindThis } from '@/decorators.js';
@@ -138,5 +139,21 @@ export class UtilityService {
 	public isFederationAllowedUri(uri: string): boolean {
 		const host = this.extractDbHost(uri);
 		return this.isFederationAllowedHost(host);
+	}
+
+	@bindThis
+	public isDeliverSuspendedSoftware(software: Pick<MiInstance, 'softwareName' | 'softwareVersion'>): SoftwareSuspension | undefined {
+		if (software.softwareName == null) return undefined;
+		if (software.softwareVersion == null) {
+			// software version is null; suspend iff versionRange is *
+			return this.meta.deliverSuspendedSoftware.find(x =>
+				x.software === software.softwareName
+				&& x.versionRange.trim() === '*');
+		} else {
+			const softwareVersion = software.softwareVersion;
+			return this.meta.deliverSuspendedSoftware.find(x =>
+				x.software === software.softwareName
+				&& semver.satisfies(softwareVersion, x.versionRange, { includePrerelease: true }));
+		}
 	}
 }

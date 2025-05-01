@@ -210,6 +210,56 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkFolder>
 
 			<MkFolder>
+				<template #icon><i class="ti ti-planet"></i></template>
+				<template #label>{{ i18n.ts.federation }}</template>
+				<template v-if="federationForm.savedState.federation === 'all'" #suffix>{{ i18n.ts.all }}</template>
+				<template v-else-if="federationForm.savedState.federation === 'specified'" #suffix>{{ i18n.ts.specifyHost }}</template>
+				<template v-else-if="federationForm.savedState.federation === 'none'" #suffix>{{ i18n.ts.none }}</template>
+				<template v-if="federationForm.modified.value" #footer>
+					<MkFormFooter :form="federationForm"/>
+				</template>
+
+				<div class="_gaps">
+					<MkRadios v-model="federationForm.state.federation">
+						<template #label>{{ i18n.ts.behavior }}<span v-if="federationForm.modifiedStates.federation" class="_modified">{{ i18n.ts.modified }}</span></template>
+						<option value="all">{{ i18n.ts.all }}</option>
+						<option value="specified">{{ i18n.ts.specifyHost }}</option>
+						<option value="none">{{ i18n.ts.none }}</option>
+					</MkRadios>
+
+					<MkTextarea v-if="federationForm.state.federation === 'specified'" v-model="federationForm.state.federationHosts">
+						<template #label>{{ i18n.ts.federationAllowedHosts }}<span v-if="federationForm.modifiedStates.federationHosts" class="_modified">{{ i18n.ts.modified }}</span></template>
+						<template #caption>{{ i18n.ts.federationAllowedHostsDescription }}</template>
+					</MkTextarea>
+
+					<MkFolder>
+						<template #icon><i class="ti ti-list"></i></template>
+						<template #label><SearchLabel>{{ i18n.ts._serverSettings.deliverSuspendedSoftware }}</SearchLabel></template>
+						<template #footer>
+							<div class="_buttons">
+								<MkButton @click="federationForm.state.deliverSuspendedSoftware.push({software: '', versionRange: ''})"><i class="ti ti-plus"></i> {{ i18n.ts.add }}</MkButton>
+							</div>
+						</template>
+
+						<div :class="$style.metadataRoot" class="_gaps_s">
+							<MkInfo>{{ i18n.ts._serverSettings.deliverSuspendedSoftwareDescription }}</MkInfo>
+							<div v-for="(element, index) in federationForm.state.deliverSuspendedSoftware" :key="index" v-panel :class="$style.fieldDragItem">
+								<button class="_button" :class="$style.dragItemRemove" @click="federationForm.state.deliverSuspendedSoftware.splice(index, 1)"><i class="ti ti-x"></i></button>
+								<div :class="$style.dragItemForm">
+									<FormSplit :minWidth="200">
+										<MkInput v-model="element.software" small :placeholder="i18n.ts.softwareName">
+										</MkInput>
+										<MkInput v-model="element.versionRange" small :placeholder="i18n.ts.version">
+										</MkInput>
+									</FormSplit>
+								</div>
+							</div>
+						</div>
+					</MkFolder>
+				</div>
+			</MkFolder>
+
+			<MkFolder>
 				<template #icon><i class="ti ti-ghost"></i></template>
 				<template #label>{{ i18n.ts.proxyAccount }}</template>
 				<template v-if="proxyAccountForm.modified.value" #footer>
@@ -340,6 +390,19 @@ const urlPreviewForm = useForm({
 	fetchInstance(true);
 });
 
+const federationForm = useForm({
+	federation: meta.federation,
+	federationHosts: meta.federationHosts.join('\n'),
+	deliverSuspendedSoftware: meta.deliverSuspendedSoftware,
+}, async (state) => {
+	await os.apiWithDialog('admin/update-meta', {
+		federation: state.federation,
+		federationHosts: state.federationHosts.split('\n'),
+		deliverSuspendedSoftware: state.deliverSuspendedSoftware,
+	});
+	fetchInstance(true);
+});
+
 const proxyAccountForm = useForm({
 	description: proxyAccount.description,
 }, async (state) => {
@@ -361,5 +424,54 @@ definePage(() => ({
 .subCaption {
 	font-size: 0.85em;
 	color: color(from var(--MI_THEME-fg) srgb r g b / 0.75);
+}
+
+.metadataRoot {
+	container-type: inline-size;
+}
+
+.fieldDragItem {
+	display: flex;
+	padding: 10px;
+	align-items: flex-end;
+	border-radius: 6px;
+
+	/* (drag button) 32px + (drag button margin) 8px + (input width) 200px * 2 + (input gap) 12px = 452px */
+	@container (max-width: 452px) {
+		align-items: center;
+	}
+}
+
+.dragItemHandle {
+	cursor: grab;
+	width: 32px;
+	height: 32px;
+	margin: 0 8px 0 0;
+	opacity: 0.5;
+	flex-shrink: 0;
+
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+.dragItemRemove {
+	@extend .dragItemHandle;
+
+	color: #ff2a2a;
+	opacity: 1;
+	cursor: pointer;
+
+	&:hover, &:focus {
+		opacity: .7;
+	}
+
+	&:active {
+		cursor: pointer;
+	}
+}
+
+.dragItemForm {
+	flex-grow: 1;
 }
 </style>

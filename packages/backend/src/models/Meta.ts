@@ -769,4 +769,14 @@ export class MiMeta {
 		nullable: true,
 	})
 	public googleAnalyticsMeasurementId: string | null;
+
+	@Column('jsonb', {
+		default: [],
+	})
+	public deliverSuspendedSoftware: SoftwareSuspension[];
 }
+
+export type SoftwareSuspension = {
+	software: string,
+	versionRange: string,
+};

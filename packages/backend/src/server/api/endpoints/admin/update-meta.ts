@@ -216,6 +216,17 @@ export const paramDef = {
 		bannerLight: { type: 'string', nullable: true },
 		bannerDark: { type: 'string', nullable: true },
 		pointName: { type: 'string', nullable: true },
+		deliverSuspendedSoftware: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					software: { type: 'string' },
+					versionRange: { type: 'string' },
+				},
+				required: ['software', 'versionRange'],
+			},
+		},
 	},
 	required: [],
 } as const;
@@ -770,7 +781,19 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.iconDark !== undefined) {
 				set.iconDark = ps.iconDark;
 			}
-			if (ps.iconLight !== undefined) {
+
+			if (ps.federation !== undefined) {
+				set.federation = ps.federation;
+			}
+
+			if (ps.deliverSuspendedSoftware !== undefined) {
+				set.deliverSuspendedSoftware = ps.deliverSuspendedSoftware;
+			}
+
+			if (Array.isArray(ps.federationHosts)) {
+				set.federationHosts = ps.federationHosts.filter(Boolean).map(x => x.toLowerCase());
+				}
+				if (ps.iconLight !== undefined) {
 				set.iconLight = ps.iconLight;
 			}
 

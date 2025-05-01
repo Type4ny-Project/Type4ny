@@ -667,6 +667,24 @@ export const meta = {
 					optional: false, nullable: false,
 				},
 			},
+			deliverSuspendedSoftware: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'object',
+					optional: false, nullable: false,
+					properties: {
+						software: {
+							type: 'string',
+							optional: false, nullable: false,
+						},
+						versionRange: {
+							type: 'string',
+							optional: false, nullable: false,
+						},
+					},
+				},
+			},
 		},
 	},
 } as const;
@@ -826,6 +844,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					nowLocalUsers: 0,
 					maxLocalUsers: 0,
 				}),
+				deliverSuspendedSoftware: instance.deliverSuspendedSoftware,
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {
