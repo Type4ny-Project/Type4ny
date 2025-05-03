@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<MkPullToRefresh :refresher="() => reload()">
+<component :is="prefer.s.enablePullToRefresh ? MkPullToRefresh : 'div'" :refresher="() => reload()">
 	<MkPagination ref="pagingComponent" :pagination="pagination" :filter="filterMutedNotification">
 		<template #empty>
 			<div class="_fullinfo">
@@ -29,7 +29,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			</component>
 		</template>
 	</MkPagination>
-</MkPullToRefresh>
+</component>
 </template>
 
 <script lang="ts" setup>
