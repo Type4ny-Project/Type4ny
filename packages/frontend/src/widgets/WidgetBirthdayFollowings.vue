@@ -14,8 +14,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			<MkAvatar v-for="user in users" :key="user.id" :user="user.followee" link preview></MkAvatar>
 		</div>
 		<div v-else :class="$style.bdayFFallback">
-			<img :src="infoImageUrl" draggable="false" :class="$style.bdayFFallbackImage"/>
-			<div>{{ i18n.ts.nothing }}</div>
+			<MkResult type="empty"/>
 		</div>
 	</div>
 </MkContainer>
@@ -31,7 +30,6 @@ import type { GetFormResultType } from '@/utility/form.js';
 import MkContainer from '@/components/MkContainer.vue';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
-import { infoImageUrl } from '@/instance.js';
 import { $i } from '@/i.js';
 
 const name = i18n.ts._widgets.birthdayFollowings;
@@ -132,13 +130,5 @@ defineExpose<WidgetComponentExpose>({
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
-
-.bdayFFallbackImage {
-	height: 96px;
-	width: auto;
-	max-width: 90%;
-	margin-bottom: 8px;
-	border-radius: var(--MI-radius);
 }
 </style>

@@ -46,12 +46,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkFoldableSection>
 			<template #header>{{ i18n.ts.myLists }}</template>
 			<div class="_gaps">
-				<div v-if="items.length === 0" class="empty">
-					<div class="_fullinfo">
-						<img :src="infoImageUrl" draggable="false"/>
-						<div>{{ i18n.ts.nothing }}</div>
-					</div>
-				</div>
+				<MkResult v-if="items.length === 0" type="empty"/>
 
 				<div v-if="items.length > 0" class="_gaps">
 					<MkA v-for="list in items" :key="list.id" class="_panel" :class="$style.list" :to="`/my/lists/${ list.id }`">
@@ -72,7 +67,6 @@ import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
 import { userFavoriteListsCache, userListsCache } from '@/cache.js';
-import { infoImageUrl } from '@/instance.js';
 import { ensureSignin } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { misskeyApi } from '@/scripts/misskey-api.js';

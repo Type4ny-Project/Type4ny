@@ -6,13 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <PageWithHeader :actions="headerActions" :tabs="headerTabs">
 	<div v-if="error != null" class="_spacer" style="--MI_SPACER-w: 1200px;">
-		<div :class="$style.root">
-			<img :class="$style.img" :src="serverErrorImageUrl" draggable="false"/>
-			<p :class="$style.text">
-				<i class="ti ti-alert-triangle"></i>
-				{{ i18n.ts.nothing }}
-			</p>
-		</div>
+		<MkResult type="error"/>
 	</div>
 	<div v-else-if="list" class="_spacer" style="--MI_SPACER-w: 700px;">
 		<MkButton v-if="list.isLiked" v-tooltip="i18n.ts.unlike" inline :class="$style.button" asLike primary @click="unlike()"><i class="ti ti-heart-off"></i><span v-if="list.likedCount > 0" class="count">{{ list.likedCount }}</span></MkButton>

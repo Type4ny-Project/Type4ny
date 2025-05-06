@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <Transition :name="prefer.s.animation ? '_transition_zoom' : ''" appear>
 	<div :class="$style.root">
-		<img :class="$style.img" :src="serverErrorImageUrl" draggable="false"/>
+		<img v-if="instance.serverErrorImageUrl" :class="$style.img" :src="instance.serverErrorImageUrl" draggable="false"/>
 		<p :class="$style.text"><i class="ti ti-alert-triangle"></i> {{ i18n.ts.somethingHappened }}</p>
 		<MkButton :class="$style.button" @click="() => emit('retry')">{{ i18n.ts.retry }}</MkButton>
 	</div>
@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';
-import { serverErrorImageUrl } from '@/instance.js';
+import { instance } from '@/instance.js';
 
 const emit = defineEmits<{
 	(ev: 'retry'): void;

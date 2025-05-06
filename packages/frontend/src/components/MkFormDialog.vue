@@ -61,10 +61,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 				/>
 			</template>
 		</div>
-		<div v-else class="_fullinfo">
-			<img :src="infoImageUrl" draggable="false"/>
-			<div>{{ i18n.ts.nothing }}</div>
-		</div>
+		<MkResult v-else type="empty"/>
 	</div>
 </MkModalWindow>
 </template>
@@ -82,7 +79,6 @@ import XFile from './MkFormDialog.file.vue';
 import type { Form } from '@/utility/form.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import { i18n } from '@/i18n.js';
-import { infoImageUrl } from '@/instance.js';
 
 const props = defineProps<{
 	title: string;
