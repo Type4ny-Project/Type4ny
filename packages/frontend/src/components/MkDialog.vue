@@ -10,18 +10,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</div>
 		<div
 			v-else-if="!input && !select"
-			:class="[$style.icon, {
-				[$style.type_success]: type === 'success',
-				[$style.type_error]: type === 'error',
-				[$style.type_warning]: type === 'warning',
-				[$style.type_info]: type === 'info',
-			}]"
+			:class="[$style.icon]"
 		>
-			<i v-if="type === 'success'" :class="$style.iconInner" class="ti ti-check"></i>
-			<i v-else-if="type === 'error'" :class="$style.iconInner" class="ti ti-circle-x"></i>
-			<i v-else-if="type === 'warning'" :class="$style.iconInner" class="ti ti-alert-triangle"></i>
-			<i v-else-if="type === 'info'" :class="$style.iconInner" class="ti ti-info-circle"></i>
-			<i v-else-if="type === 'question'" :class="$style.iconInner" class="ti ti-help-circle"></i>
+			<MkSystemIcon v-if="type === 'success'" :class="$style.iconInner" style="width: 45px;" type="success"/>
+			<MkSystemIcon v-else-if="type === 'error'" :class="$style.iconInner" style="width: 45px;" type="error"/>
+			<MkSystemIcon v-else-if="type === 'warning'" :class="$style.iconInner" style="width: 45px;" type="warn"/>
+			<MkSystemIcon v-else-if="type === 'info'" :class="$style.iconInner" style="width: 45px;" type="info"/>
+			<MkSystemIcon v-else-if="type === 'question'" :class="$style.iconInner" style="width: 45px;" type="question"/>
 			<MkLoading v-else-if="type === 'waiting'" :class="$style.iconInner" :em="true"/>
 			<div v-if="type === 'mksw'" :class="$style.text"><MkSwitch v-model="mkresult" :helpText="text"/></div>
 		</div>
@@ -203,22 +198,6 @@ function onInputKeydown(evt: KeyboardEvent) {
 .iconInner {
 	display: block;
 	margin: 0 auto;
-}
-
-.type_info {
-	color: #55c4dd;
-}
-
-.type_success {
-	color: var(--MI_THEME-success);
-}
-
-.type_error {
-	color: var(--MI_THEME-error);
-}
-
-.type_warning {
-	color: var(--MI_THEME-warn);
 }
 
 .title {
