@@ -43,8 +43,6 @@ class HomeLocalTimelineChannel extends Channel {
 
 		if (this.withFiles && (note.fileIds == null || note.fileIds.length === 0)) return;
 
-		if (note.user.host) return;
-
 		if (note.channelId) {
 			if (!this.followingChannels.has(note.channelId)) return;
 		} else {
