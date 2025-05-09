@@ -780,6 +780,11 @@ export class MiMeta {
 		default: [],
 	})
 	public deliverSuspendedSoftware: SoftwareSuspension[];
+
+	@Column('boolean', {
+		default: false,
+	})
+	public singleUserMode: boolean;
 }
 
 export type SoftwareSuspension = {

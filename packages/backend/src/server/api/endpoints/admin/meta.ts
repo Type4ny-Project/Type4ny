@@ -685,6 +685,10 @@ export const meta = {
 					},
 				},
 			},
+			singleUserMode: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			ugcVisibilityForVisitor: {
 				type: 'string',
 				enum: ['all', 'local', 'none'],
@@ -850,6 +854,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					maxLocalUsers: 0,
 				}),
 				deliverSuspendedSoftware: instance.deliverSuspendedSoftware,
+				singleUserMode: instance.singleUserMode,
 				ugcVisibilityForVisitor: instance.ugcVisibilityForVisitor,
 			};
 
