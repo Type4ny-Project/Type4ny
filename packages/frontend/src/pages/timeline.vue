@@ -236,6 +236,19 @@ function saveTlFilter(key: keyof typeof defaultStore.state.tl.filter, newValue: 
 	}
 }
 
+async function timetravel(): Promise<void> {
+	const { canceled, result: date } = await os.inputDate({
+		title: i18n.ts.date,
+	});
+	if (canceled) return;
+
+	tlComponent.value.timetravel(date);
+}
+
+function focus(): void {
+	tlComponent.value.focus();
+}
+
 function closeTutorial(): void {
 	if (!isBasicTimeline(src.value)) return;
 	const before = defaultStore.state.timelineTutorials;
@@ -309,9 +322,8 @@ const headerActions = computed(() => {
 	}
 	return tmp;
 });
-
 const headerTabs = computed(() => defaultStore.reactiveState.timelineHeader.value.map(tab => {
-	if ((tab === 'local' || tab === 'social' || tab === 'homeLocal') && !isLocalTimelineAvailable) {
+	if ((tab === 'local' || tab === 'social') && !isLocalTimelineAvailable) {
 		return {};
 	} else if (tab === 'global' && !isGlobalTimelineAvailable) {
 		return {};

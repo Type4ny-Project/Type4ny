@@ -28,8 +28,7 @@ export type TimelineHeaderItem =
 	`channel:${string}` |
 	`antenna:${string}` |
 	'media' |
-	`customTimeline:${string}` |
-	'homeLocal';
+	`customTimeline:${string}`;
 
 type TimelineHeaderItemsDef = {
 	title: string;
@@ -52,11 +51,6 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 	...(isLocalTimelineAvailable ? {
 		local: {
 			title: i18n.ts._timelines.local,
-			icon: 'ti ti-planet',
-			iconOnly: true,
-		},
-		homeLocal: {
-			title: 'home + Local',
 			icon: 'ti ti-planet',
 			iconOnly: true,
 		},

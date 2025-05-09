@@ -861,11 +861,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 			for (const channelFollowing of channelFollowings) {
 				this.fanoutTimelineService.push(`homeTimeline:${channelFollowing.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
-				this.fanoutTimelineService.push(`localHomeTimeline:${channelFollowing.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
-
 				if (note.fileIds.length > 0) {
 					this.fanoutTimelineService.push(`homeTimelineWithFiles:${channelFollowing.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax / 2, r);
-					this.fanoutTimelineService.push(`localHomeTimelineWithFiles:${channelFollowing.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
 				}
 			}
 		} else {
@@ -904,10 +901,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 				}
 
 				this.fanoutTimelineService.push(`homeTimeline:${following.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
-				if (user.host === null) this.fanoutTimelineService.push(`localHomeTimeline:${following.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
 				if (note.fileIds.length > 0) {
 					this.fanoutTimelineService.push(`homeTimelineWithFiles:${following.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax / 2, r);
-					if (user.host === null) this.fanoutTimelineService.push(`localHomeTimelineWithFiles:${following.followerId}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
 				}
 			}
 
@@ -934,10 +929,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if (note.userHost == null) {
 				if (note.visibility !== 'specified' || !note.visibleUserIds.some(v => v === user.id)) {
 					this.fanoutTimelineService.push(`homeTimeline:${user.id}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
-					this.fanoutTimelineService.push(`localHomeTimeline:${user.id}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
 					if (note.fileIds.length > 0) {
 						this.fanoutTimelineService.push(`homeTimelineWithFiles:${user.id}`, note.id, this.meta.perUserHomeTimelineCacheMax / 2, r);
-						this.fanoutTimelineService.push(`localHomeTimelineWithFiles:${user.id}`, note.id, this.meta.perUserHomeTimelineCacheMax, r);
 					}
 				}
 			}
@@ -960,13 +953,10 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 				if (note.visibility === 'public' && note.userHost == null) {
 					this.fanoutTimelineService.push('localTimeline', note.id, 1000, r);
-					this.fanoutTimelineService.push(`localHomeTimeline:${user.id}`, note.id, 1000, r);
 					if (note.fileIds.length > 0) {
 						this.fanoutTimelineService.push('localTimelineWithFiles', note.id, 500, r);
-						this.fanoutTimelineService.push(`localHomeTimelineWithFiles:${user.id}`, note.id, 1000, r);
 					}
 				}
-
 				if (note.visibility === 'public' && note.userHost !== null) {
 					this.fanoutTimelineService.push(`remoteLocalTimeline:${note.userHost}`, note.id, 1000, r);
 				}

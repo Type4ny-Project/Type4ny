@@ -16,7 +16,6 @@ import { miLocalStorage } from '@/local-storage.js';
 import { Storage } from '@/pizzax.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
 import { instance } from '@/instance.js';
-import type {TimelineHeaderItem} from "@/timeline-header";
 
 interface PostFormAction {
 	title: string;
@@ -252,7 +251,7 @@ export const defaultStore = markRaw(
 			where: 'deviceAccount',
 			default: [
 				'home',
-				...(isLocalTimelineAvailable ? ['local', 'social', 'homeLocal'] : []),
+				...(isLocalTimelineAvailable ? ['local', 'social'] : []),
 				...(isGlobalTimelineAvailable ? ['global'] : []),
 				'lists',
 				'antennas',

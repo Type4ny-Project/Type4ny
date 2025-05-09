@@ -13,16 +13,11 @@ export type FanoutTimelineName = (
 	// home timeline
 	| `homeTimeline:${string}`
 	| `homeTimelineWithFiles:${string}` // only notes with files are included
-
 	// local timeline
 	| 'localTimeline' // replies are not included
 	| 'localTimelineWithFiles' // only non-reply notes with files are included
 	| 'localTimelineWithReplies' // only replies are included
 	| `localTimelineWithReplyTo:${string}` // Only replies to specific local user are included. Parameter is reply user id.
-
-	// local home timeline
-	| `localHomeTimeline:${string}`
-	| `localHomeTimelineWithFiles:${string}` // only notes with files are included
 
 	// antenna
 	| `antennaTimeline:${string}`
@@ -42,9 +37,9 @@ export type FanoutTimelineName = (
 
 	// role timelines
 	| `roleTimeline:${string}` // any notes are included
+);
 
 	| `remoteLocalTimeline:${string}`
-);
 
 @Injectable()
 export class FanoutTimelineService {
