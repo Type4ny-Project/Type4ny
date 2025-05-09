@@ -13,13 +13,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import type { Paging } from '@/components/MkPagination.vue';
+import type { PagingCtx } from '@/use/use-pagination.js';
 import MkChannelPreview from '@/components/MkChannelPreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{
-	pagination: Paging;
+	pagination: PagingCtx;
 	noGap?: boolean;
 	extractor?: (item: any) => any;
 }>(), {

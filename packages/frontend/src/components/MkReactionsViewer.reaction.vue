@@ -22,7 +22,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		style="pointer-events: none;" :class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="note.reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
+		style="pointer-events: none;" :class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
 	<span :class="[
 			$style.count,
 			{
@@ -46,18 +46,21 @@ import { misskeyApi, misskeyApiGet } from '@/utility/misskey-api.js';
 import { useTooltip } from '@/use/use-tooltip.js';
 import { $i } from '@/i.js';
 import MkReactionEffect from '@/components/MkReactionEffect.vue';
-import { claimAchievement } from '@/utility/achievements.js';
 import { i18n } from '@/i18n.js';
 import * as sound from '@/utility/sound.js';
 import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
 import { customEmojisMap } from '@/custom-emojis.js';
 import { prefer } from '@/preferences.js';
 import { DI } from '@/di.js';
+import { noteEvents } from '@/use/use-note-capture.js';
 
 const gamingType = defaultStore.state.gamingType;
 
 const props = defineProps<{
+	noteId: Misskey.entities.Note['id'];
 	reaction: string;
+	reactionEmojis: Misskey.entities.Note['reactionEmojis'];
+	myReaction: Misskey.entities.Note['myReaction'];
 	count: number;
 	isInitial: boolean;
 	note: Misskey.entities.Note & {
@@ -84,12 +87,14 @@ const isAvailable = computed(() =>
 );
 
 const canToggle = computed(() => {
-	return (
+	// TODO
+	//return (
 		!props.reaction.match(/@\w/) &&
 		$i &&
 		emoji.value &&
 		checkReactionPermissions($i, props.note, emoji.value)
 	);
+	return !props.reaction.match(/@\w/) && $i && emoji.value;
 });
 
 const canGetInfo = computed(
@@ -139,15 +144,26 @@ async function toggleReaction() {
 		}
 
 		misskeyApi('notes/reactions/delete', {
-			noteId: props.note.id,
+			noteId: props.noteId,
 			reaction: oldReaction,
 		}).then(() => {
+			noteEvents.emit(`unreacted:${props.noteId}`, {
+				userId: $i!.id,
+				reaction: props.reaction,
+				emoji: emoji.value,
+			});
 			if (
 				oldReaction !== props.reaction
 			) {
 				misskeyApi('notes/reactions/create', {
-					noteId: props.note.id,
+					noteId: props.noteId,
 					reaction: props.reaction,
+				}).then(() => {
+					noteEvents.emit(`reacted:${props.noteId}`, {
+						userId: $i!.id,
+						reaction: props.reaction,
+						emoji: emoji.value,
+					});
 				});
 			}
 		});
@@ -169,17 +185,24 @@ async function toggleReaction() {
 		}
 
 		misskeyApi('notes/reactions/create', {
-			noteId: props.note.id,
+			noteId: props.noteId,
 			reaction: props.reaction,
+		}).then(() => {
+			noteEvents.emit(`reacted:${props.noteId}`, {
+				userId: $i!.id,
+				reaction: props.reaction,
+				emoji: emoji.value,
+			});
 		});
 
-		if (
+		// TODO: 上位コンポーネントでやる
+		//if (
 			props.note.text &&
 			props.note.text.length > 100 &&
 			Date.now() - new Date(props.note.createdAt).getTime() < 1000 * 3
 		) {
-			claimAchievement('reactWithoutRead');
-		}
+		//	claimAchievement('reactWithoutRead');
+		//}
 	}
 }
 
@@ -267,7 +290,7 @@ if (!mock) {
 		buttonEl,
 		async (showing) => {
 			const reactions = await misskeyApiGet('notes/reactions', {
-				noteId: props.note.id,
+				noteId: props.noteId,
 				type: props.reaction,
 				limit: 10,
 				_cacheKey_: props.count,

@@ -6,15 +6,15 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <XColumn :column="column" :isStacked="isStacked" :refresher="() => reloadTimeline()">
 	<template #header><i class="ti ti-mail" style="margin-right: 8px;"></i>{{ column.name || i18n.ts._deck._columns.direct }}</template>
 
-	<MkNotes ref="tlComponent" :pagination="pagination"/>
+	<MkNotesTimeline ref="tlComponent" :pagination="pagination"/>
 </XColumn>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import XColumn from './column.vue';
 import type { Column } from '@/deck.js';
-import MkNotes from '@/components/MkNotes.vue';
+import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
 import { i18n } from '@/i18n.js';
 
 defineProps<{
@@ -30,11 +30,11 @@ const pagination = {
 	},
 };
 
-const tlComponent = ref<InstanceType<typeof MkNotes>>();
+const tlComponent = useTemplateRef('tlComponent');
 
 function reloadTimeline() {
 	return new Promise<void>((res) => {
-		tlComponent.value?.pagingComponent?.reload().then(() => {
+		tlComponent.value?.reload().then(() => {
 			res();
 		});
 	});

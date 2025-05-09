@@ -8,7 +8,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<i class="ti ti-antenna"></i><span style="margin-left: 8px;">{{ column.name || antennaName || i18n.ts._deck._columns.antenna }}</span>
 	</template>
 
-	<MkTimeline v-if="column.antennaId" ref="timeline" src="antenna" :antenna="column.antennaId" @note="onNote"/>
+	<MkStreamingNotesTimeline v-if="column.antennaId" ref="timeline" src="antenna" :antenna="column.antennaId"/>
 </XColumn>
 </template>
 
@@ -21,13 +21,12 @@ import type { MenuItem } from '@/types/menu.js';
 import type { SoundStore } from '@/preferences/def.js';
 import { updateColumn } from '@/deck.js';
 import type { entities as MisskeyEntities } from 'misskey-js';
-import MkTimeline from '@/components/MkTimeline.vue';
+import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { antennasCache } from '@/cache.js';
 import { soundSettingsButton } from '@/ui/deck/tl-note-notification.js';
-import * as sound from '@/utility/sound.js';
 
 const props = defineProps<{
 	column: Column;
@@ -94,10 +93,6 @@ async function setAntenna() {
 
 function editAntenna() {
 	os.pageWindow('my/antennas/' + props.column.antennaId);
-}
-
-function onNote() {
-	sound.playMisskeySfxFile(soundSetting.value);
 }
 
 const menu: MenuItem[] = [

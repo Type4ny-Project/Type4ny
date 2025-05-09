@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	<template #func="{ buttonStyleClass }"><button class="_button" :class="buttonStyleClass" @click="configureNotification()"><i class="ti ti-settings"></i></button></template>
 
 	<div>
-		<XNotifications :excludeTypes="widgetProps.excludeTypes"/>
+		<MkStreamingNotificationsTimeline :excludeTypes="widgetProps.excludeTypes"/>
 	</div>
 </MkContainer>
 </template>
@@ -20,7 +20,7 @@ import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
 import type { GetFormResultType } from '@/utility/form.js';
 import MkContainer from '@/components/MkContainer.vue';
-import XNotifications from '@/components/MkNotifications.vue';
+import MkStreamingNotificationsTimeline from '@/components/MkStreamingNotificationsTimeline.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 

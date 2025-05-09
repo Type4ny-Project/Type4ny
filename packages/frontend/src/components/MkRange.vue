@@ -8,6 +8,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<slot name="label"></slot>
 	</div>
 	<div v-adaptive-border class="body">
+		<slot name="prefix"></slot>
 		<div ref="containerEl" class="container">
 			<div class="track">
 				<div :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="highlight" :style="{ width: (steppedRawValue * 100) + '%' }"></div>
@@ -17,6 +18,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			</div>
 			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mouseenter.passive="onMouseenter" @mousedown="onMousedown" @touchstart="onMousedown"></div>
 		</div>
+		<slot name="suffix"></slot>
 	</div>
 	<div class="caption">
 		<slot name="caption"></slot>
@@ -218,12 +220,17 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 	$thumbWidth: 20px;
 
 	> .body {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
 		padding: 7px 12px;
 		background: var(--MI_THEME-panel);
 		border: solid 1px var(--MI_THEME-panel);
 		border-radius: var(--MI-radius);
 
 		> .container {
+			flex: 1;
 			position: relative;
 			height: $thumbHeight;
 

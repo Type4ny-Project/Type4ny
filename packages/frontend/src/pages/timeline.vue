@@ -4,15 +4,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<PageWithHeader ref="pageComponent" v-model:tab="src" :actions="headerActions" :tabs="$i ? headerTabs : headerTabsWhenNotLogin" :swipable="true" :displayMyAvatar="true">
+<PageWithHeader v-model:tab="src" :actions="headerActions" :tabs="$i ? headerTabs : headerTabsWhenNotLogin" :swipable="true" :displayMyAvatar="true">
 	<div class="_spacer" style="--MI_SPACER-w: 800px;">
 		<MkInfo v-if="isBasicTimeline(src) && !store.r.timelineTutorials.value[src]" style="margin-bottom: var(--MI-margin);" closable @close="closeTutorial()">
 			{{ i18n.ts._timelineDescription[src] }}
 		</MkInfo>
 		<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo"  class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
 				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :channel="channelInfo"  :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
-		<div v-if="queue > 0" :class="$style.new"><button class="_buttonPrimary" :class="$style.newButton" @click="top()">{{ i18n.ts.newNoteRecived }}</button></div>
-		<MkTimeline
+		<MkStreamingNotesTimeline
 			ref="tlComponent"
 			:key="src + withRenotes + withReplies + onlyFiles + withSensitive"
 			:class="$style.tl"
@@ -25,7 +24,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			:withSensitive="withSensitive"
 			:onlyFiles="onlyFiles":withCw="withCw"
 			:sound="true"
-			@queue="queueUpdated"
 		/>
 	</div>
 </PageWithHeader>
@@ -36,7 +34,7 @@ import { computed, watch, provide, useTemplateRef, ref, onMounted, onActivated, 
 import type { Tab } from '@/components/global/MkPageHeader.tabs.vue';
 import type { MenuItem } from '@/types/menu.js';
 import type { BasicTimelineType } from '@/timelines.js';
-import MkTimeline from '@/components/MkTimeline.vue';
+import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
 import MkInfo from '@/components/MkInfo.vue';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 import * as os from '@/os.js';
@@ -60,11 +58,9 @@ const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'
 provide('shouldOmitHeaderTitle', true);
 
 const tlComponent = useTemplateRef('tlComponent');
-const pageComponent = useTemplateRef('pageComponent');
 
 type TimelinePageSrc = BasicTimelineType | `list:${string}`;
 
-const queue = ref(0);
 const srcWhenNotSignin = ref<'local' | 'global'>(isAvailableBasicTimeline('local') ? 'local' : 'global');
 const src = computed<TimelinePageSrc>({
 	get: () => ($i ? store.r.tl.value.src : srcWhenNotSignin.value),
@@ -137,14 +133,6 @@ watch(src, async () => {
 		channelInfo.value = null;
 	}
 });
-
-function queueUpdated(q: number): void {
-	queue.value = q;
-}
-
-function top(): void {
-	if (pageComponent.value) pageComponent.value.scrollToTop();
-}
 
 async function chooseList(ev: MouseEvent): Promise<void> {
 	const myLists = await userListsCache.fetch();
