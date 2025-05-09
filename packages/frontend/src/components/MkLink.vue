@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { defineAsyncComponent, ref } from 'vue';
 import { url as local } from '@@/js/config.js';
-import { useTooltip } from '@/use/use-tooltip.js';
+import { useTooltip } from '@/composables/use-tooltip.js';
 import * as os from '@/os.js';
 import { isEnabledUrlPreview } from '@/instance.js';
 import type { MkABehavior } from '@/components/global/MkA.vue';

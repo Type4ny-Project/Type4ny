@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import type { PagingCtx } from '@/use/use-pagination.js';
+import type { PagingCtx } from '@/composables/use-pagination.js';
 import MkChannelPreview from '@/components/MkChannelPreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';

@@ -295,7 +295,7 @@ import { definePage } from '@/page.js';
 import MkButton from '@/components/MkButton.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkKeyValue from '@/components/MkKeyValue.vue';
-import { useForm } from '@/use/use-form.js';
+import { useForm } from '@/composables/use-form.js';
 import MkFormFooter from '@/components/MkFormFooter.vue';
 
 const meta = await misskeyApi('admin/meta');
