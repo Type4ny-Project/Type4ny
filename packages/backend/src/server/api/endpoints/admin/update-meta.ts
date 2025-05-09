@@ -227,6 +227,10 @@ export const paramDef = {
 				required: ['software', 'versionRange'],
 			},
 		},
+		ugcVisibilityForVisitor: {
+			type: 'string',
+			enum: ['all', 'local', 'none'],
+		},
 	},
 	required: [],
 } as const;
@@ -795,6 +799,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				}
 				if (ps.iconLight !== undefined) {
 				set.iconLight = ps.iconLight;
+			}
+
+			if (ps.ugcVisibilityForVisitor !== undefined) {
+				set.ugcVisibilityForVisitor = ps.ugcVisibilityForVisitor;
 			}
 
 			const before = await this.metaService.fetch(true);
