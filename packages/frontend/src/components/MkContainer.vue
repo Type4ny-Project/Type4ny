@@ -153,6 +153,10 @@ onUnmounted(() => {
 	&.naked {
 		background: transparent !important;
 		box-shadow: none !important;
+
+		> .content {
+			background: transparent !important;
+		}
 	}
 
 	&.scrollable {
