@@ -37,9 +37,9 @@ export type FanoutTimelineName = (
 
 	// role timelines
 	| `roleTimeline:${string}` // any notes are included
+	| `remoteLocalTimeline:${string}`
 );
 
-	| `remoteLocalTimeline:${string}`
 
 @Injectable()
 export class FanoutTimelineService {
