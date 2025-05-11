@@ -650,16 +650,15 @@ provide(DI.mfmEmojiReactCallback, (reaction) => {
 	});
 });
 
-if (props.mock) {
-	watch(() => props.note, (to) => {
-		note.value = deepClone(to);
-	}, { deep: true });
-} else {
-	useNoteCapture({
+let subscribeManuallyToNoteCapture: () => void = () => { };
+
+if (!props.mock) {
+	const { subscribe } = useNoteCapture({
 		note: appearNote,
 		parentNote: note,
 		$note: $appearNote,
 	});
+	subscribeManuallyToNoteCapture = subscribe;
 }
 
 if (!props.mock) {
@@ -728,6 +727,8 @@ function renote(viaKeyboard = false) {
 	os.popupMenu(menu, renoteButton.value, {
 		viaKeyboard,
 	});
+
+	subscribeManuallyToNoteCapture();
 }
 
 function reply(): void {
@@ -833,6 +834,11 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 
 	misskeyApi('notes/reactions/delete', {
 		noteId: targetNote.id,
+	}).then(() => {
+		noteEvents.emit(`unreacted:${appearNote.id}`, {
+			userId: $i!.id,
+			reaction: oldReaction,
+		});
 	});
 }
 
