@@ -17,6 +17,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		}"
 	>
 		<MkImgWithBlurhash
+			v-if="prefer.s.enableHighQualityImagePlaceholders"
 			:hash="image.blurhash ?? null"
 			:src="(prefer.s.dataSaver.media && hide) ? null : url"
 			:forceBlurhash="hide"
@@ -26,6 +27,20 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			:width="image.properties.width ?? null"
 			:height="image.properties.height ?? null"
 			:style="hide ? 'filter: brightness(0.7);' : null"
+			:class="$style.image"
+		/>
+		<div
+			v-else-if="prefer.s.dataSaver.media || hide"
+			:title="image.comment || image.name"
+			:style="hide ? 'background: #888;' : null"
+			:class="$style.image"
+		></div>
+		<img
+			v-else
+			:src="url"
+			:alt="image.comment || image.name"
+			:title="image.comment || image.name"
+			:class="$style.image"
 		/>
 	</component>
 	<template v-if="hide">
@@ -298,5 +313,13 @@ html[data-color-scheme=light] .visible {
 	font-weight: bold;
 	font-size: 0.8em;
 	padding: 2px 5px;
+}
+
+.image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	object-position: center;
 }
 </style>
