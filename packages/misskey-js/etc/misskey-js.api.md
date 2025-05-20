@@ -1287,6 +1287,9 @@ type DriveFilesFindRequest = operations['drive___files___find']['requestBody']['
 type DriveFilesFindResponse = operations['drive___files___find']['responses']['200']['content']['application/json'];
 
 // @public (undocumented)
+type DriveFilesMoveBulkRequest = operations['drive___files___move-bulk']['requestBody']['content']['application/json'];
+
+// @public (undocumented)
 type DriveFilesRequest = operations['drive___files']['requestBody']['content']['application/json'];
 
 // @public (undocumented)
@@ -1796,6 +1799,7 @@ declare namespace entities {
         DriveFilesFindResponse,
         DriveFilesFindByHashRequest,
         DriveFilesFindByHashResponse,
+        DriveFilesMoveBulkRequest,
         DriveFilesShowRequest,
         DriveFilesShowResponse,
         DriveFilesUpdateRequest,

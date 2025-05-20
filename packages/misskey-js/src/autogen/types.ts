@@ -1880,6 +1880,15 @@ export type paths = {
      */
     post: operations['drive___files___find-by-hash'];
   };
+  '/drive/files/move-bulk': {
+    /**
+     * drive/files/move-bulk
+     * @description No description provided.
+     *
+     * **Credential required**: *Yes* / **Permission**: *write:drive*
+     */
+    post: operations['drive___files___move-bulk'];
+  };
   '/drive/files/show': {
     /**
      * drive/files/show
@@ -17576,6 +17585,59 @@ export type operations = {
         content: {
           'application/json': components['schemas']['DriveFile'][];
         };
+      };
+      /** @description Client error */
+      400: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Authentication error */
+      401: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Forbidden error */
+      403: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description I'm Ai */
+      418: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
+  /**
+   * drive/files/move-bulk
+   * @description No description provided.
+   *
+   * **Credential required**: *Yes* / **Permission**: *write:drive*
+   */
+  'drive___files___move-bulk': {
+    requestBody: {
+      content: {
+        'application/json': {
+          fileIds: string[];
+          /** Format: misskey:id */
+          folderId?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description OK (without any results) */
+      204: {
+        content: never;
       };
       /** @description Client error */
       400: {

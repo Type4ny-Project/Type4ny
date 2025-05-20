@@ -7,7 +7,6 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	:class="[$style.root, { [$style.isSelected]: isSelected || isSelectedFile }]"
 	draggable="true"
 	:title="title"
-	@click="onClick"
 	@contextmenu.stop="onContextmenu"
 	@dragstart="onDragstart"
 	@dragend="onDragend"
@@ -46,10 +45,7 @@ import { i18n } from '@/i18n.js';
 import { $i } from '@/i.js';
 import { getDriveFileMenu, getDriveMultiFileMenu } from '@/utility/get-drive-file-menu.js';
 import { isTouchUsing } from '@/scripts/touch.js';
-import { deviceKind } from '@/utility/device-kind.js';
-import { useRouter } from '@/router.js';
-
-const router = useRouter();
+import { setDragData } from '@/drag-and-drop.js';
 
 const props = withDefaults(defineProps<{
 	file: Misskey.entities.DriveFile;
@@ -59,12 +55,10 @@ const props = withDefaults(defineProps<{
   SelectFiles?: string[];
 }>(), {
 	isSelected: false,
-	selectMode: false,
 });
 
 const emit = defineEmits<{
-	(ev: 'chosen', r: Misskey.entities.DriveFile): void;
-	(ev: 'dragstart'): void;
+	(ev: 'dragstart', dragEvent: DragEvent): void;
 	(ev: 'dragend'): void;
 }>();
 
@@ -108,11 +102,11 @@ function onContextmenu(ev: MouseEvent) {
 function onDragstart(ev: DragEvent) {
 	if (ev.dataTransfer) {
 		ev.dataTransfer.effectAllowed = 'move';
-		ev.dataTransfer.setData(_DATA_TRANSFER_DRIVE_FILE_, JSON.stringify(props.file));
+		setDragData(ev, 'driveFiles', [props.file]);
 	}
 	isDragging.value = true;
 	 (isDragging.value);
-	emit('dragstart');
+	emit('dragstart', ev);
 }
 
 function onDragend() {
@@ -132,7 +126,7 @@ function onDragend() {
 	&:hover {
 		background: rgba(#000, 0.05);
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				background: #0b65a5;
@@ -150,7 +144,7 @@ function onDragend() {
 	&:active {
 		background: rgba(#000, 0.1);
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				background: #0b588c;
@@ -176,19 +170,19 @@ function onDragend() {
 			background: hsl(from var(--MI_THEME-accent) h s calc(l - 10));
 		}
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				display: none;
 			}
 		}
 
-		> .name {
-			color: #fff;
+		.name {
+			color: var(--MI_THEME-fgOnAccent);
 		}
 
-		> .thumbnail {
-			color: #fff;
+		.thumbnail {
+			color: var(--MI_THEME-fgOnAccent);
 		}
 	}
 }
@@ -258,8 +252,8 @@ function onDragend() {
 
 .name {
 	display: block;
-	margin: 4px 0 0 0;
-	font-size: 0.8em;
+	margin: 8px 0 0 0;
+	font-size: 82%;
 	text-align: center;
 	word-break: break-all;
 	color: var(--MI_THEME-fg);
