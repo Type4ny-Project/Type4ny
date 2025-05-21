@@ -188,11 +188,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<template #label>{{ i18n.ts.enable }}</template>
 						</MkSwitch>
 					</MkFolder>
-
-					<MkFolder v-if="matchQuery([i18n.ts._role._options.canRequestCustomEmojis, 'canRequestCustomEmojis'])" class="_margin">
-						<template #label>{{ i18n.ts._role._options.canRequestCustomEmojis }}</template>
-						<template #suffix>{{ policies.canRequestCustomEmojis ? i18n.ts.yes : i18n.ts.no }}</template>
-						<MkSwitch v-model="policies.canRequestCustomEmojis">
+							<MkFolder v-if="matchQuery([i18n.ts._role._options.canRequestCustomEmojis, 'canRequestCustomEmojis'])" class="_margin">
+								<template #label>{{ i18n.ts._role._options.canRequestCustomEmojis }}</template>
+								<template #suffix>{{ policies.canRequestCustomEmojis ? i18n.ts.yes : i18n.ts.no }}</template>
+								<MkSwitch v-model="policies.canRequestCustomEmojis">
+									<template #label>{{ i18n.ts.enable }}</template>
+								</MkSwitch>
+							</MkFolder>
+					<MkFolder v-if="matchQuery([i18n.ts._role._options.canUseTranslator, 'canUseTranslator'])">
+						<template #label>{{ i18n.ts._role._options.canUseTranslator }}</template>
+						<template #suffix>{{ policies.canUseTranslator ? i18n.ts.yes : i18n.ts.no }}</template>
+						<MkSwitch v-model="policies.canUseTranslator">
 							<template #label>{{ i18n.ts.enable }}</template>
 						</MkSwitch>
 					</MkFolder>
