@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<MkModal ref="modal" v-slot="{ type, maxHeight }" :preferType="preferedModalType" :anchor="anchor" :transparentBg="true" :src="src" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
+<MkModal ref="modal" v-slot="{ type, maxHeight }" :preferType="preferedModalType" :anchor="anchor" :transparentBg="true" :anchorElement="anchorElement" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
 	<div class="szkkfdyq _popup _shadow" :class="{ asDrawer: type === 'drawer' }" :style="{ maxHeight: maxHeight ? maxHeight + 'px' : '' }">
 		<div class="main">
 			<template v-for="item in items" :key="item.text">
@@ -37,7 +37,7 @@ const gamingType = defaultStore.state.gamingType;
 const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
 
 const props = withDefaults(defineProps<{
-	src?: HTMLElement;
+	anchorElement?: HTMLElement;
 	anchor?: { x: string; y: string; };
 }>(), {
 	anchor: () => ({ x: 'right', y: 'center' }),
@@ -47,7 +47,7 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-const preferedModalType = (deviceKind === 'desktop' && props.src != null) ? 'popup' :
+const preferedModalType = (deviceKind === 'desktop' && props.anchorElement != null) ? 'popup' :
 	deviceKind === 'smartphone' ? 'drawer' :
 	'dialog';
 
