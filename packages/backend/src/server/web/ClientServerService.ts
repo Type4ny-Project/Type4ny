@@ -221,6 +221,7 @@ export class ClientServerService {
 				await this.metaEntityService.packDetailed(meta),
 			),
 			now: Date.now(),
+			federationEnabled: this.meta.federation !== 'none',
 		};
 	}
 
