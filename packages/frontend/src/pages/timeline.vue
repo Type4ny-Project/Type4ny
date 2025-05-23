@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <PageWithHeader v-model:tab="src" :actions="headerActions" :tabs="$i ? headerTabs : headerTabsWhenNotLogin" :swipable="true" :displayMyAvatar="true">
 	<div class="_spacer" style="--MI_SPACER-w: 800px;">
-		<MkInfo v-if="isBasicTimeline(src) && !store.r.timelineTutorials.value[src]" style="margin-bottom: var(--MI-margin);" closable @close="closeTutorial()">
+		<MkTip v-if="isBasicTimeline(src)" :k="`tl.${src}`" style="margin-bottom: var(--MI-margin);">
 			{{ i18n.ts._timelineDescription[src] }}
-		</MkInfo>
+		</MkTip>
 		<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo"  class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
 				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :channel="channelInfo"  :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
 		<MkStreamingNotesTimeline
@@ -228,13 +228,6 @@ async function timetravel(): Promise<void> {
 
 function focus(): void {
 	tlComponent.value.focus();
-}
-
-function closeTutorial(): void {
-	if (!isBasicTimeline(src.value)) return;
-	const before = store.s.timelineTutorials;
-	before[src.value] = true;
-	store.set('timelineTutorials', before);
 }
 
 function switchTlIfNeeded() {

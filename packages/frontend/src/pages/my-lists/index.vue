@@ -46,7 +46,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkFoldableSection>
 			<template #header>{{ i18n.ts.myLists }}</template>
 			<div class="_gaps">
-				<MkResult v-if="items.length === 0" type="empty"/>
+				<MkTip k="userLists">
+				{{ i18n.ts._userLists.tip }}
+			</MkTip>
+
+			<MkResult v-if="items.length === 0" type="empty"/>
 
 				<div v-if="items.length > 0" class="_gaps">
 					<MkA v-for="list in items" :key="list.id" class="_panel" :class="$style.list" :to="`/my/lists/${ list.id }`">
