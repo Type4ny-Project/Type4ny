@@ -7594,8 +7594,9 @@ export type operations = {
       content: {
         'application/json': {
           /** Format: misskey:id */
-          fileId?: string;
-          url?: string;
+          fileId: string;
+        } | {
+          url: string;
         };
       };
     };
@@ -8616,10 +8617,12 @@ export type operations = {
   admin___emoji___update: {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': ({
           /** Format: misskey:id */
-          id?: string;
-          name?: string;
+          id: string;
+        } | {
+          name: string;
+        }) & ({
           /** Format: misskey:id */
           fileId?: string;
           /** @description Use `null` to reset the category. */
@@ -8630,7 +8633,7 @@ export type operations = {
           localOnly?: boolean;
           roleIdsThatCanBeUsedThisEmojiAsReaction?: string[];
           Request?: boolean;
-        };
+        });
       };
     };
     responses: {
@@ -17760,8 +17763,9 @@ export type operations = {
       content: {
         'application/json': {
           /** Format: misskey:id */
-          fileId?: string;
-          url?: string;
+          fileId: string;
+        } | {
+          url: string;
         };
       };
     };
@@ -23959,9 +23963,10 @@ export type operations = {
       content: {
         'application/json': {
           /** Format: misskey:id */
-          tokenId?: string;
-          token?: string | null;
-        };
+          tokenId: string;
+        } | ({
+          token: string | null;
+        });
       };
     };
     responses: {
@@ -26908,7 +26913,12 @@ export type operations = {
   'notes___search-by-tag': {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': ({
+          tag: string;
+        } | {
+          /** @description The outer arrays are chained with OR, the inner arrays are chained with AND. */
+          query: string[][];
+        }) & ({
           /** @default null */
           reply?: boolean | null;
           /** @default null */
@@ -26926,10 +26936,7 @@ export type operations = {
           untilId?: string;
           /** @default 10 */
           limit?: number;
-          tag?: string;
-          /** @description The outer arrays are chained with OR, the inner arrays are chained with AND. */
-          query?: string[][];
-        };
+        });
       };
     };
     responses: {
@@ -28109,9 +28116,10 @@ export type operations = {
       content: {
         'application/json': {
           /** Format: misskey:id */
-          pageId?: string;
-          name?: string;
-          username?: string;
+          pageId: string;
+        } | {
+          name: string;
+          username: string;
         };
       };
     };
@@ -30252,18 +30260,20 @@ export type operations = {
   users___followers: {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': ({
+          /** Format: misskey:id */
+          userId: string;
+        } | ({
+          username: string;
+          /** @description The local host is represented with `null`. */
+          host: string | null;
+        })) & {
           /** Format: misskey:id */
           sinceId?: string;
           /** Format: misskey:id */
           untilId?: string;
           /** @default 10 */
           limit?: number;
-          /** Format: misskey:id */
-          userId?: string;
-          username?: string;
-          /** @description The local host is represented with `null`. */
-          host?: string | null;
         };
       };
     };
@@ -30315,20 +30325,22 @@ export type operations = {
   users___following: {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': ({
+          /** Format: misskey:id */
+          userId: string;
+        } | ({
+          username: string;
+          /** @description The local host is represented with `null`. */
+          host: string | null;
+        })) & ({
           /** Format: misskey:id */
           sinceId?: string;
           /** Format: misskey:id */
           untilId?: string;
           /** @default 10 */
           limit?: number;
-          /** Format: misskey:id */
-          userId?: string;
-          username?: string;
-          /** @description The local host is represented with `null`. */
-          host?: string | null;
           birthday?: string | null;
-        };
+        });
       };
     };
     responses: {
@@ -31670,13 +31682,15 @@ export type operations = {
   'users___search-by-username-and-host': {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': (({
+          username: string | null;
+        }) | ({
+          host: string | null;
+        })) & {
           /** @default 10 */
           limit?: number;
           /** @default true */
           detail?: boolean;
-          username?: string | null;
-          host?: string | null;
         };
       };
     };
@@ -31728,14 +31742,17 @@ export type operations = {
   users___show: {
     requestBody: {
       content: {
-        'application/json': {
+        'application/json': ({
           /** Format: misskey:id */
-          userId?: string;
-          userIds?: string[];
-          username?: string;
+          userId: string;
+        } | {
+          userIds: string[];
+        } | {
+          username: string;
+        }) & ({
           /** @description The local host is represented with `null`. */
           host?: string | null;
-        };
+        });
       };
     };
     responses: {

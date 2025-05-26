@@ -43,30 +43,45 @@ export const meta = {
 } as const;
 
 export const paramDef = {
-	type: 'object',
-	properties: {
-		id: { type: 'string', format: 'misskey:id' },
-		name: { type: 'string', pattern: '^[a-zA-Z0-9_]+$' },
-		fileId: { type: 'string', format: 'misskey:id' },
-		category: {
-			type: 'string',
-			nullable: true,
-			description: 'Use `null` to reset the category.',
+	allOf: [
+		{
+			anyOf: [
+				{
+					type: 'object',
+					properties: {
+						id: { type: 'string', format: 'misskey:id' },
+					},
+					required: ['id'],
+				},
+				{
+					type: 'object',
+					properties: {
+						name: { type: 'string', pattern: '^[a-zA-Z0-9_]+$' },
+					},
+					required: ['name'],
+				},
+			],
 		},
-		aliases: { type: 'array', items: {
-			type: 'string',
-		} },
-		license: { type: 'string', nullable: true },
-		isSensitive: { type: 'boolean' },
-		localOnly: { type: 'boolean' },
-		roleIdsThatCanBeUsedThisEmojiAsReaction: { type: 'array', items: {
-			type: 'string',
-		} },
-		Request: { type: 'boolean' },
-	},
-	anyOf: [
-		{ required: ['id'] },
-		{ required: ['name'] },
+		{
+			type: 'object',
+			properties: {
+				fileId: { type: 'string', format: 'misskey:id' },
+				category: {
+					type: 'string',
+					nullable: true,
+					description: 'Use `null` to reset the category.',
+				},
+				aliases: { type: 'array', items: {
+					type: 'string',
+				} },
+				license: { type: 'string', nullable: true },
+				isSensitive: { type: 'boolean' },
+				localOnly: { type: 'boolean' },
+				roleIdsThatCanBeUsedThisEmojiAsReaction: { type: 'array', items: {
+					type: 'string',
+				} },
+			Request: { type: 'boolean' },},
+		},
 	],
 } as const;
 
@@ -85,6 +100,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				driveFile = await this.driveFilesRepository.findOneBy({ id: ps.fileId });
 				if (driveFile == null) throw new ApiError(meta.errors.noSuchFile);
 			}
+
+			const required = 'id' in ps
+				? { id: ps.id, name: 'name' in ps ? ps.name as string : undefined }
+				: { name: ps.name };
 
 			let emojiId, emoji;
 			if (ps.id) {
