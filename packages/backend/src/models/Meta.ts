@@ -724,6 +724,11 @@ export class MiMeta {
 	})
 	public urlPreviewEnabled: boolean;
 
+	@Column('boolean', {
+		default: true,
+	})
+	public urlPreviewAllowRedirect: boolean;
+
 	@Column('integer', {
 		default: 10000,
 	})

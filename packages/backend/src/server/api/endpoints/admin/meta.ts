@@ -622,6 +622,10 @@ export const meta = {
 				optional: false,
 				nullable: false,
 			},
+			urlPreviewAllowRedirect: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			urlPreviewTimeout: {
 				type: 'number',
 				optional: false,
@@ -851,6 +855,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				proxyCheckioApiKey: instance.proxyCheckioApiKey,
 				summalyProxy: instance.urlPreviewSummaryProxyUrl,
 				urlPreviewEnabled: instance.urlPreviewEnabled,
+				urlPreviewAllowRedirect: instance.urlPreviewAllowRedirect,
 				urlPreviewTimeout: instance.urlPreviewTimeout,
 				urlPreviewMaximumContentLength: instance.urlPreviewMaximumContentLength,
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,

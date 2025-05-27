@@ -201,6 +201,7 @@ export const paramDef = {
 			description: '[Deprecated] Use "urlPreviewSummaryProxyUrl" instead.',
 		},
 		urlPreviewEnabled: { type: 'boolean', nullable: true },
+		urlPreviewAllowRedirect: { type: 'boolean' },
 		urlPreviewTimeout: { type: 'integer', nullable: true },
 		urlPreviewMaximumContentLength: { type: 'integer', nullable: true },
 		urlPreviewRequireContentLength: { type: 'boolean', nullable: true },
@@ -779,9 +780,19 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.bannedEmailDomains !== undefined) {
 				set.bannedEmailDomains = ps.bannedEmailDomains;
 			}
-
 			if (ps.bannerDark !== undefined) {
 				set.bannerDark = ps.bannerDark;
+			}
+			if (ps.urlPreviewEnabled !== undefined) {
+				set.urlPreviewEnabled = ps.urlPreviewEnabled;
+			}
+
+			if (ps.urlPreviewAllowRedirect !== undefined) {
+				set.urlPreviewAllowRedirect = ps.urlPreviewAllowRedirect;
+			}
+
+			if (ps.urlPreviewTimeout !== undefined) {
+				set.urlPreviewTimeout = ps.urlPreviewTimeout;
 			}
 			if (ps.bannerLight !== undefined) {
 				set.bannerLight = ps.bannerLight;
