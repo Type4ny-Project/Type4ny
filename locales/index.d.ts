@@ -1485,6 +1485,10 @@ export interface Locale extends ILocale {
      */
     "syncDeviceDarkMode": string;
     /**
+     * 「{x}」がオンになっています。同期をオフにして手動でモードを切り替えますか？
+     */
+    "switchDarkModeManuallyWhenSyncEnabledConfirm": ParameterizedString<"x">;
+    /**
      * ドライブ
      */
     "drive": string;
