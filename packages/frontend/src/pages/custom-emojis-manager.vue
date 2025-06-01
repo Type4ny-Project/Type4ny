@@ -69,7 +69,7 @@ const toggleSelect = (emoji) => {
 };
 
 const add = async (ev: MouseEvent) => {
-	const { dispose } = os.popup(defineAsyncComponent(() => import('../components/MkEmojiEditDialog.vue')), {
+	const { dispose } = await os.popupAsyncWithDialog(import('../components/MkEmojiEditDialog.vue').then(x => x.default), {
 	}, {
 		done: result => {
 			if (result.created) {
@@ -80,8 +80,8 @@ const add = async (ev: MouseEvent) => {
 	});
 };
 
-const edit = (emoji) => {
-	const { dispose } = os.popup(defineAsyncComponent(() => import('../components/MkEmojiEditDialog.vue')), {
+const edit = async (emoji) => {
+	const { dispose } = await os.popupAsyncWithDialog(import('../components/MkEmojiEditDialog.vue').then(x => x.default), {
 		emoji: emoji,
 	}, {
 		done: result => {
