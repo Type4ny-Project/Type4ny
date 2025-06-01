@@ -129,8 +129,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 				<div v-if="!draghover && folder == null">
 					<strong>{{
 						i18n.ts.emptyDrive
-					}}</strong><br/>{{ i18n.ts['empty-drive-description'] }}
-				</div>
+					}}</strong></div>
 				<div v-if="!draghover && folder != null">{{ i18n.ts.emptyFolder }}</div>
 			</div>
 		</div>
