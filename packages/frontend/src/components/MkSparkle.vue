@@ -56,6 +56,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
+import { genId } from '@/utility/id.js';
 
 const particles = ref<{
 	id: string,
@@ -85,7 +86,7 @@ onMounted(() => {
 		const y = (Math.random() * (height.value - 64));
 		const sizeFactor = Math.random();
 		const particle = {
-			id: Math.random().toString(),
+			id: genId(),
 			x,
 			y,
 			size: 0.2 + ((sizeFactor / 10) * 3),
