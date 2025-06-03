@@ -206,7 +206,7 @@ const isRootSelected = ref(false);
 
 watch(selectedFiles, () => {
 	emit('changeSelectedFiles', selectedFiles.value);
-});
+}, { deep: true });
 
 watch([selectedFolders, isRootSelected], () => {
 	emit('changeSelectedFolders', isRootSelected.value ? [null, ...selectedFolders.value] : selectedFolders.value);
