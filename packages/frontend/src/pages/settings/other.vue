@@ -129,6 +129,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<hr>
 
+		<MkButton @click="readAllChatMessages">Read all chat messages</MkButton>
+
+		<hr>
+
 		<FormSlot>
 			<MkButton danger @click="migrate"><i class="ti ti-refresh"></i> {{ i18n.ts.migrateOldSettings }}</MkButton>
 			<template #caption>{{ i18n.ts.migrateOldSettings_description }}</template>
@@ -213,6 +217,10 @@ function hideAllTips() {
 	}
 	store.set('tips', v);
 	os.success();
+}
+
+function readAllChatMessages() {
+	os.apiWithDialog('chat/read-all', {});
 }
 
 const headerActions = computed(() => []);
