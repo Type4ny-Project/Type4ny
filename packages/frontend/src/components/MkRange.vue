@@ -11,12 +11,19 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<slot name="prefix"></slot>
 		<div ref="containerEl" class="container">
 			<div class="track">
-				<div :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="highlight" :style="{ width: (steppedRawValue * 100) + '%' }"></div>
+				<div :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="highlight right" :style="{ width: ((steppedRawValue - minRatio) * 100) + '%', left: (Math.abs(Math.min(0, min)) / (max + Math.abs(Math.min(0, min)))) * 100 + '%' }">
+					<div class="shine right"></div>
+				</div>
+				<div class="highlight left" :style="{ width: ((minRatio - steppedRawValue) * 100) + '%', left: (steppedRawValue) * 100 + '%' }">
+					<div class="shine left"></div>
+				</div>
 			</div>
 			<div v-if="steps && showTicks" class="ticks">
 				<div v-for="i in (steps + 1)" class="tick" :style="{ left: (((i - 1) / steps) * 100) + '%' }"></div>
 			</div>
-			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mouseenter.passive="onMouseenter" @mousedown="onMousedown" @touchstart="onMousedown"></div>
+			<div ref="thumbEl" v-tooltip="textConverter(finalValue)" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light'}" class="thumb" :style="{ left: thumbPosition + 'px' }" @mouseenter.passive="onMouseenter" @mousedown="onMousedown" @touchstart="onMousedown">
+				<div class="thumbInner"></div>
+			</div>
 		</div>
 		<slot name="suffix"></slot>
 	</div>
@@ -56,6 +63,9 @@ const emit = defineEmits<{
 
 const containerEl = useTemplateRef('containerEl');
 const thumbEl = useTemplateRef('thumbEl');
+
+const maxRatio = computed(() => Math.abs(props.max) / (props.max + Math.abs(Math.min(0, props.min))));
+const minRatio = computed(() => Math.abs(Math.min(0, props.min)) / (props.max + Math.abs(Math.min(0, props.min))));
 
 const rawValue = ref((props.modelValue - props.min) / (props.max - props.min));
 const steppedRawValue = computed(() => {
@@ -216,15 +226,17 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 		}
 	}
 
-	$thumbHeight: 20px;
-	$thumbWidth: 20px;
+	$thumbHeight: 32px;
+	$thumbWidth: 32px;
+	$thumbInnerHeight: 19px;
+	$thumbInnerWidth: 19px;
 
 	> .body {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
-		padding: 7px 12px;
+		padding: 0px 4px;
 		background: var(--MI_THEME-panel);
 		border: solid 1px var(--MI_THEME-panel);
 		border-radius: var(--MI-radius);
@@ -250,24 +262,45 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 				> .highlight {
 					position: absolute;
 					top: 0;
-					left: 0;
 					height: 100%;
-					background: var(--MI_THEME-accent);
-					opacity: 0.5;
-          &.gamingLight{
-            background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
-            background-size: 1800% 1800%;
-            -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-            -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-            animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-          }
-          &.gamingDark{
-            background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
-            background-size: 1800% 1800% !important;
-            -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-            -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-            animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-          }
+					background: color(from var(--MI_THEME-buttonGradateA) srgb r g b / 0.5);
+					overflow: clip;
+
+					&.gamingLight{
+						background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+						background-size: 1800% 1800%;
+						-webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+						-moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+						animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+					}
+					&.gamingDark{
+						background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+						background-size: 1800% 1800% !important;
+						-webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+						-moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+						animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+					}
+
+					> .shine {
+						position: absolute;
+						top: 0;
+						width: 64px;
+						height: 100%;
+					}
+				}
+
+				> .highlight.right {
+					> .shine.right {
+						right: calc(#{$thumbInnerWidth} / 2);
+						background: linear-gradient(-90deg, var(--MI_THEME-buttonGradateB), color(from var(--MI_THEME-buttonGradateA) srgb r g b / 0));
+					}
+				}
+
+				> .highlight.left {
+					> .shine.left {
+						left: calc(#{$thumbInnerWidth} / 2);
+						background: linear-gradient(90deg, var(--MI_THEME-buttonGradateB), color(from var(--MI_THEME-buttonGradateA) srgb r g b / 0));
+					}
 				}
 			}
 
@@ -298,38 +331,38 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 				width: $thumbWidth;
 				height: $thumbHeight;
 				cursor: grab;
-				background: var(--MI_THEME-accent);
-				border-radius: 999px;
-        &.gamingDark{
-          background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
-          background-size: 1800% 1800% !important;
-          -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-          -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-          animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-        }
-        &.gamingLight{
-          background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
-          background-size: 1800% 1800%;
-          -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-          -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-          animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-        }
+				&.gamingLight{
+					background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+					background-size: 1800% 1800%;
+					-webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+					-moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+					animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+				}
+				&.gamingDark{
+					background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+					background-size: 1800% 1800% !important;
+					-webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+					-moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+					animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+				}
 				&:hover {
-					background: hsl(from var(--MI_THEME-accent) h s calc(l + 10));
-          &.gamingDark{
-            background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
-            background-size: 1800% 1800% !important;
-            -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-            -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-            animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-          }
-          &.gamingLight{
-            background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
-            background-size: 1800% 1800%;
-            -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-            -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-            animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-          }
+					> .thumbInner {
+						background: hsl(from var(--MI_THEME-accent) h s calc(l + 10));
+					}
+				}
+
+				> .thumbInner {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: auto;
+					width: $thumbInnerWidth;
+					height: $thumbInnerHeight;
+					background: var(--MI_THEME-accent);
+					border-radius: 999px;
+					pointer-events: none;
 				}
 			}
 		}
