@@ -1583,6 +1583,15 @@ export type paths = {
      */
     post: operations['chat___messages___user-timeline'];
   };
+  '/chat/read-all': {
+    /**
+     * chat/read-all
+     * @description No description provided.
+     *
+     * **Credential required**: *Yes* / **Permission**: *write:chat*
+     */
+    post: operations['chat___read-all'];
+  };
   '/chat/rooms/create': {
     /**
      * chat/rooms/create
@@ -15823,6 +15832,50 @@ export type operations = {
         content: {
           'application/json': components['schemas']['ChatMessageLiteFor1on1'][];
         };
+      };
+      /** @description Client error */
+      400: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Authentication error */
+      401: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Forbidden error */
+      403: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description I'm Ai */
+      418: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+    };
+  };
+  /**
+   * chat/read-all
+   * @description No description provided.
+   *
+   * **Credential required**: *Yes* / **Permission**: *write:chat*
+   */
+  'chat___read-all': {
+    responses: {
+      /** @description OK (without any results) */
+      204: {
+        content: never;
       };
       /** @description Client error */
       400: {
