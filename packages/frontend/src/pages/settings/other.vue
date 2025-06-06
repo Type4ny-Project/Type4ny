@@ -162,7 +162,8 @@ import { prefer } from '@/preferences.js';
 import MkRolePreview from '@/components/MkRolePreview.vue';
 import { signout } from '@/signout.js';
 import { migrateOldSettings } from '@/pref-migrate.js';
-import { store, TIPS } from '@/store.js';
+import { store } from '@/store.js';
+import { hideAllTips as _hideAllTips } from '@/store.js';
 
 const $i = ensureSignin();
 
@@ -211,11 +212,7 @@ function resetAllTips() {
 }
 
 function hideAllTips() {
-	const v = {};
-	for (const k of TIPS) {
-		v[k] = true;
-	}
-	store.set('tips', v);
+	_hideAllTips();
 	os.success();
 }
 
