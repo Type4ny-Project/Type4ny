@@ -727,6 +727,7 @@ function showOtherSettings() {
 		},
 	}, { type: 'divider' }, {
 		type: 'switch',
+		icon: 'ti ti-eye',
 		text: i18n.ts.preview,
 		ref: showPreview,
 	}, {
