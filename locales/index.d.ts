@@ -12932,6 +12932,10 @@ export interface Locale extends ILocale {
              * チェッカー
              */
             "checker": string;
+            /**
+             * ブロックノイズ
+             */
+            "blockNoise": string;
         };
     };
 }
