@@ -15,7 +15,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 >
 	<template #header>{{ i18n.ts.describeFile }}</template>
 	<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
-		<MkDriveFileThumbnail :file="file" fit="contain" style="height: 100px; margin-bottom: 16px;"/>
+		<MkDriveFileThumbnail v-if="file" :file="file" fit="contain" style="height: 100px; margin-bottom: 16px;"/>
 		<MkTextarea v-model="caption" autofocus :placeholder="i18n.ts.inputNewDescription">
 			<template #label>{{ i18n.ts.caption }}</template>
 		</MkTextarea>
@@ -32,8 +32,8 @@ import MkDriveFileThumbnail from '@/components/MkDriveFileThumbnail.vue';
 import { i18n } from '@/i18n.js';
 
 const props = defineProps<{
-	file: Misskey.entities.DriveFile;
-	default: string;
+	file?: Misskey.entities.DriveFile | null;
+	default?: string | null;
 }>();
 
 const emit = defineEmits<{
@@ -43,7 +43,7 @@ const emit = defineEmits<{
 
 const dialog = useTemplateRef('dialog');
 
-const caption = ref(props.default);
+const caption = ref(props.default ?? '');
 
 async function ok() {
 	emit('done', caption.value);
