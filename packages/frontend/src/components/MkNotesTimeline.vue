@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :pullToRefresh="pullToRefresh">
+<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :pullToRefresh="pullToRefresh" :withControl="withControl">
 	<template #empty><MkResult type="empty" :text="i18n.ts.noNotes"/></template>
 
 	<template #default="{ items: notes }">
@@ -45,9 +45,11 @@ const props = withDefaults(defineProps<{
 	noGap?: boolean;
 	disableAutoLoad?: boolean;
 	pullToRefresh?: boolean;
+	withControl?: boolean;
 	withCw?: boolean;
 }>(), {
 	pullToRefresh: true,
+	withControl: true,
 });
 const pagingComponent = useTemplateRef('pagingComponent');
 
