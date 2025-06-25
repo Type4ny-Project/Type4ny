@@ -17,10 +17,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-click-anime v-tooltip="i18n.ts.switchAccount" :class="$style.account" class="_button" @click="openAccountMenu">
 				<MkAvatar :user="postAccount ?? $i" :class="$style.avatar"/>
 			</button>
+			<button v-if="$i.policies.noteDraftLimit > 0" v-tooltip="(postAccount != null && postAccount.id !== $i.id) ? null : i18n.ts.draft" class="_button" :class="$style.draftButton" :disabled="postAccount != null && postAccount.id !== $i.id" @click="showDraftMenu"><i class="ti ti-pencil-minus"></i></button>
 		</div>
 		<div :class="$style.headerRight">
-			<template v-if="!(channel != null && fixed)">
-				<button v-if="channel == null" ref="visibilityButton" v-tooltip="i18n.ts.visibility" data-cy-open-post-form-visibility :class="['_button', $style.headerRightItem, $style.visibility]" @click="setVisibility">
+			<template v-if="!(targetChannel != null && fixed)">
+				<button v-if="targetChannel == null" ref="visibilityButton" v-tooltip="i18n.ts.visibility" data-cy-open-post-form-visibility :class="['_button', $style.headerRightItem, $style.visibility]" @click="setVisibility">
 					<span v-if="visibility === 'public'"><i class="ti ti-world"></i></span>
 					<span v-if="visibility === 'home'"><i class="ti ti-home"></i></span>
 					<span v-if="visibility === 'followers'"><i class="ti ti-lock"></i></span>
@@ -29,11 +30,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</button>
 				<button v-else class="_button" :class="[$style.headerRightItem, $style.visibility]" disabled>
 					<span><i class="ti ti-device-tv"></i></span>
-					<span :class="$style.headerRightButtonText">{{ channel.name }}</span>
+					<span :class="$style.headerRightButtonText">{{ targetChannel.name }}</span>
 				</button>
 			</template>
 			<button v-click-anime v-tooltip="i18n.ts.drafts" class="_button" :class="$style.headerRightItem" @click="chooseDraft"><i class="ti ti-note"></i></button>
-			<button v-tooltip="i18n.ts._visibility.disableFederation" class="_button" :class="[$style.headerRightItem, { [$style.danger]: localOnly || channel != null && channel.isLocalOnly }]" :disabled="channel != null && channel.isLocalOnly || visibility === 'specified'" @click="toggleLocalOnly">
+			<button v-tooltip="i18n.ts._visibility.disableFederation" class="_button" :class="[$style.headerRightItem, { [$style.danger]: localOnly || channel != null && channel.isLocalOnly }]" :disabled="targetChannel != null && channel.isLocalOnly || visibility === 'specified'" @click="toggleLocalOnly">
 				<span v-if="!(channel && channel?.isLocalOnly) && !localOnly"><i class="ti ti-rocket"></i></span>
 				<span v-else><i class="ti ti-rocket-off"></i></span>
 			</button>
@@ -43,12 +44,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template v-if="posted"></template>
 					<template v-else-if="posting"><MkEllipsis/></template>
 					<template v-else-if="screenWidth >= 355">{{ submitText }}</template>
-					<i :class="[posted ? 'ti ti-check' : reply ? 'ti ti-arrow-back-up' : renoteTargetNote ? 'ti ti-quote' : schedule ? 'ti ti-clock-hour-4' : 'ti ti-send',$style.mgnlft]"></i>
+					<i :class="[posted ? 'ti ti-check' : replyTargetNote ? 'ti ti-arrow-back-up' : renoteTargetNote ? 'ti ti-quote' : schedule ? 'ti ti-clock-hour-4' : 'ti ti-send',$style.mgnlft]"></i>
 				</div>
 			</button>
 		</div>
 	</header>
-	<MkNoteSimple v-if="reply" :class="$style.targetNote" :note="reply"/>
+	<MkNoteSimple v-if="replyTargetNote" :class="$style.targetNote" :note="replyTargetNote"/>
 	<MkNoteSimple v-if="renoteTargetNote" :class="$style.targetNote" :note="renoteTargetNote"/>
 	<div v-if="quoteId" :class="$style.withQuote"><i class="ti ti-quote"></i> {{ i18n.ts.quoteAttached }}<button @click="quoteId = null; renoteTargetNote = null;"><i class="ti ti-x"></i></button></div>
 	<div v-if="visibility === 'specified'" :class="$style.toSpecified">
@@ -67,7 +68,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div v-if="maxCwTextLength - cwTextLength < 20" :class="['_acrylic', $style.cwTextCount, { [$style.cwTextOver]: cwTextLength > maxCwTextLength }]">{{ maxCwTextLength - cwTextLength }}</div>
 	</div>
 	<div :class="[$style.textOuter, { [$style.withCw]: useCw }]">
-		<div v-if="channel" :class="$style.colorBar" :style="{ background: channel.color }"></div>
+		<div v-if="targetChannel" :class="$style.colorBar" :style="{ background: targetChannel.color }"></div>
 		<textarea ref="textareaEl" v-model="text" :class="[$style.text]" :disabled="posting || posted" :readonly="textAreaReadOnly" :placeholder="placeholder" data-cy-post-form-text @keydown="onKeydown" @keyup="onKeyup" @paste="onPaste" @compositionupdate="onCompositionUpdate" @compositionend="onCompositionEnd"/>
 		<div v-if="maxTextLength - textLength < 100" :class="['_acrylic', $style.textCount, { [$style.textOver]: textLength > maxTextLength }]">{{ maxTextLength - textLength }}</div>
 	</div>
@@ -230,6 +231,10 @@ const showingOptions = ref(false);
 const textAreaReadOnly = ref(false);
 const justEndedComposition = ref(false);
 const renoteTargetNote: ShallowRef<PostFormProps['renote'] | null> = shallowRef(props.renote);
+const replyTargetNote: ShallowRef<PostFormProps['reply'] | null> = shallowRef(props.reply);
+const targetChannel = shallowRef(props.channel);
+
+const serverDraftId = ref<string | null>(null);
 const postFormActions = getPluginHandlers('post_form_action');
 
 const uploader = useUploader({
@@ -248,6 +253,17 @@ const draftType = computed(() => {
 	return 'note';
 });
 
+const draftKey = computed((): string => {
+	let key = targetChannel.value ? `channel:${targetChannel.value.id}` : '';
+
+	if (renote.value) {
+		key += `renote:${renote.value.id}`;
+	} else if (reply.value) {
+		key += `reply:${reply.value.id}`;
+	} else {
+		key += `note:${$i.id}`;
+	}
+
 const draftAuxId = computed<string | null>(() => props.channel ? props.channel.id : renote.value ? renote.value.id : reply.value ? reply.value.id : null);
 
 const placeholder = computed((): string => {
@@ -255,7 +271,7 @@ const placeholder = computed((): string => {
 		return i18n.ts._postForm.quotePlaceholder;
 	} else if (reply.value) {
 		return i18n.ts._postForm.replyPlaceholder;
-	} else if (props.channel) {
+	} else if (targetChannel.value) {
 		return i18n.ts._postForm.channelPlaceholder;
 	} else {
 		const xs = [
@@ -314,6 +330,11 @@ const canPost = computed((): boolean => {
 		) &&
 		(files.value.length <= 16) &&
 		(!poll.value || poll.value.choices.length >= 2);
+});
+
+// cannot save pure renote as draft
+const canSaveAsServerDraft = computed((): boolean => {
+	return canPost.value && (textLength.value > 0 || files.value.length > 0 || poll.value != null);
 });
 
 const withHashtags = computed(store.makeGetterSetter('postFormWithHashtags'));
@@ -460,7 +481,7 @@ function initialize() {
 		visibility.value = 'home';
 	}
 
-	if (props.channel) {
+	if (targetChannel.value) {
 		visibility.value = 'public';
 	}
 
@@ -627,7 +648,7 @@ function upload(file: File, name?: string): void {
 }
 
 function setVisibility() {
-	if (props.channel) {
+	if (targetChannel.value) {
 		visibility.value = 'public';
 	}
 
@@ -652,7 +673,7 @@ function setVisibility() {
 }
 
 async function toggleLocalOnly() {
-	if (props.channel) {
+	if (targetChannel.value) {
 		visibility.value = 'public';
 	}
 
@@ -938,7 +959,7 @@ async function saveDraft(auto = true) {
 		localOnly: localOnly.value,
 		files: files.value,
 		poll: poll.value,
-		visibleUserIds: visibility.value === 'specified' ? visibleUsers.value.map(x => x.id) : undefined,
+		...( visibleUsers.value.length > 0 ? { visibleUserIds: visibleUsers.value.map(x => x.id) } : {}),
 		quoteId: quoteId.value,
 		reactionAcceptance: reactionAcceptance.value }, draftAuxId.value as string);
 
@@ -1001,6 +1022,32 @@ async function applyDraft(draft: noteDrafts.NoteDraft, native = false) {
 	if (draft.data.poll) {
 		poll.value = draft.data.poll;
 	}
+}
+
+async function saveServerDraft(clearLocal = false) {
+	return await os.apiWithDialog(serverDraftId.value == null ? 'notes/drafts/create' : 'notes/drafts/update', {
+		...(serverDraftId.value == null ? {} : { draftId: serverDraftId.value }),
+		text: text.value,
+		useCw: useCw.value,
+		cw: cw.value,
+		visibility: visibility.value,
+		localOnly: localOnly.value,
+		hashtag: hashtags.value,
+		...(files.value.length > 0 ? { fileIds: files.value.map(f => f.id) } : {}),
+		poll: poll.value,
+		...(visibleUsers.value.length > 0 ? { visibleUserIds: visibleUsers.value.map(x => x.id) } : {}),
+		renoteId: renoteTargetNote.value ? renoteTargetNote.value.id : undefined,
+		replyId: replyTargetNote.value ? replyTargetNote.value.id : undefined,
+		quoteId: quoteId.value,
+		channelId: targetChannel.value ? targetChannel.value.id : undefined,
+		reactionAcceptance: reactionAcceptance.value,
+	}).then(() => {
+		if (clearLocal) {
+			clear();
+			deleteDraft();
+		}
+	}).catch((err) => {
+	});
 }
 
 function isAnnoying(text: string): boolean {
@@ -1323,6 +1370,84 @@ function showPerUploadItemMenuViaContextmenu(item: UploaderItem, ev: MouseEvent)
 	const menu = uploader.getMenu(item);
 	os.contextMenu(menu, ev);
 }
+	function showDraftMenu(ev: MouseEvent) {
+		function showDraftsDialog() {
+			const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkNoteDraftsDialog.vue')), {}, {
+				restore: async (draft: Misskey.entities.NoteDraft) => {
+					text.value = draft.text ?? '';
+					useCw.value = draft.cw != null;
+					cw.value = draft.cw ?? null;
+					visibility.value = draft.visibility;
+					localOnly.value = draft.localOnly ?? false;
+					files.value = draft.files ?? [];
+					hashtags.value = draft.hashtag ?? '';
+					if (draft.hashtag) withHashtags.value = true;
+					if (draft.poll) {
+						// 投票を一時的に空にしないと反映されないため
+						poll.value = null;
+						nextTick(() => {
+							poll.value = {
+								choices: draft.poll!.choices,
+								multiple: draft.poll!.multiple,
+								expiresAt: draft.poll!.expiresAt ? (new Date(draft.poll!.expiresAt)).getTime() : null,
+								expiredAfter: null,
+							};
+						});
+					}
+					if (draft.visibleUserIds) {
+						misskeyApi('users/show', { userIds: draft.visibleUserIds }).then(users => {
+							users.forEach(u => pushVisibleUser(u));
+						});
+					}
+					quoteId.value = draft.renoteId ?? null;
+					renoteTargetNote.value = draft.renote;
+					replyTargetNote.value = draft.reply;
+					reactionAcceptance.value = draft.reactionAcceptance;
+					if (draft.channel) targetChannel.value = draft.channel as unknown as Misskey.entities.Channel;
+
+					visibleUsers.value = [];
+					draft.visibleUserIds?.forEach(uid => {
+						if (!visibleUsers.value.some(u => u.id === uid)) {
+							misskeyApi('users/show', { userId: uid }).then(user => {
+								pushVisibleUser(user);
+							});
+						}
+					});
+
+					serverDraftId.value = draft.id;
+				},
+				cancel: () => {
+
+				},
+				closed: () => {
+					dispose();
+				},
+			});
+		}
+
+		os.popupMenu([{
+			type: 'button',
+			text: i18n.ts._drafts.saveToDraft,
+			icon: 'ti ti-cloud-upload',
+			action: async () => {
+				if (!canSaveAsServerDraft.value) {
+					return os.alert({
+						type: 'error',
+						text: i18n.ts._drafts.cannotCreateDraftOfRenote,
+					});
+				}
+				saveServerDraft();
+			},
+		}, {
+			type: 'button',
+			text: i18n.ts._drafts.listDrafts,
+			icon: 'ti ti-cloud-download',
+			action: () => {
+				showDraftsDialog();
+			},
+		}], (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
+	}
+
 
 function openOtherSettingsMenu(ev: MouseEvent) {
 	let reactionAcceptanceIcon: string;
@@ -1469,14 +1594,15 @@ defineExpose({
 
 .headerLeft {
   display: flex;
-  flex: 0 1 100px;
+  flex: 1;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 6px;
+	padding-left: 12px;
 }
 
 .cancel {
-  padding: 0;
-  font-size: 1em;
-  height: 100%;
-  flex: 0 1 50px;
+  padding: 8px;
 }
 
 .account {
@@ -1490,6 +1616,20 @@ defineExpose({
   width: 28px;
   height: 28px;
   margin: auto;
+}
+
+.draftButton {
+	padding: 8px;
+	font-size: 90%;
+	border-radius: 6px;
+
+	&:hover {
+		background: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
+	}
+
+	&:disabled {
+		background: none;
+	}
 }
 
 .headerRight {
