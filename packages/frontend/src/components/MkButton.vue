@@ -92,6 +92,7 @@ const props = defineProps<{
   value?: string;
 	disabled?: boolean;
 	iconOnly?: boolean;
+	active?: boolean;
 }>();
 
 const gamingType = store.state.gamingType;
@@ -418,6 +419,10 @@ function onMousedown(evt: MouseEvent): void {
 				background: hsl(from var(--MI_THEME-error) h s calc(l - 10));
 			}
 		}
+	}
+
+	&.active {
+		color: var(--MI_THEME-accent) !important;
 	}
 
 	&:disabled {
