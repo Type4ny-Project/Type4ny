@@ -104,7 +104,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #icon><i class="ti ti-repeat-off"></i></template>
 					<template #label><SearchLabel>{{ i18n.ts.mutedUsers }} ({{ i18n.ts.renote }})</SearchLabel></template>
 
-					<MkPagination :pagination="renoteMutingPagination" withControl>
+					<MkPagination :paginator="renoteMutingPaginator" withControl>
 						<template #empty><MkResult type="empty" :text="i18n.ts.noUsers"/></template>
 
 						<template #default="{ items }">
@@ -135,7 +135,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #icon><i class="ti ti-eye-off"></i></template>
 					<template #label>{{ i18n.ts.mutedUsers }}</template>
 
-					<MkPagination :pagination="mutingPagination" withControl>
+					<MkPagination :paginator="mutingPaginator" withControl>
 						<template #empty><MkResult type="empty" :text="i18n.ts.noUsers"/></template>
 
 						<template #default="{ items }">
@@ -168,7 +168,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #icon><i class="ti ti-ban"></i></template>
 					<template #label>{{ i18n.ts.blockedUsers }}</template>
 
-					<MkPagination :pagination="blockingPagination" withControl>
+					<MkPagination :paginator="blockingPaginator" withControl>
 						<template #empty><MkResult type="empty" :text="i18n.ts.noUsers"/></template>
 
 						<template #default="{ items }">
@@ -198,7 +198,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, markRaw } from 'vue';
 import XEmojiMute from './mute-block.emoji-mute.vue';
 import { ref, computed, watch, Ref } from 'vue';
 import * as Misskey from 'misskey-js';
@@ -221,23 +221,21 @@ import { prefer } from '@/preferences.js';
 import MkFeatureBanner from '@/components/MkFeatureBanner.vue';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
+import { Paginator } from '@/utility/paginator.js';
 
 const $i = ensureSignin();
 
-const renoteMutingPagination = {
-	endpoint: 'renote-mute/list' as const,
+const renoteMutingPaginator = markRaw(new Paginator('renote-mute/list', {
 	limit: 10,
-};
+}));
 
-const mutingPagination = {
-	endpoint: 'mute/list' as const,
+const mutingPaginator = markRaw(new Paginator('mute/list', {
 	limit: 10,
-};
+}));
 
-const blockingPagination = {
-	endpoint: 'blocking/list' as const,
+const blockingPaginator = markRaw(new Paginator('blocking/list', {
 	limit: 10,
-};
+}));
 
 const expandedRenoteMuteItems = ref([]);
 const expandedMuteItems = ref([]);
