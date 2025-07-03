@@ -13,15 +13,16 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import type { Paginator } from '@/utility/paginator.js';
+import * as Misskey from 'misskey-js';
+import type { IPaginator } from '@/utility/paginator.js';
 import MkChannelPreview from '@/components/MkChannelPreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{
-	paginator: Paginator;
+	paginator: IPaginator;
 	noGap?: boolean;
-	extractor?: (item: any) => any;
+	extractor?: (item: any) => Misskey.entities.Channel;
 }>(), {
 	extractor: (item) => item,
 });
