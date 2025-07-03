@@ -1433,7 +1433,7 @@ function showPerUploadItemMenuViaContextmenu(item: UploaderItem, ev: MouseEvent)
 				if (!canSaveAsServerDraft.value) {
 					return os.alert({
 						type: 'error',
-						text: i18n.ts._drafts.cannotCreateDraftOfRenote,
+						text: i18n.ts._drafts.cannotCreateDraft,
 					});
 				}
 				saveServerDraft();
