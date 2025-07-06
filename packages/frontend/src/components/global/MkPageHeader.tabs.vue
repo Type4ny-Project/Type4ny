@@ -199,10 +199,6 @@ onUnmounted(() => {
 	overflow-x: auto;
 	overflow-y: hidden;
 	scrollbar-width: none;
-
-	&::-webkit-scrollbar {
-		display: none;
-	}
 }
 
 .tabsInner {
