@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div class="_panel">
-	<div :class="$style.container" :style="{ backgroundImage: instance.bannerUrl ? `url(${ bannerUrl })` : null }">
+	<div :class="$style.container" :style="{ backgroundImage: instance.bannerUrl ? `url(${ bannerUrl })` : undefined }">
 		<div :class="$style.iconContainer">
 			<img :src="iconUrl" alt="" :class="$style.icon"/>
 		</div>
@@ -23,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, ref, watch } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import type { GetFormResultType } from '@/utility/form';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form';
 import { host } from '@@/js/config';
 import { instance } from '@/instance';
 import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store';
@@ -52,7 +52,7 @@ if (!iconUrl.value) {
 	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
 }
 const widgetPropsDef = {
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 

@@ -12,16 +12,16 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { onMounted, onUnmounted, useTemplateRef } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentProps, WidgetComponentEmits, WidgetComponentExpose } from './widget.js';
-import type { GetFormResultType } from '@/utility/form.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 
 const name = 'ai';
 
 const widgetPropsDef = {
 	transparent: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 
@@ -41,6 +41,8 @@ const touched = () => {
 };
 
 const onMousemove = (ev: MouseEvent) => {
+	if (!live2d.value || !live2d.value.contentWindow) return;
+
 	const iframeRect = live2d.value.getBoundingClientRect();
 	live2d.value.contentWindow.postMessage({
 		type: 'moveCursor',

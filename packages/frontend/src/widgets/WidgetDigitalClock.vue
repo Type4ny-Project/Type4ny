@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { computed } from 'vue';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import type { GetFormResultType } from '@/utility/form.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 import { timezones } from '@/utility/timezones.js';
 import MkDigitalClock from '@/components/MkDigitalClock.vue';
 
@@ -24,24 +24,24 @@ const name = 'digitalClock';
 
 const widgetPropsDef = {
 	transparent: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
 	fontSize: {
-		type: 'number' as const,
+		type: 'number',
 		default: 1.5,
 		step: 0.1,
 	},
 	showMs: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: true,
 	},
 	showLabel: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: true,
 	},
 	timezone: {
-		type: 'enum' as const,
+		type: 'enum',
 		default: null,
 		enum: [...timezones.map((tz) => ({
 			label: tz.name,
@@ -51,7 +51,7 @@ const widgetPropsDef = {
 			value: null,
 		}],
 	},
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 

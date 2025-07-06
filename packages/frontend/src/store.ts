@@ -52,7 +52,7 @@ export const store = markRaw(new Pizzax('base', {
 	},
 	memo: {
 		where: 'account',
-		default: null,
+		default: null as string | null,
 	},
 	reactionAcceptance: {
 		where: 'account',
