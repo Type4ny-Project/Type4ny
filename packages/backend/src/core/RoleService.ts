@@ -75,6 +75,7 @@ export type RolePolicies = {
 	chatAvailability: 'available' | 'readonly' | 'unavailable';
 	uploadableFileTypes: string[];
 	noteDraftLimit: number;
+	watermarkAvailable: boolean;
 };
 
 export const DEFAULT_POLICIES: RolePolicies = {
@@ -127,6 +128,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	localTimelineAnyLimit: 3,
 	loginBonusGrantEnabled: true,
 	canSendPoints: false,
+	watermarkAvailable: true,
 };
 
 @Injectable()
@@ -458,6 +460,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),
 			canSendPoints: calc('canSendPoints', vs => vs.some(v => v === true)),
 			canChat: calc('canChat', vs => vs.some(v => v === true)),
+			watermarkAvailable: calc('watermarkAvailable', vs => vs.some(v => v === true)),
 		};
 	}
 
