@@ -71,10 +71,6 @@ import { Paginator } from '@/utility/paginator.js';
 
 const $i = ensureSignin();
 
-const {
-	enableInfiniteScroll,
-} = prefer.r;
-
 const props = defineProps<{
 	listId: string;
 }>();
