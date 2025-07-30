@@ -184,7 +184,11 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: Router 
 			icon: 'ti ti-user-exclamation',
 			text: i18n.ts.moderation,
 			action: () => {
-				router.push(`/admin/user/${user.id}`);
+				router.push('/admin/user/:userId', {
+					params: {
+						userId: user.id,
+					},
+				});
 			},
 		}, { type: 'divider' });
 	}
@@ -242,7 +246,12 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: Router 
 			icon: 'ti ti-search',
 			text: i18n.ts.searchThisUsersNotes,
 			action: () => {
-				router.push(`/search?username=${encodeURIComponent(user.username)}${user.host != null ? '&host=' + encodeURIComponent(user.host) : ''}`);
+				router.push('/search', {
+					query: {
+						username: user.username,
+						host: user.host ?? undefined,
+					},
+				});
 			},
 		});
 	}
