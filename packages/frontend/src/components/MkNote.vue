@@ -35,7 +35,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	tabindex="0"
 >
 	<MkNoteSub
-		v-if="appearNote.reply && !renoteCollapsed"
+		v-if="appearNote.replyId && !renoteCollapsed"
 		:note="appearNote.reply"
 		:class="$style.replyTo"
 	/>
@@ -216,7 +216,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							:class="$style.urlPreview"
 						/>
 					</div>
-					<div v-if="appearNote.renote" :class="$style.quote">
+					<div v-if="appearNote.renoteId" :class="$style.quote">
 						<MkNoteSimple
 							:note="appearNote.renote"
 							:class="$style.quoteNote"
@@ -498,7 +498,7 @@ let note = deepClone(props.note);
 //}
 
 const isRenote = Misskey.note.isPureRenote(note);
-const appearNote = getAppearNote(note);
+const appearNote = getAppearNote(note) ?? note;
 const { $note: $appearNote, subscribe: subscribeManuallyToNoteCapture } = useNoteCapture({
 	note: appearNote,
 	parentNote: note,
