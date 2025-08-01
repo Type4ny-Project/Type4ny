@@ -759,7 +759,7 @@ export class MiMeta {
 
 	@Column('varchar', {
 		length: 128,
-		default: 'all',
+		default: 'none',
 	})
 	public federation: 'all' | 'specified' | 'none';
 
@@ -808,7 +808,7 @@ export class MiMeta {
 	public allowExternalApRedirect: boolean;
 
 	@Column('boolean', {
-		default: true,
+		default: false,
 	})
 	public enableRemoteNotesCleaning: boolean;
 
