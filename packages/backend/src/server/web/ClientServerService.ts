@@ -26,11 +26,11 @@ import type {
 	EndedPollNotificationQueue,
 	InboxQueue,
 	ObjectStorageQueue,
-	ScheduleNotePostQueue,
 	RelationshipQueue,
 	SystemQueue,
-	SystemWebhookDeliverQueue,
 	UserWebhookDeliverQueue,
+	SystemWebhookDeliverQueue,
+	ScheduleNotePostQueue,
 } from '@/core/QueueModule.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
@@ -120,21 +120,6 @@ export class ClientServerService {
 		private feedService: FeedService,
 		private roleService: RoleService,
 		private clientLoggerService: ClientLoggerService,
-		@Inject('queue:system') public systemQueue: SystemQueue,
-		@Inject('queue:endedPollNotification')
-		public endedPollNotificationQueue: EndedPollNotificationQueue,
-		@Inject('queue:scheduleNotePost')
-		public scheduleNotePostQueue: ScheduleNotePostQueue,
-		@Inject('queue:deliver') public deliverQueue: DeliverQueue,
-		@Inject('queue:inbox') public inboxQueue: InboxQueue,
-		@Inject('queue:db') public dbQueue: DbQueue,
-		@Inject('queue:relationship') public relationshipQueue: RelationshipQueue,
-		@Inject('queue:objectStorage')
-		public objectStorageQueue: ObjectStorageQueue,
-		@Inject('queue:userWebhookDeliver')
-		public userWebhookDeliverQueue: UserWebhookDeliverQueue,
-		@Inject('queue:systemWebhookDeliver')
-		public systemWebhookDeliverQueue: SystemWebhookDeliverQueue,
 	) {
 		//this.createServer = this.createServer.bind(this);
 	}
