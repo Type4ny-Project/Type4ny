@@ -138,7 +138,7 @@ async function chooseList(ev: MouseEvent): Promise<void> {
 	const myLists = await userListsCache.fetch();
 	const favoriteLists = await userFavoriteListsCache.fetch();
 	let lists = [...new Set([...myLists, ...favoriteLists])];
-	const items : MenuItem[] = [
+	const items : (MenuItem | undefined)[] = [
 		... lists.map(list => ({
 			type: 'link' as const,
 			text: list.name,
@@ -152,12 +152,12 @@ async function chooseList(ev: MouseEvent): Promise<void> {
 			to: '/my/lists',
 		},
 	];
-	os.popupMenu(items, ev.currentTarget ?? ev.target);
+	os.popupMenu(items.filter(i => i != null), ev.currentTarget ?? ev.target);
 }
 
 async function chooseAntenna(ev: MouseEvent): Promise<void> {
 	const antennas = await antennasCache.fetch();
-	const items : MenuItem[] = [
+	const items : (MenuItem | undefined)[] = [
 		... antennas.map(antenna => ({
 			type: 'link' as const,
 			text: antenna.name,
@@ -171,12 +171,12 @@ async function chooseAntenna(ev: MouseEvent): Promise<void> {
 			to: '/my/antennas',
 		},
 	];
-	os.popupMenu(items, ev.currentTarget ?? ev.target);
+	os.popupMenu(items.filter(i => i != null), ev.currentTarget ?? ev.target);
 }
 
 async function chooseChannel(ev: MouseEvent): Promise<void> {
 	const channels = await favoritedChannelsCache.fetch();
-	const items: MenuItem[] = [
+	const items: (MenuItem | undefined)[] = [
 		...channels.map(channel => {
 			const lastReadedAt = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.id}`) ?? null;
 			const hasUnreadNote = (lastReadedAt && channel.lastNotedAt) ? Date.parse(channel.lastNotedAt) > lastReadedAt : !!(!lastReadedAt && channel.lastNotedAt);
@@ -194,7 +194,7 @@ async function chooseChannel(ev: MouseEvent): Promise<void> {
 			to: '/channels',
 		},
 	];
-	os.popupMenu(items, ev.currentTarget ?? ev.target);
+	os.popupMenu(items.filter(i => i != null), ev.currentTarget ?? ev.target);
 }
 
 function saveSrc(newSrc: TimelinePageSrc): void {
@@ -215,19 +215,6 @@ function saveTlFilter(key: keyof typeof store.s.tl.filter, newValue: boolean) {
 		const out = deepMerge({ filter: { [key]: newValue } }, store.s.tl);
 		store.set('tl', out);
 	}
-}
-
-async function timetravel(): Promise<void> {
-	const { canceled, result: date } = await os.inputDate({
-		title: i18n.ts.date,
-	});
-	if (canceled) return;
-
-	tlComponent.value.timetravel(date);
-}
-
-function focus(): void {
-	tlComponent.value.focus();
 }
 
 function switchTlIfNeeded() {
