@@ -478,7 +478,18 @@ const currentClip = inject<Ref<Misskey.entities.Clip> | null>(
 	null,
 );
 let note = deepClone(props.note);
-
+const noteViewInterruptors = getPluginHandlers('note_view_interruptor');
+if (noteViewInterruptors.length > 0) {
+	let result: Misskey.entities.Note | null = deepClone(note);
+	for (const interruptor of noteViewInterruptors) {
+		try {
+			result = interruptor.handler(result!) as Misskey.entities.Note | null;
+		} catch (err) {
+			console.error(err);
+		}
+	}
+	note = result as Misskey.entities.Note;
+}
 // コンポーネント初期化に非同期的な処理を行うとTransitionのレンダリングがバグるため同期的に実行できるメソッドが実装されるのを待つ必要がある
 // https://github.com/aiscript-dev/aiscript/issues/937
 //// plugin
@@ -488,8 +499,8 @@ let note = deepClone(props.note);
 //	for (const interruptor of noteViewInterruptors) {
 //		try {
 //			result = (await interruptor.handler(
-					result!,
-				)) as Misskey.entities.Note | null;
+// 					result!,
+// 				)) as Misskey.entities.Note | null;
 //		} catch (err) {
 //			console.error(err);
 //		}
