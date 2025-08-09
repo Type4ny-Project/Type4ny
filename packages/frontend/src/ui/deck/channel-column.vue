@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <XColumn :menu="menu" :column="column" :isStacked="isStacked" :refresher="async () => { await timeline?.reloadTimeline() }">
 	<template #header>
-		<i class="ti ti-device-tv"></i><span style="margin-left: 8px;">{{ column.name || channel?.name || i18n.ts._deck._columns.channel }}</span>
+		<i class="ti ti-device-tv"></i><span style="margin-left: 8px;">{{ column.name || column.timelineNameCache || i18n.ts._deck._columns.channel }}</span>
 	</template>
 
 	<template v-if="column.channelId">
@@ -45,13 +45,9 @@ const soundSetting = ref<SoundStore>(props.column.soundSetting ?? { type: null, 
 onMounted(() => {
 	if (props.column.channelId == null) {
 		setChannel();
-	}
-});
-
-watch([() => props.column.name, () => props.column.channelId], () => {
-	if (!props.column.name && props.column.channelId) {
+	} else if (!props.column.name && props.column.channelId) {
 		misskeyApi('channels/show', { channelId: props.column.channelId })
-			.then(value => channel.value = value);
+			.then(value => updateColumn(props.column.id, { timelineNameCache: value.name }));
 	}
 });
 
@@ -71,7 +67,7 @@ async function setChannel() {
 	if (canceled || chosenChannel == null) return;
 	updateColumn(props.column.id, {
 		channelId: chosenChannel.id,
-		name: chosenChannel.name,
+		timelineNameCache: chosenChannel.name,
 	});
 }
 

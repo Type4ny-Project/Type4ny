@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <XColumn :menu="menu" :column="column" :isStacked="isStacked" :refresher="async () => { await timeline?.reloadTimeline() }">
 	<template #header>
-		<i class="ti ti-badge"></i><span style="margin-left: 8px;">{{ column.name || roleName || i18n.ts._deck._columns.roleTimeline }}</span>
+		<i class="ti ti-badge"></i><span style="margin-left: 8px;">{{ column.name || column.timelineNameCache || i18n.ts._deck._columns.roleTimeline }}</span>
 	</template>
 
 	<MkStreamingNotesTimeline v-if="column.roleId" ref="timeline" src="role" :role="column.roleId"/>
@@ -32,18 +32,13 @@ const props = defineProps<{
 
 const timeline = useTemplateRef('timeline');
 const soundSetting = ref<SoundStore>(props.column.soundSetting ?? { type: null, volume: 1 });
-const roleName = ref<string | null>(null);
 
 onMounted(() => {
 	if (props.column.roleId == null) {
 		setRole();
-	}
-});
-
-watch([() => props.column.name, () => props.column.roleId], () => {
-	if (!props.column.name && props.column.roleId) {
+	} else if (props.column.timelineNameCache == null) {
 		misskeyApi('roles/show', { roleId: props.column.roleId })
-			.then(value => roleName.value = value.name);
+			.then(value => updateColumn(props.column.id, { timelineNameCache: value.name }));
 	}
 });
 
@@ -63,6 +58,7 @@ async function setRole() {
 	if (canceled || role == null) return;
 	updateColumn(props.column.id, {
 		roleId: role.id,
+		timelineNameCache: role.name,
 	});
 }
 
