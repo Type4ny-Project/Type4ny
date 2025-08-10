@@ -1,10 +1,10 @@
 {
-	"name": "type4ny",
+	"name": "typeany",
 	"version": "1.8.0-alpha.9",
 	"codename": "emerald",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/type4ny-project/type4ny.git"
+		"url": "https://github.com/Type4ny-Project/Type4ny.git"
 	},
 	"packageManager": "pnpm@10.14.0",
 	"workspaces": [
