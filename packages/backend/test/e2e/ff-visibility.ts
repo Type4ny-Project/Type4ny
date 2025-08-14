@@ -16,7 +16,7 @@ describe('FF visibility', () => {
 	beforeAll(async () => {
 		alice = await signup({ username: 'alice' });
 		bob = await signup({ username: 'bob' });
-		await api('admin/update-meta', { federation: 'all' }, alice as misskey.entities.SignupResponse);
+		// Federation setting removed - no longer needed
 	}, 1000 * 60 * 2);
 
 	test('followingVisibility, followersVisibility がともに public なユーザーのフォロー/フォロワーを誰でも見れる', async () => {

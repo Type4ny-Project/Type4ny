@@ -316,8 +316,9 @@ export const uploadFile = async (user?: UserToken, { path, name, blob }: UploadO
 			: new URL(path, new URL('resources/', import.meta.url));
 
 	const formData = new FormData();
+	const fileContent = await readFile(absPath);
 	formData.append('file', blob ??
-		new File([new Uint8Array(await readFile(absPath))], basename(absPath.toString())));
+		new File([new Uint8Array(fileContent)], basename(absPath.toString())));
 	formData.append('force', 'true');
 	if (name) {
 		formData.append('name', name);
@@ -608,8 +609,8 @@ export async function initTestDb(justBorrow = false, initEntities?: any[]) {
 		username: config.db.user,
 		password: config.db.pass,
 		database: config.db.db,
-		synchronize: !justBorrow,
-		dropSchema: !justBorrow,
+		synchronize: true && !justBorrow,
+		dropSchema: true && !justBorrow,
 		entities: initEntities ?? entities,
 	});
 
@@ -661,9 +662,7 @@ export async function captureWebhook<T = SystemWebhookPayload>(postAction: () =>
 	let timeoutHandle: NodeJS.Timeout | null = null;
 	const result = await new Promise<string>(async (resolve, reject) => {
 		fastify.all('/', async (req, res) => {
-			if (timeoutHandle) {
-				clearTimeout(timeoutHandle);
-			}
+			timeoutHandle && clearTimeout(timeoutHandle);
 
 			const body = JSON.stringify(req.body);
 			res.status(200).send('ok');

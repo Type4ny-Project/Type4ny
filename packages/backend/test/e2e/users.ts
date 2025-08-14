@@ -44,6 +44,8 @@ describe('ユーザー', () => {
 			emojis: user.emojis,
 			onlineStatus: user.onlineStatus,
 			badgeRoles: user.badgeRoles,
+			getPoints: user.host === null ? user.getPoints : undefined,
+			loginBonusIsVisible: user.host === null ? user.loginBonusIsVisible : undefined,
 
 			// BUG isAdmin/isModeratorはUserLiteではなくMeDetailedOnlyに含まれる。
 			isAdmin: undefined,
@@ -142,6 +144,8 @@ describe('ユーザー', () => {
 			mutedWords: user.mutedWords,
 			hardMutedWords: user.hardMutedWords,
 			mutedInstances: user.mutedInstances,
+			// mutedReactions removed
+			// mutedReactions: user.mutedReactions,
 			// @ts-expect-error 後方互換性
 			mutingNotificationTypes: user.mutingNotificationTypes,
 			notificationRecieveConfig: user.notificationRecieveConfig,
@@ -381,6 +385,8 @@ describe('ユーザー', () => {
 		assert.deepStrictEqual(response.unreadAnnouncements, []);
 		assert.deepStrictEqual(response.mutedWords, []);
 		assert.deepStrictEqual(response.mutedInstances, []);
+		// mutedReactions removed
+		// assert.deepStrictEqual(response.mutedReactions, []);
 		// @ts-expect-error 後方互換のため
 		assert.deepStrictEqual(response.mutingNotificationTypes, []);
 		assert.deepStrictEqual(response.notificationRecieveConfig, {});
@@ -393,6 +399,10 @@ describe('ユーザー', () => {
 		assert.strictEqual(response.securityKeys, false);
 		assert.notStrictEqual(response.email, undefined);
 		assert.strictEqual(response.emailVerified, false);
+		if (response.host === null) {
+			assert.strictEqual(response.getPoints, null);
+			assert.strictEqual(response.loginBonusIsVisible, true);
+		}
 		assert.deepStrictEqual(response.securityKeysList, []);
 	});
 
@@ -472,6 +482,9 @@ describe('ユーザー', () => {
 		{ parameters: () => ({ mutedWords: [] }) },
 		{ parameters: () => ({ mutedInstances: ['xxxx.xxxxx'] }) },
 		{ parameters: () => ({ mutedInstances: [] }) },
+		// mutedReactions removed
+		// { parameters: () => ({ mutedReactions: ['xxxx.xxxxx'] }) },
+		// { parameters: () => ({ mutedReactions: [] }) },
 		{ parameters: () => ({ notificationRecieveConfig: { mention: { type: 'following' } } }) },
 		{ parameters: () => ({ notificationRecieveConfig: {} }) },
 		{ parameters: () => ({ emailNotificationTypes: ['mention', 'reply', 'quote', 'follow', 'receiveFollowRequest'] }) },

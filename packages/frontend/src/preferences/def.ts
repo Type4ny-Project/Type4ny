@@ -405,6 +405,9 @@ export const PREF_DEF = definePreferences({
 	makeEveryTextElementsSelectable: {
 		default: DEFAULT_DEVICE_KIND === 'desktop',
 	},
+	showVisibilityColor: {
+		default: false,
+	},
 	showNavbarSubButtons: {
 		default: true,
 	},

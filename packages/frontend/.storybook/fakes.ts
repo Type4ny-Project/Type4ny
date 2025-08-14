@@ -40,6 +40,8 @@ export function channel(id = 'somechannelid', name = 'Some Channel', bannerUrl: 
 		notesCount: 1,
 		isSensitive: false,
 		allowRenoteToExternal: false,
+		isLocalOnly: false,
+		collaboratorUsers: null,
 	};
 }
 
@@ -102,6 +104,7 @@ export function emojiDetailed(id = 'someemojiid', name = 'some_emoji'): entities
 		host: null,
 		url: '/client-assets/about-icon.png',
 		license: null,
+		draft: null,
 		isSensitive: false,
 		localOnly: false,
 		roleIdsThatCanBeUsedThisEmojiAsReaction: ['roleId1', 'roleId2'],
@@ -215,6 +218,7 @@ export function federationInstance(): entities.FederationInstance {
 		maintainerName: '',
 		maintainerEmail: '',
 		isSilenced: false,
+		isMediaSilenced: false,
 		iconUrl: 'https://github.com/misskey-dev/misskey/blob/master/packages/frontend/assets/about-icon.png?raw=true',
 		faviconUrl: '',
 		themeColor: '',
@@ -311,6 +315,8 @@ export function userDetailed(id = 'someuserid', username = 'miskist', host: enti
 		alsoKnownAs: null,
 		notify: 'none',
 		memo: null,
+		chatScope: 'everyone',
+		canChat: true,
 	};
 }
 
@@ -383,6 +389,7 @@ export function role(params: {
 			type: 'or',
 			values: []
 		},
+		preserveAssignmentOnMoveAccount: false,
 		policies: {},
 	}
 }

@@ -8,7 +8,7 @@
 import { parse as vueSfcParse } from 'vue/compiler-sfc';
 import {
 	createLogger,
-	EnvironmentModuleGraph,
+	type EnvironmentModuleGraph,
 	type LogErrorOptions,
 	type LogOptions,
 	normalizePath,
@@ -85,7 +85,7 @@ function initLogger(options: Options) {
 
 	logger.error = (msg, options) => {
 		msg = `[create-search-index] ${msg}`;
-		viteLogger.error(msg, options);
+		viteLogger.error(msg, options as LogErrorOptions);
 	}
 }
 

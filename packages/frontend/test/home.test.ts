@@ -10,10 +10,11 @@ import * as Misskey from 'misskey-js';
 import { directives } from '@/directives/index.js';
 import { components } from '@/components/index.js';
 import XHome from '@/pages/user/home.vue';
+import { userDetailed } from '@/../.storybook/fakes.js';
 import 'intersection-observer';
 
 describe('XHome', () => {
-	const renderHome = (user: Partial<Misskey.entities.UserDetailed>): RenderResult => {
+	const renderHome = (user: Misskey.entities.UserDetailed | Misskey.entities.MeDetailed): RenderResult => {
 		return render(XHome, {
 			props: { user, disableNotes: true },
 			global: { directives, components },
@@ -26,17 +27,9 @@ describe('XHome', () => {
 
 	test('Should render the remote caution when user.host exists', async () => {
 		const home = renderHome({
-			id: 'blobcat',
-			name: 'blobcat',
-			host: 'example.com',
+			...userDetailed('blobcat', 'blobcat', 'example.com'),
 			uri: 'https://example.com/@user',
 			url: 'https://example.com/@user/profile',
-			roles: [],
-			createdAt: '1970-01-01T00:00:00.000Z',
-			fields: [],
-			pinnedNotes: [],
-			avatarUrl: 'https://example.com',
-			avatarDecorations: [],
 		});
 
 		const anchor = home.container.querySelector<HTMLAnchorElement>('a[href^="https://example.com/"]');
@@ -46,17 +39,9 @@ describe('XHome', () => {
 
 	test('The remote caution should fall back to uri if url is null', async () => {
 		const home = renderHome({
-			id: 'blobcat',
-			name: 'blobcat',
-			host: 'example.com',
+			...userDetailed('blobcat', 'blobcat', 'example.com'),
 			uri: 'https://example.com/@user',
 			url: null,
-			roles: [],
-			createdAt: '1970-01-01T00:00:00.000Z',
-			fields: [],
-			pinnedNotes: [],
-			avatarUrl: 'https://example.com',
-			avatarDecorations: [],
 		});
 
 		const anchor = home.container.querySelector<HTMLAnchorElement>('a[href^="https://example.com/"]');

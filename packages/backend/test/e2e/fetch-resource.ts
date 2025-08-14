@@ -78,7 +78,7 @@ describe('Webリソース', () => {
 
 	beforeAll(async () => {
 		alice = await signup({ username: 'alice' });
-		await api('admin/update-meta', { federation: 'all' }, alice as misskey.entities.SignupResponse);
+		// Federation setting removed - no longer needed
 		aliceUploadedFile = (await uploadFile(alice)).body;
 		alicesPost = await post(alice, {
 			text: 'test',
