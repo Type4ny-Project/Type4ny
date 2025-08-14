@@ -317,8 +317,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					set.enableServerMachineStats = ps.enableServerMachineStats;
 				}
 
-				if (ps.enableStatsForFederatedInstances !== undefined) {
-					set.enableStatsForFederatedInstances = ps.enableStatsForFederatedInstances;
+				if (ps.enableChartsForFederatedInstances !== undefined) {
+					set.enableChartsForFederatedInstances = ps.enableChartsForFederatedInstances;
 				}
 
 				if (ps.cacheRemoteFiles !== undefined) {
@@ -506,7 +506,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.backgroundImageUrl !== undefined) {
 				set.backgroundImageUrl = ps.backgroundImageUrl;
 			}
-			if (ps.backgroundImageUrls !== undefined) {
+			if (ps.backgroundImageUrls !== undefined && ps.backgroundImageUrls !== null) {
 				set.backgroundImageUrls = ps.backgroundImageUrls;
 			}
 
@@ -786,15 +786,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.bannerDark !== undefined) {
 				set.bannerDark = ps.bannerDark;
 			}
-			if (ps.urlPreviewEnabled !== undefined) {
+			if (ps.urlPreviewEnabled !== undefined && ps.urlPreviewEnabled !== null) {
 				set.urlPreviewEnabled = ps.urlPreviewEnabled;
 			}
 
-			if (ps.urlPreviewAllowRedirect !== undefined) {
+			if (ps.urlPreviewAllowRedirect !== undefined && ps.urlPreviewAllowRedirect !== null) {
 				set.urlPreviewAllowRedirect = ps.urlPreviewAllowRedirect;
 			}
 
-			if (ps.urlPreviewTimeout !== undefined) {
+			if (ps.urlPreviewTimeout !== undefined && ps.urlPreviewTimeout !== null) {
 				set.urlPreviewTimeout = ps.urlPreviewTimeout;
 			}
 			if (ps.bannerLight !== undefined) {
@@ -804,17 +804,18 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.iconDark = ps.iconDark;
 			}
 
-			if (ps.federation !== undefined) {
-				set.federation = ps.federation;
-			}
+			// Note: federation and federationHosts properties are not available in ps
+			// if (ps.federation !== undefined) {
+			// 	set.federation = ps.federation;
+			// }
 
 			if (ps.deliverSuspendedSoftware !== undefined) {
 				set.deliverSuspendedSoftware = ps.deliverSuspendedSoftware;
 			}
 
-			if (Array.isArray(ps.federationHosts)) {
-				set.federationHosts = ps.federationHosts.filter(Boolean).map(x => x.toLowerCase());
-				}
+			// if (Array.isArray(ps.federationHosts)) {
+			// 	set.federationHosts = ps.federationHosts.filter(Boolean).map((x: any) => x.toLowerCase());
+			// }
 				if (ps.iconLight !== undefined) {
 				set.iconLight = ps.iconLight;
 			}

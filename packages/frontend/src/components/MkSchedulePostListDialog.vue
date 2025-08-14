@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	@close="cancel()"
 >
 	<template #header>{{ i18n.ts._schedulePost.list }}</template>
-	<MkSpacer :marginMin="14" :marginMax="16">
+	<div class="_spacer" style="--MI_SPACER-min: 14px; --MI_SPACER-max: 16px;">
 		<MkPagination ref="paginationEl" :pagination="pagination">
 			<template #empty>
 				<div class="_fullinfo">
@@ -26,7 +26,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</template>
 		</MkPagination>
-	</MkSpacer>
+	</div>
 </MkModalWindow>
 </template>
 

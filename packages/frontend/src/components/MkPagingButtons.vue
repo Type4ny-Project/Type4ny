@@ -78,7 +78,6 @@ function onToPrevButtonClicked() {
 }
 
 function onToNextButtonClicked() {
-	const newPageNumber = current.value >= max.value ? max.value : current.value + 1;
 	emit('pageChanged', newPageNumber);
 }
 

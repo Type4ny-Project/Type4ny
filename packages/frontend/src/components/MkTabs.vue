@@ -131,7 +131,6 @@ function afterEnter(el: Element) {
 
 async function leave(el: Element) {
 	if (!(el instanceof HTMLElement)) return;
-	const elementWidth = el.getBoundingClientRect().width;
 	el.style.width = `${elementWidth}px`;
 	el.style.paddingLeft = '';
 	el.offsetWidth; // reflow

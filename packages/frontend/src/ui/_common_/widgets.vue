@@ -20,8 +20,9 @@ const editMode = ref(false);
 import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 
-const gamingType = computed(() => defaultStore.state.gamingType);
+const gamingType = computed(() => store.s.gamingType);
 const props = withDefaults(defineProps<{
 	// null = 全てのウィジェットを表示
 	// left = place: leftだけを表示

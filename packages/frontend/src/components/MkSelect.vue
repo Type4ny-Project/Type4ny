@@ -221,7 +221,7 @@ function show() {
 			});
 		};
 
-		const scanOptions = (options: VNodeChild[]) => {
+		const scanOptions = (options: VNode[]) => {
 			for (const vnode of options) {
 				if (typeof vnode !== 'object' || vnode === null || Array.isArray(vnode)) continue;
 				if (vnode.type === 'optgroup') {

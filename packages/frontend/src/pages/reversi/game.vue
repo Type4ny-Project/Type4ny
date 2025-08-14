@@ -90,7 +90,7 @@ useInterval(async () => {
 	if (game.value == null) return;
 	if (game.value.isStarted) return;
 
-	const _game = await misskeyApi('reversi/show-game', {
+	const _game = await misskeyApi('reversi/games/show', {
 		gameId: props.gameId,
 	});
 

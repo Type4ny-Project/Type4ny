@@ -57,20 +57,19 @@ import { openInstanceMenu } from './_common_/common.js';
 // import { host } from '@@/js/config.js';
 import * as os from '@/os.js';
 import { navbarItemDef } from '@/navbar.js';
-import { openAccountMenu as openAccountMenu_, $i } from '@/account.js';
+import { openAccountMenu as openAccountMenu_, $i } from '@/i.js';
 import MkButton from '@/components/MkButton.vue';
 // import { StickySidebar } from '@/scripts/sticky-sidebar.js';
 // import { mainRouter } from '@/router.js';
 //import MisskeyLogo from '@assets/client/misskey.svg';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
-import { mainRouter } from '@/router/main.js';
 
 const WINDOW_THRESHOLD = 1400;
 
-const menu = ref(defaultStore.state.menu);
-const menuDisplay = computed(defaultStore.makeGetterSetter('menuDisplay'));
+const menu = ref(store.s.menu);
+const menuDisplay = computed(store.makeGetterSetter('menuDisplay'));
 const otherNavItemIndicated = computed<boolean>(() => {
 	for (const def in navbarItemDef) {
 		if (menu.value.includes(def)) continue;
@@ -102,7 +101,7 @@ function openAccountMenu(ev: MouseEvent) {
 }
 
 let updateIconOnly: () => void;
-watch(defaultStore.reactiveState.menuDisplay, () => {
+watch(() => store.s.menuDisplay, () => {
 	calcViewState();
 });
 onMounted(() => {

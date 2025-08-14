@@ -119,20 +119,6 @@ export class SignupApiService {
 		const host: string | null = process.env.NODE_ENV === 'test' ? (body['host'] ?? null) : null;
 		const invitationCode = body['invitationCode'];
 		const emailAddress = body['emailAddress'];
-		const activeSystemWebhooksWithUserRegistered = await this.systemWebhooksRepository
-			.createQueryBuilder('webhook')
-			.where('webhook.isActive = :isActive', { isActive: true })
-			.andWhere('webhook.on @> :eventName', { eventName: '{userRegistered}' })
-			.getMany();
-		activeSystemWebhooksWithUserRegistered.forEach(it => this.systemWebhookService.enqueueSystemWebhook(
-			it.id,
-			'userRegistered',
-			{
-				username,
-				email: emailAddress ?? null,
-				host,
-			},
-		));
 		if (this.meta.emailRequiredForSignup) {
 			if (emailAddress == null || typeof emailAddress !== 'string') {
 				reply.code(400);
@@ -237,6 +223,18 @@ export class SignupApiService {
 				const { account, secret } = await this.signupService.signup({
 					username, password, host,
 				});
+
+				// Send webhook notification for user registration
+				const activeSystemWebhooksWithUserRegistered = await this.systemWebhooksRepository
+					.createQueryBuilder('webhook')
+					.where('webhook.isActive = :isActive', { isActive: true })
+					.andWhere('webhook.on @> :eventName', { eventName: '{userRegistered}' })
+					.getMany();
+				const packedUser = await this.userEntityService.pack(account, null, { schema: 'UserLite' });
+				activeSystemWebhooksWithUserRegistered.forEach(it => this.systemWebhookService.enqueueSystemWebhook(
+					'userRegistered',
+					packedUser,
+				));
 
 				const res = await this.userEntityService.pack(account, account, {
 					schema: 'MeDetailed',

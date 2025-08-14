@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<div v-show="!isDeleted" :class="$style.root" :tabindex="!isDeleted ? '-1' : undefined">
+<div v-if="!isDeleted" :class="$style.root" :tabindex="!isDeleted ? '-1' : undefined">
 	<MkAvatar :class="$style.avatar" :user="note.user" link preview/>
 	<div :class="$style.main">
 		<MkNoteHeader :class="$style.header" :note="note" :mini="true"/>
@@ -30,14 +30,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import { i18n } from '../i18n.js';
+import { i18n } from '@/i18n.js';
 import MkNoteHeader from '@/components/MkNoteHeader.vue';
 import MkSubNoteContent from '@/components/MkSubNoteContent.vue';
 import MkCwButton from '@/components/MkCwButton.vue';
 import MkButton from '@/components/MkButton.vue';
-import { i18n } from '@/i18n.js';
 
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 const isDeleted = ref(false);
 
 const props = defineProps<{

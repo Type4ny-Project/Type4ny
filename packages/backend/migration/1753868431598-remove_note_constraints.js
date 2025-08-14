@@ -7,8 +7,18 @@ export class RemoveNoteConstraints1753868431598 {
     name = 'RemoveNoteConstraints1753868431598'
 
     async up(queryRunner) {
-        await queryRunner.query(`ALTER TABLE "note" DROP CONSTRAINT "FK_52ccc804d7c69037d558bac4c96"`);
-        await queryRunner.query(`ALTER TABLE "note" DROP CONSTRAINT "FK_17cb3553c700a4985dff5a30ff5"`);
+        // Check if constraints exist before dropping them
+        const constraints = await queryRunner.query(`
+            SELECT constraint_name 
+            FROM information_schema.table_constraints 
+            WHERE table_name = 'note' 
+            AND constraint_type = 'FOREIGN KEY'
+            AND constraint_name IN ('FK_52ccc804d7c69037d558bac4c96', 'FK_17cb3553c700a4985dff5a30ff5')
+        `);
+        
+        for (const constraint of constraints) {
+            await queryRunner.query(`ALTER TABLE "note" DROP CONSTRAINT "${constraint.constraint_name}"`);
+        }
     }
 
     async down(queryRunner) {

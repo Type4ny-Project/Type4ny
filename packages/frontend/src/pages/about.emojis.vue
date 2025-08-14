@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <MkStickyContainer>
 	<template #header><MkPageHeader v-model:tab="tab" :hide="true" :actions="headerActions" :tabs="headerTabs"/></template>
-	<MkSpacer v-if="tab === 'emojis'" :contentMax="1000" :marginMin="20">
+	<div v-if="tab === 'emojis'" class="_spacer" style="--MI_SPACER-w: 1000px; --MI_SPACER-min: 20px;">
 		<MkButton v-if="$i && ($i.isModerator || $i.policies.canManageCustomEmojis)" primary link to="/custom-emojis-manager">{{ i18n.ts.manageCustomEmojis }}</MkButton>
 		<MkButton v-if="$i && (!$i.isModerator || $i.policies.canRequestCustomEmojis)" primary @click="edit">{{ i18n.ts.requestCustomEmojis }}</MkButton>
 
@@ -35,12 +35,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<XEmoji v-for="emoji in customEmojis.filter(e => e.category === category)" :key="emoji.name" :emoji="emoji"/>
 			</div>
 		</MkFoldableSection>
-	</MkSpacer>
-	<MkSpacer v-if="tab === 'request'" :contentMax="1000" :marginMin="20">
+	</div>
+	<div v-if="tab === 'request'" class="_spacer" style="--MI_SPACER-w: 1000px; --MI_SPACER-min: 20px;">
 		<div :class="$style.emojis">
 			<XEmoji v-for="emoji in requestEmojis.emojis" :key="emoji.name" :emoji="emoji" :request="true"/>
 		</div>
-	</MkSpacer>
+	</div>
 </MkStickyContainer>
 </template>
 
@@ -54,8 +54,8 @@ import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { customEmojis, customEmojiCategories } from '@/custom-emojis.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/i.js';
-import { definePageMetadata } from '@/scripts/page-metadata';
-import { misskeyApiGet } from '@/scripts/misskey-api.js';
+import { definePage } from '@/utility/page-metadata';
+import { misskeyApiGet } from '@/utility/misskey-api.js';
 import * as os from '@/os.js';
 let tab = ref('emojis');
 const headerActions = computed(() => []);

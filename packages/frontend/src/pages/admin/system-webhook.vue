@@ -73,7 +73,6 @@ async function onDeleteButtonClicked(webhook: entities.SystemWebhook) {
 }
 
 async function fetchWebhooks() {
-	const result = await misskeyApi('admin/system-webhook/list', {});
 	webhooks.value = result.sort((a, b) => a.id.localeCompare(b.id));
 }
 

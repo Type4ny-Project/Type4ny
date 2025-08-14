@@ -165,7 +165,6 @@ async function openDecoration(avatarDecoration, index?: number) {
 				offsetX: payload.offsetX,
 				offsetY: payload.offsetY,
 			};
-			const update = [...$i.avatarDecorations];
 			update[index] = decoration;
 			await os.apiWithDialog('i/update', {
 				avatarDecorations: update,
@@ -173,7 +172,6 @@ async function openDecoration(avatarDecoration, index?: number) {
 			$i.avatarDecorations = update;
 		},
 		'detach': async () => {
-			const update = [...$i.avatarDecorations];
 			update.splice(index, 1);
 			await os.apiWithDialog('i/update', {
 				avatarDecorations: update,

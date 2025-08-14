@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			{{ i18n.ts._timelineDescription[src] }}
 		</MkTip>
 		<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo"  class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
-				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :channel="channelInfo"  :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
+				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
 		<MkStreamingNotesTimeline
 			ref="tlComponent"
 			:key="src + withRenotes + withReplies + onlyFiles + withSensitive"
@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:withRenotes="withRenotes"
 			:withReplies="withReplies"
 			:withSensitive="withSensitive"
-			:onlyFiles="onlyFiles":withCw="withCw"
+			:onlyFiles="onlyFiles" :withCw="withCw"
 			:sound="true"
 		/>
 	</div>
@@ -51,7 +51,7 @@ import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBa
 import { prefer } from '@/preferences.js';
 import { useRouter } from '@/router.js';
 import { useScrollPositionKeeper } from '@/use/use-scroll-position-keeper.js';
-import { useScrollPositionManager } from '@/nirax.js';
+import { useScrollPositionManager } from '@/lib/nirax.js';
 import { ui } from '@@/js/config.js';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
 
@@ -69,7 +69,7 @@ const withRenotes = computed<boolean>({
 	set: (x) => saveTlFilter('withRenotes', x),
 });
 const withCw = computed<boolean>({
-	get: () => defaultStore.reactiveState.tl.value.filter.withCw,
+	get: () => store.r.tl.value.filter.withCw,
 	set: (x) => saveTlFilter('withCw', x),
 });
 
@@ -119,21 +119,15 @@ const withSensitive = computed<boolean>({
 
 const showFixedPostForm = prefer.model('showFixedPostForm');
 const channelInfo = ref();
-if (src.value.split(':')[0] === 'channel') {
-	const channelId = src.value.split(':')[1];
-	channelInfo.value = await misskeyApi('channels/show', { channelId });
-}
 watch(src, async () => {
-	queue.value = 0;
 	if (src.value.split(':')[0] === 'channel') {
 		const channelId = src.value.split(':')[1];
-		channelInfo.value = await misskeyApi('channels/show', { channelId });
+		// TODO: Implement channel info fetching
+		// channelInfo.value = await misskeyApi('channels/show', { channelId });
 	} else {
 		channelInfo.value = null;
 	}
 });
-
-const showFixedPostForm = prefer.model('showFixedPostForm');
 
 async function chooseList(ev: MouseEvent): Promise<void> {
 	const myLists = await userListsCache.fetch();
@@ -213,7 +207,6 @@ function saveSrc(newSrc: TimelinePageSrc): void {
 
 function saveTlFilter(key: keyof typeof store.s.tl.filter, newValue: boolean) {
 	if (key !== 'withReplies' || $i) {
-		const out = deepMerge({ filter: { [key]: newValue } }, store.s.tl);
 		store.set('tl', out);
 	}
 }

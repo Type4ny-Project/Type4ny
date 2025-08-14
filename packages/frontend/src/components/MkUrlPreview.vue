@@ -145,10 +145,10 @@ onDeactivated(() => {
 });
 
 onMounted(() => {
-	if (defaultStore.state.alwaysShowPlayer) {
+	if (store.s.alwaysShowPlayer) {
 		playerEnabled.value = true;
 	}
-	if (defaultStore.state.alwaysExpandTweet) {
+	if (store.s.alwaysExpandTweet) {
 		tweetExpanded.value = true;
 	}
 });

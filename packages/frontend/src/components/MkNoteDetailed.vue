@@ -286,6 +286,7 @@ import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
 import { pleaseLogin } from '@/utility/please-login.js';
 import { checkWordMute } from '@/utility/check-word-mute.js';
 import { userPage } from '@/filters/user.js';
+import { store } from '@/store.js';
 import { notePage } from '@/filters/note.js';
 import number from '@/filters/number.js';
 import * as os from '@/os.js';
@@ -365,15 +366,14 @@ const urls = parsed ? extractUrlFromMfm(parsed).filter((url) => appearNote.renot
 const showTicker = (prefer.s.instanceTicker === 'always') || (prefer.s.instanceTicker === 'remote' && appearNote.user.instance);
 const conversation = ref<Misskey.entities.Note[]>([]);
 const replies = ref<Misskey.entities.Note[]>([]);
-const mutedReactions = ref<string[]>(defaultStore.state.mutedReactions);
-const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i?.id);
+const mutedReactions = ref<string[]>(store.s.mutedReactions);
+const canRenote = computed(() => ['public', 'home'].includes(appearNote.value.visibility) || appearNote.value.userId === $i?.id);
 
 useGlobalEvent('noteDeleted', (noteId) => {
 	if (noteId === note.id || noteId === appearNote.id) {
 		isDeleted.value = true;
 	}
 });
-const canRenote = computed(() => ['public', 'home'].includes(appearNote.value.visibility) || appearNote.value.userId === $i?.id);
 
 const pleaseLoginContext = computed<OpenOnRemoteOptions>(() => ({
 	type: 'lookup',
@@ -461,7 +461,6 @@ if (appearNote.reactionAcceptance === 'likeOnly') {
 			_cacheKey_: $appearNote.reactionCount,
 		});
 
-		const users = reactions.map(x => x.user);
 
 		if (users.length < 1) return;
 
@@ -603,10 +602,10 @@ async function reactionMuteToggle(reactionName: string | null) {
 
 	if (!mutedReactions.value.includes(reactionName)) {
 		mutedReactions.value.push(reactionName);
-		defaultStore.set('mutedReactions', mutedReactions.value);
+		store.set('mutedReactions', mutedReactions.value);
 	} else {
 		mutedReactions.value = mutedReactions.value.filter(x => x !== reactionName);
-		defaultStore.set('mutedReactions', mutedReactions.value);
+		store.set('mutedReactions', mutedReactions.value);
 	}
 }
 

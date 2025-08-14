@@ -231,7 +231,7 @@ const childrenCache = new WeakMap<MenuParent, MenuItem[]>();
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
 const XChild = defineAsyncComponent(() => import('./MkMenu.child.vue'));
 
@@ -248,7 +248,7 @@ const emit = defineEmits<{
 	(ev: 'hide'): void;
 }>();
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const big = isTouchUsing;
 
@@ -414,10 +414,6 @@ function focusDown() {
 	if (disposed) return;
 	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
-	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
-	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
-	const targetIndex = (activeIndex !== -1 && activeIndex !== (focusableElements.length - 1)) ? (activeIndex + 1) : 0;
-	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
 	targetElement.focus();
 }

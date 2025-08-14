@@ -21,8 +21,9 @@ import type { MkABehavior } from '@/components/global/MkA.vue';
 import { $i } from '@/i.js';
 import { getStaticImageUrl } from '@/utility/media-proxy.js';
 import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	username: string;

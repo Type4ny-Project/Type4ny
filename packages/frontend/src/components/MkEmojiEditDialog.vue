@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
@@ -17,7 +17,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template v-else #header>New emoji</template>
 
 	<div>
-		<MkSpacer :marginMin="20" :marginMax="28">
+		<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
 			<div class="_gaps_m" style="display: flex; flex-direction: row">
 				<div>
 					<div v-if="imgUrl != null" :class="$style.imgs">
@@ -85,7 +85,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<p>※上記の物は問題がないことを保証するものではありません。</p>
 				</div>
 			</div>
-		</MkSpacer>
+		</div>
 
 		<div :class="$style.footer">
 			<div :class="$style.footerButtons">
@@ -107,13 +107,13 @@ import MkInput from '@/components/MkInput.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { customEmojiCategories } from '@/custom-emojis.js';
 import MkSwitch from '@/components/MkSwitch.vue';
-import { selectFile, selectFiles } from '@/scripts/select-file.js';
+import { selectFile, selectFiles } from '@/utility/select-file.js';
 import MkRolePreview from '@/components/MkRolePreview.vue';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 import MkNoteSimple from '@/components/MkNoteSimple.vue';
 const props = defineProps<{
   emoji?: any,

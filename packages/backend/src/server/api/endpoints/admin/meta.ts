@@ -891,6 +891,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				enableRemoteNotesCleaning: instance.enableRemoteNotesCleaning,
 				remoteNotesCleaningExpiryDaysForEachNotes: instance.remoteNotesCleaningExpiryDaysForEachNotes,
 				remoteNotesCleaningMaxProcessingDurationInMinutes: instance.remoteNotesCleaningMaxProcessingDurationInMinutes,
+				federation: 'all' as const,
+				federationHosts: [] as string[],
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {

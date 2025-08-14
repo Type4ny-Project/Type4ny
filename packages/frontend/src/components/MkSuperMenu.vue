@@ -100,8 +100,9 @@ import MkInput from '@/components/MkInput.vue';
 import { i18n } from '@/i18n.js';
 import { useRouter } from '@/router.js';
 import { initIntlString, compareStringIncludes } from '@/utility/intl-string.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	def: SuperMenuDef[];
@@ -211,7 +212,6 @@ function searchOnKeyDown(ev: KeyboardEvent) {
 		searchSelectedIndex.value = current + 1 >= searchResult.value.length ? 0 : current + 1;
 	} else if (ev.key === 'ArrowUp') {
 		ev.preventDefault();
-		const current = searchSelectedIndex.value ?? 0;
 		searchSelectedIndex.value = current - 1 < 0 ? searchResult.value.length - 1 : current - 1;
 	}
 

@@ -125,10 +125,6 @@ export function getConfig(): UserConfig {
 					}),
 				]
 				: [],
-			visualizer({
-				filename: './dist/stats.html',
-				open: true,
-			})
 		],
 
 		resolve: {

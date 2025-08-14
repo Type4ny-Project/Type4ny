@@ -10,12 +10,24 @@ import semver from 'semver';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import { bindThis } from '@/decorators.js';
+import { MetaService } from '@/core/MetaService.js';
+
+type MiInstance = {
+	softwareName: string | null;
+	softwareVersion: string | null;
+};
+
+type SoftwareSuspension = {
+	software: string;
+	versionRange: string;
+};
 
 @Injectable()
 export class UtilityService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+		private metaService: MetaService,
 	) {
 	}
 
@@ -127,31 +139,33 @@ export class UtilityService {
 	}
 
 	@bindThis
-	public isFederationAllowedHost(host: string): boolean {
-		if (this.meta.federation === 'none') return false;
-		if (this.meta.federation === 'specified' && !this.meta.federationHosts.some(x => `.${host.toLowerCase()}`.endsWith(`.${x}`))) return false;
-		if (this.isBlockedHost(this.meta.blockedHosts, host)) return false;
+	public async isFederationAllowedHost(host: string): Promise<boolean> {
+		const meta = await this.metaService.fetch();
+		if (meta.federation === 'none') return false;
+		if (meta.federation === 'specified' && !meta.federationHosts.some(x => `.${host.toLowerCase()}`.endsWith(`.${x}`))) return false;
+		if (this.isBlockedHost(meta.blockedHosts, host)) return false;
 
 		return true;
 	}
 
 	@bindThis
-	public isFederationAllowedUri(uri: string): boolean {
+	public async isFederationAllowedUri(uri: string): Promise<boolean> {
 		const host = this.extractDbHost(uri);
-		return this.isFederationAllowedHost(host);
+		return await this.isFederationAllowedHost(host);
 	}
 
 	@bindThis
-	public isDeliverSuspendedSoftware(software: Pick<MiInstance, 'softwareName' | 'softwareVersion'>): SoftwareSuspension | undefined {
+	public async isDeliverSuspendedSoftware(software: Pick<MiInstance, 'softwareName' | 'softwareVersion'>): Promise<SoftwareSuspension | undefined> {
 		if (software.softwareName == null) return undefined;
+		const meta = await this.metaService.fetch();
 		if (software.softwareVersion == null) {
 			// software version is null; suspend iff versionRange is *
-			return this.meta.deliverSuspendedSoftware.find(x =>
+			return meta.deliverSuspendedSoftware.find(x =>
 				x.software === software.softwareName
 				&& x.versionRange.trim() === '*');
 		} else {
 			const softwareVersion = software.softwareVersion;
-			return this.meta.deliverSuspendedSoftware.find(x =>
+			return meta.deliverSuspendedSoftware.find(x =>
 				x.software === software.softwareName
 				&& semver.satisfies(softwareVersion, x.versionRange, { includePrerelease: true }));
 		}

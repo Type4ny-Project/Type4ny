@@ -236,8 +236,6 @@ const align = () => {
 			left = (window.innerWidth - SCROLLBAR_THICKNESS) - width + window.scrollX - 1;
 		}
 
-		const underSpace = ((window.innerHeight - SCROLLBAR_THICKNESS) - MARGIN) - (top - window.scrollY);
-		const upperSpace = (anchorRect.top - MARGIN);
 
 		// 画面から縦にはみ出る場合
 		if (top + height - window.scrollY > ((window.innerHeight - SCROLLBAR_THICKNESS) - MARGIN)) {

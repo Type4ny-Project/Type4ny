@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts">
 import { computed, defineComponent, h, resolveDirective, withDirectives, ref, watch } from 'vue';
-import { defaultStore } from '@/store.js';
-const gamingType = defaultStore.state.gamingType;
+import { store } from '@/store.js';
+const gamingType = store.s.gamingType;
 
 export default defineComponent({
 	props: {

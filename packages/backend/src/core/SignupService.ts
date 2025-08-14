@@ -24,7 +24,6 @@ import type { Config } from '@/config.js';
 import { envOption } from '@/env.js';
 import { UserService } from '@/core/UserService.js';
 import { SystemAccountService } from '@/core/SystemAccountService.js';
-import { MetaService } from '@/core/MetaService.js';
 
 @Injectable()
 export class SignupService {
@@ -43,7 +42,6 @@ export class SignupService {
 		private userEntityService: UserEntityService,
 		private idService: IdService,
 		private systemAccountService: SystemAccountService,
-		private metaService: MetaService,
 		private usersChart: UsersChart,
 	) {}
 
@@ -110,7 +108,7 @@ export class SignupService {
 				throw new Error('USED_USERNAME');
 			}
 
-			const hasProhibitedWords = this.utilityService.isKeyWordIncluded(username.toLowerCase(), this.meta.prohibitedWordsForNameOfUser);
+			const hasProhibitedWords = this.utilityService.isKeyWordIncluded(username.toLowerCase(), meta.prohibitedWordsForNameOfUser);
 			if (hasProhibitedWords) {
 				throw new Error('USED_USERNAME');
 			}
@@ -155,7 +153,6 @@ export class SignupService {
 					usernameLower: username.toLowerCase(),
 					host: this.utilityService.toPunyNullable(host),
 					token: secret,
-					isRoot: isTheFirstUser || opts.isRoot,
 				}),
 			);
 
@@ -186,7 +183,8 @@ export class SignupService {
 		this.usersChart.update(account, true);
 		this.userService.notifySystemWebhook(account, 'userCreated');
 
-		if (this.meta.rootUserId == null) {
+		const currentMeta = await this.metaService.fetch();
+		if (currentMeta.rootUserId == null) {
 			await this.metaService.update({ rootUserId: account.id });
 		}
 

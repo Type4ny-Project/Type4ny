@@ -55,8 +55,9 @@ import { prefer } from '@/preferences.js';
 import { DI } from '@/di.js';
 import { noteEvents } from '@/composables/use-note-capture.js';
 import { mute as muteEmoji, unmute as unmuteEmoji, checkMuted as isEmojiMuted } from '@/utility/emoji-mute.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	noteId: Misskey.entities.Note['id'];
@@ -91,11 +92,11 @@ const isAvailable = computed(() =>
 const canToggle = computed(() => {
 	// TODO
 	//return (
-		!props.reaction.match(/@\w/) &&
-		$i &&
-		emoji.value &&
-		checkReactionPermissions($i, props.note, emoji.value)
-	);
+	//	!props.reaction.match(/@\w/) &&
+	//	$i &&
+	//	emoji.value &&
+	//	checkReactionPermissions($i, props.note, emoji.value)
+	//);
 	return !props.reaction.match(/@\w/) && $i && emoji.value;
 });
 const canGetInfo = computed(() => !props.reaction.match(/@\w/) && props.reaction.includes(':'));
@@ -196,10 +197,10 @@ async function toggleReaction() {
 
 		// TODO: 上位コンポーネントでやる
 		//if (
-			props.note.text &&
-			props.note.text.length > 100 &&
-			Date.now() - new Date(props.note.createdAt).getTime() < 1000 * 3
-		) {
+		//	props.note.text &&
+		//	props.note.text.length > 100 &&
+		//	Date.now() - new Date(props.note.createdAt).getTime() < 1000 * 3
+		//) {
 		//	claimAchievement('reactWithoutRead');
 		//}
 	}

@@ -267,7 +267,6 @@ onDeactivated(() => {
 });
 
 async function fetchMore() {
-	const LIMIT = 30;
 
 	moreFetching.value = true;
 
@@ -329,9 +328,7 @@ function onReact(ctx: Parameters<Misskey.Channels['chatUser']['events']['react']
 }
 
 function onUnreact(ctx: Parameters<Misskey.Channels['chatUser']['events']['unreact']>[0] | Parameters<Misskey.Channels['chatRoom']['events']['unreact']>[0]) {
-	const message = messages.value.find(m => m.id === ctx.messageId);
 	if (message) {
-		const index = message.reactions.findIndex(r => r.reaction === ctx.reaction && r.user.id === ctx.user!.id);
 		if (index !== -1) {
 			message.reactions.splice(index, 1);
 		}

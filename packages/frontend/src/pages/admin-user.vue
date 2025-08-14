@@ -353,7 +353,6 @@ async function revokePoints() {
 	});
 	if (canceled) return;
 	if (!result) return;
-	let points = parseInt(result);
 	if (points <= 0) {
 		await os.alert({
 			type: 'error',

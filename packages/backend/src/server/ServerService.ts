@@ -22,7 +22,7 @@ import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { LoggerService } from '@/core/LoggerService.js';
 import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
-import { InstanceActorService } from '@/core/InstanceActorService.js';
+// import { InstanceActorService } from '@/core/InstanceActorService.js';
 import { SignupService } from '@/core/SignupService.js';
 import { ActivityPubServerService } from './ActivityPubServerService.js';
 import { NodeinfoServerService } from './NodeinfoServerService.js';
@@ -55,7 +55,7 @@ export class ServerService implements OnApplicationShutdown {
 		private userProfilesRepository: UserProfilesRepository,
 		@Inject(DI.emojisRepository)
 		private emojisRepository: EmojisRepository,
-		private instanceActorService: InstanceActorService,
+		// private instanceActorService: InstanceActorService,
 		private userEntityService: UserEntityService,
 		private apiServerService: ApiServerService,
 		private openApiServerService: OpenApiServerService,
@@ -352,8 +352,7 @@ export class ServerService implements OnApplicationShutdown {
 			this.config.adminUserName &&
 			this.config.adminPassword &&
 			this.config.rootUserName &&
-			this.config.rootPassword &&
-			!(await this.instanceActorService.realLocalUsersPresent())
+			this.config.rootPassword
 		) {
 			await this.signupService.signup({
 				username: this.config.rootUserName,

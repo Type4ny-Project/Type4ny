@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
@@ -24,7 +24,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</div>
 
-	<Transition :name="defaultStore.state.animation ? 'tray-back' : ''">
+	<Transition :name="store.s.animation ? 'tray-back' : ''">
 		<div
 			v-if="widgetsShowing"
 			class="tray-back _modalBg"
@@ -47,10 +47,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<button :class="$style.navButton" class="_button" @click="os.post()"><i :class="$style.navButtonIcon" class="ti ti-pencil"></i></button>
 	</div>
 	<Transition
-		:enterActiveClass="defaultStore.state.animation ? $style.transition_menuDrawerBg_enterActive : ''"
-		:leaveActiveClass="defaultStore.state.animation ? $style.transition_menuDrawerBg_leaveActive : ''"
-		:enterFromClass="defaultStore.state.animation ? $style.transition_menuDrawerBg_enterFrom : ''"
-		:leaveToClass="defaultStore.state.animation ? $style.transition_menuDrawerBg_leaveTo : ''"
+		:enterActiveClass="store.s.animation ? $style.transition_menuDrawerBg_enterActive : ''"
+		:leaveActiveClass="store.s.animation ? $style.transition_menuDrawerBg_leaveActive : ''"
+		:enterFromClass="store.s.animation ? $style.transition_menuDrawerBg_enterFrom : ''"
+		:leaveToClass="store.s.animation ? $style.transition_menuDrawerBg_leaveTo : ''"
 	>
 		<div
 			v-if="drawerMenuShowing || widgetsShowing"
@@ -62,20 +62,20 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</Transition>
 
 	<Transition
-		:enterActiveClass="defaultStore.state.animation ? $style.transition_menuDrawer_enterActive : ''"
-		:leaveActiveClass="defaultStore.state.animation ? $style.transition_menuDrawer_leaveActive : ''"
-		:enterFromClass="defaultStore.state.animation ? $style.transition_menuDrawer_enterFrom : ''"
-		:leaveToClass="defaultStore.state.animation ? $style.transition_menuDrawer_leaveTo : ''"
+		:enterActiveClass="store.s.animation ? $style.transition_menuDrawer_enterActive : ''"
+		:leaveActiveClass="store.s.animation ? $style.transition_menuDrawer_leaveActive : ''"
+		:enterFromClass="store.s.animation ? $style.transition_menuDrawer_enterFrom : ''"
+		:leaveToClass="store.s.animation ? $style.transition_menuDrawer_leaveTo : ''"
 	>
 		<div v-if="drawerMenuShowing" :class="$style.menuDrawer">
 			<XDrawerMenu/>
 		</div>
 	</Transition>
 	<Transition
-		:enterActiveClass="defaultStore.state.animation ? $style.transition_widgetsDrawer_enterActive : ''"
-		:leaveActiveClass="defaultStore.state.animation ? $style.transition_widgetsDrawer_leaveActive : ''"
-		:enterFromClass="defaultStore.state.animation ? $style.transition_widgetsDrawer_enterFrom : ''"
-		:leaveToClass="defaultStore.state.animation ? $style.transition_widgetsDrawer_leaveTo : ''"
+		:enterActiveClass="store.s.animation ? $style.transition_widgetsDrawer_enterActive : ''"
+		:leaveActiveClass="store.s.animation ? $style.transition_widgetsDrawer_leaveActive : ''"
+		:enterFromClass="store.s.animation ? $style.transition_widgetsDrawer_enterFrom : ''"
+		:leaveToClass="store.s.animation ? $style.transition_widgetsDrawer_leaveTo : ''"
 	>
 		<div v-if="widgetsShowing" :class="$style.widgetsDrawer">
 			<button class="_button" :class="$style.widgetsCloseButton" @click="widgetsShowing = false"><i class="ti ti-x"></i></button>
@@ -91,15 +91,15 @@ import { instanceName, ui } from '@@/js/config.js';
 import XSidebar from './twilike.sidebar.vue';
 import XCommon from './_common_/common.vue';
 import * as os from '@/os.js';
-import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
-import { defaultStore } from '@/store.js';
+import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/utility/page-metadata.js';
+import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { miLocalStorage } from '@/local-storage.js';
-import { mainRouter } from '@/router/main.js';
-import { $i } from '@/account.js';
+import { mainRouter } from '@/router.js';
+import { $i } from '@/i.js';
 import XDrawerMenu from '@/ui/_common_/navbar-for-mobile.vue';
 const XHeaderMenu = defineAsyncComponent(() => import('./classic.header.vue'));
-const XWidgets = defineAsyncComponent(() => import('./universal.widgets.vue'));
+const XWidgets = defineAsyncComponent(() => import('./_common_/widgets.vue'));
 
 const isRoot = computed(() => mainRouter.currentRoute.value.name === 'index');
 
@@ -112,7 +112,7 @@ const widgetsShowing = ref(false);
 const fullView = ref(false);
 const globalHeaderHeight = ref(0);
 const wallpaper = miLocalStorage.getItem('wallpaper') != null;
-const showMenuOnTop = computed(() => defaultStore.state.menuDisplay === 'top');
+const showMenuOnTop = computed(() => store.s.menuDisplay === 'top');
 const widgetsLeft = ref<HTMLElement>();
 const widgetsRight = ref<HTMLElement>();
 
@@ -166,9 +166,9 @@ function onContextmenu(ev: MouseEvent) {
 
 document.documentElement.style.overflowY = 'scroll';
 
-defaultStore.loaded.then(() => {
-	if (defaultStore.state.widgets.length === 0) {
-		defaultStore.set('widgets', [{
+store.loaded.then(() => {
+	if (store.s.widgets.length === 0) {
+		store.set('widgets', [{
 			name: 'calendar',
 			id: 'a', place: null, data: {},
 		}, {

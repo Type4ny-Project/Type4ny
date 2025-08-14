@@ -128,14 +128,14 @@ function realtimeSubscribe(props: {
 					userId: body.userId,
 					reaction: body.reaction,
 					emoji: body.emoji,
-					console.log(note.value.myReactions);
-					if (!note.value.myReactions) {
-						note.value.myReactions = [];
-						note.value.myReactions.push(reaction);
-					} else if (!note.value.myReactions.includes(reaction)) {
-						note.value.myReactions.push(reaction);
-					}
 				});
+				console.log(note.value.myReactions);
+				if (!note.value.myReactions) {
+					note.value.myReactions = [];
+					note.value.myReactions.push(reaction);
+				} else if (!note.value.myReactions.includes(reaction)) {
+					note.value.myReactions.push(reaction);
+				}
 				break;
 			}
 
@@ -144,8 +144,8 @@ function realtimeSubscribe(props: {
 					userId: body.userId,
 					reaction: body.reaction,
 					emoji: body.emoji,
-					note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
 				});
+				note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
 				break;
 			}
 

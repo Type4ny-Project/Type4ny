@@ -41,7 +41,7 @@ import MkPagination from '@/components/MkPagination.vue';
 import * as os from '@/os';
 import { i18n } from '@/i18n';
 import MkButton from '@/components/MkButton.vue';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 
 const emojisRequestPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
@@ -78,7 +78,7 @@ function editRequest(emoji) {
 async function unrequested(emoji) {
 	const { canceled } = await os.confirm({
 		type: 'warning',
-		text: i18n.t('requestApprovalAreYouSure', { x: emoji.name }),
+		text: i18n.tsx.requestApprovalAreYouSure( { x: emoji.name }),
 	});
 	if (canceled) return;
 
@@ -101,7 +101,7 @@ async function unrequested(emoji) {
 async function deleteRequest(emoji) {
 	const { canceled } = await os.confirm({
 		type: 'warning',
-		text: i18n.t('removeAreYouSure', { x: emoji.name }),
+		text: i18n.tsx.removeAreYouSure( { x: emoji.name }),
 	});
 	if (canceled) return;
 

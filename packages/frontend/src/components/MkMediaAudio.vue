@@ -81,7 +81,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 
 		<WaveSurferPlayer
-			v-if="!defaultStore.state.dataSaver.media && audioEl"
+			v-if="!store.s.dataSaver.media && audioEl"
 			:class="$style.seekbarRoot"
 			:options="{ media: audioEl,
 				height: 32,
@@ -94,7 +94,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			}"
 		></WaveSurferPlayer>
 		<MkMediaRange
-			v-if="defaultStore.state.dataSaver.media && !hide"
+			v-if="store.s.dataSaver.media && !hide"
 			v-model="rangePercent"
 			:class="$style.seekbarRoot"
 		/>
@@ -118,6 +118,7 @@ import { hms } from '@/filters/hms.js';
 import MkMediaRange from '@/components/MkMediaRange.vue';
 import { $i, iAmModerator } from '@/i.js';
 import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 
 const props = defineProps<{
 	audio: Misskey.entities.DriveFile;

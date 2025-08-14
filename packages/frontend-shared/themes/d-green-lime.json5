@@ -1,0 +1,23 @@
+{
+	id: 'd-green-lime',
+	base: 'dark',
+	name: 'Green Lime Dark',
+	props: {
+		accent: '#86b300',
+		accentDarken: '#6b8f00',
+		accentLighten: '#a1ce00',
+		accentedBg: '#1a1f0f',
+		focus: '#86b300',
+		bg: '#0c0c0c',
+		fg: '#e0e0e0',
+		fgHighlighted: '#86b300',
+		divider: 'rgba(255, 255, 255, 0.1)',
+		panel: '#1a1a1a',
+		panelHighlight: '#262626',
+		header: '#1a1a1a',
+		navBg: '#0c0c0c',
+		indicator: '#86b300',
+		mentionMe: '#86b300',
+		modalBg: 'rgba(0, 0, 0, 0.5)',
+	},
+}

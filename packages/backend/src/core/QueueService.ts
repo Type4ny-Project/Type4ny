@@ -38,7 +38,6 @@ import type {
 	SystemQueue,
 	SystemWebhookDeliverQueue,
 	UserWebhookDeliverQueue,
-	SystemWebhookDeliverQueue,
 	ScheduleNotePostQueue,
 } from './QueueModule.js';
 import type httpSignature from '@peertube/http-signature';

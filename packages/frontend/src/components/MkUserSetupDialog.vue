@@ -142,7 +142,7 @@ import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowB
 import { store } from '@/store.js';
 import * as os from '@/os.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const emit = defineEmits<{
 	(ev: 'closed'): void;

@@ -51,8 +51,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div v-if="tab === 'index'" class="group index">
 			<section v-if="showPinned">
 				<div style="display: flex; ">
-					<div v-for="a in profileMax" :key="a" :title="defaultStore.state[`pickerProfileName${a > 1 ? a - 1 : ''}`]" class="sllfktkhgl" :class="{ active: activeIndex === a }" @click="pinnedProfileSelect(a)">
-						{{ defaultStore.state[`pickerProfileName${a > 1 ? a - 1 : ''}`] }}
+					<div v-for="a in profileMax" :key="a" :title="store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`]" class="sllfktkhgl" :class="{ active: activeIndex === a }" @click="pinnedProfileSelect(a)">
+						{{ store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`] }}
 					</div>
 				</div>
 				<div class="body">
@@ -146,7 +146,7 @@ import { checkReactionPermissions } from '@/utility/check-reaction-permissions.j
 import { deepClone } from '@/utility/clone.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 import { prefer } from '@/preferences.js';
 import { useRouter } from '@/router.js';
 
@@ -315,15 +315,10 @@ watch(q, () => {
 	};
 
 	const searchUnicode = () => {
-		const max = 100;
-		const emojis = emojilist;
-		const matches = new Set<UnicodeEmojiDef>();
 
-		const exactMatch = emojis.find(emoji => emoji.name === newQ);
 		if (exactMatch) matches.add(exactMatch);
 
 		if (newQ.includes(' ')) { // AND検索
-			const keywords = newQ.split(' ');
 
 			for (const emoji of emojis) {
 				if (keywords.every(keyword => emoji.name.includes(keyword))) {
@@ -478,11 +473,11 @@ function onKeydown(ev: KeyboardEvent) {
 	}
 }
 
-const activeIndex = ref(defaultStore.state.pickerProfileDefault);
-pinnedEmojis.value = props.asReactionPicker ? deepClone(defaultStore.state[`reactions${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]) : deepClone(defaultStore.state[`pinnedEmojis${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]);
+const activeIndex = ref(store.s.pickerProfileDefault);
+pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]);
 
 function pinnedProfileSelect(index:number) {
-	pinnedEmojis.value = props.asReactionPicker ? deepClone(defaultStore.state[`reactions${index > 1 ? index - 1 : ''}`]) : deepClone(defaultStore.state[`pinnedEmojis${index > 1 ? index - 1 : ''}`]);
+	pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${index > 1 ? index - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${index > 1 ? index - 1 : ''}`]);
 	activeIndex.value = index;
 }
 

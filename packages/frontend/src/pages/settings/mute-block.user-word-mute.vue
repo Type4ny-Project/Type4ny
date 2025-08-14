@@ -24,14 +24,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
+import type { Ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import { watchEffect } from 'vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 
 const props = defineProps<{

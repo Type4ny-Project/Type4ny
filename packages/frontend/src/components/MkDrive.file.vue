@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -44,7 +44,7 @@ import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/i.js';
 import { getDriveFileMenu, getDriveMultiFileMenu } from '@/utility/get-drive-file-menu.js';
-import { isTouchUsing } from '@/scripts/touch.js';
+import { isTouchUsing } from '@/utility/touch.js';
 import { setDragData } from '@/drag-and-drop.js';
 
 const props = withDefaults(defineProps<{

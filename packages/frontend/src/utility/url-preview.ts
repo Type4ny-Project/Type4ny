@@ -9,6 +9,8 @@ import { prefer } from '@/preferences.js';
 
 export const isEnabledUrlPreview = computed(() => (instance.enableUrlPreview && !prefer.r.dataSaver.value.disableUrlPreview));
 
+export const infoImageUrl = computed(() => instance.infoImageUrl || '/client-assets/info.png');
+
 export function transformPlayerUrl(url: string): string {
 	const urlObj = new URL(url);
 	if (!['https:', 'http:'].includes(urlObj.protocol)) throw new Error('Invalid protocol');

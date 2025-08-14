@@ -16,7 +16,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkAccountMoved v-if="user.movedTo" :movedTo="user.movedTo"/>
 					<MkRemoteCaution v-if="user.host != null" :href="user.url ?? user.uri!"/>
 					<MkInfo v-if="user.host == null && user.username.includes('.')">{{ i18n.ts.isSystemAccount }}</MkInfo>
-<MkRemoteInfoUpdate v-if="user.host != null" :UserId="user.id" class="warn"/>
+					<MkRemoteInfoUpdate v-if="user.host != null" :UserId="user.id" class="warn"/>
 					<div :key="user.id" class="main _panel">
 						<div class="banner-container" :style="style">
 							<div ref="bannerEl" class="banner" :style="style"></div>
@@ -36,7 +36,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<div class="actions">
 								<button class="menu _button" @click="menu"><i class="ti ti-dots"></i></button>
 								<MkNotifyButton :user="user" @update:notify="user.notify = $event"/>
-							<MkFollowButton v-if="$i?.id != user.id" v-model:user="user" :inline="true" :transparent="false" :full="true" class="koudoku"/>
+								<MkFollowButton v-if="$i?.id != user.id" v-model:user="user" :inline="true" :transparent="false" :full="true" class="koudoku"/>
 							</div>
 						</div>
 						<MkAvatar class="avatar" :user="user" indicator/>
@@ -55,11 +55,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 							</MkFukidashi>
 						</div>
 						<div v-if="user.roles.length > 0" class="roles">
-							<span v-for="role in user.roles" :key="role.id" v-tooltip="role.description" class="role" :style="{ '--color': role.color }"
-							>	<MkA v-adaptive-bg :to="`/roles/${role.id}`">
-									<img v-if="role.iconUrl" style="height: 1.3em; vertical-align: -22%;" :src="role.iconUrl"/>
-									{{ role.name }}
-								</MkA>
+							<span v-for="role in user.roles" :key="role.id" v-tooltip="role.description" class="role" :style="{ '--color': role.color }">	<MkA v-adaptive-bg :to="`/roles/${role.id}`">
+								<img v-if="role.iconUrl" style="height: 1.3em; vertical-align: -22%;" :src="role.iconUrl"/>
+								{{ role.name }}
+							</MkA>
 							</span>
 						</div>
 						<div v-if="iAmModerator" class="moderationNote">
@@ -125,10 +124,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkA v-if="isFollowersVisibleForMe(user)" :to="userPage(user, 'followers')">
 								<b>{{ number(user.followersCount) }}</b>
 								<span>{{ i18n.ts.followers }}</span>
-						</MkA>
-						<MkA v-if="!user.host && user?.loginBonusIsVisible">
-							<b> {{ number(user.getPoints) }}</b>
-							<span>{{ instance.pointName ? instance.pointName : i18n.ts.point }}</span>
+							</MkA>
+							<MkA v-if="!user.host && user?.loginBonusIsVisible">
+								<b> {{ number(user.getPoints) }}</b>
+								<span>{{ instance.pointName ? instance.pointName : i18n.ts.point }}</span>
 							</MkA>
 						</div>
 					</div>
@@ -147,9 +146,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<XActivity :key="user.id" :user="user"/>
 						</MkLazy>
 					</template>
-					<div >
+					<div>
 						<div style="margin-bottom: 8px;">{{ i18n.ts._sfx.note }}</div>
-							<MkNotes :class="$style.tl" :noGap="true" :pagination="Notes"/>
+						<MkNotesTimeline :class="$style.tl" :noGap="true" :paginator="notePaginator"/>
 					</div>
 				</div>
 			</div>
@@ -163,7 +162,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, computed, onMounted, onUnmounted, nextTick, watch, ref } from 'vue';
+import { defineAsyncComponent, computed, onMounted, onUnmounted, nextTick, watch, ref, markRaw } from 'vue';
 import * as Misskey from 'misskey-js';
 import { getScrollPosition } from '@@/js/scroll.js';
 import MkNote from '@/components/MkNote.vue';
@@ -179,7 +178,7 @@ import { getUserMenu } from '@/utility/get-user-menu.js';
 import number from '@/filters/number.js';
 import { userPage } from '@/filters/user.js';
 import * as os from '@/os.js';
-import { useRouter } from '@/router/supplier.js';
+import { useRouter } from '@/router.js';
 import { i18n } from '@/i18n.js';
 import { $i, iAmModerator } from '@/i.js';
 import { dateString } from '@/filters/date.js';
@@ -188,14 +187,14 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { isFollowingVisibleForMe, isFollowersVisibleForMe } from '@/utility/isFfVisibleForMe.js';
 import MkNotifyButton from '@/components/MkNotifyButton.vue';
 import MkRemoteInfoUpdate from '@/components/MkRemoteInfoUpdate.vue';
-import MkNotes from '@/components/MkNotes.vue';
 import MkLazy from '@/components/global/MkLazy.vue';
-import { useRouter } from '@/router.js';
 import { getStaticImageUrl } from '@/utility/media-proxy.js';
 import MkSparkle from '@/components/MkSparkle.vue';
 import { prefer } from '@/preferences.js';
 import { instance } from '@/instance.js';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
+import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
+import { Paginator } from '@/utility/paginator';
 
 function calcAge(birthdate: string): number {
 	const date = new Date(birthdate);
@@ -216,9 +215,9 @@ const XFiles = defineAsyncComponent(() => import('./index.files.vue'));
 const XActivity = defineAsyncComponent(() => import('./index.activity.vue'));
 
 const props = withDefaults(defineProps<{
-  user: Misskey.entities.UserDetailed;
-  /** Test only; MkNotesTimeline currently causes problems in vitest */
-  disableNotes: boolean;
+	user: Misskey.entities.UserDetailed;
+	/** Test only; MkNotesTimeline currently causes problems in vitest */
+	disableNotes: boolean;
 }>(), {
 	disableNotes: false,
 });
@@ -244,20 +243,12 @@ watch(moderationNote, async () => {
 	await misskeyApi('admin/update-user-note', { userId: props.user.id, text: moderationNote.value });
 });
 
-const pagination = {
-	endpoint: 'users/featured-notes' as const,
+const notePaginator = markRaw(new Paginator('users/notes', {
 	limit: 10,
-	params: computed(() => ({
+	computedParams: computed(() => ({
 		userId: props.user.id,
 	})),
-};
-const Notes = {
-	endpoint: 'users/notes' as const,
-	limit: 10,
-	params: computed(() => ({
-		userId: props.user.id,
-	})),
-};
+}));
 
 const style = computed(() => {
 	if (props.user.bannerUrl == null) return {};

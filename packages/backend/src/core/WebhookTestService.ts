@@ -55,6 +55,7 @@ function generateDummyUser(override?: Partial<MiUser>): MiUser {
 		chatScope: 'mutual',
 		emojis: [],
 		score: 0,
+		getPoints: 0,
 		host: null,
 		inbox: null,
 		sharedInbox: null,
@@ -69,6 +70,9 @@ function generateDummyUser(override?: Partial<MiUser>): MiUser {
 function generateDummyNote(override?: Partial<MiNote>): MiNote {
 	return {
 		id: 'dummy-note-1',
+		updatedAt: null,
+		updatedAtHistory: null,
+		noteEditHistory: [],
 		replyId: null,
 		reply: null,
 		renoteId: null,
@@ -184,27 +188,23 @@ export class WebhookTestService {
 
 		const dummyNote1 = generateDummyNote({
 			userId: dummyUser1.id,
-			user: dummyUser1,
 		});
 		const dummyReply1 = generateDummyNote({
 			id: 'dummy-reply-1',
 			replyId: dummyNote1.id,
 			reply: dummyNote1,
 			userId: dummyUser1.id,
-			user: dummyUser1,
 		});
 		const dummyRenote1 = generateDummyNote({
 			id: 'dummy-renote-1',
 			renoteId: dummyNote1.id,
 			renote: dummyNote1,
 			userId: dummyUser2.id,
-			user: dummyUser2,
 			text: null,
 		});
 		const dummyMention1 = generateDummyNote({
 			id: 'dummy-mention-1',
 			userId: dummyUser1.id,
-			user: dummyUser1,
 			text: `@${dummyUser2.username} This is a mention to you.`,
 			mentions: [dummyUser2.id],
 		});
@@ -324,6 +324,32 @@ export class WebhookTestService {
 				send('inactiveModeratorsInvitationOnlyChanged', {});
 				break;
 			}
+			case 'customEmojiRequest': {
+				send('customEmojiRequest', {
+					emoji: {
+						id: 'dummy-emoji-request-1',
+						name: 'test_emoji',
+						uri: 'https://example.com/emoji.png',
+					},
+					user: await this.toPackedUserLite(dummyUser1),
+				});
+				break;
+			}
+			case 'customEmojiRequestResolved': {
+				send('customEmojiRequestResolved', {
+					emoji: {
+						id: 'dummy-emoji-request-2',
+						name: 'test_emoji_resolved',
+						uri: 'https://example.com/emoji2.png',
+					},
+					user: await this.toPackedUserLite(dummyUser2),
+				});
+				break;
+			}
+			case 'userRegistered': {
+				send('userRegistered', await this.toPackedUserLite(dummyUser3));
+				break;
+			}
 			default: {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const _exhaustiveAssertion: never = params.type;
@@ -349,6 +375,8 @@ export class WebhookTestService {
 			reporterHost: null,
 			resolvedAs: null,
 			moderationNote: 'foo',
+			notes: [],
+			noteIds: null,
 			...override,
 		};
 
@@ -362,6 +390,7 @@ export class WebhookTestService {
 
 	@bindThis
 	private async toPackedNote(note: MiNote, detail = true, override?: Packed<'Note'>): Promise<Packed<'Note'>> {
+		const noteUser = note.user ? note.user : generateDummyUser({ id: note.userId });
 		return {
 			id: note.id,
 			createdAt: new Date().toISOString(),
@@ -369,7 +398,7 @@ export class WebhookTestService {
 			text: note.text,
 			cw: note.cw,
 			userId: note.userId,
-			user: await this.toPackedUserLite(note.user ?? generateDummyUser()),
+			user: await this.toPackedUserLite(noteUser),
 			replyId: note.replyId,
 			renoteId: note.renoteId,
 			isHidden: false,

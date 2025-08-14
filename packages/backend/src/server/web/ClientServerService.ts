@@ -479,7 +479,6 @@ export class ClientServerService {
 				usernameLower: username.toLowerCase(),
 				host: host ?? IsNull(),
 				isSuspended: false,
-				requireSigninToViewContents: false,
 			});
 
 			return user && (await this.feedService.packFeed(user));
@@ -637,7 +636,7 @@ export class ClientServerService {
 
 				if (
 					note &&
-					!note.user!.requireSigninToViewContents &&
+					// Note: requireSigninToViewContents check removed
 					(this.meta.ugcVisibilityForVisitor === 'all' ||
 						(this.meta.ugcVisibilityForVisitor === 'local' && note.userHost == null)
 					)

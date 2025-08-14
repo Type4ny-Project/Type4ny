@@ -41,6 +41,7 @@ import { i18n } from '@/i18n.js';
 import { claimAchievement } from '@/utility/achievements.js';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
 import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 import { globalEvents } from '@/events.js';
 import { checkDragDataType, getDragData, setDragData } from '@/drag-and-drop.js';
 import { selectDriveFolder } from '@/utility/drive.js';
@@ -49,7 +50,7 @@ const props = withDefaults(defineProps<{
 	folder: Misskey.entities.DriveFolder;
 	isSelected?: boolean;
 	selectMode?: boolean;
-  selectedFiles?: string[];
+	selectedFiles?: string[];
 }>(), {
 	isSelected: false,
 	selectMode: false,
@@ -178,7 +179,6 @@ function onDrop(ev: DragEvent) {
 
 	//#region ドライブのフォルダ
 	{
-		const droppedData = getDragData(ev, 'driveFolders');
 		if (droppedData != null) {
 			const droppedFolder = droppedData[0];
 
@@ -284,7 +284,7 @@ function deleteFolder() {
 		if (r.filesCount > 0) {
 			const { canceled } = await os.confirm({
 				type: 'warning',
-				text: i18n.t('driveFolderDeleteConfirm', { name: props.folder.name }),
+				text: i18n.tsx.driveFolderDeleteConfirm({ name: props.folder.name }),
 			});
 
 			if (canceled) return;
@@ -305,11 +305,8 @@ function deleteFolder() {
 				folderId: props.folder.id,
 			}).then(async (r) => {
 				if (r.filesCount > 0) {
-					let allResults = [];
-					let Result = await misskeyApi('drive/files', { folderId: props.folder.id, limit: 31 });
 					allResults = allResults.concat(Result);
 					while (Result.length >= 31) {
-						const untilId = Result[Result.length - 1].id;
 						Result = await misskeyApi('drive/files', { folderId: props.folder.id, limit: 31, untilId });
 						allResults = allResults.concat(Result);
 					}
@@ -320,8 +317,8 @@ function deleteFolder() {
 					misskeyApi('drive/folders/delete', {
 						folderId: props.folder.id,
 					}).then(() => {
-						if (defaultStore.state.uploadFolder === props.folder.id) {
-							defaultStore.set('uploadFolder', null);
+						if (store.s.uploadFolder === props.folder.id) {
+							store.set('uploadFolder', null);
 						}
 					}).catch(err => {
 						switch (err.id) {
@@ -351,26 +348,27 @@ function deleteFolder() {
 			});
 		} else {
 			awaitmisskeyApi('drive/folders/delete', {
-		folderId: props.folder.id,
-	}).then(() => {
-		if (prefer.s.uploadFolder === props.folder.id) {
-			prefer.commit('uploadFolder', null);
-		}
-		globalEvents.emit('driveFoldersDeleted', [props.folder]);
-	}).catch(err => {
-		switch (err.id) {
-			case 'b0fc8a17-963c-405d-bfbc-859a487295e1':
-				os.alert({
-					type: 'error',
-					title: i18n.ts.unableToDelete,
-					text: i18n.ts.hasChildFilesOrFolders,
-				});
-				break;
-			default:
-				os.alert({
-					type: 'error',
-					text: i18n.ts.unableToDelete,
-				});}
+				folderId: props.folder.id,
+			}).then(() => {
+				if (prefer.s.uploadFolder === props.folder.id) {
+					prefer.commit('uploadFolder', null);
+				}
+				globalEvents.emit('driveFoldersDeleted', [props.folder]);
+			}).catch(err => {
+				switch (err.id) {
+					case 'b0fc8a17-963c-405d-bfbc-859a487295e1':
+						os.alert({
+							type: 'error',
+							title: i18n.ts.unableToDelete,
+							text: i18n.ts.hasChildFilesOrFolders,
+						});
+						break;
+					default:
+						os.alert({
+							type: 'error',
+							text: i18n.ts.unableToDelete,
+						});
+				}
 			});
 		}
 	});

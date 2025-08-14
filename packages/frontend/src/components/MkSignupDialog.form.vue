@@ -167,16 +167,16 @@ import { i18n } from '@/i18n.js';
 import { login } from '@/accounts.js';
 import { store } from '@/store.js';
 
-const gamingType = store.state.gamingType;
+const gamingType = store.s.gamingType;
 const props = withDefaults(defineProps<{
-  autoSet?: boolean;
+	autoSet?: boolean;
 }>(), {
 	autoSet: false,
 });
 
 const emit = defineEmits<{
-  (ev: 'signup', user: Misskey.entities.SignupResponse): void;
-  (ev: 'signupEmailPending'): void;
+	(ev: 'signup', user: Misskey.entities.SignupResponse): void;
+	(ev: 'signupEmailPending'): void;
 }>();
 
 const host = toUnicode(config.host);
@@ -210,14 +210,13 @@ const shouldDisableSubmitting = computed((): boolean => {
       instance.enableHcaptcha && !hCaptchaResponse.value ||
       instance.enableMcaptcha && !mCaptchaResponse.value || instance.enableRecaptcha && !reCaptchaResponse.value ||
       instance.enableTurnstile && !turnstileResponse.value ||
-      instance.enableTestcaptcha && !testcaptchaResponse.value ||instance.emailRequiredForSignup && emailState.value !== 'ok' ||
+      instance.enableTestcaptcha && !testcaptchaResponse.value || instance.emailRequiredForSignup && emailState.value !== 'ok' ||
       instance.disableRegistration && invitationCode.value === '' ||
 		usernameState.value !== 'ok' ||
 		passwordRetypeState.value !== 'match';
 });
 
 function getPasswordStrength(source: string): number {
-	let strength = 0;
 	let power = 0.018;
 
 	// 英数字

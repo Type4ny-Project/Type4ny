@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	v-show="!isDeleted"
 	ref="rootEl"
 	v-hotkey="keymap"
-	:class="[$style.root, { [$style.showActionsOnlyHover]: defaultStore.state.showNoteActionsOnlyHover }]"
+	:class="[$style.root, { [$style.showActionsOnlyHover]: store.s.showNoteActionsOnlyHover }]"
 	:tabindex="!isDeleted ? '-1' : undefined"
 >
 	<MkNoteSub v-if="appearNote.reply && !renoteCollapsed" :note="appearNote.reply" :class="$style.replyTo"/>
@@ -123,11 +123,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<i v-else-if="appearNote.myReaction != null" class="ti ti-minus" style="color: var(--MI_THEME-accent);"></i>
 						<i v-else-if="appearNote.reactionAcceptance === 'likeOnly'" class="ti ti-heart"></i>
 						<i v-else class="ti ti-plus"></i>
-						<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || defaultStore.state.showReactionsCount) && appearNote.reactionCount > 0" :class="$style.footerButtonCount">{{ number(appearNote.reactionCount) }}</p>
+						<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || store.s.showReactionsCount) && appearNote.reactionCount > 0" :class="$style.footerButtonCount">{{ number(appearNote.reactionCount) }}</p>
 					</button>
 				</div>
 				<div :class="$style.footerRight">
-					<button v-if="defaultStore.state.showClipButtonInNoteFooter" ref="clipButton" :class="$style.footerButton" class="_button" @mousedown="clip()">
+					<button v-if="store.s.showClipButtonInNoteFooter" ref="clipButton" :class="$style.footerButton" class="_button" @mousedown="clip()">
 						<i class="ti ti-paperclip"></i>
 					</button>
 
@@ -179,29 +179,29 @@ import MkPoll from '@/components/MkPoll.vue';
 import MkUsersTooltip from '@/components/MkUsersTooltip.vue';
 import MkUrlPreview from '@/components/MkUrlPreview.vue';
 import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
-import { pleaseLogin } from '@/scripts/please-login.js';
-import { focusPrev, focusNext } from '@/scripts/focus.js';
-import { checkWordMute } from '@/scripts/check-word-mute.js';
+import { pleaseLogin } from '@/utility/please-login.js';
+import { focusPrev, focusNext } from '@/utility/focus.js';
+import { checkWordMute } from '@/utility/check-word-mute.js';
 import { userPage } from '@/filters/user.js';
 import number from '@/filters/number.js';
 import * as os from '@/os.js';
-import * as sound from '@/scripts/sound.js';
-import { misskeyApi, misskeyApiGet } from '@/scripts/misskey-api.js';
-import { defaultStore, noteViewInterruptors } from '@/store.js';
-import { reactionPicker } from '@/scripts/reaction-picker.js';
-import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm.js';
-import { $i } from '@/account.js';
+import * as sound from '@/utility/sound.js';
+import { misskeyApi, misskeyApiGet } from '@/utility/misskey-api.js';
+import { store, noteViewInterruptors } from '@/store.js';
+import { reactionPicker } from '@/utility/reaction-picker.js';
+import { extractUrlFromMfm } from '@/utility/extract-url-from-mfm.js';
+import { $i } from '@/i.js';
 import { i18n } from '@/i18n.js';
-import { getAbuseNoteMenu, getCopyNoteLinkMenu, getNoteClipMenu, getNoteMenu, getRenoteMenu } from '@/scripts/get-note-menu.js';
-import { useNoteCapture } from '@/scripts/use-note-capture.js';
-import { deepClone } from '@/scripts/clone.js';
-import { useTooltip } from '@/scripts/use-tooltip.js';
-import { claimAchievement } from '@/scripts/achievements.js';
-import { getNoteSummary } from '@/scripts/get-note-summary.js';
+import { getAbuseNoteMenu, getCopyNoteLinkMenu, getNoteClipMenu, getNoteMenu, getRenoteMenu } from '@/utility/get-note-menu.js';
+import { useNoteCapture } from '@/utility/use-note-capture.js';
+import { deepClone } from '@/utility/clone.js';
+import { useTooltip } from '@/utility/use-tooltip.js';
+import { claimAchievement } from '@/utility/achievements.js';
+import { getNoteSummary } from '@/utility/get-note-summary.js';
 import { MenuItem } from '@/types/menu.js';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
-import { showMovedDialog } from '@/scripts/show-moved-dialog.js';
-import { shouldCollapsed } from '@/scripts/collapsed.js';
+import { showMovedDialog } from '@/utility/show-moved-dialog.js';
+import { shouldCollapsed } from '@/utility/collapsed.js';
 import { isEnabledUrlPreview } from '@/instance.js';
 
 const props = withDefaults(defineProps<{
@@ -271,7 +271,7 @@ const muted = ref(checkMute(appearNote.value, $i?.mutedWords));
 const hardMuted = ref(props.withHardMute && checkMute(appearNote.value, $i?.hardMutedWords, true));
 const translation = ref<Misskey.entities.NotesTranslateResponse | null>(null);
 const translating = ref(false);
-const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.value.user.instance);
+const showTicker = (store.s.instanceTicker === 'always') || (store.s.instanceTicker === 'remote' && appearNote.value.user.instance);
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.value.visibility) || (appearNote.value.visibility === 'followers' && appearNote.value.userId === $i?.id));
 const isFavorite = ref(false);
 let statePromise;
@@ -284,7 +284,7 @@ if ($i) {
 	});
 }
 const renoteCollapsed = ref(
-	defaultStore.state.collapseRenotes && isRenote && (
+	store.s.collapseRenotes && isRenote && (
 		($i && ($i.id === note.value.userId || $i.id === appearNote.value.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
 		(appearNote.value.myReaction != null)
 	),
@@ -303,7 +303,7 @@ function checkMute(noteToCheck: Misskey.entities.Note, mutedWords: Array<string 
 
 	if (checkOnly) return false;
 
-	if (inTimeline && !defaultStore.state.tl.filter.withSensitive && noteToCheck.files?.some((v) => v.isSensitive)) return 'sensitiveMute';
+	if (inTimeline && !store.s.tl.filter.withSensitive && noteToCheck.files?.some((v) => v.isSensitive)) return 'sensitiveMute';
 	return false;
 }
 
@@ -376,7 +376,6 @@ if (!props.mock) {
 				_cacheKey_: appearNote.value.reactionCount,
 			});
 
-			const users = reactions.map(x => x.user);
 
 			if (users.length < 1) return;
 
@@ -499,7 +498,7 @@ function onContextmenu(ev: MouseEvent): void {
 	if (ev.target && isLink(ev.target as HTMLElement)) return;
 	if (window.getSelection()?.toString() !== '') return;
 
-	if (defaultStore.state.useReactionPickerForContextMenu) {
+	if (store.s.useReactionPickerForContextMenu) {
 		ev.preventDefault();
 		react();
 	} else {

@@ -16,17 +16,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 		},
 		{
 			[$style.home]:
-				defaultStore.state.showVisibilityColor && note.visibility === 'home',
+				store.s.showVisibilityColor && note.visibility === 'home',
 			[$style.followers]:
-				defaultStore.state.showVisibilityColor &&
+				store.s.showVisibilityColor &&
 				note.visibility === 'followers',
 			[$style.specified]:
-				defaultStore.state.showVisibilityColor &&
+				store.s.showVisibilityColor &&
 				note.visibility === 'specified',
 		},
 		{
 			[$style.localonly]:
-				defaultStore.state.showVisibilityColor && note.localOnly && note.visibility === 'public',
+				store.s.showVisibilityColor && note.localOnly && note.visibility === 'public',
 		},
 		{
 			[$style.skipRender]: prefer.s.skipNoteRender
@@ -416,6 +416,7 @@ import MkCwButton from '@/components/MkCwButton.vue';
 import MkPoll from '@/components/MkPoll.vue';
 import MkUsersTooltip from '@/components/MkUsersTooltip.vue';
 import MkUrlPreview from '@/components/MkUrlPreview.vue';
+import { store } from '@/store.js';
 import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
 import { pleaseLogin } from '@/utility/please-login.js';
 import { checkWordMute } from '@/utility/check-word-mute.js';
@@ -541,7 +542,7 @@ const isLong = shouldCollapsed(appearNote, urls.value ?? []);
 const collapsed = ref(appearNote.cw == null && isLong);
 const muted = ref(checkMute(appearNote, $i?.mutedWords));
 const hardMuted = ref(
-	props.withHardMute && checkMute(appearNote, $i?.hardMutedWords, true, defaultStore.state.userWordMute),
+	props.withHardMute && checkMute(appearNote, $i?.hardMutedWords, true, store.s.userWordMute),
 );
 const showSoftWordMutedWord = computed(() => prefer.s.showSoftWordMutedWord);
 const translation = ref<Misskey.entities.NotesTranslateResponse | null>(null);
@@ -700,7 +701,6 @@ if (!props.mock) {
 				_cacheKey_: $appearNote.reactionCount,
 			});
 
-			const users = reactions.map((x) => x.user);
 
 			if (users.length < 1) return;
 

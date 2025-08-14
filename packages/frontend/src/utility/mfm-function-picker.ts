@@ -9,7 +9,6 @@ import type { Ref } from 'vue';
 import type { MenuItem } from '@/types/menu.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { MFM_TAGS } from '@@/js/const.js';
 
 /**
  * MFMの装飾のリストを表示する

@@ -26,9 +26,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { toRefs } from 'vue';
 import type { Ref, computed } from 'vue';
 import { i18n } from '@/i18n.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = withDefaults(defineProps<{
   checked: boolean | Ref<boolean>;

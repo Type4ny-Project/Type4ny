@@ -53,7 +53,7 @@ function updateItem(v) {
 }
 
 function removeItem(el) {
-	const i = props.modelValue.findIndex(x => x.id === el.id);
+	const i = props.modelValue.findIndex(x => x === el);
 	const newValue = [
 		...props.modelValue.slice(0, i),
 		...props.modelValue.slice(i + 1),

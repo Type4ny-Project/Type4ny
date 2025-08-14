@@ -73,7 +73,7 @@ import { definePage } from '@/page.js';
 import { userFavoriteListsCache, userListsCache } from '@/cache.js';
 import { ensureSignin } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 
 const $i = ensureSignin();
 

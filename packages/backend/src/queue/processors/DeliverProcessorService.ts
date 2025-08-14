@@ -19,6 +19,7 @@ import ApRequestChart from '@/core/chart/charts/ap-request.js';
 import FederationChart from '@/core/chart/charts/federation.js';
 import { StatusError } from '@/misc/status-error.js';
 import { UtilityService } from '@/core/UtilityService.js';
+import { MetaService } from '@/core/MetaService.js';
 import { bindThis } from '@/decorators.js';
 import { QueueLoggerService } from '../QueueLoggerService.js';
 import type { DeliverJobData } from '../types.js';
@@ -36,6 +37,7 @@ export class DeliverProcessorService {
 		@Inject(DI.instancesRepository)
 		private instancesRepository: InstancesRepository,
 
+		private metaService: MetaService,
 		private utilityService: UtilityService,
 		private federatedInstanceService: FederatedInstanceService,
 		private fetchInstanceMetadataService: FetchInstanceMetadataService,
@@ -72,12 +74,13 @@ export class DeliverProcessorService {
 			return 'skip (suspended)';
 		}
 
-		const i = await (this.meta.enableStatsForFederatedInstances
-			? this.federatedInstanceService.fetchOrRegister(host)
+		const meta = await this.metaService.fetch();
+		const i = await (meta.enableChartsForFederatedInstances
+			? this.federatedInstanceService.fetch(host)
 			: this.federatedInstanceService.fetch(host));
 
 		// suspend server by software
-		if (i != null && this.utilityService.isDeliverSuspendedSoftware(i)) {
+		if (i != null && await this.utilityService.isDeliverSuspendedSoftware(i)) {
 			return 'skip (software suspended)';
 		}
 

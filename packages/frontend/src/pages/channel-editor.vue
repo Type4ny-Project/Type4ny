@@ -112,7 +112,7 @@ import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import { useRouter } from '@/router.js';
-import { $i, iAmModerator } from '@/account.js';
+import { $i, iAmModerator } from '@/i.js';
 import { userPage } from '@/filters/user';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 

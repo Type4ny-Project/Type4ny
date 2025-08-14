@@ -26,9 +26,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup generic="T extends unknown">
 import { ref, computed, watch } from 'vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	modelValue: T;

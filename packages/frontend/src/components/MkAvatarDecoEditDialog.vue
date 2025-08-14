@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template v-else #header>New create</template>
 
 	<div>
-		<MkSpacer :marginMin="20" :marginMax="28">
+		<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
 			<div class="_gaps_m">
 				<div class="_gaps_m">
 					<XDecoration
@@ -36,7 +36,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</MkInput>
 				</div>
 			</div>
-		</MkSpacer>
+		</div>
 		<div :class="$style.footer">
 			<div :class="$style.footerButtons">
 				<MkButton danger rounded style="margin: 0 auto;" @click="del()"><i class="ti ti-trash"></i> {{ i18n.ts.delete }}</MkButton>
@@ -49,7 +49,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
@@ -58,28 +58,28 @@ import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import XDecoration from '@/pages/settings/avatar-decoration.decoration.vue';
 const props = defineProps<{
-    avatarDecoration?: {
-				id: string | null;
-				name: string;
-				description: string;
-				url: string;
-				category: string;
-		};
+	avatarDecoration?: {
+		id: string | null;
+		name: string;
+		description: string;
+		url: string;
+		category: string;
+	};
 }>();
-let name = ref(props.avatarDecoration?.name ?? '');
-let category = ref(props.avatarDecoration?.category ?? '');
-let description = ref(props.avatarDecoration?.description ?? '');
-let url = ref(props.avatarDecoration?.url ?? '');
+const name = ref(props.avatarDecoration?.name ?? '');
+const category = ref(props.avatarDecoration?.category ?? '');
+const description = ref(props.avatarDecoration?.description ?? '');
+const url = ref(props.avatarDecoration?.url ?? '');
 const emit = defineEmits<{
-    (ev: 'del'): void
+	(ev: 'del'): void
 }>();
 
-let dialog = ref<InstanceType<typeof MkModalWindow> | null>(null);
+const dialog = ref<InstanceType<typeof MkModalWindow> | null>(null);
 
 function del() {
 	os.confirm({
 		type: 'warning',
-		text: i18n.t('deleteAreYouSure', { x: props.avatarDecoration?.name }),
+		text: i18n.tsx.deleteAreYouSure({ x: props.avatarDecoration?.name || '' }),
 	}).then(({ canceled }) => {
 		if (canceled) return;
 		misskeyApi('admin/avatar-decorations/delete', { id: props.avatarDecoration?.id }).then(() => {

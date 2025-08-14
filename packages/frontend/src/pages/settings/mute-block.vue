@@ -94,7 +94,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<template #icon><i class="ti ti-message-off"></i></template>
 			<template #label>{{ i18n.ts.userWordMute }}</template>
 
-			<XUserWordMute :muted="defaultStore.state.userWordMute" @save="saveMutedUsers"/>
+			<XUserWordMute :muted="store.s.userWordMute" @save="saveMutedUsers"/>
 		</MkFolder>
 
 		<SearchMarker
@@ -199,8 +199,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { ref, computed, watch, markRaw } from 'vue';
+import type { Ref } from 'vue';
 import XEmojiMute from './mute-block.emoji-mute.vue';
-import { ref, computed, watch, Ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import XInstanceMute from './mute-block.instance-mute.vue';
 import XUserWordMute from './mute-block.user-word-mute.vue';
@@ -218,6 +218,7 @@ import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import { prefer } from '@/preferences.js';
 import MkFeatureBanner from '@/components/MkFeatureBanner.vue';
+import { store } from '@/store.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
 import { Paginator } from '@/utility/paginator.js';
@@ -252,7 +253,7 @@ watch([
 const mutedReactions = ref<string[]>(store.state.mutedReactions);
 
 watch(mutedReactions, () => {
-	defaultStore.set('mutedReactions', mutedReactions.value);
+	store.set('mutedReactions', mutedReactions.value);
 }, {
 	deep: true,
 });
@@ -346,7 +347,7 @@ async function saveHardMutedWords(hardMutedWords: (string | string[])[]) {
 }
 
 async function saveMutedUsers(mutedUsers: { user: Misskey.entities.UserLite; words: (string | string[])}[]) {
-	defaultStore.set('userWordMute', mutedUsers);
+	store.set('userWordMute', mutedUsers);
 }
 
 const headerActions = computed(() => []);

@@ -976,7 +976,6 @@ function downloadEmojiIndex(lang: typeof emojiIndexLangs[number]) {
 
 function removeEmojiIndex(lang: string) {
 	async function main() {
-		const currentIndexes = store.s.additionalUnicodeEmojiIndexes;
 		delete currentIndexes[lang];
 		await store.set('additionalUnicodeEmojiIndexes', currentIndexes);
 	}
@@ -1011,7 +1010,6 @@ function enableAllDataSaver() {
 }
 
 function disableAllDataSaver() {
-	const g = { ...prefer.s.dataSaver };
 
 	Object.keys(g).forEach((key) => { g[key] = false; });
 

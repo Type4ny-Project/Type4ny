@@ -204,7 +204,6 @@ import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
 import MkButton from '@/components/MkButton.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
-import { host } from '@@/js/config.js';
 import MkFolder from '@/components/MkFolder.vue';
 
 const meta = await misskeyApi('admin/meta');

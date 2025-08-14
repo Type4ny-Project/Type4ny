@@ -19,11 +19,11 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { useStream } from '@/stream.js';
-import { defaultStore } from '@/store.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { $i } from '@/account.js';
+import { store } from '@/store.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { $i } from '@/i.js';
 
-const gamingType = computed(() => defaultStore.state.gamingType);
+const gamingType = computed(() => store.s.gamingType);
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed,

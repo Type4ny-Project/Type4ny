@@ -27,8 +27,7 @@ import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { definePage } from '@/page.js';
-import { notificationTypes } from '@@/js/const.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { Paginator } from '@/utility/paginator.js';
 
 const tab = ref('all');

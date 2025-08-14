@@ -28,6 +28,7 @@ type Source = {
 	port?: number;
 	socket?: string;
 	chmodSocket?: string;
+	setupPassword?: string;
 	disableHsts?: boolean;
 	db: {
 		host: string;

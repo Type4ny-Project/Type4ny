@@ -24,12 +24,12 @@ import { ensureSignin } from '@/i.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import MkSwitch from '@/components/MkSwitch.vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
 const $i = ensureSignin();
 
 const instanceMutes = ref($i.mutedInstances.join('\n'));
-const reactionAndServerMute = computed(defaultStore.makeGetterSetter('reactionAndServerMute'));
+const reactionAndServerMute = computed(store.makeGetterSetter('reactionAndServerMute'));
 
 const changed = ref(false);
 

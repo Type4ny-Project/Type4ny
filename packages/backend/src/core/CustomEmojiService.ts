@@ -11,6 +11,7 @@ import { GlobalEventService } from '@/core/GlobalEventService.js';
 import { IdService } from '@/core/IdService.js';
 import { ModerationLogService } from '@/core/ModerationLogService.js';
 import { UtilityService } from '@/core/UtilityService.js';
+import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import type { MiDriveFile } from '@/models/DriveFile.js';
 import type { MiEmoji } from '@/models/Emoji.js';
 import type { EmojisRepository, EmojiRequestsRepository, MiRole, MiUser, SystemWebhooksRepository } from '@/models/_.js';
@@ -19,6 +20,7 @@ import { DI } from '@/di-symbols.js';
 import { MemoryKVCache, RedisSingleCache } from '@/misc/cache.js';
 import { sqlLikeEscape } from '@/misc/sql-like-escape.js';
 import type { Serialized } from '@/types.js';
+import type { Packed } from '@/misc/json-schema.js';
 import { MiEmojiRequest } from '@/models/EmojiRequest.js';
 import { SystemWebhookService } from '@/core/SystemWebhookService.js';
 
@@ -83,6 +85,7 @@ export class CustomEmojiService implements OnApplicationShutdown {
 		private moderationLogService: ModerationLogService,
 		private globalEventService: GlobalEventService,
 		private systemWebhookService: SystemWebhookService,
+		private userEntityService: UserEntityService,
 	) {
 		this.emojisCache = new MemoryKVCache<MiEmoji | null>(1000 * 60 * 60 * 12); // 12h
 
@@ -106,10 +109,10 @@ export class CustomEmojiService implements OnApplicationShutdown {
 			.andWhere('webhook.on @> :eventName', { eventName: `{${eventType}}` })
 			.getMany();
 		console.log({ emoji, user: (me ? me : null) });
+		const packedUser = me ? await this.userEntityService.pack(me, null, { schema: 'UserLite' }) : null;
 		activeSystemWebhooksWithCustomEmojiRequest.forEach(it => this.systemWebhookService.enqueueSystemWebhook(
-			it.id,
 			eventType,
-			{ emoji, user: (me ? me : null) },
+			{ emoji, user: packedUser },
 		));
 	}
 	@bindThis

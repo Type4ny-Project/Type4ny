@@ -462,7 +462,6 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),
 			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),
 			canSendPoints: calc('canSendPoints', vs => vs.some(v => v === true)),
-			canChat: calc('canChat', vs => vs.some(v => v === true)),
 			watermarkAvailable: calc('watermarkAvailable', vs => vs.some(v => v === true)),
 		};
 	}

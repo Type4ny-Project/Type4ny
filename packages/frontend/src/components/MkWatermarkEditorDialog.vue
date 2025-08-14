@@ -354,9 +354,7 @@ function swapUpLayer(layer: WatermarkPreset['layers'][number]) {
 }
 
 function swapDownLayer(layer: WatermarkPreset['layers'][number]) {
-	const index = preset.layers.findIndex(l => l.id === layer.id);
 	if (index < preset.layers.length - 1) {
-		const tmp = preset.layers[index + 1];
 		preset.layers[index + 1] = preset.layers[index];
 		preset.layers[index] = tmp;
 	}

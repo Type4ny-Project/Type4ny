@@ -265,7 +265,6 @@ async function onRegistryClicked() {
 			);
 	};
 
-	const result = await os.promiseDialog(Promise.all(upload()));
 	const failedItems = result.filter(it => !it.success);
 
 	if (failedItems.length > 0) {
@@ -356,7 +355,6 @@ function fromDriveFile(it: Misskey.entities.DriveFile): GridItem {
 }
 
 async function refreshUploadFolders() {
-	const result = await misskeyApi('drive/folders', {});
 	uploadFolders.value = Array.of<FolderItem>({ name: '-' }, ...result);
 }
 

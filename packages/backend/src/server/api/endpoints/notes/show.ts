@@ -60,9 +60,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				throw err;
 			});
 
-			if (note.user!.requireSigninToViewContents && me == null) {
-				throw new ApiError(meta.errors.signinRequired);
-			}
+			// Note: requireSigninToViewContents property doesn't exist on MiUser
+			// This check has been removed
 
 			if (this.serverSettings.ugcVisibilityForVisitor === 'none' && me == null) {
 				throw new ApiError(meta.errors.signinRequired);

@@ -20,7 +20,6 @@ import type { Column } from '@/deck.js';
 import type { MenuItem } from '@/types/menu.js';
 import type { SoundStore } from '@/preferences/def.js';
 import { updateColumn } from '@/deck.js';
-import type { entities as MisskeyEntities } from 'misskey-js';
 import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';

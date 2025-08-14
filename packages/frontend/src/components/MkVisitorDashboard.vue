@@ -33,7 +33,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div v-if="instance.policies.ltlAvailable" :class="[$style.tl, $style.panel]">
 		<div :class="$style.tlHeader">{{ i18n.ts.letsLookAtTimeline }}</div>
 		<div :class="$style.tlBody">
-			<MkTimeline :acrylic="true" src="local"/>
+			<MkNotesTimeline :paginator="paginator"/>
 		</div>
 	</div>
 	<div :class="$style.stats">
@@ -59,7 +59,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { markRaw, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import { instanceName } from '@@/js/config.js';
 import XSigninDialog from '@/components/MkSigninDialog.vue';
@@ -73,7 +73,12 @@ import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import MkNumber from '@/components/MkNumber.vue';
 import { openInstanceMenu } from '@/ui/_common_/common.js';
+import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
+import { Paginator } from '@/utility/paginator';
 
+const paginator = markRaw(new Paginator('notes/local-timeline', {
+	limit: 10,
+}));
 const stats = ref<Misskey.entities.StatsResponse | null>(null);
 
 misskeyApi('stats', {}).then((res) => {

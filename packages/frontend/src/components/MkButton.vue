@@ -71,34 +71,34 @@ import { nextTick, onMounted, useTemplateRef, computed } from 'vue';
 import { store } from '@/store.js';
 
 const props = defineProps<{
-  type?: 'button' | 'submit' | 'reset';
-  primary?: boolean;
-  gradate?: boolean;
-  rounded?: boolean;
-  inline?: boolean;
-  link?: boolean;
-  to?: string;
-  linkBehavior?: null | 'window' | 'browser';autofocus?: boolean;
-  wait?: boolean;
-  danger?: boolean;
-  full?: boolean;
-  small?: boolean;
-  large?: boolean;
-  transparent?: boolean;
-  gamingdark?: boolean;
-  gaminglight?: boolean;
-  asLike?: boolean;
-  name?: string;
-  value?: string;
+	type?: 'button' | 'submit' | 'reset';
+	primary?: boolean;
+	gradate?: boolean;
+	rounded?: boolean;
+	inline?: boolean;
+	link?: boolean;
+	to?: string;
+	linkBehavior?: null | 'window' | 'browser';autofocus?: boolean;
+	wait?: boolean;
+	danger?: boolean;
+	full?: boolean;
+	small?: boolean;
+	large?: boolean;
+	transparent?: boolean;
+	gamingdark?: boolean;
+	gaminglight?: boolean;
+	asLike?: boolean;
+	name?: string;
+	value?: string;
 	disabled?: boolean;
 	iconOnly?: boolean;
 	active?: boolean;
 }>();
 
-const gamingType = store.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const emit = defineEmits<{
-  (ev: 'click', payload: MouseEvent): void;
+	(ev: 'click', payload: MouseEvent): void;
 }>();
 
 const el = useTemplateRef('el');
@@ -126,15 +126,17 @@ function calcCircleScale(boxW, boxH, circleCenterX, circleCenterY): number {
 }
 
 function onMousedown(evt: MouseEvent): void {
+	if (!ripples.value) return; // Guard against null ripples ref
+	
 	const target = evt.target! as HTMLElement;
 	const rect = target.getBoundingClientRect();
 
 	const ripple = window.document.createElement('div');
-	ripple.classList.add(ripples.value!.dataset.childrenClass!);
+	ripple.classList.add(ripples.value.dataset.childrenClass!);
 	ripple.style.top = (evt.clientY - rect.top - 1).toString() + 'px';
 	ripple.style.left = (evt.clientX - rect.left - 1).toString() + 'px';
 
-	ripples.value!.appendChild(ripple);
+	ripples.value.appendChild(ripple);
 
 	const circleCenterX = evt.clientX - rect.left;
 	const circleCenterY = evt.clientY - rect.top;

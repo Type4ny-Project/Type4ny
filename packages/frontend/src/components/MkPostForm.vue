@@ -134,7 +134,7 @@ import { extractMentions } from '@/utility/extract-mentions.js';
 import { formatTimeString } from '@/utility/format-time-string.js';
 import { Autocomplete } from '@/utility/autocomplete.js';
 import * as os from '@/os.js';
-import * as noteDrafts from '@/scripts/note-drafts.js';
+import * as noteDrafts from '@/utility/note-drafts.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { chooseDriveFile } from '@/utility/drive.js';
 import {
@@ -142,7 +142,7 @@ import {
 	bannerDark,
 	bannerLight,
 	iconDark,
-	iconLight
+	iconLight,
 } from '@/store.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { i18n } from '@/i18n.js';
@@ -185,9 +185,9 @@ const props = withDefaults(defineProps<PostFormProps & {
 provide(DI.mock, props.mock);
 
 const emit = defineEmits<{
-  (ev: 'posted'): void;
-  (ev: 'cancel'): void;
-  (ev: 'esc'): void;
+	(ev: 'posted'): void;
+	(ev: 'cancel'): void;
+	(ev: 'esc'): void;
 
 	// Mock用
 	(ev: 'fileChangeSensitive', fileId: string, to: boolean): void;
@@ -205,8 +205,8 @@ const text = ref(props.initialText ?? '');
 const files = ref(props.initialFiles ?? []);
 const poll = ref<PollEditorModelValue | null>(null);
 let schedule = ref<{
-    scheduledAt: string | null;
-}| null>(null);
+	scheduledAt: string | null;
+} | null>(null);
 const useCw = ref<boolean>(!!props.initialCw);
 const renote = ref(props.renote);
 const reply = ref(props.reply);
@@ -263,6 +263,9 @@ const draftKey = computed((): string => {
 	} else {
 		key += `note:${$i.id}`;
 	}
+
+	return key;
+});
 
 const draftAuxId = computed<string | null>(() => props.channel ? props.channel.id : renote.value ? renote.value.id : reply.value ? reply.value.id : null);
 
@@ -543,8 +546,6 @@ function watchForDraft() {
 
 function checkMissingMention() {
 	if (visibility.value === 'specified') {
-		const ast = mfm.parse(text.value);
-
 		for (const x of extractMentions(ast)) {
 			if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 				hasNotSpecifiedMentions.value = true;
@@ -556,8 +557,6 @@ function checkMissingMention() {
 }
 
 function addMissingMention() {
-	const ast = mfm.parse(text.value);
-
 	for (const x of extractMentions(ast)) {
 		if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 			misskeyApi('users/show', { username: x.username, host: x.host }).then(user => {
@@ -870,7 +869,6 @@ async function onPaste(ev: ClipboardEvent) {
 			}
 
 			const fileName = formatTimeString(new Date(), pastedFileName).replace(/{{number}}/g, '0');
-			const file = new File([paste], `${fileName}.txt`, { type: 'text/plain' });
 			uploader.addFiles([file]);
 		});
 	}
@@ -971,8 +969,6 @@ function chooseDraft() {
 		channelId: props.channel?.id,
 	}, {
 		selected: async (res) => {
-			const draft = await res as noteDrafts.NoteDraft;
-
 			if (text.value !== '' || files.value.length > 0) {
 				const { canceled } = await os.confirm({
 					type: 'warning',
@@ -1188,7 +1184,6 @@ async function post(ev?: MouseEvent) {
 			deleteDraft();
 			emit('posted');
 			if (postData.text && postData.text !== '') {
-				const hashtags_ = mfm.parse(postData.text).map(x => x.type === 'hashtag' && x.props.hashtag).filter(x => x) as string[];
 				const history = JSON.parse(miLocalStorage.getItem('hashtags') ?? '[]') as string[];
 				miLocalStorage.setItem('hashtags', JSON.stringify(unique(hashtags_.concat(history))));
 			}
@@ -1203,11 +1198,10 @@ async function post(ev?: MouseEvent) {
 			if (postData.schedule?.scheduledAt) {
 				const d = new Date(postData.schedule.scheduledAt);
 				const str = dateTimeFormat.format(d);
-				os.toast(i18n.t('_schedulePost.willBePostedAtX', { date: str }));
+				os.toast(i18n.tsx._schedulePost.willBePostedAtX({ date: str }));
 			}
 
-			const text = postData.text ?? '';
-			const lowerCase = text.toLowerCase();
+			const lowerCase = text.value.toLowerCase();
 			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('type4ny')) {
 				claimAchievement('iLoveType4ny');
 			}
@@ -1224,11 +1218,11 @@ async function post(ev?: MouseEvent) {
 				'https://open.spotify.com/track/7anfcaNPQWlWCwyCHmZqNy',
 				'https://open.spotify.com/track/5Odr16TvEN4my22K9nbH7l',
 				'https://open.spotify.com/album/5bOlxyl4igOrp2DwVQxBco',
-			].some(url => text.includes(url))) {
+			].some(url => text.value.includes(url))) {
 				claimAchievement('brainDiver');
 			}
 
-			if (renote.value && (renote.value.userId === $i.id) && text.length > 0) {
+			if (renote.value && (renote.value.userId === $i.id) && text.value.length > 0) {
 				claimAchievement('selfQuote');
 			}
 
@@ -1303,8 +1297,6 @@ async function insertEmoji(ev: MouseEvent, cwMode = false) {
 				const textAfter = cw.value?.substring(cwPosEnd);
 				cw.value = textBefore + emoji + textAfter;
 			} else {
-				const textBefore = text.value.substring(0, pos);
-				const textAfter = text.value.substring(posEnd);
 				text.value = textBefore + emoji + textAfter;
 			}
 
@@ -1366,87 +1358,86 @@ function showPerUploadItemMenu(item: UploaderItem, ev: MouseEvent) {
 }
 
 function showPerUploadItemMenuViaContextmenu(item: UploaderItem, ev: MouseEvent) {
-	const menu = uploader.getMenu(item);
 	os.contextMenu(menu, ev);
 }
-	function showDraftMenu(ev: MouseEvent) {
-		function showDraftsDialog() {
-			const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkNoteDraftsDialog.vue')), {}, {
-				restore: async (draft: Misskey.entities.NoteDraft) => {
-					text.value = draft.text ?? '';
-					useCw.value = draft.cw != null;
-					cw.value = draft.cw ?? null;
-					visibility.value = draft.visibility;
-					localOnly.value = draft.localOnly ?? false;
-					files.value = draft.files ?? [];
-					hashtags.value = draft.hashtag ?? '';
-					if (draft.hashtag) withHashtags.value = true;
-					if (draft.poll) {
-						// 投票を一時的に空にしないと反映されないため
-						poll.value = null;
-						nextTick(() => {
-							poll.value = {
-								choices: draft.poll!.choices,
-								multiple: draft.poll!.multiple,
-								expiresAt: draft.poll!.expiresAt ? (new Date(draft.poll!.expiresAt)).getTime() : null,
-								expiredAfter: null,
-							};
-						});
-					}
-					if (draft.visibleUserIds) {
-						misskeyApi('users/show', { userIds: draft.visibleUserIds }).then(users => {
-							users.forEach(u => pushVisibleUser(u));
-						});
-					}
-					quoteId.value = draft.renoteId ?? null;
-					renoteTargetNote.value = draft.renote;
-					replyTargetNote.value = draft.reply;
-					reactionAcceptance.value = draft.reactionAcceptance;
-					if (draft.channel) targetChannel.value = draft.channel as unknown as Misskey.entities.Channel;
 
-					visibleUsers.value = [];
-					draft.visibleUserIds?.forEach(uid => {
-						if (!visibleUsers.value.some(u => u.id === uid)) {
-							misskeyApi('users/show', { userId: uid }).then(user => {
-								pushVisibleUser(user);
-							});
-						}
-					});
-
-					serverDraftId.value = draft.id;
-				},
-				cancel: () => {
-
-				},
-				closed: () => {
-					dispose();
-				},
-			});
-		}
-
-		os.popupMenu([{
-			type: 'button',
-			text: i18n.ts._drafts.saveToDraft,
-			icon: 'ti ti-cloud-upload',
-			action: async () => {
-				if (!canSaveAsServerDraft.value) {
-					return os.alert({
-						type: 'error',
-						text: i18n.ts._drafts.cannotCreateDraft,
+function showDraftMenu(ev: MouseEvent) {
+	function showDraftsDialog() {
+		const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkNoteDraftsDialog.vue')), {}, {
+			restore: async (draft: Misskey.entities.NoteDraft) => {
+				text.value = draft.text ?? '';
+				useCw.value = draft.cw != null;
+				cw.value = draft.cw ?? null;
+				visibility.value = draft.visibility;
+				localOnly.value = draft.localOnly ?? false;
+				files.value = draft.files ?? [];
+				hashtags.value = draft.hashtag ?? '';
+				if (draft.hashtag) withHashtags.value = true;
+				if (draft.poll) {
+					// 投票を一時的に空にしないと反映されないため
+					poll.value = null;
+					nextTick(() => {
+						poll.value = {
+							choices: draft.poll!.choices,
+							multiple: draft.poll!.multiple,
+							expiresAt: draft.poll!.expiresAt ? (new Date(draft.poll!.expiresAt)).getTime() : null,
+							expiredAfter: null,
+						};
 					});
 				}
-				saveServerDraft();
+				if (draft.visibleUserIds) {
+					misskeyApi('users/show', { userIds: draft.visibleUserIds }).then(users => {
+						users.forEach(u => pushVisibleUser(u));
+					});
+				}
+				quoteId.value = draft.renoteId ?? null;
+				renoteTargetNote.value = draft.renote;
+				replyTargetNote.value = draft.reply;
+				reactionAcceptance.value = draft.reactionAcceptance;
+				if (draft.channel) targetChannel.value = draft.channel as unknown as Misskey.entities.Channel;
+
+				visibleUsers.value = [];
+				draft.visibleUserIds?.forEach(uid => {
+					if (!visibleUsers.value.some(u => u.id === uid)) {
+						misskeyApi('users/show', { userId: uid }).then(user => {
+							pushVisibleUser(user);
+						});
+					}
+				});
+
+				serverDraftId.value = draft.id;
 			},
-		}, {
-			type: 'button',
-			text: i18n.ts._drafts.listDrafts,
-			icon: 'ti ti-cloud-download',
-			action: () => {
-				showDraftsDialog();
+			cancel: () => {
+
 			},
-		}], (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
+			closed: () => {
+				dispose();
+			},
+		});
 	}
 
+	os.popupMenu([{
+		type: 'button',
+		text: i18n.ts._drafts.saveToDraft,
+		icon: 'ti ti-cloud-upload',
+		action: async () => {
+			if (!canSaveAsServerDraft.value) {
+				return os.alert({
+					type: 'error',
+					text: i18n.ts._drafts.cannotCreateDraft,
+				});
+			}
+			saveServerDraft();
+		},
+	}, {
+		type: 'button',
+		text: i18n.ts._drafts.listDrafts,
+		icon: 'ti ti-cloud-download',
+		action: () => {
+			showDraftsDialog();
+		},
+	}], (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
+}
 
 function openOtherSettingsMenu(ev: MouseEvent) {
 	let reactionAcceptanceIcon: string;

@@ -75,9 +75,10 @@ const onKeydown = (ev: KeyboardEvent) => {
 
 	emit('keydown', ev);
 
+	const pos = inputEl.value?.selectionStart ?? 0;
+	const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
+
 	if (ev.code === 'Enter') {
-		const pos = inputEl.value?.selectionStart ?? 0;
-		const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
 		if (pos === posEnd) {
 			const lines = v.value.slice(0, pos).split('\n');
 			const currentLine = lines[lines.length - 1];
@@ -93,8 +94,6 @@ const onKeydown = (ev: KeyboardEvent) => {
 	}
 
 	if (ev.key === 'Tab') {
-		const pos = inputEl.value?.selectionStart ?? 0;
-		const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
 		v.value = v.value.slice(0, pos) + '\t' + v.value.slice(posEnd);
 		nextTick(() => {
 			inputEl.value?.setSelectionRange(pos + 1, pos + 1);

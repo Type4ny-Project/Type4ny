@@ -37,9 +37,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 import { computed, defineAsyncComponent, onMounted, onUnmounted, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { isTouchUsing } from '@/utility/touch.js';
 import * as os from '@/os.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 const props = withDefaults(defineProps<{
 	modelValue: number;
 	disabled?: boolean;
@@ -209,7 +209,6 @@ function onMousedown(ev: MouseEvent | TouchEvent) {
 		}
 	};
 
-	let beforeValue = finalValue.value;
 
 	const onMouseup = () => {
 		window.document.head.removeChild(style);

@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <MkStickyContainer>
 	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
 	<div style="overflow: clip;">
-		<MkSpacer :contentMax="600" :marginMin="20">
+		<div class="_spacer" style="--MI_SPACER-w: 600px; --MI_SPACER-min: 20px;">
 			<div class="_gaps_m znqjceqz">
 				<div v-panel class="about">
 					<div ref="containerEl" class="container" :class="{ playing: easterEggEngine != null }">
@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					{{ i18n.ts._aboutType4ny.about }}<br><a href="https://type4ny-hub.net/about-type4ny" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
 				</div>
 				<div v-if="$i != null" style="text-align: center;">
-					<MkButton primary rounded inline @click="iLoveType4ny">I <Mfm text="$[jelly ❤]"/> #Type4ny</MkButton>
+					<MkButton primary rounded inline @click="iLoveType4ny">I <Mfm text="$[jelly ?]"/> #Type4ny</MkButton>
 				</div>
 				<FormSection>
 					<div class="_gaps_s">
@@ -112,7 +112,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFoldableSection>
 				<FormSection>
-					<template #label><Mfm text="$[jelly ❤]"/> {{ i18n.ts._aboutType4ny.patrons }}</template>
+					<template #label><Mfm text="$[jelly ?]"/> {{ i18n.ts._aboutType4ny.patrons }}</template>
 					<div :class="$style.patronsWithIcon">
 						<div v-for="patron in patronsWithIcon" :class="$style.patronWithIcon">
 							<img :src="patron.icon" :class="$style.patronIcon">
@@ -125,7 +125,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<p v-if="patrons.length =! -1">{{ i18n.ts._aboutType4ny.morePatrons }}</p>
 				</FormSection>
 			</div>
-		</MkSpacer>
+		</div>
 	</div>
 </MkStickyContainer>
 </template>
@@ -137,14 +137,14 @@ import FormLink from '@/components/form/link.vue';
 import FormSection from '@/components/form/section.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInfo from '@/components/MkInfo.vue';
-import { physics } from '@/scripts/physics.js';
+import { physics } from '@/utility/physics.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import * as os from '@/os.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { claimAchievement, claimedAchievements } from '@/scripts/achievements.js';
-import { $i } from '@/account.js';
+import { definePage } from '@/utility/page-metadata.js';
+import { claimAchievement, claimedAchievements } from '@/utility/achievements.js';
+import { $i } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 
 const patronsWithIcon = [];
@@ -165,7 +165,7 @@ const easterEggEngine = ref<{ stop: () => void } | null>(null);
 const containerEl = shallowRef<HTMLElement>();
 
 function iconLoaded() {
-	const emojis = defaultStore.state.reactions;
+	const emojis = store.s.reactions;
 	const containerWidth = containerEl.value.offsetWidth;
 	for (let i = 0; i < 32; i++) {
 		easterEggEmojis.value.push({
@@ -189,7 +189,7 @@ function gravity() {
 
 function iLoveType4ny() {
 	os.post({
-		initialText: 'I $[jelly ❤] #Type4ny',
+		initialText: 'I $[jelly ?] #Type4ny',
 		instant: true,
 	});
 }
@@ -209,7 +209,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.aboutType4ny,
 	icon: null,
 }));

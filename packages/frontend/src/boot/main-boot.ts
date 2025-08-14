@@ -46,19 +46,19 @@ export async function mainBoot() {
 		let rootComponent: Component;
 		switch (uiStyle) {
 			case 'zen':
-				rootComponent = await import('@/ui/zen.vue').then(x => x.default);
+				rootComponent = await import('@/ui/zen.vue').then(module => module.default);
 				break;
 			case 'deck':
-				rootComponent = await import('@/ui/deck.vue').then(x => x.default);
+				rootComponent = await import('@/ui/deck.vue').then(module => module.default);
 				break;
 			case 'visitor':
-				rootComponent = await import('@/ui/visitor.vue').then(x => x.default);
+				rootComponent = await import('@/ui/visitor.vue').then(module => module.default);
 				break;
 			case 'twilike':
 				rootComponent = defineAsyncComponent(() => import('@/ui/twilike.vue')) ;
 				break;
 			default:
-				rootComponent = await import('@/ui/universal.vue').then(x => x.default);
+				rootComponent = await import('@/ui/universal.vue').then(module => module.default);
 				break;
 		}
 
@@ -120,7 +120,7 @@ export async function mainBoot() {
 			}
 		});
 
-		for (const announcement of ($i.unreadAnnouncements ?? []).filter(x => x.display === 'dialog')) {
+		for (const announcement of ($i.unreadAnnouncements ?? []).filter(item => item.display === 'dialog')) {
 			const { dispose } = popup(defineAsyncComponent(() => import('@/components/MkAnnouncementDialog.vue')), {
 				announcement,
 			}, {
@@ -355,8 +355,8 @@ if (modifiedVersionMustProminentlyOfferInAgplV3Section13Read !== 'true' && insta
 			const main = markRaw(stream.useChannel('main', null, 'System'));
 
 			// 自分の情報が更新されたとき
-			main.on('meUpdated', i => {
-				updateCurrentAccountPartial(i);
+			main.on('meUpdated', updatedUser => {
+				updateCurrentAccountPartial(updatedUser);
 			});
 
 			main.on('readAllNotifications', () => {

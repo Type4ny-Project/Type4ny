@@ -97,7 +97,7 @@ import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowB
 import MkFeatureBanner from '@/components/MkFeatureBanner.vue';
 import MkRadios from '@/components/MkRadios.vue';
 import MkButton from '@/components/MkButton.vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 
 const $i = ensureSignin();

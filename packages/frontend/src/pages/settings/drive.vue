@@ -261,7 +261,6 @@ function onUpdateWatermarkPreset(id: string, preset: WatermarkPreset) {
 }
 
 function onDeleteWatermarkPreset(id: string) {
-	const index = prefer.s.watermarkPresets.findIndex(p => p.id === id);
 	if (index !== -1) {
 		prefer.commit('watermarkPresets', [
 			...prefer.s.watermarkPresets.slice(0, index),

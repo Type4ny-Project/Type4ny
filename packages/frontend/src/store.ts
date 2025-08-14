@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
@@ -11,33 +11,14 @@ import { hemisphere } from '@@/js/intl-const.js';
 import type { DeviceKind } from '@/utility/device-kind.js';
 import type { Plugin } from '@/plugin.js';
 import type { TIPS } from '@/tips.js';
+import type { TimelineHeaderItem } from '@/timeline-header';
 import { miLocalStorage } from '@/local-storage.js';
 import { Pizzax } from '@/lib/pizzax.js';
 import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
-import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/scripts/get-timeline-available.js';
+import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/utility/get-timeline-available.js';
 import { instance } from '@/instance.js';
 
 export const { bannerDark, bannerLight, iconDark, iconLight } = instance;
-export const TIPS = [
-	'drive',
-	'uploader',
-	'clips',
-	'userLists',
-	'tl.home',
-	'tl.local',
-	'tl.social',
-	'tl.global',
-	'abuses',
-] as const;
-
-export function hideAllTips() {
-	const v = {};
-	for (const k of TIPS) {
-		v[k] = true;
-	}
-	store.set('tips', v);
-}
-
 /**
  * 「状態」を管理するストア(not「設定」)
  */
@@ -69,6 +50,10 @@ export const store = markRaw(new Pizzax('base', {
 	localOnly: {
 		where: 'deviceAccount',
 		default: false,
+	},
+	gamingType: {
+		where: 'deviceAccount',
+		default: 'none' as 'light' | 'dark' | 'none',
 	},
 	showPreview: {
 		where: 'device',
@@ -183,8 +168,8 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'deviceAccount',
 		default: [
 			'home',
-			...(isLocalTimelineAvailable ? ['local', 'social'] : []),
-			...(isGlobalTimelineAvailable ? ['global'] : []),
+			...(isLocalTimelineAvailable() ? ['local', 'social'] : []),
+			...(isGlobalTimelineAvailable() ? ['global'] : []),
 			'lists',
 			'antennas',
 			'channels',
@@ -232,14 +217,6 @@ export const store = markRaw(new Pizzax('base', {
 	defaultWithReplies: {
 		where: 'account',
 		default: false,
-	},
-	reactions: {
-		where: 'account',
-		default: ['👍', '❤️', '😆', '🤔', '😮', '🎉', '💢', '😥', '😇', '🍮'],
-	},
-	pinnedEmojis: {
-		where: 'account',
-		default: [],
 	},
 	widgets: {
 		where: 'account',

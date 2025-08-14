@@ -1884,6 +1884,10 @@ export interface Locale extends ILocale {
      * ファイルが添付されたノートのみ
      */
     "withFileAntenna": string;
+    /**
+     * センシティブなチャンネルのノートを除外
+     */
+    "excludeNotesInSensitiveChannel": string;
     "_antennaKeywordNullError": {
         /**
          * 受信キーワードがありません
@@ -1895,9 +1899,9 @@ export interface Locale extends ILocale {
         "description": string;
     };
     /**
-     * センシティブなチャンネルのノートを除外
+     * センシティブなチャンネルのノートを非表示
      */
-    "excludeNotesInSensitiveChannel": string;
+    "hideNotesInSensitiveChannel": string;
     /**
      * ブラウザへのプッシュ通知を有効にする
      */
@@ -5663,10 +5667,6 @@ export interface Locale extends ILocale {
      */
     "federationDisabled": string;
     /**
-     * 下書き
-     */
-    "draft": string;
-    /**
      * CWに絵文字を挿入
      */
     "cwInsertEmoji": string;
@@ -5766,10 +5766,6 @@ export interface Locale extends ILocale {
      * 絵文字パレット
      */
     "emojiPalette": string;
-    /**
-     * 投稿フォーム
-     */
-    "postForm": string;
     /**
      * 文字数
      */
@@ -10085,10 +10081,6 @@ export interface Locale extends ILocale {
          */
         "instanceCloud": string;
         /**
-         * 投稿フォーム
-         */
-        "postForm": string;
-        /**
          * スライドショー
          */
         "slideshow": string;
@@ -11573,10 +11565,6 @@ export interface Locale extends ILocale {
          */
         "deleteChatRoom": string;
         /**
-         * プロキシアカウントの説明を更新
-         */
-        "updateProxyAccountDescription": string;
-        /**
          * Inboxのルールを設定
          */
         "setInboxRule": string;
@@ -11592,6 +11580,10 @@ export interface Locale extends ILocale {
          * というルールで拒否されました。
          */
         "rejectedWithTheRule": string;
+        /**
+         * プロキシアカウントの説明を更新
+         */
+        "updateProxyAccountDescription": string;
     };
     "_fileViewer": {
         /**
@@ -13178,10 +13170,6 @@ export interface Locale extends ILocale {
             "zoomLinesBlack": string;
         };
     };
-    /**
-     * 下書き
-     */
-    "drafts": string;
     "_drafts": {
         /**
          * 下書きを選択

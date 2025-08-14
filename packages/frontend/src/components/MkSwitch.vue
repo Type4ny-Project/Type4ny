@@ -30,9 +30,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { toRefs } from 'vue';
 import type { Ref, ref, computed, watch } from 'vue';
 import XButton from '@/components/MkSwitch.button.vue';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 
-const gamingType = defaultStore.state.gamingType;
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	modelValue: boolean | Ref<boolean>;

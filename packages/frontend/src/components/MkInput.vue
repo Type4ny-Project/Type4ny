@@ -49,7 +49,6 @@ import { useInterval } from '@@/js/use-interval.js';
 import MkButton from '@/components/MkButton.vue';
 import type { InputHTMLAttributes } from 'vue';
 import type { SuggestionType } from '@/utility/autocomplete.js';
-import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 import { Autocomplete } from '@/utility/autocomplete.js';
 import { genId } from '@/utility/id.js';

@@ -153,7 +153,6 @@ async function edit(avatarDecoration) {
 	}, {
 		done: result => {
 			if (result.updated) {
-				const index = avatarDecorations.value.findIndex(x => x.id === avatarDecoration.id);
 				avatarDecorations.value[index] = {
 					...avatarDecorations.value[index],
 					...result.updated,

@@ -9,18 +9,18 @@ import * as Misskey from 'misskey-js';
 import { host, url } from '@@/js/config.js';
 import type { Router } from '@/router.js';
 import type { MenuItem } from '@/types/menu.js';
-import type { IRouter } from '@/nirax.js';
+import type { IRouter } from '@/lib/nirax.js';
 import { i18n } from '@/i18n.js';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
-import { $i, iAmModerator, refreshAccount } from '@/i.js';
+import { $i, iAmModerator } from '@/i.js';
 import { notesSearchAvailable, canSearchNonLocalNotes } from '@/utility/check-permissions.js';
 import { antennasCache, rolesCache, userListsCache } from '@/cache.js';
 import { mainRouter } from '@/router.js';
 import { genEmbedCode } from '@/utility/get-embed-code.js';
 import { instance } from '@/instance.js';
-import { parse } from 'path';
+// import { parse } from 'path'; // Not needed in browser context
 import { prefer } from '@/preferences.js';
 import { getPluginHandlers } from '@/plugin.js';
 
@@ -401,7 +401,8 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: Router 
 					}).then(async ({ canceled }) => {
 						if (canceled) return;
 						await misskeyApi('point/send', { userId: user.id, points });
-						await refreshAccount();
+						// refreshAccount is removed
+						// await refreshAccount();
 					});
 				},
 			});

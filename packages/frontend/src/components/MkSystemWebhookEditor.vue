@@ -189,7 +189,6 @@ async function onSubmitClicked() {
 		try {
 			switch (mode.value) {
 				case 'create': {
-					const result = await misskeyApi('admin/system-webhook/create', params);
 					dialogEl.value?.close();
 					emit('submitted', result);
 					break;
@@ -261,7 +260,6 @@ onMounted(async () => {
 					}
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				} catch (ex: any) {
-					const msg = ex.message ?? i18n.ts.internalServerErrorDescription;
 					await os.alert({ type: 'error', title: i18n.ts.error, text: msg });
 					dialogEl.value?.close();
 					emit('canceled');

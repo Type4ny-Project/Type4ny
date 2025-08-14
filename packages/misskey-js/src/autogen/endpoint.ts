@@ -525,8 +525,6 @@ import type {
 	NotesFeaturedResponse,
 	NotesGlobalTimelineRequest,
 	NotesGlobalTimelineResponse,
-	NotesHomeLocalTimelineRequest,
-	NotesHomeLocalTimelineResponse,
 	NotesHybridTimelineRequest,
 	NotesHybridTimelineResponse,
 	NotesLocalTimelineRequest,
@@ -1029,7 +1027,6 @@ export type Endpoints = {
 	'notes/favorites/delete': { req: NotesFavoritesDeleteRequest; res: EmptyResponse };
 	'notes/featured': { req: NotesFeaturedRequest; res: NotesFeaturedResponse };
 	'notes/global-timeline': { req: NotesGlobalTimelineRequest; res: NotesGlobalTimelineResponse };
-	'notes/home-local-timeline': { req: NotesHomeLocalTimelineRequest; res: NotesHomeLocalTimelineResponse };
 	'notes/hybrid-timeline': { req: NotesHybridTimelineRequest; res: NotesHybridTimelineResponse };
 	'notes/local-timeline': { req: NotesLocalTimelineRequest; res: NotesLocalTimelineResponse };
 	'notes/mentions': { req: NotesMentionsRequest; res: NotesMentionsResponse };

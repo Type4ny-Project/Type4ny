@@ -17,8 +17,8 @@ import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps 
 import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 import MkContainer from '@/components/MkContainer.vue';
 import MkClickerGame from '@/components/MkClickerGame.vue';
-import { defaultStore } from '@/store.js';
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
+import { store } from '@/store.js';
+const darkMode = computed(store.makeGetterSetter('darkMode'));
 const name = 'clicker';
 
 const widgetPropsDef = {

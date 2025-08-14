@@ -76,7 +76,6 @@ import { url } from '@@/js/config.js';
 import { useInterval } from '@@/js/use-interval.js';
 import type { PageHeaderItem } from '@/types/page-header.js';
 import MkPostForm from '@/components/MkPostForm.vue';
-import { url } from '@@/js/config.js';
 import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
 import XChannelFollowButton from '@/components/MkChannelFollowButton.vue';
 import * as os from '@/os.js';

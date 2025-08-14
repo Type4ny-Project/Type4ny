@@ -139,7 +139,7 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { openInstanceMenu } from './common.js';
 import * as os from '@/os';
 import { navbarItemDef } from '@/navbar.js';
-import { bannerDark, bannerLight, defaultStore, iconDark, iconLight, store } from '@/store.js';
+import { bannerDark, bannerLight, iconDark, iconLight, store } from '@/store.js';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { getHTMLElementOrNull } from '@/utility/get-dom-node-or-null.js';
@@ -148,7 +148,7 @@ import { prefer } from '@/preferences.js';
 import { openAccountMenu as openAccountMenu_ } from '@/accounts.js';
 import { $i } from '@/i.js';
 
-const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
+// const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 
 function hexToRgb(hex) {
 	hex = hex.replace(/^#/, '');
@@ -159,11 +159,11 @@ function hexToRgb(hex) {
 	return `${r},${g},${b}`;
 }
 
-document.documentElement.style.setProperty('--homeColor', hexToRgb(prefer.state.homeColor));
-document.documentElement.style.setProperty('--followerColor', hexToRgb(prefer.state.followerColor));
-document.documentElement.style.setProperty('--specifiedColor', hexToRgb(prefer.state.specifiedColor));
-document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.state.localOnlyColor));
-document.documentElement.style.setProperty('--gamingspeed', prefer.state.numberOfGamingSpeed + 's');
+document.documentElement.style.setProperty('--homeColor', hexToRgb(prefer.s.homeColor));
+document.documentElement.style.setProperty('--followerColor', hexToRgb(prefer.s.followerColor));
+document.documentElement.style.setProperty('--specifiedColor', hexToRgb(prefer.s.specifiedColor));
+document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.s.localOnlyColor));
+document.documentElement.style.setProperty('--gamingspeed', prefer.s.numberOfGamingSpeed + 's');
 
 const router = useRouter();
 

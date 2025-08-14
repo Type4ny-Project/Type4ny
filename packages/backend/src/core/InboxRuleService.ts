@@ -17,6 +17,18 @@ import { ApMentionService } from '@/core/activitypub/models/ApMentionService.js'
 import { ApResolverService } from '@/core/activitypub/ApResolverService.js';
 import type { MiMeta } from '@/models/Meta.js';
 
+interface IActivity extends IObject {
+	object?: IObject | string;
+}
+
+function hasObject(activity: IObject): activity is IActivity {
+	return 'object' in activity && activity.object !== undefined;
+}
+
+function isObjectAnIObject(obj: any): obj is IObject {
+	return typeof obj === 'object' && obj !== null;
+}
+
 @Injectable()
 export class InboxRuleService {
 	constructor(
@@ -105,27 +117,30 @@ export class InboxRuleService {
 				}
 				// メンション数が指定値以上
 				case 'maxMentionsMoreThanOrEq': {
-					if (isNote(activity.object)) {
-						return activity.object?.tag
-							? activity.object?.tag?.filter(t => t.type === 'Mention').length >= value.value
+					if (hasObject(activity) && isObjectAnIObject(activity.object) && isNote(activity.object)) {
+						const note = activity.object as IPost;
+						return note.tag && Array.isArray(note.tag)
+							? note.tag.filter((t: any) => t.type === 'Mention').length >= value.value
 							: false;
 					}
 					return false;
 				}
 				// 添付ファイル数が指定値以上
 				case 'attachmentFileMoreThanOrEq': {
-					if (isNote(activity.object)) {
-						return activity.object?.attachment?.length ? activity.object?.attachment.length >= value.value : false;
+					if (hasObject(activity) && isObjectAnIObject(activity.object) && isNote(activity.object)) {
+						const note = activity.object as IPost;
+						return note.attachment?.length ? note.attachment.length >= value.value : false;
 					}
 					return false;
 				}
 				case 'thisActivityIsNote': {
-					return isNote(activity.object);
+					return hasObject(activity) && isObjectAnIObject(activity.object) && isNote(activity.object);
 				}
 				// 指定されたワードが含まれている
 				case 'isIncludeThisWord': {
-					if (isNote(activity.object)) {
-						return this.utilityService.isKeyWordIncluded(typeof activity.object?.content === 'string' ? activity.object?.content : '', [value.value]);
+					if (hasObject(activity) && isObjectAnIObject(activity.object) && isNote(activity.object)) {
+						const note = activity.object as IPost;
+						return this.utilityService.isKeyWordIncluded(typeof note.content === 'string' ? note.content : '', [value.value]);
 					}
 					return false;
 				}

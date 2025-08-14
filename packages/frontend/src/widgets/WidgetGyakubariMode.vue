@@ -12,11 +12,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget';
-import { GetFormResultType } from '@/scripts/form.js';
+import type { GetFormResultType } from '@/utility/form.js';
 import { i18n } from '@/i18n.js';
 import MkSwitch from '@/components/MkSwitch.vue';
-import { defaultStore } from '@/store.js';
-const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'));
+import { store } from '@/store.js';
+const enablehanntenn = computed(store.makeGetterSetter('enablehanntenn'));
 const name = 'gyakubariMode';
 
 const widgetPropsDef = {

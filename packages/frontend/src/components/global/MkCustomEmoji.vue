@@ -50,6 +50,7 @@ import { $i } from '@/i.js';
 import { prefer } from '@/preferences.js';
 import { DI } from '@/di.js';
 import { makeEmojiMuteKey, mute as muteEmoji, unmute as unmuteEmoji, checkMuted as checkEmojiMuted } from '@/utility/emoji-mute';
+import { store } from '@/store.js';
 
 const props = defineProps<{
 	name: string;
@@ -86,7 +87,7 @@ const rawUrl = computed(() => {
 const url = computed(() => {
 	if (rawUrl.value == null) return undefined;
 	const useOriginalSize = props.useOriginalSize;
-	const enableDataSaverMode = defaultStore.state.enableUltimateDataSaverMode;
+	const enableDataSaverMode = store.s.enableUltimateDataSaverMode;
 	let datasaver_result;
 	if (enableDataSaverMode) {
 		datasaver_result = useOriginalSize ? undefined : 'datasaver';
