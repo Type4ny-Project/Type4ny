@@ -18,6 +18,7 @@ export const noteEvents = new EventEmitter<{
 	[ev: `reacted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; reaction: string; emoji?: { name: string; url: string; }; }) => void;
 	[ev: `unreacted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; reaction: string; emoji?: { name: string; url: string; }; }) => void;
 	[ev: `pollVoted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; choice: string; }) => void;
+	[ev: `updated:${string}`]: (body: { cw: string | null; text: string; }) => void;
 }>();
 
 const fetchEvent = new EventEmitter<{
@@ -129,13 +130,6 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
-				console.log(note.value.myReactions);
-				if (!note.value.myReactions) {
-					note.value.myReactions = [];
-					note.value.myReactions.push(reaction);
-				} else if (!note.value.myReactions.includes(reaction)) {
-					note.value.myReactions.push(reaction);
-				}
 				break;
 			}
 
@@ -145,7 +139,6 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
-				note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
 				break;
 			}
 
@@ -158,9 +151,7 @@ function realtimeSubscribe(props: {
 			}
 
 			case 'updated': {
-				note.value.updatedAt = new Date().toISOString();
-				note.value.cw = body.cw;
-				note.value.text = body.text;
+				noteEvents.emit(`updated:${id}`, body);
 				break;
 			}
 

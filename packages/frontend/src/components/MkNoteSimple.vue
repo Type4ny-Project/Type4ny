@@ -30,6 +30,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
+import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import MkNoteHeader from '@/components/MkNoteHeader.vue';
 import MkSubNoteContent from '@/components/MkSubNoteContent.vue';
@@ -39,14 +40,16 @@ import MkButton from '@/components/MkButton.vue';
 import { misskeyApi } from '@/utility/misskey-api.js';
 const isDeleted = ref(false);
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note & {
 		id: string | null;
 		isSchedule?: boolean;
 		scheduledNoteId?: string;
 	};
-	emojireq:boolean;
-}>();
+	emojireq?: boolean;
+}>(), {
+	emojireq: false,
+});
 
 const emit = defineEmits<{
   (ev: 'editScheduleNote'): void;

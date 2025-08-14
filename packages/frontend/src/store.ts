@@ -555,6 +555,10 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'account',
 		default: false as boolean,
 	},
+	mutedReactions: {
+		where: 'account',
+		default: [] as string[],
+	},
 	//#endregion
 }));
 

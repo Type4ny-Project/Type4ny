@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<PageWithHeader  v-model:tab="tab" :actions="headerActions" :tabs="headerTabs" :swipable="true">
+<PageWithHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs" :swipable="true">
 	<div class="_spacer" style="--MI_SPACER-w: 800px;">
 		<div v-if="tab === 'all'">
 			<MkStreamingNotificationsTimeline :class="$style.notifications" :excludeTypes="excludeTypes"/>
@@ -20,8 +20,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, markRaw, ref,onMounted} from 'vue';
+import { computed, markRaw, ref, onMounted } from 'vue';
 import { notificationTypes } from '@@/js/const.js';
+import PageWithHeader from '@/components/global/PageWithHeader.vue';
 import MkStreamingNotificationsTimeline from '@/components/MkStreamingNotificationsTimeline.vue';
 import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
 import * as os from '@/os.js';
@@ -32,7 +33,7 @@ import { Paginator } from '@/utility/paginator.js';
 
 const tab = ref('all');
 const includeTypes = ref<string[] | null>(null);
-const excludeTypes = computed(() => includeTypes.value ? notificationTypes.filter(t => !includeTypes.value.includes(t)) : null);
+const excludeTypes = computed(() => includeTypes.value ? notificationTypes.filter(t => !includeTypes.value!.includes(t)) : undefined);
 
 const mentionsPaginator = markRaw(new Paginator('notes/mentions', {
 	limit: 10,

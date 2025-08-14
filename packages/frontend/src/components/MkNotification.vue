@@ -1,5 +1,5 @@
 <!--
-1
+SPDX-FileCopyrightText: syuilo and misskey-project, Type4ny-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -58,7 +58,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					[$style.t_acceptPoints]: notification.type === 'acceptPoints',
 					[$style.t_createToken]: notification.type === 'createToken',
 					[$style.t_chatRoomInvitationReceived]: notification.type === 'chatRoomInvitationReceived',
-				[$style.t_roleAssigned]:
+					[$style.t_roleAssigned]:
 						notification.type === 'roleAssigned' &&
 						notification.role.iconUrl == null,
 				},
@@ -96,7 +96,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				v-else-if="notification.type === 'acceptPoints'"
 				class="ti ti-medal"
 			></i>
-<i v-else-if="notification.type === 'exportCompleted'" class="ti ti-archive"></i>
+			<i v-else-if="notification.type === 'exportCompleted'" class="ti ti-archive"></i>
 			<i v-else-if="notification.type === 'login'" class="ti ti-login-2"></i>
 			<i v-else-if="notification.type === 'createToken'" class="ti ti-key"></i>
 			<i v-else-if="notification.type === 'chatRoomInvitationReceived'" class="ti ti-messages"></i>
@@ -347,10 +347,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</template>
 			<template
 				v-else-if="notification.type === 'followRequestAccepted'"
+			>
+				<div
+					:class="$style.text"
+					style="opacity: 0.6"
 				>
-				<div :class="$style.text"
-				style="opacity: 0.6"
-			>{{ i18n.ts.followRequestAccepted }}</div>
+					{{ i18n.ts.followRequestAccepted }}
+				</div>
 				<div v-if="notification.message" :class="$style.text" style="opacity: 0.6; font-style: oblique;">
 					<i class="ti ti-quote" :class="$style.quote"></i>
 					<span>{{ notification.message }}</span>
@@ -432,7 +435,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -442,6 +445,7 @@ import { userPage } from '@/filters/user.js';
 import { i18n } from '@/i18n.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { ensureSignin } from '@/i.js';
+import { instance, infoImageUrl } from '@/instance.js';
 
 const $i = ensureSignin();
 

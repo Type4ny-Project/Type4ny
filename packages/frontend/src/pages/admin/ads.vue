@@ -140,7 +140,7 @@ function toggleDayOfWeek(ad, index) {
 
 function add() {
 	ads.value.unshift({
-		id: null,
+		id: '',
 		memo: '',
 		place: 'square',
 		priority: 'middle',

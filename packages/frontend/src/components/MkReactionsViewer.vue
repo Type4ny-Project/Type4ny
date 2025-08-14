@@ -20,6 +20,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		:count="count"
 		:isInitial="initialReactions.has(reaction)"
 		:noteId="props.noteId"
+		:note="props.note"
 		:myReaction="props.myReaction"
 		@reactionToggled="onMockToggleReaction"
 	/>
@@ -44,6 +45,7 @@ const props = withDefaults(defineProps<{
 	reactions: Misskey.entities.Note['reactions'];
 	reactionEmojis: Misskey.entities.Note['reactionEmojis'];
 	myReaction: Misskey.entities.Note['myReaction'];
+	note?: Misskey.entities.Note;
 	maxNumber?: number;
 }>(), {
 	maxNumber: Infinity,

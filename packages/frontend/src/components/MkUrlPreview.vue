@@ -167,7 +167,9 @@ if (requestUrl.hostname === 'music.youtube.com' && requestUrl.pathname.match('^/
 
 requestUrl.hash = '';
 
-window.fetch(`/url?url=${encodeURIComponent(requestUrl.href)}&lang=${versatileLang}`)
+window.fetch(`/url?url=${encodeURIComponent(requestUrl.href)}&lang=${versatileLang}`, {
+	signal: AbortSignal.timeout(10000) // 10 second timeout
+})
 	.then(res => {
 		if (!res.ok) {
 			if (_DEV_) {
@@ -195,6 +197,11 @@ window.fetch(`/url?url=${encodeURIComponent(requestUrl.href)}&lang=${versatileLa
 		sitename.value = info.sitename;
 		player.value = info.player;
 		sensitive.value = info.sensitive ?? false;
+	})
+	.catch(err => {
+		console.error('Error fetching URL preview:', err);
+		fetching.value = false;
+		unknownUrl.value = true;
 	});
 
 function adjustTweetHeight(message: MessageEvent) {

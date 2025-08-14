@@ -27,7 +27,7 @@ const emit = defineEmits<{
 
 provide('isNestingMenu', true);
 
-const el = useTemplateRef('el');
+const el = useTemplateRef<HTMLDivElement>('el');
 const align = 'left';
 
 const SCROLLBAR_THICKNESS = 16;
