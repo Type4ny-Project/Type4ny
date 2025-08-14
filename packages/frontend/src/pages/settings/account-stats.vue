@@ -94,7 +94,7 @@ import number from '@/filters/number';
 import bytes from '@/filters/bytes';
 import { $i } from '@/account';
 import { i18n } from '@/i18n';
-import { definePage } from '@/utility/page-metadata';
+import { definePage } from '@/page.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 
 const stats = ref<any>({});

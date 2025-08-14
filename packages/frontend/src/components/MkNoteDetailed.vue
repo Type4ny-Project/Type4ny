@@ -462,7 +462,7 @@ if (appearNote.reactionAcceptance === 'likeOnly') {
 			_cacheKey_: $appearNote.reactionCount,
 		});
 
-
+		const users = reactions.map(x => x.user);
 		if (users.length < 1) return;
 
 		const { dispose } = os.popup(MkReactionsViewerDetails, {
@@ -560,6 +560,7 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 	if (!oldReaction) return;
 	misskeyApi('notes/reactions/delete', {
 		noteId: targetNote.id,
+		reaction: oldReaction,
 	}).then(() => {
 		noteEvents.emit(`unreacted:${appearNote.id}`, {
 			userId: $i!.id,

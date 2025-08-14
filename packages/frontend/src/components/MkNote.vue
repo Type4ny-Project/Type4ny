@@ -548,12 +548,13 @@ const hardMuted = ref(
 const showSoftWordMutedWord = computed(() => prefer.s.showSoftWordMutedWord);
 const translation = ref<Misskey.entities.NotesTranslateResponse | null>(null);
 const translating = ref(false);
+const isDeleted = ref(false);
 const showTicker = (prefer.s.instanceTicker === 'always') || (prefer.s.instanceTicker === 'remote' && appearNote.user.instance);
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || (appearNote.visibility === 'followers' && appearNote.userId === $i?.id));
 const renoteCollapsed = ref(
 	prefer.s.collapseRenotes && isRenote && (
-		($i && ($i.id === note.value.userId || $i.id === appearNote.value.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
-		(appearNote.value.myReaction != null)
+		($i && ($i.id === note.userId || $i.id === appearNote.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
+		(appearNote.myReaction != null)
 	),
 );
 
@@ -702,7 +703,7 @@ if (!props.mock) {
 				_cacheKey_: $appearNote.reactionCount,
 			});
 
-
+			const users = reactions.map(x => x.user);
 			if (users.length < 1) return;
 
 			const { dispose } = os.popup(
@@ -841,6 +842,7 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 
 	misskeyApi('notes/reactions/delete', {
 		noteId: targetNote.id,
+		reaction: oldReaction,
 	}).then(() => {
 		noteEvents.emit(`unreacted:${appearNote.id}`, {
 			userId: $i!.id,
@@ -850,10 +852,10 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 }
 
 function toggleReact() {
-	if (appearNote.value.myReaction == null) {
+	if ($appearNote.myReaction == null) {
 		react();
 	} else {
-		undoReact(appearNote.value);
+		undoReact($appearNote);
 	}
 }
 
@@ -973,7 +975,7 @@ function focusAfter() {
 
 function readPromo() {
 	misskeyApi('promo/read', {
-		noteId: appearNote.value.id,
+		noteId: appearNote.id,
 	});
 	isDeleted.value = true;
 }

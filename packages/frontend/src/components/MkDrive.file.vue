@@ -1,5 +1,6 @@
 ﻿<!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -46,6 +47,8 @@ import { $i } from '@/i.js';
 import { getDriveFileMenu, getDriveMultiFileMenu } from '@/utility/get-drive-file-menu.js';
 import { isTouchUsing } from '@/utility/touch.js';
 import { setDragData } from '@/drag-and-drop.js';
+import { deviceKind } from '@/utility/device-kind.js';
+import { useRouter } from '@/router.js';
 
 const props = withDefaults(defineProps<{
 	file: Misskey.entities.DriveFile;
@@ -60,8 +63,10 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
 	(ev: 'dragstart', dragEvent: DragEvent): void;
 	(ev: 'dragend'): void;
+	(ev: 'chosen', file: Misskey.entities.DriveFile): void;
 }>();
 
+const router = useRouter();
 const isDragging = ref(false);
 const isSelectedFile = ref(false);
 const title = computed(() => `${props.file.name}\n${props.file.type} ${bytes(props.file.size)}`);

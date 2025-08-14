@@ -17,6 +17,7 @@
 		"strict": true,
 		"strictNullChecks": true,
 		"experimentalDecorators": true,
+		"skipLibCheck": true,
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
 		"isolatedModules": true,
@@ -46,6 +47,7 @@
 	},
 	"compileOnSave": false,
 	"include": [
+		"./vue-shims.d.ts",
 		"./build.ts",
 		"./lib/**/*.ts",
 		"./src/**/*.ts",

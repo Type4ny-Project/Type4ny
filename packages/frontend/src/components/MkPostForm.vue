@@ -542,6 +542,7 @@ function watchForDraft() {
 
 function checkMissingMention() {
 	if (visibility.value === 'specified') {
+		const ast = mfm.parse(text.value);
 		for (const x of extractMentions(ast)) {
 			if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 				hasNotSpecifiedMentions.value = true;
@@ -553,6 +554,7 @@ function checkMissingMention() {
 }
 
 function addMissingMention() {
+	const ast = mfm.parse(text.value);
 	for (const x of extractMentions(ast)) {
 		if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 			misskeyApi('users/show', { username: x.username, host: x.host }).then(user => {
@@ -651,9 +653,7 @@ function replaceFile(file: Misskey.entities.DriveFile, newFile: Misskey.entities
 function upload(file: File, name?: string): void {
 	if (props.mock) return;
 
-	uploadFile(file, prefer.s.uploadFolder, name).then(res => {
-		files.value.push(res);
-	});
+	uploader.uploadFile(file, prefer.s.uploadFolder, name);
 }
 
 function setVisibility() {
@@ -879,6 +879,7 @@ async function onPaste(ev: ClipboardEvent) {
 			}
 
 			const fileName = formatTimeString(new Date(), pastedFileName).replace(/{{number}}/g, '0');
+			const file = new File([paste], fileName, { type: 'text/plain' });
 			uploader.addFiles([file]);
 		});
 	}
@@ -987,7 +988,7 @@ function chooseDraft() {
 				if (canceled) return;
 			}
 
-			applyDraft(draft);
+			applyDraft(res);
 		},
 	}, 'closed');
 }

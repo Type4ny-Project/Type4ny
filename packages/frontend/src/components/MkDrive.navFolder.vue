@@ -125,6 +125,7 @@ function onDrop(ev: DragEvent) {
 
 	//#region ドライブのフォルダ
 	{
+		const droppedData = getDragData(ev, 'driveFolders');
 		if (droppedData != null) {
 			const droppedFolder = droppedData[0];
 			// 移動先が自分自身ならreject

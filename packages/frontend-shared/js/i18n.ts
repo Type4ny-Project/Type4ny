@@ -51,6 +51,16 @@ export class I18n<T extends ILocale> {
 		if (this.devMode) {
 			class Handler<TTarget extends ILocale> implements ProxyHandler<TTarget> {
 				get(target: TTarget, p: string | symbol): unknown {
+					// Handle symbol properties
+					if (typeof p === 'symbol') {
+						return undefined;
+					}
+
+					// Handle special string methods
+					if (p === 'toString' || p === 'valueOf') {
+						return () => '';
+					}
+
 					const value = target[p as keyof TTarget];
 
 					if (typeof value === 'object') {
@@ -87,6 +97,16 @@ export class I18n<T extends ILocale> {
 
 			class Handler<TTarget extends ILocale> implements ProxyHandler<TTarget> {
 				get(target: TTarget, p: string | symbol): unknown {
+					// Handle symbol properties
+					if (typeof p === 'symbol') {
+						return undefined;
+					}
+
+					// Handle special string methods
+					if (p === 'toString' || p === 'valueOf') {
+						return () => '';
+					}
+
 					const value = target[p as keyof TTarget];
 
 					if (typeof value === 'object') {

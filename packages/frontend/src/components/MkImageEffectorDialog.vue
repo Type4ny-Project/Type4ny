@@ -117,6 +117,7 @@ function onLayerSwapUp(layer: ImageEffectorLayer) {
 }
 
 function onLayerSwapDown(layer: ImageEffectorLayer) {
+	const index = layers.indexOf(layer);
 	if (index < layers.length - 1) {
 		layers.splice(index, 1);
 		layers.splice(index + 1, 0, layer);
@@ -124,6 +125,7 @@ function onLayerSwapDown(layer: ImageEffectorLayer) {
 }
 
 function onLayerDelete(layer: ImageEffectorLayer) {
+	const index = layers.indexOf(layer);
 	if (index !== -1) {
 		layers.splice(index, 1);
 	}
@@ -186,6 +188,7 @@ async function save() {
 		return;
 	}
 
+	const closeWaiting = os.waiting();
 
 	await nextTick(); // waitingがレンダリングされるまで待つ
 

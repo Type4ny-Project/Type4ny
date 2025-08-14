@@ -139,6 +139,7 @@ async function saveAntenna() {
 		const res = await os.apiWithDialog('antennas/create', antennaData);
 		emit('created', res);
 	} else {
+		const res = await os.apiWithDialog('antennas/update', { ...antennaData, antennaId: initialAntenna.id });
 		emit('updated', res);
 	}
 }
