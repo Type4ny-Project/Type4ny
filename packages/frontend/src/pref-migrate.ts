@@ -51,6 +51,12 @@ export function migrateOldSettings() {
 			prefer.commit('deck.profiles', profiles);
 		});
 
+		// TypeAny独自の設定を以降
+		prefer.commit('timelineHeader', store.s.timelineHeader);
+		prefer.commit('followerColor', store.s.followerColor);
+		prefer.commit('specifiedColor', store.s.specifiedColor);
+		prefer.commit('localOnlyColor', store.s.localOnlyColor);
+
 		prefer.commit('lightTheme', ColdDeviceStorage.get('lightTheme'));
 		prefer.commit('darkTheme', ColdDeviceStorage.get('darkTheme'));
 		prefer.commit('syncDeviceDarkMode', ColdDeviceStorage.get('syncDeviceDarkMode'));

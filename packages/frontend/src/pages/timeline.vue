@@ -30,12 +30,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, provide, useTemplateRef, ref, onMounted, onActivated, defineAsyncComponent } from 'vue';
+import { computed, watch, useTemplateRef, ref, onMounted, onActivated, defineAsyncComponent } from 'vue';
 import type { Tab } from '@/components/global/MkPageHeader.tabs.vue';
 import type { MenuItem } from '@/types/menu.js';
 import type { BasicTimelineType } from '@/timelines.js';
 import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
-import MkInfo from '@/components/MkInfo.vue';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 import * as os from '@/os.js';
 import { store } from '@/store.js';
@@ -49,6 +48,7 @@ import { miLocalStorage } from '@/local-storage.js';
 import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';
 import { prefer } from '@/preferences.js';
 import { ui } from '@@/js/config.js';
+import { timelineHeaderItemDef } from '@/timeline-header';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
 
 const tlComponent = useTemplateRef('tlComponent');
@@ -203,6 +203,7 @@ function saveSrc(newSrc: TimelinePageSrc): void {
 
 function saveTlFilter(key: keyof typeof store.s.tl.filter, newValue: boolean) {
 	if (key !== 'withReplies' || $i) {
+		const out = deepMerge({ filter: { [key]: newValue } }, store.s.tl);
 		store.set('tl', out);
 	}
 }
@@ -284,32 +285,39 @@ const headerActions = computed(() => {
 	return items;
 });
 
-const headerTabs = computed(() => [...(prefer.r.pinnedUserLists.value.map(l => ({
-	key: 'list:' + l.id,
-	title: l.name,
-	icon: 'ti ti-star',
-	iconOnly: true,
-}))), ...availableBasicTimelines().map(tl => ({
-	key: tl,
-	title: i18n.ts._timelines[tl],
-	icon: basicTimelineIconClass(tl),
-	iconOnly: true,
-})), {
-	icon: 'ti ti-list',
-	title: i18n.ts.lists,
-	iconOnly: true,
-	onClick: chooseList,
-}, {
-	icon: 'ti ti-antenna',
-	title: i18n.ts.antennas,
-	iconOnly: true,
-	onClick: chooseAntenna,
-}, {
-	icon: 'ti ti-device-tv',
-	title: i18n.ts.channel,
-	iconOnly: true,
-	onClick: chooseChannel,
-}] as Tab[]);
+const headerTabs = computed(() => {
+	const timelineHeaderValue = prefer.s.timelineHeader;
+	console.log(prefer.s.timelineHeader);
+	if (!Array.isArray(timelineHeaderValue)) {
+		console.error('timelineHeader is not an array:', timelineHeaderValue);
+		return [] as Tab[];
+	}
+
+	return timelineHeaderValue.map(tab => {
+		const tabDef = timelineHeaderItemDef[tab];
+		if (!tabDef) {
+			return {};
+		}
+
+		return {
+			...(!['channels', 'antennas', 'lists'].includes(tab) ? {
+				key: tab,
+			} : {}),
+			title: tabDef.title,
+			icon: tabDef.icon,
+			iconOnly: tabDef.iconOnly,
+			...(tab === 'lists' ? {
+				onClick: (ev) => chooseList(ev),
+			} : {}),
+			...(tab === 'antennas' ? {
+				onClick: (ev) => chooseAntenna(ev),
+			} : {}),
+			...(tab === 'channels' ? {
+				onClick: (ev) => chooseChannel(ev),
+			} : {}),
+		};
+	}) as Tab[];
+});
 
 const headerTabsWhenNotLogin = computed(() => [...availableBasicTimelines().map(tl => ({
 	key: tl,
