@@ -72,6 +72,7 @@ function afterEnter(el: Element) {
 
 function leave(el: Element) {
 	if (!(el instanceof HTMLElement)) return;
+	const elementHeight = el.getBoundingClientRect().height;
 	el.style.height = `${elementHeight}px`;
 	el.offsetHeight; // reflow
 	el.style.height = '0';

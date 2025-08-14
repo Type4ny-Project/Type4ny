@@ -95,9 +95,10 @@ import { Autocomplete } from '@/utility/autocomplete.js';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { selectFiles } from '@/utility/select-file.js';
-import { store, notePostInterruptors, postFormActions } from '@/store.js';
+import { store } from '@/store.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { i18n } from '@/i18n.js';
+import { getPluginHandlers } from '@/plugin.js';
 import { instance } from '@/instance.js';
 import { ensureSignin, notesCount, incNotesCount, getAccounts, openAccountMenu as openAccountMenu_ } from '@/i.js';
 import { uploadFile } from '@/utility/upload.js';
@@ -226,6 +227,8 @@ const submitText = computed((): string => {
 const textLength = computed((): number => {
 	return (text.value + imeText.value).trim().length;
 });
+
+const postFormActions = getPluginHandlers('post_form_action');
 
 const maxTextLength = computed((): number => {
 	return instance ? instance.maxNoteTextLength : 1000;
@@ -772,6 +775,7 @@ async function post(ev?: MouseEvent) {
 	}
 
 	// plugin
+	const notePostInterruptors = getPluginHandlers('note_post_interruptor');
 	if (notePostInterruptors.length > 0) {
 		for (const interruptor of notePostInterruptors) {
 			try {

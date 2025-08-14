@@ -151,7 +151,7 @@ export async function refreshCurrentAccount() {
 	if (!$i) return;
 	return fetchAccount($i.token, $i.id).then(updateCurrentAccount).catch(reason => {
 		if (reason === isAccountDeleted) {
-			removeAccount(host, $i.id);
+			removeAccount(host, $i!.id);
 			if (Object.keys(store.s.accountTokens).length > 0) {
 				login(Object.values(store.s.accountTokens)[0]);
 			} else {
@@ -226,7 +226,7 @@ export async function openAccountMenu(opts: {
 				active: opts.active != null ? opts.active === id : false,
 				action: async () => {
 					if (opts.onChoose) {
-						opts.onChoose(account);
+						opts.onChoose!(account);
 					} else {
 						switchAccount(host, id);
 					}
@@ -240,7 +240,7 @@ export async function openAccountMenu(opts: {
 				action: async () => {
 					if (opts.onChoose) {
 						fetchAccount(token, id).then(account => {
-							opts.onChoose(account);
+							opts.onChoose!(account);
 						});
 					} else {
 						switchAccount(host, id);
@@ -253,7 +253,7 @@ export async function openAccountMenu(opts: {
 	const menuItems: MenuItem[] = [];
 
 	// TODO: $iのホストも比較したいけど通常null
-	const accountItems = (await getAccounts().then(accounts => accounts.filter(x => x.id !== $i.id))).map(a => createItem(a.host, a.id, a.username, a.user, a.token));
+	const accountItems = (await getAccounts().then(accounts => accounts.filter(x => x.id !== $i!.id))).map(a => createItem(a.host, a.id, a.username, a.user, a.token!));
 
 	if (opts.withExtraOperation) {
 		menuItems.push({

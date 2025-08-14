@@ -91,12 +91,14 @@ import { instanceName, ui } from '@@/js/config.js';
 import XSidebar from './twilike.sidebar.vue';
 import XCommon from './_common_/common.vue';
 import * as os from '@/os.js';
-import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/utility/page-metadata.js';
+import { definePage, provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
+import type { PageMetadata } from '@/page.js';
 import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { mainRouter } from '@/router.js';
 import { $i } from '@/i.js';
+import { DI } from '@/di.js';
 import XDrawerMenu from '@/ui/_common_/navbar-for-mobile.vue';
 const XHeaderMenu = defineAsyncComponent(() => import('./classic.header.vue'));
 const XWidgets = defineAsyncComponent(() => import('./_common_/widgets.vue'));
@@ -116,7 +118,8 @@ const showMenuOnTop = computed(() => store.s.menuDisplay === 'top');
 const widgetsLeft = ref<HTMLElement>();
 const widgetsRight = ref<HTMLElement>();
 
-provide('router', mainRouter);
+provide(DI.router, mainRouter);
+provide(DI.routerCurrentDepth, 0);
 provideMetadataReceiver((metadataGetter) => {
 	const info = metadataGetter();
 	pageMetadata.value = info;

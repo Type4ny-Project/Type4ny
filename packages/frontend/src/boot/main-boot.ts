@@ -376,7 +376,7 @@ if (modifiedVersionMustProminentlyOfferInAgplV3Section13Read !== 'true' && insta
 
 			main.on('unreadAntenna', () => {
 				updateCurrentAccountPartial({ hasUnreadAntenna: true });
-				sound.playMisskeySfx('antenna');
+				sound.playMisskeySfx('notification');
 			});
 
 			main.on('newChatMessage', () => {

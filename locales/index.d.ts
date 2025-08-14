@@ -3967,6 +3967,10 @@ export interface Locale extends ILocale {
      */
     "loginBonusIsVisibleDescription": string;
     /**
+     * ログインボーナスの通知
+     */
+    "loginBonusNotify": string;
+    /**
      * 未読
      */
     "unread": string;

@@ -61,7 +61,7 @@ import * as os from '@/os.js';
 import { store } from '@/store.js';
 import { unisonReload } from '@/utility/unison-reload.js';
 import { i18n } from '@/i18n.js';
-import { definePage } from '@/utility/page-metadata.js';
+import { definePage } from '@/page.js';
 import { timelineHeaderItemDef } from '@/timeline-header.js';
 import MkInput from '@/components/MkInput.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';

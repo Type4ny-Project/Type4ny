@@ -315,7 +315,12 @@ watch(q, () => {
 	};
 
 	const searchUnicode = () => {
+		const max = 100;
+		const emojis = emojilist;
+		const matches = new Set<UnicodeEmojiDef>();
+		const keywords = newQ.split(' ');
 
+		const exactMatch = emojis.find(emoji => emoji.name === newQ);
 		if (exactMatch) matches.add(exactMatch);
 
 		if (newQ.includes(' ')) { // AND検索

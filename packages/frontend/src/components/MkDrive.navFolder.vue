@@ -103,7 +103,7 @@ function onDrop(ev: DragEvent) {
 		}
 	}
 	//#region ドライブのファイル
-	const driveFile = ev.dataTransfer.getData(_DATA_TRANSFER_DRIVE_FILE_);
+	const driveFile = ev.dataTransfer.getData('misskey/drivefiles');
 	if (driveFile != null && driveFile !== '') {
 		const file = JSON.parse(driveFile);
 		emit('removeFile', file.id);
@@ -125,6 +125,7 @@ function onDrop(ev: DragEvent) {
 
 	//#region ドライブのフォルダ
 	{
+		const droppedData = getDragData(ev, 'driveFolders');
 		if (droppedData != null) {
 			const droppedFolder = droppedData[0];
 			// 移動先が自分自身ならreject

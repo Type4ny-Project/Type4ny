@@ -46,6 +46,7 @@ type MfmProps = {
 	author?: {
 		isCat?: boolean;
 		isBot?: boolean;
+		host?: string | null;
 	};
 	i?: Misskey.entities.UserLite | null;
 	isNote?: boolean;

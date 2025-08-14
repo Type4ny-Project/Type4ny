@@ -72,6 +72,7 @@ const items = computed<TlItem<T>[]>(() => {
 	for (let i = 0; i < events.value.length; i++) {
 		const item = events.value[i];
 
+		const date = new Date(item.timestamp);
 		const nextDate = events.value[i + 1] ? new Date(events.value[i + 1].timestamp) : null;
 
 		results.push({

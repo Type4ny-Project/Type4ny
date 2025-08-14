@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <div ref="el" :class="$style.tabs" @wheel="onTabWheel">
 	<div :class="ui !== 'twilike' ? $style.tabsInner : $style.tabsInnerX">
 		<button
-			v-for="t in tabs" :ref="(el) => tabRefs[t.key] = (el as HTMLElement)" v-tooltip.noDelay="t.title"
+			v-for="t in tabs" :ref="(el) => tabRefs[t.key] = (el as HTMLElement)" v-tooltip.noDelay="'iconOnly' in t && t.iconOnly ? undefined : t.title"
 			class="_button" :class="[ui !== 'twilike' ? $style.tab : $style.tabX, { [$style.active]: t.key != null && t.key === props.tab, [$style.animate]: prefer.s.animation }]"
 			@mousedown="(ev) => onTabMousedown(t, ev)" @click="(ev) => onTabClick(t, ev)"
 		>
@@ -17,13 +17,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 					v-if="!t.iconOnly || (!prefer.s.animation && t.key === tab)"
 					:class="$style.tabTitle"
 				>
-					{{ t.title }}
+					{{ 'iconOnly' in t && t.iconOnly ? '' : t.title }}
 				</div>
 				<Transition
 					v-else mode="in-out" @enter="enter" @afterEnter="afterEnter" @leave="leave"
 					@afterLeave="afterLeave"
 				>
-					<div v-show="t.key === tab" :class="[$style.tabTitle, $style.animate]">{{ t.title }}</div>
+					<div v-show="t.key === tab" :class="[$style.tabTitle, $style.animate]">{{ 'iconOnly' in t && t.iconOnly ? '' : t.title }}</div>
 				</Transition>
 			</div>
 		</button>
@@ -57,7 +57,7 @@ import { nextTick, onMounted, onUnmounted, useTemplateRef, watch } from 'vue';
 import { prefer } from '@/preferences.js';
 import { ui } from '@@/js/config.js';
 
-const gamingType = prefer.s.gamingType;
+const gamingType = (prefer.s as any).gamingType;
 
 const props = withDefaults(defineProps<{
 	tabs?: Tab[];

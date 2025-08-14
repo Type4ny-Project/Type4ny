@@ -54,7 +54,7 @@ import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { customEmojis, customEmojiCategories } from '@/custom-emojis.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/i.js';
-import { definePage } from '@/utility/page-metadata';
+import { definePage } from '@/page.js';
 import { misskeyApiGet } from '@/utility/misskey-api.js';
 import * as os from '@/os.js';
 let tab = ref('emojis');

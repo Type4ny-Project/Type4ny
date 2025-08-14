@@ -414,6 +414,10 @@ function focusDown() {
 	if (disposed) return;
 	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
+	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
+	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
+	const targetIndex = (activeIndex !== -1 && activeIndex !== focusableElements.length - 1) ? (activeIndex + 1) : 0;
+	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
 	targetElement.focus();
 }

@@ -264,8 +264,11 @@ function exec() {
 			hashtags.value = JSON.parse(miLocalStorage.getItem('hashtags') ?? '[]');
 			fetching.value = false;
 		} else {
+			const cacheKey = `autocomplete:hashtag:${props.q}`;
+			const cache = sessionStorage.getItem(cacheKey);
+			
 			if (cache) {
-				hashtags.value = hashtags;
+				hashtags.value = JSON.parse(cache);
 				fetching.value = false;
 			} else {
 				misskeyApi('hashtags/search', {
