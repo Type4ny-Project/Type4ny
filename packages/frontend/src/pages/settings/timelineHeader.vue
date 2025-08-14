@@ -66,6 +66,7 @@ import { timelineHeaderItemDef } from '@/timeline-header.js';
 import MkInput from '@/components/MkInput.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { $i } from '@/i.js';
+import { prefer } from '@/preferences';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 const tmpName = ref();
@@ -128,7 +129,7 @@ function removeItem(index: number) {
 }
 
 async function save() {
-	store.set('timelineHeader', items.value.map(x => x.type));
+	prefer.commit('timelineHeader', items.value.map(x => x.type));
 	await reloadAsk();
 }
 

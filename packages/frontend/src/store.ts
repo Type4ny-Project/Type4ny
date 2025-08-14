@@ -177,6 +177,26 @@ export const store = markRaw(new Pizzax('base', {
 			'channels',
 		] as TimelineHeaderItem[],
 	},
+	specifiedColor: {
+		where: 'device',
+		default: '#FFFF64',
+	},
+	followerColor: {
+		where: 'device',
+		default: '#FF00FF',
+	},
+	homeColor: {
+		where: 'device',
+		default: '#00FFFF',
+	},
+	localOnlyColor: {
+		where: 'device',
+		default: '#2b2c41',
+	},
+	numberOfGamingSpeed: {
+		where: 'device',
+		default: 44,
+	},
 	menuDisplay: {
 		where: 'device',
 		default: 'sideFull' as 'sideFull' | 'sideIcon' | 'top',

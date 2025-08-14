@@ -45,49 +45,49 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 	home: {
 		title: i18n.ts._timelines.home,
 		icon: 'ti ti-home',
-		iconOnly: true,
+		iconOnly: false,
 	},
 	...(isLocalTimelineAvailable() ? {
 		local: {
 			title: i18n.ts._timelines.local,
 			icon: 'ti ti-planet',
-			iconOnly: true,
+			iconOnly: false,
 		},
 		social: {
 			title: i18n.ts._timelines.social,
 			icon: 'ti ti-universe',
-			iconOnly: true,
+			iconOnly: false,
 		},
 		media: {
 			title: i18n.ts._timelines.media,
 			icon: 'ti ti-photo',
-			iconOnly: true,
+			iconOnly: false,
 		} } : {}),
 	...(isGlobalTimelineAvailable() ? { global: {
 		title: i18n.ts._timelines.global,
 		icon: 'ti ti-whirl',
-		iconOnly: true,
+		iconOnly: false,
 	} } : {}),
 	lists: {
 		icon: 'ti ti-list',
 		title: i18n.ts.lists,
-		iconOnly: true,
+		iconOnly: false,
 	},
 	antennas: {
 		icon: 'ti ti-antenna',
 		title: i18n.ts.antennas,
-		iconOnly: true,
+		iconOnly: false,
 	},
 	channels: {
 		icon: 'ti ti-device-tv',
 		title: i18n.ts.channel,
-		iconOnly: true,
+		iconOnly: false,
 	},
 	...lists.reduce((acc, l) => {
 		acc['list:' + l.id] = {
 			title: i18n.ts.lists + ':' + l.name,
 			icon: 'ti ti-star',
-			iconOnly: true,
+			iconOnly: false,
 		};
 		return acc;
 	}, {}),
@@ -95,7 +95,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		acc['channel:' + l.id] = {
 			title: i18n.ts.channel + ':' + l.name,
 			icon: 'ti ti-star',
-			iconOnly: true,
+			iconOnly: false,
 		};
 		return acc;
 	}, {}),
@@ -103,7 +103,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		acc['channel:' + l.id] = {
 			title: i18n.ts.channel + ':' + l.name,
 			icon: 'ti ti-star',
-			iconOnly: true,
+			iconOnly: false,
 		};
 		return acc;
 	}, {}),
@@ -111,7 +111,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		acc['channel:' + l.id] = {
 			title: i18n.ts.channel + ':' + l.name,
 			icon: 'ti ti-star',
-			iconOnly: true,
+			iconOnly: false,
 		};
 		return acc;
 	}, {}),
@@ -119,7 +119,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		acc['antenna:' + l.id] = {
 			title: i18n.ts.antennas + ':' + l.name,
 			icon: 'ti ti-star',
-			iconOnly: true,
+			iconOnly: false,
 		};
 		return acc;
 	}, {}),

@@ -12,10 +12,11 @@ import type { Plugin } from '@/plugin.js';
 import type { DeviceKind } from '@/utility/device-kind.js';
 import type { DeckProfile } from '@/deck.js';
 import type { WatermarkPreset } from '@/utility/watermark.js';
+import type { TimelineHeaderItem } from '@/timeline-header';
 import { genId } from '@/utility/id.js';
 import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
 import { deepEqual } from '@/utility/deep-equal.js';
-import { instance } from '@/instance';
+import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/utility/get-timeline-available';
 
 /** サウンド設定 */
 export type SoundStore = {
@@ -42,7 +43,17 @@ export const PREF_DEF = definePreferences({
 			username: string;
 		}][],
 	},
-
+	timelineHeader: {
+		serverDependent: true,
+		default: [
+			'home',
+			...(isLocalTimelineAvailable() ? ['local', 'social'] : []),
+			...(isGlobalTimelineAvailable() ? ['global'] : []),
+			'lists',
+			'antennas',
+			'channels',
+		] as TimelineHeaderItem[],
+	},
 	pinnedUserLists: {
 		accountDependent: true,
 		default: [] as Misskey.entities.UserList[],
