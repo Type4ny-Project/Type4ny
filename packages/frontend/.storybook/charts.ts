@@ -6,7 +6,7 @@
 import { HttpResponse, http } from 'msw';
 import type { DefaultBodyType, HttpResponseResolver, JsonBodyType, PathParams } from 'msw';
 import seedrandom from 'seedrandom';
-import { action } from '@storybook/addon-actions';
+// import { action } from '@storybook/addon-actions'; // action not exported in newer versions
 
 function getChartArray(seed: string, limit: number, option?: { accumulate?: boolean, mul?: number }): number[] {
 	const rng = seedrandom(seed);
@@ -27,7 +27,7 @@ function getChartArray(seed: string, limit: number, option?: { accumulate?: bool
 
 export function getChartResolver(fields: string[], option?: { accumulate?: boolean, mulMap?: Record<string, number> }): HttpResponseResolver<PathParams, DefaultBodyType, JsonBodyType> {
 	return ({ request }) => {
-		action(`GET ${request.url}`)();
+		// action(`GET ${request.url}`)(); // action not available
 		const limitParam = new URL(request.url).searchParams.get('limit');
 		const limit = limitParam ? parseInt(limitParam) : 30;
 		const res = {};

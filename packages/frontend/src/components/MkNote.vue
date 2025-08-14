@@ -16,17 +16,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 		},
 		{
 			[$style.home]:
-				store.s.showVisibilityColor && note.visibility === 'home',
+				prefer.s.showVisibilityColor && note.visibility === 'home',
 			[$style.followers]:
-				store.s.showVisibilityColor &&
+				prefer.s.showVisibilityColor &&
 				note.visibility === 'followers',
 			[$style.specified]:
-				store.s.showVisibilityColor &&
+				prefer.s.showVisibilityColor &&
 				note.visibility === 'specified',
 		},
 		{
 			[$style.localonly]:
-				store.s.showVisibilityColor && note.localOnly && note.visibility === 'public',
+				prefer.s.showVisibilityColor && note.localOnly && note.visibility === 'public',
 		},
 		{
 			[$style.skipRender]: prefer.s.skipNoteRender
@@ -798,35 +798,35 @@ function react(): void {
 
 			sound.playMisskeySfx('reaction');
 
-				if (props.mock) {
-					emit('reaction', reaction);
-					$appearNote.reactions[reaction] = 1;
+			if (props.mock) {
+				emit('reaction', reaction);
+				$appearNote.reactions[reaction] = 1;
 				$appearNote.reactionCount++;
 				$appearNote.myReaction = reaction;
 				return;
 			}
 
-				misskeyApi('notes/reactions/create', {
-					noteId: appearNote.id,
-					reaction: reaction,
-				}).then(() => {
+			misskeyApi('notes/reactions/create', {
+				noteId: appearNote.id,
+				reaction: reaction,
+			}).then(() => {
 				noteEvents.emit(`reacted:${appearNote.id}`, {
 					userId: $i!.id,
 					reaction: reaction,
 				});
 			});
 
-				if (
-					appearNote.text &&
+			if (
+				appearNote.text &&
 					appearNote.text.length > 100 &&
 					Date.now() - new Date(appearNote.createdAt).getTime() < 1000 * 3
-				) {
-					claimAchievement('reactWithoutRead');
-				}
-			},
-			() => {
-				focus();
-			},
+			) {
+				claimAchievement('reactWithoutRead');
+			}
+		},
+		() => {
+			focus();
+		},
 		);
 	}
 }
@@ -876,7 +876,7 @@ function onContextmenu(ev: MouseEvent): void {
 			translating,
 			translation,
 
-			currentClip: currentClip?.value ,
+			currentClip: currentClip?.value,
 		});
 		os.contextMenu(menu, ev).then(focus).finally(cleanup);
 	}
@@ -892,7 +892,7 @@ function showMenu(): void {
 		translating,
 		translation,
 
-		currentClip: currentClip?.value ,
+		currentClip: currentClip?.value,
 	});
 	os.popupMenu(menu, menuButton.value).then(focus).finally(cleanup);
 }

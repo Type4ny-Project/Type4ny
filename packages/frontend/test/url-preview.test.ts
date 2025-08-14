@@ -35,7 +35,7 @@ describe('MkUrlPreview', () => {
 		});
 
 		const result = render(MkUrlPreview, {
-			props: { url: summary.url },
+			props: { url: summary.url ?? 'https://example.com' },
 			global: { directives, components },
 		});
 

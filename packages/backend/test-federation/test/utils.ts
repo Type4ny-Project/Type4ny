@@ -79,9 +79,10 @@ async function createAdmin(host: Host): Promise<Misskey.entities.SignupResponse 
 				rateLimitFactor: 0 as never,
 			},
 		}, res.token);
-		await client.request('admin/update-meta', {
-			federation: 'all',
-		}, res.token);
+		// Federation setting removed - no longer needed
+		// await client.request('admin/update-meta', {
+		// 	federation: 'all',
+		// }, res.token);
 		return res;
 	}).catch(err => {
 		if (err.info.e.message === 'access denied') return undefined;
@@ -190,7 +191,8 @@ export async function uploadFile(
 	path = '../../test/resources/192.jpg',
 ): Promise<Misskey.entities.DriveFile> {
 	const filename = path.split('/').pop() ?? 'untitled';
-	const blob = new Blob([await readFile(join(__dirname, path))]);
+	const fileContent = await readFile(join(__dirname, path));
+	const blob = new Blob([new Uint8Array(fileContent)]);
 
 	const body = new FormData();
 	body.append('i', user.i);

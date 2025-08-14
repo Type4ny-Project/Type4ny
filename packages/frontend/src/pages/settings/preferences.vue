@@ -184,6 +184,28 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 						<div class="_gaps_m">
 							<div class="_gaps_s">
+								<SearchMarker :keywords="['post', 'form', 'timeline', 'channel']">
+									<MkPreferenceContainer k="showVisibilityColor">
+										<MkSwitch v-model="showVisibilityColor">
+											<template #label><SearchLabel>{{ i18n.ts.showVisibilityColor }}</SearchLabel></template>
+										</MkSwitch>
+									</MkPreferenceContainer>
+								</SearchMarker>
+								<div v-if="showVisibilityColor">
+									<MkColorInput v-if="showVisibilityColor" v-model="homeColor">
+										<template #label>{{ i18n.ts._visibility.home }}</template>
+									</MkColorInput>
+									<MkColorInput v-if="showVisibilityColor" v-model="followerColor">
+										<template #label>{{ i18n.ts._visibility.followers }}</template>
+									</MkColorInput>
+									<MkColorInput v-if="showVisibilityColor" v-model="specifiedColor">
+										<template #label>{{ i18n.ts._visibility.specified }}</template>
+									</MkColorInput>
+									<MkColorInput v-if="showVisibilityColor" v-model="localOnlyColor">
+										<template #label>{{ i18n.ts.localOnly }}</template>
+									</MkColorInput>
+								</div>
+
 								<SearchMarker :keywords="['hover', 'show', 'footer', 'action']">
 									<MkPreferenceContainer k="showNoteActionsOnlyHover">
 										<MkSwitch v-model="showNoteActionsOnlyHover">
@@ -815,6 +837,7 @@ import { instance } from '@/instance.js';
 import { ensureSignin } from '@/i.js';
 import { genId } from '@/utility/id.js';
 import { suggestReload } from '@/utility/reload-suggest.js';
+import MkColorInput from '@/components/MkColorInput.vue';
 
 const $i = ensureSignin();
 
@@ -880,6 +903,11 @@ const useNativeUiForVideoAudioPlayer = prefer.model('useNativeUiForVideoAudioPla
 const contextMenu = prefer.model('contextMenu');
 const menuStyle = prefer.model('menuStyle');
 const makeEveryTextElementsSelectable = prefer.model('makeEveryTextElementsSelectable');
+const showVisibilityColor = prefer.model('showVisibilityColor');
+const homeColor = prefer.model('homeColor');
+const followerColor = prefer.model('followerColor');
+const specifiedColor = prefer.model('specifiedColor');
+const localOnlyColor = prefer.model('localOnlyColor');
 
 const fontSize = ref(miLocalStorage.getItem('fontSize'));
 const useSystemFont = ref(miLocalStorage.getItem('useSystemFont') != null);
@@ -936,6 +964,7 @@ watch([
 	enablePullToRefresh,
 	reduceAnimation,
 	showAvailableReactionsFirstInNote,
+	showVisibilityColor,
 ], () => {
 	suggestReload();
 });
@@ -1010,7 +1039,6 @@ function enableAllDataSaver() {
 }
 
 function disableAllDataSaver() {
-
 	Object.keys(g).forEach((key) => { g[key] = false; });
 
 	dataSaver.value = g;

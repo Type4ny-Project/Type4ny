@@ -14,7 +14,7 @@ describe('.well-known', () => {
 
 	beforeAll(async () => {
 		alice = await signup({ username: 'alice' });
-		await api('admin/update-meta', { federation: 'all' }, alice as misskey.entities.SignupResponse);
+		// Federation setting removed - no longer needed
 	}, 1000 * 60 * 2);
 
 	test('nodeinfo', async () => {

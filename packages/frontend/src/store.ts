@@ -193,6 +193,10 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'device',
 		default: '#2b2c41',
 	},
+	showVisibilityColor: {
+		where: 'device',
+		default: false,
+	},
 	numberOfGamingSpeed: {
 		where: 'device',
 		default: 44,
