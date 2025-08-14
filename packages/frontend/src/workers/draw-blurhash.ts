@@ -18,5 +18,5 @@ onmessage = (event) => {
 
 	render(event.data.hash, canvas);
 	const bitmap = canvas.transferToImageBitmap();
-	self.postMessage({ id: event.data.id, bitmap }, [bitmap]);
+	(self as unknown as Worker).postMessage({ id: event.data.id, bitmap }, [bitmap]);
 };
