@@ -87,7 +87,7 @@ const rawUrl = computed(() => {
 const url = computed(() => {
 	if (rawUrl.value == null) return undefined;
 	const useOriginalSize = props.useOriginalSize;
-	const enableDataSaverMode = store.s.enableUltimateDataSaverMode;
+	const enableDataSaverMode = prefer.s.enableUltimateDataSaverMode;
 	let datasaver_result;
 	if (enableDataSaverMode) {
 		datasaver_result = useOriginalSize ? undefined : 'datasaver';

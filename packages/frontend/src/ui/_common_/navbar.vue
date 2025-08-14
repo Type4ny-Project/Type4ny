@@ -139,7 +139,7 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { openInstanceMenu } from './common.js';
 import * as os from '@/os';
 import { navbarItemDef } from '@/navbar.js';
-import { bannerDark, bannerLight, iconDark, iconLight, store } from '@/store.js';
+import { store } from '@/store.js';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { getHTMLElementOrNull } from '@/utility/get-dom-node-or-null.js';
@@ -147,6 +147,7 @@ import { useRouter } from '@/router.js';
 import { prefer } from '@/preferences.js';
 import { openAccountMenu as openAccountMenu_ } from '@/accounts.js';
 import { $i } from '@/i.js';
+const { bannerDark, bannerLight, iconDark, iconLight } = instance;
 
 // const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 
@@ -159,11 +160,11 @@ function hexToRgb(hex) {
 	return `${r},${g},${b}`;
 }
 
-document.documentElement.style.setProperty('--homeColor', hexToRgb(prefer.s.homeColor));
-document.documentElement.style.setProperty('--followerColor', hexToRgb(prefer.s.followerColor));
-document.documentElement.style.setProperty('--specifiedColor', hexToRgb(prefer.s.specifiedColor));
-document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.s.localOnlyColor));
-document.documentElement.style.setProperty('--gamingspeed', prefer.s.numberOfGamingSpeed + 's');
+window.document.documentElement.style.setProperty('--homeColor', hexToRgb(prefer.s.homeColor));
+window.document.documentElement.style.setProperty('--followerColor', hexToRgb(prefer.s.followerColor));
+window.document.documentElement.style.setProperty('--specifiedColor', hexToRgb(prefer.s.specifiedColor));
+window.document.documentElement.style.setProperty('--localOnlyColor', hexToRgb(prefer.s.localOnlyColor));
+window.document.documentElement.style.setProperty('--gamingspeed', prefer.s.numberOfGamingSpeed + 's');
 
 const router = useRouter();
 
@@ -180,24 +181,24 @@ const forceIconOnly = ref(!props.asDrawer && window.innerWidth <= 1279);
 const iconOnly = computed(() => {
 	return !props.asDrawer && (forceIconOnly.value || (store.r.menuDisplay.value === 'sideIcon'));
 });
-let bannerUrl = computed(store.makeGetterSetter('bannerUrl'));
+// let bannerUrl = computed(store.makeGetterSetter('bannerUrl'));
 let iconUrl = ref();
 let gamingType = computed(store.makeGetterSetter('gamingType'));
 
 const gamingMode = computed(store.makeGetterSetter('gamingMode'));
 const darkMode = computed(store.makeGetterSetter('darkMode'));
-const enablehanntenn = computed(store.makeGetterSetter('enablehanntenn'));
+// const enablehanntenn = computed(store.makeGetterSetter('enablehanntenn'));
 
-if (darkMode.value) {
-	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
-	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark);
-} else {
-	bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
-	iconUrl.value = (enablehanntenn.value ? iconDark : iconLight);
-}
+// if (darkMode.value) {
+// 	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
+// 	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark);
+// } else {
+// 	bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
+// 	iconUrl.value = (enablehanntenn.value ? iconDark : iconLight);
+// }
 
 if (!iconUrl.value) {
-	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
+	iconUrl.value = instance.iconUrl || '/favicon.ico';
 }
 
 if (darkMode.value && gamingMode.value) {
@@ -205,17 +206,17 @@ if (darkMode.value && gamingMode.value) {
 } else if (!darkMode.value && gamingMode.value) {
 	gamingType.value = 'light';
 } else {
-	gamingType.value = '';
+	gamingType.value = 'none';
 }
 
 watch([darkMode, gamingMode], () => {
-	if (darkMode.value) {
-		bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
-		iconUrl.value = enablehanntenn.value ? iconLight : iconDark;
-	} else {
-		bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
-		iconUrl.value = enablehanntenn.value ? iconDark : iconLight;
-	}
+	// if (darkMode.value) {
+	// 	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
+	// 	iconUrl.value = enablehanntenn.value ? iconLight : iconDark;
+	// } else {
+	// 	bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
+	// 	iconUrl.value = enablehanntenn.value ? iconDark : iconLight;
+	// }
 
 	if (darkMode.value && gamingMode.value) {
 		gamingType.value = 'dark';

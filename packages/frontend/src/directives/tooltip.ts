@@ -59,7 +59,12 @@ export default {
 				direction: binding.modifiers.left ? 'left' : binding.modifiers.right ? 'right' : binding.modifiers.top ? 'top' : binding.modifiers.bottom ? 'bottom' : 'top',
 				targetElement: el,
 			}, {
-				closed: () => dispose(),
+				closed: () => {
+					// Add safety check to prevent race conditions
+					if (self._close) {
+						dispose();
+					}
+				},
 			});
 
 			self._close = () => {

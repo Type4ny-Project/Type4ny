@@ -147,6 +147,7 @@ function leave(el: Element) {
 	if (CSS.supports('interpolate-size', 'allow-keywords')) return;
 	if (!(el instanceof HTMLElement)) return;
 
+	const elementHeight = el.getBoundingClientRect().height;
 	el.style.height = `${elementHeight}px`;
 	el.offsetHeight; // reflow
 	el.style.height = '0';
