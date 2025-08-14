@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: syuilo and misskey-project
+ * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
@@ -18,6 +18,7 @@ export const noteEvents = new EventEmitter<{
 	[ev: `reacted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; reaction: string; emoji?: { name: string; url: string; }; }) => void;
 	[ev: `unreacted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; reaction: string; emoji?: { name: string; url: string; }; }) => void;
 	[ev: `pollVoted:${string}`]: (ctx: { userId: Misskey.entities.User['id']; choice: string; }) => void;
+	[ev: `updated:${string}`]: (body: { cw: string | null; text: string; }) => void;
 }>();
 
 const fetchEvent = new EventEmitter<{
@@ -129,13 +130,6 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
-				console.log(note.value.myReactions);
-				if (!note.value.myReactions) {
-					note.value.myReactions = [];
-					note.value.myReactions.push(reaction);
-				} else if (!note.value.myReactions.includes(reaction)) {
-					note.value.myReactions.push(reaction);
-				}
 				break;
 			}
 
@@ -145,7 +139,6 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
-				note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
 				break;
 			}
 
@@ -154,6 +147,11 @@ function realtimeSubscribe(props: {
 					userId: body.userId,
 					choice: body.choice,
 				});
+				break;
+			}
+
+			case 'updated': {
+				noteEvents.emit(`updated:${id}`, body);
 				break;
 			}
 

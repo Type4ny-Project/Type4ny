@@ -1568,6 +1568,7 @@ async function canClose() {
 
 defineExpose({
 	clear,
+	canClose,
 });
 </script>
 

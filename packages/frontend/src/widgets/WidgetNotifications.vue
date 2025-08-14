@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { defineAsyncComponent } from 'vue';
-import type { notificationTypes as notificationTypes_typeReferenceOnly } from '@@/js/const.js';
+import { notificationTypes } from '@@/js/const.js';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
 import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
@@ -39,7 +39,7 @@ const widgetPropsDef = {
 	excludeTypes: {
 		type: 'array',
 		hidden: true,
-		default: [] as (typeof notificationTypes_typeReferenceOnly[number])[],
+		default: [] as (typeof notificationTypes[number])[],
 	},
 } satisfies FormWithDefault;
 

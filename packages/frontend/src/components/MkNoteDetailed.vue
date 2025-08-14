@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div
-	v-if="!muted && !isDeleted"
+	v-if="!muted && !isDeleted && appearNote"
 	ref="rootEl"
 	v-hotkey="keymap"
 	:class="$style.root"
@@ -143,6 +143,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:reactionEmojis="$appearNote.reactionEmojis"
 				:myReaction="$appearNote.myReaction"
 				:noteId="appearNote.id"
+				:note="appearNote"
 				:maxNumber="16"
 				@mockUpdateMyReaction="emitUpdReaction"
 			/>
@@ -367,7 +368,7 @@ const showTicker = (prefer.s.instanceTicker === 'always') || (prefer.s.instanceT
 const conversation = ref<Misskey.entities.Note[]>([]);
 const replies = ref<Misskey.entities.Note[]>([]);
 const mutedReactions = ref<string[]>(store.s.mutedReactions);
-const canRenote = computed(() => ['public', 'home'].includes(appearNote.value.visibility) || appearNote.value.userId === $i?.id);
+const canRenote = computed(() => appearNote && (['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i?.id));
 
 useGlobalEvent('noteDeleted', (noteId) => {
 	if (noteId === note.id || noteId === appearNote.id) {

@@ -254,6 +254,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:reactionEmojis="$appearNote.reactionEmojis"
 				:myReaction="$appearNote.myReaction"
 				:noteId="appearNote.id"
+				:note="appearNote"
 				:maxNumber="16"
 				@mockUpdateMyReaction="emitUpdReaction"
 			>
