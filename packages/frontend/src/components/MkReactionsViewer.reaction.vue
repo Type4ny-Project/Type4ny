@@ -12,17 +12,17 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		{
 			[$style.gamingDark]: gamingType === 'dark',
 			[$style.gamingLight]: gamingType === 'light',
-			[$style.reacted]: note.myReactions?.includes(reaction),
+			[$style.reacted]: isReacted,
 			[$style.canToggle]: canToggle,
-			[$style.small]: prefer.s.reactionsDisplaySize === 'small',
-			[$style.large]: prefer.s.reactionsDisplaySize === 'large',
+			[$style.small]: reactionsDisplaySize === 'small',
+			[$style.large]: reactionsDisplaySize === 'large',
 		},
 	]"
 	@click="toggleReaction()"
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		style="pointer-events: none;" :class="prefer.s.limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
+		style="pointer-events: none;" :class="limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
 	<span :class="[
 			$style.count,
 			{
@@ -58,6 +58,13 @@ import { mute as muteEmoji, unmute as unmuteEmoji, checkMuted as isEmojiMuted } 
 import { store } from '@/store.js';
 
 const gamingType = store.s.gamingType;
+
+// Computed properties to safely access prefer
+const reactionsDisplaySize = computed(() => prefer.s.reactionsDisplaySize);
+const limitWidthOfReaction = computed(() => prefer.s.limitWidthOfReaction);
+
+// Computed property to safely check if reacted
+const isReacted = computed(() => props.note?.myReactions?.includes(props.reaction) ?? false);
 
 const props = defineProps<{
 	noteId: Misskey.entities.Note['id'];
@@ -115,6 +122,7 @@ function getReactionName(reaction: string, formated = false) {
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
+	if (!props.note) return; // Guard against undefined note
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const oldReaction = props.note.myReactions?.includes(props.reaction)

@@ -191,22 +191,22 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<FormSection>
 			<div class="_formLinksGrid">
 				<FormLink to="/settings/theme/manage">
-				<template #icon><i class="ti ti-tool"></i></template>
-				{{ i18n.ts._theme.manage }}
-				<template #suffix>{{ themesCount }}</template>
-			</FormLink>
+					<template #icon><i class="ti ti-tool"></i></template>
+					{{ i18n.ts._theme.manage }}
+					<template #suffix>{{ themesCount }}</template>
+				</FormLink>
 				<FormLink to="https://assets.misskey.io/theme/list" external>
-				<template #icon><i class="ti ti-world"></i></template>
-				{{ i18n.ts._theme.explore }}
-			</FormLink>
+					<template #icon><i class="ti ti-world"></i></template>
+					{{ i18n.ts._theme.explore }}
+				</FormLink>
 				<FormLink to="/settings/theme/install">
-				<template #icon><i class="ti ti-download"></i></template>
-				{{ i18n.ts._theme.install }}
-			</FormLink>
+					<template #icon><i class="ti ti-download"></i></template>
+					{{ i18n.ts._theme.install }}
+				</FormLink>
 				<FormLink to="/theme-editor">
-				<template #icon><i class="ti ti-paint"></i></template>
-				{{ i18n.ts._theme.make }}
-			</FormLink>
+					<template #icon><i class="ti ti-paint"></i></template>
+					{{ i18n.ts._theme.make }}
+				</FormLink>
 			</div>
 		</FormSection>
 	</div>
@@ -218,8 +218,8 @@ import { computed, ref, watch } from 'vue';
 import JSON5 from 'json5';
 import defaultLightTheme from '@@/themes/l-light.json5';
 import defaultDarkTheme from '@@/themes/d-green-lime.json5';
-import type { Theme } from '@/theme.js';
 import { isSafeMode } from '@@/js/config.js';
+import type { Theme } from '@/theme.js';
 import * as os from '@/os.js';
 import MkSwitch from '@/components/MkSwitch.vue';
 import FormSection from '@/components/form/section.vue';
@@ -229,7 +229,7 @@ import MkThemePreview from '@/components/MkThemePreview.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import { getBuiltinThemesRef, getThemesRef, removeTheme } from '@/theme.js';
 import { isDeviceDarkmode } from '@/utility/is-device-darkmode.js';
-import { store, bannerDark, bannerLight, iconDark, iconLight } from '@/store.js';
+import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { uniqueBy } from '@/utility/array.js';
@@ -277,18 +277,18 @@ const lightThemeId = computed({
 
 const syncDeviceDarkMode = prefer.model('syncDeviceDarkMode');
 const themesCount = installedThemes.value.length;
-watch(darkMode, () => {
-	if (darkMode.value) {
-		prefer.set('bannerUrl', bannerDark);
-		prefer.set('iconUrl', iconDark);
-	} else if (!darkMode.value) {
-		prefer.set('bannerUrl', bannerLight);
-		prefer.set('iconUrl', iconLight);
-	} else {
-		prefer.set('bannerUrl', bannerDark);
-		prefer.set('iconUrl', iconDark);
-	}
-});
+// watch(darkMode, () => {
+// 	if (darkMode.value) {
+// 		prefer.set('bannerUrl', bannerDark);
+// 		prefer.set('iconUrl', iconDark);
+// 	} else if (!darkMode.value) {
+// 		prefer.set('bannerUrl', bannerLight);
+// 		prefer.set('iconUrl', iconLight);
+// 	} else {
+// 		prefer.set('bannerUrl', bannerDark);
+// 		prefer.set('iconUrl', iconDark);
+// 	}
+// });
 
 watch(syncDeviceDarkMode, () => {
 	if (syncDeviceDarkMode.value) {

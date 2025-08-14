@@ -124,6 +124,7 @@ const props = withDefaults(defineProps<{
 const viewId = genId();
 const root = useTemplateRef('root');
 const img = useTemplateRef('img');
+const canvas = useTemplateRef('canvas');
 const loaded = ref(false);
 const canvasWidth = ref(64);
 const canvasHeight = ref(64);
@@ -182,6 +183,7 @@ function drawAvg() {
 
 	const color = (props.hash != null && extractAvgColorFromBlurhash(props.hash)) || '#888';
 
+	const ctx = canvas.value.getContext('2d');
 	if (!ctx) return;
 
 	// avgColorでお茶をにごす

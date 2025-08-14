@@ -206,14 +206,15 @@ const align = () => {
 		top = y + props.anchorElement.offsetHeight;
 	}
 
+	// Calculate spaces regardless of fixed position
+	const underSpace = ((window.innerHeight - SCROLLBAR_THICKNESS) - MARGIN) - top;
+	const upperSpace = (anchorRect.top - MARGIN);
+
 	if (fixed.value) {
 		// 画面から横にはみ出る場合
 		if (left + width > (window.innerWidth - SCROLLBAR_THICKNESS)) {
 			left = (window.innerWidth - SCROLLBAR_THICKNESS) - width;
 		}
-
-		const underSpace = ((window.innerHeight - SCROLLBAR_THICKNESS) - MARGIN) - top;
-		const upperSpace = (anchorRect.top - MARGIN);
 
 		// 画面から縦にはみ出る場合
 		if (top + height > ((window.innerHeight - SCROLLBAR_THICKNESS) - MARGIN)) {

@@ -45,7 +45,7 @@ import { lookupUser, lookupUserByEmail, lookupFile } from '@/utility/admin-looku
 import { definePage, provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
 import { useRouter } from '@/router.js';
 import { genSearchIndexes } from '@/utility/inapp-search.js';
-import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store.js';
+import { store } from '@/store.js';
 const searchIndex = await import('search-index:admin').then(({ searchIndexes }) => genSearchIndexes(searchIndexes));
 
 const isEmpty = (x: string | null) => x == null || x === '';
@@ -74,21 +74,21 @@ const thereIsUnresolvedAbuseReport = ref(false);
 const currentPage = computed(() => router.currentRef.value.child);
 const darkMode = computed(store.makeGetterSetter('darkMode'));
 let iconUrl = ref();
-if (darkMode.value) {
-	iconUrl.value = iconDark;
-} else {
-	iconUrl.value = iconLight;
-}
-watch(darkMode, () => {
-	if (darkMode.value) {
-		iconUrl.value = iconDark;
-	} else {
-		iconUrl.value = iconLight;
-	}
-	if (!iconUrl.value) {
-		iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
-	}
-});
+// if (darkMode.value) {
+// 	iconUrl.value = iconDark;
+// } else {
+// 	iconUrl.value = iconLight;
+// }
+// watch(darkMode, () => {
+// 	if (darkMode.value) {
+// 		iconUrl.value = iconDark;
+// 	} else {
+// 		iconUrl.value = iconLight;
+// 	}
+// 	if (!iconUrl.value) {
+// 		iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
+// 	}
+// });
 
 misskeyApi('admin/abuse-user-reports', {
 	state: 'unresolved',

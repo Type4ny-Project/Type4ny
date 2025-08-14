@@ -139,10 +139,6 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { chooseDriveFile } from '@/utility/drive.js';
 import {
 	store,
-	bannerDark,
-	bannerLight,
-	iconDark,
-	iconLight,
 } from '@/store.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { i18n } from '@/i18n.js';
@@ -602,6 +598,20 @@ function focus() {
 		textareaEl.value.focus();
 		textareaEl.value.setSelectionRange(textareaEl.value.value.length, textareaEl.value.value.length);
 	}
+}
+
+function chooseFileFrom(ev: MouseEvent) {
+	if (props.mock) return;
+	
+	os.popupMenu([{
+		text: i18n.ts.upload,
+		icon: 'ti ti-upload',
+		action: () => chooseFileFromPc(ev),
+	}, {
+		text: i18n.ts.fromDrive,
+		icon: 'ti ti-cloud',
+		action: () => chooseFileFromDrive(ev),
+	}], ev.currentTarget as HTMLElement | null);
 }
 
 function chooseFileFromPc(ev: MouseEvent) {
@@ -1136,8 +1146,9 @@ async function post(ev?: MouseEvent) {
 		noteId: props.updateMode ? props.initialNote?.id : undefined,
 	};
 
+	let hashtags_ = '';
 	if (withHashtags.value && hashtags.value && hashtags.value.trim() !== '') {
-		const hashtags_ = hashtags.value.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
+		hashtags_ = hashtags.value.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
 		if (!postData.text) {
 			postData.text = hashtags_;
 		} else {

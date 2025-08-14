@@ -9,8 +9,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkTip v-if="isBasicTimeline(src)" :k="`tl.${src}`" style="margin-bottom: var(--MI-margin);">
 			{{ i18n.ts._timelineDescription[src] }}
 		</MkTip>
-		<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo"  class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
-				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
+		<MkPostForm v-if="prefer.r.showFixedPostForm.value" :class="$style.postForm && ui !== 'twilike'" :channel="channelInfo" class="post-form _panel" fixed style="margin-bottom: var(--MI-margin);"/>
+		<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :class="$style.postForm" class="_panel" fixed style="margin-bottom: var(--MI-margin);"/>
 		<MkStreamingNotesTimeline
 			ref="tlComponent"
 			:key="src + withRenotes + withReplies + onlyFiles + withSensitive"
@@ -18,8 +18,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 			:src="src.split(':')[0]"
 			:list="src.split(':')[1]"
 			:channel="src.split(':')[1]"
-						:antenna="src.split(':')[1]"
-					:withRenotes="withRenotes"
+			:antenna="src.split(':')[1]"
+			:withRenotes="withRenotes"
 			:withReplies="withReplies"
 			:withSensitive="withSensitive"
 			:onlyFiles="onlyFiles" :withCw="withCw"
@@ -46,12 +46,8 @@ import { antennasCache, userFavoriteListsCache, userListsCache, favoritedChannel
 import { deviceKind } from '@/utility/device-kind.js';
 import { deepMerge } from '@/utility/merge.js';
 import { miLocalStorage } from '@/local-storage.js';
-import { timelineHeaderItemDef } from '@/timeline-header.js';
 import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';
 import { prefer } from '@/preferences.js';
-import { useRouter } from '@/router.js';
-import { useScrollPositionKeeper } from '@/use/use-scroll-position-keeper.js';
-import { useScrollPositionManager } from '@/lib/nirax.js';
 import { ui } from '@@/js/config.js';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
 
@@ -237,10 +233,10 @@ const headerActions = computed(() => {
 				text: i18n.ts.showRenotes,
 				ref: withRenotes,
 			}, {
-					type: 'switch',
-					text: i18n.ts.showCw,
-					ref: withCw,
-				});
+				type: 'switch',
+				text: i18n.ts.showCw,
+				ref: withCw,
+			});
 
 			if (isBasicTimeline(src.value) && hasWithReplies(src.value)) {
 				menuItems.push({

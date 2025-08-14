@@ -8,7 +8,7 @@ import { promises as fsp } from 'fs';
 
 import locales from '../../locales/index.js';
 import meta from '../../package.json';
-import packageInfo from './package.json' with { type: 'json' };
+import packageInfo from './package.json';
 import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name.js';
 import pluginJson5 from './vite.json5.js';
 import pluginCreateSearchIndex from './lib/vite-plugin-create-search-index.js';
@@ -152,6 +152,7 @@ export function getConfig(): UserConfig {
 			},
 			preprocessorOptions: {
 				scss: {
+					// @ts-ignore - api option is not in type definition but valid for sass
 					api: 'modern-compiler',
 				},
 			},

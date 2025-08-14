@@ -20,36 +20,36 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { ref } from 'vue';
+import { host } from '@@/js/config';
 import { useWidgetPropsManager } from './widget.js';
 import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
 import type { FormWithDefault, GetFormResultType } from '@/utility/form';
-import { host } from '@@/js/config';
 import { instance } from '@/instance';
-import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store';
+import { store } from '@/store';
 
 const name = 'instanceInfo';
-let bannerUrl = ref(store.state.bannerUrl);
-let iconUrl = ref(store.state.iconUrl);
-const darkMode = computed(store.makeGetterSetter('darkMode'));
-if (darkMode.value) {
-	bannerUrl.value = bannerDark;
-	iconUrl.value = iconDark;
-} else {
-	bannerUrl.value = bannerLight;
-	iconUrl.value = iconLight;
-}
-watch(darkMode, () => {
-	if (darkMode.value) {
-		bannerUrl.value = bannerDark;
-		iconUrl.value = iconDark;
-	} else {
-		bannerUrl.value = bannerLight;
-		iconUrl.value = iconLight;
-	}
-});
+let bannerUrl = ref('TODO');
+let iconUrl = ref('TODO');
+// const darkMode = computed(store.makeGetterSetter('darkMode'));
+// if (darkMode.value) {
+// 	bannerUrl.value = bannerDark;
+// 	iconUrl.value = iconDark;
+// } else {
+// 	bannerUrl.value = bannerLight;
+// 	iconUrl.value = iconLight;
+// }
+// watch(darkMode, () => {
+// 	if (darkMode.value) {
+// 		bannerUrl.value = bannerDark;
+// 		iconUrl.value = iconDark;
+// 	} else {
+// 		bannerUrl.value = bannerLight;
+// 		iconUrl.value = iconLight;
+// 	}
+// });
 if (!iconUrl.value) {
-	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
+	iconUrl.value = instance.iconUrl || '/favicon.ico';
 }
 const widgetPropsDef = {
 } satisfies FormWithDefault;

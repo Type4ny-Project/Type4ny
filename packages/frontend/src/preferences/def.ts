@@ -15,6 +15,7 @@ import type { WatermarkPreset } from '@/utility/watermark.js';
 import { genId } from '@/utility/id.js';
 import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
 import { deepEqual } from '@/utility/deep-equal.js';
+import { instance } from '@/instance';
 
 /** サウンド設定 */
 export type SoundStore = {
@@ -204,6 +205,24 @@ export const PREF_DEF = definePreferences({
 	animatedMfm: {
 		default: !window.matchMedia('(prefers-reduced-motion)').matches,
 	},
+	specifiedColor: {
+		default: '#FFFF64',
+	},
+	followerColor: {
+		default: '#FF00FF',
+	},
+	homeColor: {
+		default: '#00FFFF',
+	},
+	localOnlyColor: {
+		default: '#2b2c41',
+	},
+	numberOfGamingSpeed: {
+		default: 44,
+	},
+	enablehanntenn: {
+		default: false,
+	},
 	advancedMfm: {
 		default: true,
 	},
@@ -221,6 +240,9 @@ export const PREF_DEF = definePreferences({
 	},
 	disableShowingAnimatedImages: {
 		default: window.matchMedia('(prefers-reduced-motion)').matches,
+	},
+	enableUltimateDataSaverMode: {
+		default: false,
 	},
 	emojiStyle: {
 		default: 'twemoji', // twemoji / fluentEmoji / native

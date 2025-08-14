@@ -16,9 +16,7 @@ import { miLocalStorage } from '@/local-storage.js';
 import { Pizzax } from '@/lib/pizzax.js';
 import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/utility/get-timeline-available.js';
-import { instance } from '@/instance.js';
 
-export const { bannerDark, bannerLight, iconDark, iconLight } = instance;
 /**
  * 「状態」を管理するストア(not「設定」)
  */
@@ -149,6 +147,10 @@ export const store = markRaw(new Pizzax('base', {
 		default: 1,
 	},
 	darkMode: {
+		where: 'device',
+		default: false,
+	},
+	gamingMode: {
 		where: 'device',
 		default: false,
 	},

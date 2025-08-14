@@ -31,7 +31,6 @@ const XOverview = defineAsyncComponent(() => import('@/pages/about.overview.vue'
 const XEmojis = defineAsyncComponent(() => import('@/pages/about.emojis.vue'));
 const XFederation = defineAsyncComponent(() => import('@/pages/about.federation.vue'));
 const MkInstanceStats = defineAsyncComponent(() => import('@/components/MkInstanceStats.vue'));
-import { bannerDark, bannerLight, store, iconDark, iconLight } from '@/store.js';
 
 const props = withDefaults(defineProps<{
 	initialTab?: string;
