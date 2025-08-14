@@ -16,7 +16,9 @@ import { miLocalStorage } from '@/local-storage.js';
 import { Pizzax } from '@/lib/pizzax.js';
 import { DEFAULT_DEVICE_KIND } from '@/utility/device-kind.js';
 import { isGlobalTimelineAvailable, isLocalTimelineAvailable } from '@/utility/get-timeline-available.js';
+import { instance } from '@/instance.js';
 
+export const { bannerDark, bannerLight, iconDark, iconLight } = instance;
 /**
  * 「状態」を管理するストア(not「設定」)
  */
@@ -150,10 +152,6 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'device',
 		default: false,
 	},
-	gamingMode: {
-		where: 'device',
-		default: false,
-	},
 	realtimeMode: {
 		where: 'device',
 		default: true,
@@ -176,30 +174,6 @@ export const store = markRaw(new Pizzax('base', {
 			'antennas',
 			'channels',
 		] as TimelineHeaderItem[],
-	},
-	specifiedColor: {
-		where: 'device',
-		default: '#FFFF64',
-	},
-	followerColor: {
-		where: 'device',
-		default: '#FF00FF',
-	},
-	homeColor: {
-		where: 'device',
-		default: '#00FFFF',
-	},
-	localOnlyColor: {
-		where: 'device',
-		default: '#2b2c41',
-	},
-	showVisibilityColor: {
-		where: 'device',
-		default: false,
-	},
-	numberOfGamingSpeed: {
-		where: 'device',
-		default: 44,
 	},
 	menuDisplay: {
 		where: 'device',
@@ -578,10 +552,6 @@ export const store = markRaw(new Pizzax('base', {
 	reactionAndServerMute: {
 		where: 'account',
 		default: false as boolean,
-	},
-	mutedReactions: {
-		where: 'account',
-		default: [] as string[],
 	},
 	//#endregion
 }));

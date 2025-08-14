@@ -372,8 +372,6 @@ async function onUpdateButtonClicked() {
 }
 
 async function onDeleteButtonClicked() {
-	const _items = gridItems.value;
-	const _originItems = originGridItems.value;
 	if (_items.length !== _originItems.length) {
 		throw new Error('The number of items has been changed. Please refresh the page and try again.');
 	}
@@ -479,7 +477,7 @@ async function refreshCustomEmojis() {
 		currentPage.value = 1;
 	}
 
-	const result = await loadingHandler.scope(() => misskeyApi('v2/admin/emoji/list', {
+	const result = await misskeyApi('admin/emoji/list', cleanObj({
 		query: query,
 		limit: limit,
 		page: currentPage.value,

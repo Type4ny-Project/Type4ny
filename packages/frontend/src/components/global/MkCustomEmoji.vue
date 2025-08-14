@@ -65,7 +65,7 @@ const props = defineProps<{
 	ignoreMuted?: boolean;
 }>();
 
-const react = inject(DI.mfmEmojiReactCallback, undefined);
+const react = inject(DI.mfmEmojiReactCallback);
 
 const customEmojiName = computed(() => (props.name[0] === ':' ? props.name.substring(1, props.name.length - 1) : props.name).replace('@.', ''));
 const isLocal = computed(() => !props.host && (customEmojiName.value.endsWith('@.') || !customEmojiName.value.includes('@')));
@@ -87,7 +87,7 @@ const rawUrl = computed(() => {
 const url = computed(() => {
 	if (rawUrl.value == null) return undefined;
 	const useOriginalSize = props.useOriginalSize;
-	const enableDataSaverMode = prefer.s.enableUltimateDataSaverMode;
+	const enableDataSaverMode = store.s.enableUltimateDataSaverMode;
 	let datasaver_result;
 	if (enableDataSaverMode) {
 		datasaver_result = useOriginalSize ? undefined : 'datasaver';

@@ -511,7 +511,7 @@ export class QueueProcessorService implements OnApplicationShutdown {
 
 		//#region schedule note post
 		this.schedulerNotePostQueueWorker = new Bull.Worker(QUEUE.SCHEDULE_NOTE_POST, (job) => this.scheduleNotePostProcessorService.process(job), {
-			...baseQueueOptions(this.config, QUEUE.SCHEDULE_NOTE_POST),
+			...baseWorkerOptions(this.config, QUEUE.SCHEDULE_NOTE_POST),
 			autorun: false,
 		});
 		//#endregion

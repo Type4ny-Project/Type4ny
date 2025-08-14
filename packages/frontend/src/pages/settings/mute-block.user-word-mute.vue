@@ -4,46 +4,48 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-	<div class="_gaps_m">
-		<MkButton rounded primary style="margin: 0 auto" @click="addUser()">{{
+<div class="_gaps_m">
+	<MkButton rounded primary style="margin: 0 auto" @click="addUser()">
+		{{
 			i18n.ts.addUser
-		}}</MkButton>
+		}}
+	</MkButton>
 
-		<div v-for="(userAndWords , index) in mutedUserWords" class="_gaps">
-			<div :class="$style.flex">
-				<button class="_button" @click="unUserMute(index)"><i class="ti ti-x"></i></button>
-				<MkUserCardMini :style="{flexGrow: 1}"  :user="userAndWords.user" :withChart="false" />
-			</div>
-
-			<MkTextarea v-model="userAndWords.words" />
+	<div v-for="(userAndWords , index) in mutedUserWords" class="_gaps">
+		<div :class="$style.flex">
+			<button class="_button" @click="unUserMute(index)"><i class="ti ti-x"></i></button>
+			<MkUserCardMini :style="{flexGrow: 1}" :user="userAndWords.user" :withChart="false"/>
 		</div>
-		<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton
-		>
+
+		<MkTextarea v-model="userAndWords.words"/>
 	</div>
+	<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
+</div>
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref, watch } from "vue";
-import MkTextarea from "@/components/MkTextarea.vue";
-import MkButton from "@/components/MkButton.vue";
-import * as os from "@/os.js";
-import { i18n } from "@/i18n.js";
-import { misskeyApi } from "@/scripts/misskey-api.js";
-import * as Misskey from "misskey-js";
-import MkUserCardMini from "@/components/MkUserCardMini.vue";
-import { watchEffect } from "@vue/runtime-core";
+import { ref, watch } from 'vue';
+import type { Ref } from 'vue';
+import * as Misskey from 'misskey-js';
+import { watchEffect } from 'vue';
+import MkTextarea from '@/components/MkTextarea.vue';
+import MkButton from '@/components/MkButton.vue';
+import * as os from '@/os.js';
+import { i18n } from '@/i18n.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import MkUserCardMini from '@/components/MkUserCardMini.vue';
 
 const props = defineProps<{
-	muted: { user: userType; words: string }[];
+	muted: { user: UserType; words: string }[];
 }>();
 
 const emit = defineEmits<{
-	(ev: "save", value: { user: userType; words: string }[]): void;
+	(ev: 'save', value: { user: UserType; words: string }[]): void;
 }>();
 
 const changed = ref(false);
 
-type userType = {
+type UserType = {
 	id: string;
 	avatarBlurhash: string;
 	avatarDecorations: string;
@@ -53,9 +55,11 @@ type userType = {
 	username: string;
 	host: string;
 };
+
 function unUserMute(index: number) {
 	mutedUserWords.value.splice(index, 1);
 }
+
 const renderWord = (mutedWords) => mutedWords.map(x => {
 	if (Array.isArray(x)) {
 		return x.join(' ');
@@ -63,7 +67,7 @@ const renderWord = (mutedWords) => mutedWords.map(x => {
 		return x;
 	}
 }).join('\n');
-const render = (mutedWords: { user: userType; words: string }[]): { user: userType; words: string }[] =>
+const render = (mutedWords: { user: UserType; words: string }[]): { user: UserType; words: string }[] =>
 	mutedWords.map((x) => {
 		return {
 			user: {
@@ -80,14 +84,14 @@ const render = (mutedWords: { user: userType; words: string }[]): { user: userTy
 		};
 	});
 
-const mutedUserWords = ref<{ user: userType; words: string }[]>(props.muted ? render(props.muted) : []);
+const mutedUserWords = ref<{ user: UserType; words: string }[]>(props.muted ? render(props.muted) : []);
 
 watch(
 	() => mutedUserWords.value.map((userAndWords) => userAndWords.words),
 	() => {
 		changed.value = true;
 	},
-	{ deep: true }
+	{ deep: true },
 );
 
 const save = () => {
@@ -136,14 +140,14 @@ const save = () => {
 			words: parseMutes(x.words),
 		};
 	});
-	emit("save", parsed);
+	emit('save', parsed);
 	changed.value = false;
 };
 
 function addUser() {
 	os.selectUser().then((user) => {
 		if (mutedUserWords.value.find((x) => x.user.id === user.id)) return;
-		mutedUserWords.value.push({ user: user, words: "" });
+		mutedUserWords.value.push({ user: user, words: '' });
 	});
 }
 </script>

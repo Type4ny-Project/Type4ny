@@ -1,9 +1,9 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: syuilo and misskey-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { computed, reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { i18n } from '@/i18n.js';
 import {
 	antennasCache,
@@ -12,9 +12,8 @@ import {
 	userFavoriteListsCache,
 	userListsCache,
 } from '@/cache.js';
-import { isLocalTimelineAvailable, isGlobalTimelineAvailable } from '@/scripts/get-timeline-available.js';
-import { defaultStore } from '@/store.js';
-import { $i } from '@/account.js';
+import { isLocalTimelineAvailable, isGlobalTimelineAvailable } from '@/utility/get-timeline-available.js';
+import { $i } from '@/i.js';
 
 export type TimelineHeaderItem =
 	'home' |
@@ -34,7 +33,7 @@ type TimelineHeaderItemsDef = {
 	title: string;
 	icon: string;
 	iconOnly?: boolean; // わからん
-}
+};
 
 const lists = await userListsCache.fetch();
 const userChannels = await userChannelsCache.fetch();
@@ -48,7 +47,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		icon: 'ti ti-home',
 		iconOnly: true,
 	},
-	...(isLocalTimelineAvailable ? {
+	...(isLocalTimelineAvailable() ? {
 		local: {
 			title: i18n.ts._timelines.local,
 			icon: 'ti ti-planet',
@@ -64,7 +63,7 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 			icon: 'ti ti-photo',
 			iconOnly: true,
 		} } : {}),
-	...(isGlobalTimelineAvailable ? { global: {
+	...(isGlobalTimelineAvailable() ? { global: {
 		title: i18n.ts._timelines.global,
 		icon: 'ti ti-whirl',
 		iconOnly: true,
@@ -124,14 +123,5 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		};
 		return acc;
 	}, {}),
-	...defaultStore.reactiveState.remoteLocalTimeline.value.reduce((acc, t : {host:string; name:string;}) => {
-		acc['remoteLocalTimeline:' + t.host.replace('https://', '')] = {
-			title: t.name,
-			icon: 'ti ti-star',
-			iconOnly: true,
-		};
-		return acc;
-	}, {}),
-
 });
 

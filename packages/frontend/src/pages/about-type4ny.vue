@@ -142,7 +142,7 @@ import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { store } from '@/store.js';
 import * as os from '@/os.js';
-import { definePage } from '@/page.js';
+import { definePage } from '@/utility/page-metadata.js';
 import { claimAchievement, claimedAchievements } from '@/utility/achievements.js';
 import { $i } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';

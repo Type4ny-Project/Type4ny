@@ -139,6 +139,10 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { chooseDriveFile } from '@/utility/drive.js';
 import {
 	store,
+	bannerDark,
+	bannerLight,
+	iconDark,
+	iconLight,
 } from '@/store.js';
 import MkInfo from '@/components/MkInfo.vue';
 import { i18n } from '@/i18n.js';
@@ -542,7 +546,6 @@ function watchForDraft() {
 
 function checkMissingMention() {
 	if (visibility.value === 'specified') {
-		const ast = mfm.parse(text.value);
 		for (const x of extractMentions(ast)) {
 			if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 				hasNotSpecifiedMentions.value = true;
@@ -554,7 +557,6 @@ function checkMissingMention() {
 }
 
 function addMissingMention() {
-	const ast = mfm.parse(text.value);
 	for (const x of extractMentions(ast)) {
 		if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 			misskeyApi('users/show', { username: x.username, host: x.host }).then(user => {
@@ -602,20 +604,6 @@ function focus() {
 	}
 }
 
-function chooseFileFrom(ev: MouseEvent) {
-	if (props.mock) return;
-	
-	os.popupMenu([{
-		text: i18n.ts.upload,
-		icon: 'ti ti-upload',
-		action: () => chooseFileFromPc(ev),
-	}, {
-		text: i18n.ts.fromDrive,
-		icon: 'ti ti-cloud',
-		action: () => chooseFileFromDrive(ev),
-	}], ev.currentTarget as HTMLElement | null);
-}
-
 function chooseFileFromPc(ev: MouseEvent) {
 	if (props.mock) return; os.chooseFileFromPc({ multiple: true }).then(files => {
 		if (files.length === 0) return;
@@ -653,7 +641,9 @@ function replaceFile(file: Misskey.entities.DriveFile, newFile: Misskey.entities
 function upload(file: File, name?: string): void {
 	if (props.mock) return;
 
-	uploader.uploadFile(file, prefer.s.uploadFolder, name);
+	uploadFile(file, prefer.s.uploadFolder, name).then(res => {
+		files.value.push(res);
+	});
 }
 
 function setVisibility() {
@@ -879,7 +869,6 @@ async function onPaste(ev: ClipboardEvent) {
 			}
 
 			const fileName = formatTimeString(new Date(), pastedFileName).replace(/{{number}}/g, '0');
-			const file = new File([paste], fileName, { type: 'text/plain' });
 			uploader.addFiles([file]);
 		});
 	}
@@ -988,7 +977,7 @@ function chooseDraft() {
 				if (canceled) return;
 			}
 
-			applyDraft(res);
+			applyDraft(draft);
 		},
 	}, 'closed');
 }
@@ -1147,9 +1136,8 @@ async function post(ev?: MouseEvent) {
 		noteId: props.updateMode ? props.initialNote?.id : undefined,
 	};
 
-	let hashtags_ = '';
 	if (withHashtags.value && hashtags.value && hashtags.value.trim() !== '') {
-		hashtags_ = hashtags.value.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
+		const hashtags_ = hashtags.value.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
 		if (!postData.text) {
 			postData.text = hashtags_;
 		} else {
@@ -1569,7 +1557,6 @@ async function canClose() {
 
 defineExpose({
 	clear,
-	canClose,
 });
 </script>
 

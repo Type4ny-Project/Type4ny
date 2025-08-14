@@ -1,5 +1,6 @@
-<!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+﻿<!--
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -110,6 +111,8 @@ import { popups } from '@/os.js';
 import { unisonReload } from '@/utility/unison-reload.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { pendingApiRequestsCount } from '@/utility/misskey-api.js';
+import { filterMutedNotification } from '@/utility/filter-muted-notification.js';
+import { uploads } from '@/utility/upload.js';
 import * as sound from '@/utility/sound.js';
 import { $i } from '@/i.js';
 import { useStream } from '@/stream.js';
@@ -137,6 +140,8 @@ function onNotification(notification: Misskey.entities.Notification, isClient = 
 				useStream().send('readNotification');
 			}
 		}
+
+		if (!filterMutedNotification(notification)) return;
 
 		notifications.value.unshift(notification);
 		window.setTimeout(() => {

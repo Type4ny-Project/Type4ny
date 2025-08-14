@@ -138,7 +138,6 @@ var cursor = 0
 		let r = Math:rnd(0, (length - 1))
 		chars.push(string.pick(r))
 	}
-	let result = chars.join("")
 
 	results.push(result)
 
@@ -148,13 +147,11 @@ var cursor = 0
 
 @back() {
 	cursor = cursor + 1
-	let result = results[results.len - (cursor + 1)]
 	render(result)
 }
 
 @forward() {
 	cursor = cursor - 1
-	let result = results[results.len - (cursor + 1)]
 	render(result)
 }
 
@@ -195,7 +192,6 @@ main()
 `;
 
 const PRESET_QUIZ = `/// @ ${AISCRIPT_VERSION}
-let title = '地理クイズ'
 
 let qas = [{
 	q: 'オーストラリアの首都は？'
@@ -277,7 +273,6 @@ each (let qa, qas) {
 		})
 	}
 
-	let result = \`{title}の結果は{qas.len}問中{score}問正解でした。\`
 	Ui:get('footer').update({
 		children: [
 			Ui:C:postFormButton({
@@ -331,7 +326,6 @@ const PRESET_TIMELINE = `/// @ ${AISCRIPT_VERSION}
 		// リノートもしくはメディア・投票のみで本文が無いノートに代替表示文を設定
 		let noteText = if Core:type(note.text) == "str" note.text else "（リノートもしくはメディア・投票のみのノート）"
 
-		let el = Ui:C:container({
 			bgColor: "#444"
 			fgColor: "#fff"
 			padding: 10

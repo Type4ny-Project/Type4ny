@@ -129,6 +129,13 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
+				console.log(note.value.myReactions);
+				if (!note.value.myReactions) {
+					note.value.myReactions = [];
+					note.value.myReactions.push(reaction);
+				} else if (!note.value.myReactions.includes(reaction)) {
+					note.value.myReactions.push(reaction);
+				}
 				break;
 			}
 
@@ -138,6 +145,7 @@ function realtimeSubscribe(props: {
 					reaction: body.reaction,
 					emoji: body.emoji,
 				});
+				note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
 				break;
 			}
 

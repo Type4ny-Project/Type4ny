@@ -476,3 +476,25 @@ export class Nirax<DEF extends RouteDef[]> extends EventEmitter<RouterEvents> {
 		});
 	}
 }
+
+export function useScrollPositionManager(getScrollContainer?: () => HTMLElement | null, router?: any) {
+	const scrollPositions = new Map<string, number>();
+	
+	return {
+		save: (path: string) => {
+			const container = getScrollContainer ? getScrollContainer() : document.documentElement;
+			if (container) {
+				scrollPositions.set(path, container.scrollTop);
+			}
+		},
+		restore: (path: string) => {
+			const position = scrollPositions.get(path);
+			if (position !== undefined) {
+				const container = getScrollContainer ? getScrollContainer() : document.documentElement;
+				if (container) {
+					container.scrollTop = position;
+				}
+			}
+		}
+	};
+}

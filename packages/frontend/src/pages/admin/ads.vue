@@ -210,8 +210,6 @@ function more() {
 	misskeyApi('admin/ad/list', { untilId: ads.value.reduce((acc, ad) => ad.id != null ? ad : acc).id, publishing: publishing }).then(adsResponse => {
 		if (adsResponse == null) return;
 		ads.value = ads.value.concat(adsResponse.map(r => {
-			const exdate = new Date(r.expiresAt);
-			const stdate = new Date(r.startsAt);
 			exdate.setMilliseconds(exdate.getMilliseconds() - localTimeDiff);
 			stdate.setMilliseconds(stdate.getMilliseconds() - localTimeDiff);
 			return {
@@ -227,8 +225,6 @@ function refresh() {
 	misskeyApi('admin/ad/list', { publishing: publishing }).then(adsResponse => {
 		if (adsResponse == null) return;
 		ads.value = adsResponse.map(r => {
-			const exdate = new Date(r.expiresAt);
-			const stdate = new Date(r.startsAt);
 			exdate.setMilliseconds(exdate.getMilliseconds() - localTimeDiff);
 			stdate.setMilliseconds(stdate.getMilliseconds() - localTimeDiff);
 			return {

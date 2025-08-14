@@ -127,15 +127,8 @@ const graduationsMajor = computed(() => {
 	}
 	return angles;
 });
-const texts = computed(() => {
-	const angles: number[] = [];
-	const times = props.twentyfour ? 24 : 12;
-	for (let i = 0; i < times; i++) {
-		const angle = Math.PI * i / (times / 2);
-		angles.push(angle);
-	}
-	return angles;
-});
+
+const texts = graduationsMajor;
 
 let enabled = true;
 const majorGraduationColor = ref<string>();

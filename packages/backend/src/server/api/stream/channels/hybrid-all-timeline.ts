@@ -82,7 +82,8 @@ class HybridAllTimelineChannel extends Channel {
 		// そのためレコードが存在するかのチェックでは不十分なので、改めてcheckWordMuteを呼んでいる
 		if (this.userProfile && await checkWordMute(note, this.user, this.userProfile.mutedWords)) return;
 
-		this.connection.cacheNote(note);
+		// Note: cacheNote method doesn't exist on Connection
+		// this.connection.cacheNote(note);
 
 		this.send('note', note);
 	}

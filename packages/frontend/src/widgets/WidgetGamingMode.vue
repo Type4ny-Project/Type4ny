@@ -5,18 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div>
-  <MkSwitch v-model="enableGamingMode">{{ i18n.ts.gamingMode }} <template #caption>{{ i18n.ts.gamingModeInfo }} </template></MkSwitch>
+	<MkSwitch v-model="enableGamingMode">{{ i18n.ts.gamingMode }} <template #caption>{{ i18n.ts.gamingModeInfo }} </template></MkSwitch>
 </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget';
-import { GetFormResultType } from '@/scripts/form.js';
-import {i18n} from "@/i18n.js";
-import MkSwitch from "@/components/MkSwitch.vue";
-import {computed} from "vue";
-import {defaultStore} from "@/store.js";
-const enableGamingMode = computed(defaultStore.makeGetterSetter('gamingMode'));
+import type { GetFormResultType } from '@/utility/form.js';
+import { i18n } from '@/i18n.js';
+import MkSwitch from '@/components/MkSwitch.vue';
+import { store } from '@/store.js';
+const enableGamingMode = computed(store.makeGetterSetter('gamingMode'));
 const name = 'gamingMode';
 
 const widgetPropsDef = {

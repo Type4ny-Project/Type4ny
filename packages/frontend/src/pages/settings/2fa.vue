@@ -125,7 +125,6 @@ async function registerTOTP(): Promise<void> {
 }
 
 async function unregisterTOTP(): Promise<void> {
-	const auth = await os.authenticateDialog();
 	if (auth.canceled) return;
 
 	os.apiWithDialog('i/2fa/unregister', {
@@ -164,7 +163,6 @@ async function unregisterKey(key) {
 	});
 	if (confirm.canceled) return;
 
-	const auth = await os.authenticateDialog();
 	if (auth.canceled) return;
 
 	await os.apiWithDialog('i/2fa/remove-key', {
@@ -192,7 +190,6 @@ async function renameKey(key) {
 }
 
 async function addSecurityKey() {
-	const auth = await os.authenticateDialog();
 	if (auth.canceled) return;
 
 	const registrationOptions = parseCreationOptionsFromJSON({

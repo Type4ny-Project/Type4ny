@@ -183,7 +183,18 @@ async function duplicate() {
 	title.value = title.value + ' - copy';
 	name.value = name.value + '-copy';
 
-	const created = await os.apiWithDialog('pages/create', getSaveOptions(), undefined, {
+	const created = await os.apiWithDialog('pages/create', {
+		name: name.value.trim(),
+		title: title.value.trim(),
+		summary: summary.value.trim(),
+		content: content.value,
+		variables: variables.value,
+		script: script.value.trim(),
+		alignCenter: alignCenter.value,
+		hideTitleWhenPinned: hideTitleWhenPinned.value,
+		font: font.value,
+		eyeCatchingImageId: eyeCatchingImageId.value,
+	}, {
 		'4650348e-301c-499a-83c9-6aa988c66bc1': {
 			title: i18n.ts.somethingHappened,
 			text: i18n.ts._pages.nameAlreadyExists,
@@ -251,7 +262,6 @@ async function init() {
 		content.value = page.value.content;
 		eyeCatchingImageId.value = page.value.eyeCatchingImageId;
 	} else {
-		const id = genId();
 		content.value = [{
 			id,
 			type: 'text',

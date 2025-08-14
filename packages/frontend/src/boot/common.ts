@@ -212,12 +212,12 @@ export async function common(createVue: () => Promise<App<Element>>) {
 		updateDeviceKind(kind);
 	}, { immediate: true });
 
-	watch(prefer.r.useBlurEffectForModal, v => {
-		window.document.documentElement.style.setProperty('--MI-modalBgFilter', v ? 'blur(4px)' : 'none');
+	watch(prefer.r.useBlurEffectForModal, value => {
+		window.document.documentElement.style.setProperty('--MI-modalBgFilter', value ? 'blur(4px)' : 'none');
 	}, { immediate: true });
 
-	watch(prefer.r.useBlurEffect, v => {
-		if (v) {
+	watch(prefer.r.useBlurEffect, value => {
+		if (value) {
 			window.document.documentElement.style.removeProperty('--MI-blur');
 		} else {
 			window.document.documentElement.style.setProperty('--MI-blur', 'none');

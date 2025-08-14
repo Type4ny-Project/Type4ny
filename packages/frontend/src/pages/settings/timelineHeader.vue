@@ -58,24 +58,24 @@ import MkButton from '@/components/MkButton.vue';
 import FormSlot from '@/components/form/slot.vue';
 import MkContainer from '@/components/MkContainer.vue';
 import * as os from '@/os.js';
-import { defaultStore } from '@/store.js';
-import { unisonReload } from '@/scripts/unison-reload.js';
+import { store } from '@/store.js';
+import { unisonReload } from '@/utility/unison-reload.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { definePage } from '@/utility/page-metadata.js';
 import { timelineHeaderItemDef } from '@/timeline-header.js';
 import MkInput from '@/components/MkInput.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 const tmpName = ref();
 const tmpServer = ref();
 
-const items = ref(defaultStore.state.timelineHeader.map(x => ({
+const items = ref(store.s.timelineHeader.map(x => ({
 	id: Math.random().toString(),
 	type: x,
 })));
-const remoteLocalTimeline = ref(defaultStore.state.remoteLocalTimeline);
+const remoteLocalTimeline = ref([]);
 const maxLocalTimeline = $i.policies.localTimelineAnyLimit;
 
 async function reloadAsk() {
@@ -98,7 +98,7 @@ async function addRemote() {
 	});
 	tmpName.value = '';
 	tmpServer.value = '';
-	await defaultStore.set('remoteLocalTimeline', remoteLocalTimeline.value);
+	// remoteLocalTimeline is not implemented in store yet
 }
 
 const menu = computed(() => {
@@ -128,18 +128,28 @@ function removeItem(index: number) {
 }
 
 async function save() {
-	defaultStore.set('timelineHeader', items.value.map(x => x.type));
+	store.set('timelineHeader', items.value.map(x => x.type));
 	await reloadAsk();
 }
 
 function reset() {
-	items.value = defaultStore.def.timelineHeader.default.map(x => ({
+	// Reset to default timeline header values
+	const defaultTimelineHeader = [
+		'home',
+		'local',
+		'social',
+		'global',
+		'lists',
+		'antennas',
+		'channels',
+	];
+	items.value = defaultTimelineHeader.map(x => ({
 		id: Math.random().toString(),
 		type: x,
 	}));
 }
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.navbar,
 	icon: 'ti ti-list',
 }));

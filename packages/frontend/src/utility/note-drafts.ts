@@ -1,8 +1,13 @@
+/*
+ * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 import * as Misskey from 'misskey-js';
 import type { PollEditorModelValue } from '@/components/MkPollEditor.vue';
 import type { DeleteScheduleEditorModelValue } from '@/components/MkDeleteScheduleEditor.vue';
 import { miLocalStorage } from '@/local-storage.js';
-import { get as idbGet, set as idbSet } from '@/scripts/idb-proxy.js';
+import { get as idbGet, set as idbSet } from '@/utility/idb-proxy.js';
 
 export type NoteDraft = {
 	updatedAt: Date;
@@ -26,7 +31,7 @@ type NoteKeys = {
 	reply: (replyId: string) => unknown,
 	quote: (renoteId: string) => unknown,
 	channel: (channelId: string) => unknown,
-}
+};
 
 export async function migrate(userId: string) {
 	const raw = miLocalStorage.getItem('drafts');

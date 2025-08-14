@@ -41,9 +41,15 @@ export type InactiveModeratorsWarningPayload = {
 	remainingTime: ModeratorInactivityRemainingTime;
 };
 
+export type CustomEmojiRequestPayload = {
+	emoji: any; // TODO: 適切な型定義
+	user: Packed<'UserLite'> | null;
+};
+
 export type SystemWebhookPayload<T extends SystemWebhookEventType> =
 	T extends 'abuseReport' | 'abuseReportResolved' ? AbuseReportPayload :
-	T extends 'userCreated' ? Packed<'UserLite'> :
+	T extends 'userCreated' | 'userRegistered' ? Packed<'UserLite'> :
+	T extends 'customEmojiRequest' | 'customEmojiRequestResolved' ? CustomEmojiRequestPayload :
 	T extends 'inactiveModeratorsWarning' ? InactiveModeratorsWarningPayload :
 	T extends 'inactiveModeratorsInvitationOnlyChanged' ? Record<string, never> :
 		never;

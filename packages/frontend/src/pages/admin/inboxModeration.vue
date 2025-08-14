@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <div>
 	<MkStickyContainer>
 		<template #header><XHeader/></template>
-		<MkSpacer :contentMax="900">
+		<div class="_spacer" style="--MI_SPACER-w: 900px;">
 			<div class="_gaps">
 				<MkButton rounded primary @click="addRule">{{ i18n.ts._inboxRule.add }}</MkButton>
 				<div v-for="(rule,i) in rules">
@@ -32,7 +32,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</MkFolder>
 				</div>
 			</div>
-		</MkSpacer>
+		</div>
 	</MkStickyContainer>
 </div>
 </template>
@@ -40,7 +40,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <script setup lang="ts">
 
 import { ref } from 'vue';
-import { v4 as uuid } from 'uuid';
+import { genId } from '@/utility/id.js';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
 import XHeader from '@/pages/admin/_header_.vue';
@@ -48,7 +48,7 @@ import InboxModerationEditorFormula from '@/pages/admin/InboxModerationEditorFor
 import MkFolder from '@/components/MkFolder.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkSelect from '@/components/MkSelect.vue';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 
 type Rule = {
 	id?:string;
@@ -71,7 +71,7 @@ const rules = ref<Rule[]>([]);
 function addRule() {
 	rules.value.push({
 		name: null,
-		condFormula: { id: uuid(), type: 'isLocked' },
+		condFormula: { id: genId(), type: 'isLocked' },
 		action: { type: 'reject' },
 		description: null,
 	});

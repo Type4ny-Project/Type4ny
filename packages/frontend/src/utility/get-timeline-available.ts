@@ -1,12 +1,9 @@
-import { $i } from '@/account.js';
-import { instance } from '@/instance.js';
+import { $i } from '@/i.js';
 
-// Ensure $i is initialized before using it
-if (typeof $i === 'undefined') {
-	throw new Error('$i is not initialized');
+export function isLocalTimelineAvailable() {
+	return $i == null || ($i.policies?.ltlAvailable ?? true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-export const isLocalTimelineAvailable = ($i == null && instance?.policies?.ltlAvailable) || ($i != null && $i?.policies?.ltlAvailable);
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-export const isGlobalTimelineAvailable = ($i == null && instance?.policies?.gtlAvailable) || ($i != null && $i?.policies?.gtlAvailable);
+export function isGlobalTimelineAvailable() {
+	return $i == null || ($i.policies?.gtlAvailable ?? true);
+}

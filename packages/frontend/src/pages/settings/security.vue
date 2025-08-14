@@ -108,7 +108,6 @@ async function change() {
 }
 
 async function regenerateToken() {
-	const auth = await os.authenticateDialog();
 	if (auth.canceled) return;
 
 	misskeyApi('i/regenerate-token', {

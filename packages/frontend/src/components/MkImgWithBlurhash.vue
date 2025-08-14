@@ -75,7 +75,6 @@ const canvasPromise = new Promise<WorkerMultiDispatch | HTMLCanvasElement>(resol
 			);
 			resolve(workers);
 		} else {
-			const canvas = window.document.createElement('canvas');
 			canvas.width = 64;
 			canvas.height = 64;
 			resolve(canvas);
@@ -123,7 +122,6 @@ const props = withDefaults(defineProps<{
 });
 
 const viewId = genId();
-const canvas = useTemplateRef('canvas');
 const root = useTemplateRef('root');
 const img = useTemplateRef('img');
 const loaded = ref(false);
@@ -184,7 +182,6 @@ function drawAvg() {
 
 	const color = (props.hash != null && extractAvgColorFromBlurhash(props.hash)) || '#888';
 
-	const ctx = canvas.value.getContext('2d');
 	if (!ctx) return;
 
 	// avgColorでお茶をにごす

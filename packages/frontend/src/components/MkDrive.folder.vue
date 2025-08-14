@@ -157,7 +157,7 @@ function onDrop(ev: DragEvent) {
 	//#endregion
 
 	//#region ドライブのファイル
-	const driveFile = ev.dataTransfer.getData('misskey/drivefiles');
+	const driveFile = ev.dataTransfer.getData(_DATA_TRANSFER_DRIVE_FILE_);
 	if (driveFile != null && driveFile !== '') {
 		const file = JSON.parse(driveFile);
 		emit('removeFile', file.id);
@@ -179,7 +179,6 @@ function onDrop(ev: DragEvent) {
 
 	//#region ドライブのフォルダ
 	{
-		const droppedData = getDragData(ev, 'driveFolders');
 		if (droppedData != null) {
 			const droppedFolder = droppedData[0];
 
@@ -348,7 +347,7 @@ function deleteFolder() {
 				}
 			});
 		} else {
-			misskeyApi('drive/folders/delete', {
+			awaitmisskeyApi('drive/folders/delete', {
 				folderId: props.folder.id,
 			}).then(() => {
 				if (prefer.s.uploadFolder === props.folder.id) {

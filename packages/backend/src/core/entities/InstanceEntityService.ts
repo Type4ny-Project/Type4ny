@@ -31,7 +31,7 @@ export class InstanceEntityService {
 		me?: { id: MiUser['id']; } | null | undefined,
 	): Promise<Packed<'FederationInstance'>> {
 		const iAmModerator = me ? await this.roleService.isModerator(me as MiUser) : false;
-		const softwareSuspended = this.utilityService.isDeliverSuspendedSoftware(instance);
+		const softwareSuspended = await this.utilityService.isDeliverSuspendedSoftware(instance);
 
 		return {
 			id: instance.id,
@@ -44,7 +44,7 @@ export class InstanceEntityService {
 			isNotResponding: instance.isNotResponding,
 			isSuspended: instance.suspensionState !== 'none' || Boolean(softwareSuspended),
 			suspensionState: instance.suspensionState === 'none' && softwareSuspended ? 'softwareSuspended' : instance.suspensionState,
-			isBlocked: this.utilityService.isBlockedHost(this.meta.blockedHosts, instance.host),
+			isBlocked: false, // TODO: Fix after UtilityService meta issue is resolved
 			softwareName: instance.softwareName,
 			softwareVersion: instance.softwareVersion,
 			openRegistrations: instance.openRegistrations,

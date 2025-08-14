@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-// TODO: Implement admin header
+// TODO: Implement classic header
 </script>

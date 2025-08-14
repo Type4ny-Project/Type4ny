@@ -82,7 +82,6 @@ function actualFetch() {
 		return;
 	}
 
-	const now = new Date();
 	now.setHours(0, 0, 0, 0);
 	fetching.value = true;
 	misskeyApi('users/following', {

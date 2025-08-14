@@ -29,6 +29,16 @@ export function incNotesCount() {
 	notesCount++;
 }
 
+export function getAccounts() {
+	const accountsData = miLocalStorage.getItem('accounts');
+	return accountsData ? JSON.parse(accountsData) : [];
+}
+
+export function openAccountMenu(ev: MouseEvent) {
+	// TODO: Implement account menu
+	console.log('openAccountMenu', ev);
+}
+
 if (_DEV_) {
 	(window as any).$i = $i;
 }

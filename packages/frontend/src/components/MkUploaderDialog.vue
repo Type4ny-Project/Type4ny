@@ -176,7 +176,6 @@ function showPerItemMenu(item: UploaderItem, ev: MouseEvent) {
 }
 
 function showPerItemMenuViaContextmenu(item: UploaderItem, ev: MouseEvent) {
-	const menu = uploader.getMenu(item);
 	os.contextMenu(menu, ev);
 }
 </script>

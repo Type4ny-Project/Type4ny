@@ -16,17 +16,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 		},
 		{
 			[$style.home]:
-				prefer.s.showVisibilityColor && note.visibility === 'home',
+				store.s.showVisibilityColor && note.visibility === 'home',
 			[$style.followers]:
-				prefer.s.showVisibilityColor &&
+				store.s.showVisibilityColor &&
 				note.visibility === 'followers',
 			[$style.specified]:
-				prefer.s.showVisibilityColor &&
+				store.s.showVisibilityColor &&
 				note.visibility === 'specified',
 		},
 		{
 			[$style.localonly]:
-				prefer.s.showVisibilityColor && note.localOnly && note.visibility === 'public',
+				store.s.showVisibilityColor && note.localOnly && note.visibility === 'public',
 		},
 		{
 			[$style.skipRender]: prefer.s.skipNoteRender
@@ -254,7 +254,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:reactionEmojis="$appearNote.reactionEmojis"
 				:myReaction="$appearNote.myReaction"
 				:noteId="appearNote.id"
-				:note="appearNote"
 				:maxNumber="16"
 				@mockUpdateMyReaction="emitUpdReaction"
 			>
@@ -548,13 +547,12 @@ const hardMuted = ref(
 const showSoftWordMutedWord = computed(() => prefer.s.showSoftWordMutedWord);
 const translation = ref<Misskey.entities.NotesTranslateResponse | null>(null);
 const translating = ref(false);
-const isDeleted = ref(false);
 const showTicker = (prefer.s.instanceTicker === 'always') || (prefer.s.instanceTicker === 'remote' && appearNote.user.instance);
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || (appearNote.visibility === 'followers' && appearNote.userId === $i?.id));
 const renoteCollapsed = ref(
 	prefer.s.collapseRenotes && isRenote && (
-		($i && ($i.id === note.userId || $i.id === appearNote.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
-		(appearNote.myReaction != null)
+		($i && ($i.id === note.value.userId || $i.id === appearNote.value.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
+		(appearNote.value.myReaction != null)
 	),
 );
 
@@ -703,7 +701,7 @@ if (!props.mock) {
 				_cacheKey_: $appearNote.reactionCount,
 			});
 
-			const users = reactions.map(x => x.user);
+
 			if (users.length < 1) return;
 
 			const { dispose } = os.popup(
@@ -798,35 +796,35 @@ function react(): void {
 
 			sound.playMisskeySfx('reaction');
 
-			if (props.mock) {
-				emit('reaction', reaction);
-				$appearNote.reactions[reaction] = 1;
+				if (props.mock) {
+					emit('reaction', reaction);
+					$appearNote.reactions[reaction] = 1;
 				$appearNote.reactionCount++;
 				$appearNote.myReaction = reaction;
 				return;
 			}
 
-			misskeyApi('notes/reactions/create', {
-				noteId: appearNote.id,
-				reaction: reaction,
-			}).then(() => {
+				misskeyApi('notes/reactions/create', {
+					noteId: appearNote.id,
+					reaction: reaction,
+				}).then(() => {
 				noteEvents.emit(`reacted:${appearNote.id}`, {
 					userId: $i!.id,
 					reaction: reaction,
 				});
 			});
 
-			if (
-				appearNote.text &&
+				if (
+					appearNote.text &&
 					appearNote.text.length > 100 &&
 					Date.now() - new Date(appearNote.createdAt).getTime() < 1000 * 3
-			) {
-				claimAchievement('reactWithoutRead');
-			}
-		},
-		() => {
-			focus();
-		},
+				) {
+					claimAchievement('reactWithoutRead');
+				}
+			},
+			() => {
+				focus();
+			},
 		);
 	}
 }
@@ -842,7 +840,6 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 
 	misskeyApi('notes/reactions/delete', {
 		noteId: targetNote.id,
-		reaction: oldReaction,
 	}).then(() => {
 		noteEvents.emit(`unreacted:${appearNote.id}`, {
 			userId: $i!.id,
@@ -852,10 +849,10 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 }
 
 function toggleReact() {
-	if ($appearNote.myReaction == null) {
+	if (appearNote.value.myReaction == null) {
 		react();
 	} else {
-		undoReact($appearNote);
+		undoReact(appearNote.value);
 	}
 }
 
@@ -876,7 +873,7 @@ function onContextmenu(ev: MouseEvent): void {
 			translating,
 			translation,
 
-			currentClip: currentClip?.value,
+			currentClip: currentClip?.value ,
 		});
 		os.contextMenu(menu, ev).then(focus).finally(cleanup);
 	}
@@ -892,7 +889,7 @@ function showMenu(): void {
 		translating,
 		translation,
 
-		currentClip: currentClip?.value,
+		currentClip: currentClip?.value ,
 	});
 	os.popupMenu(menu, menuButton.value).then(focus).finally(cleanup);
 }
@@ -975,7 +972,7 @@ function focusAfter() {
 
 function readPromo() {
 	misskeyApi('promo/read', {
-		noteId: appearNote.id,
+		noteId: appearNote.value.id,
 	});
 	isDeleted.value = true;
 }

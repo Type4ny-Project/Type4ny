@@ -238,7 +238,6 @@ function setupGrid(): GridSetting {
 						text: i18n.ts._customEmojisManager._remote.importSelectionRangesRows,
 						icon: 'ti ti-download',
 						action: async () => {
-							const targets = context.rangedCells.map(it => gridItems.value[it.row.index]);
 							await importEmojis(targets);
 						},
 					},
@@ -291,7 +290,6 @@ async function onPageChanged(pageNumber: number) {
 }
 
 async function onImportClicked() {
-	const targets = gridItems.value.filter(it => it.checked);
 	await importEmojis(targets);
 }
 
@@ -368,7 +366,7 @@ async function refreshCustomEmojis() {
 		currentPage.value = 1;
 	}
 
-	const result = await loadingHandler.scope(() => misskeyApi('v2/admin/emoji/list', {
+	const result = await misskeyApi('admin/emoji/list-remote', cleanObj({
 		limit: queryLimit.value,
 		query: query,
 		page: currentPage.value,

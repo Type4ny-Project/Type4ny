@@ -238,9 +238,7 @@ function clickCancel() {
 async function clickAccept() {
 	if (selectedUser.value === null) return;
 
-	const user = users.value.get(selectedUser.value)!;
 
-	const token = user.token;
 
 	waiting.value = true;
 	emit('accept', token);

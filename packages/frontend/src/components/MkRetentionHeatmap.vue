@@ -100,7 +100,6 @@ async function renderChart() {
 				backgroundColor(c) {
 					const v = c.dataset.data[c.dataIndex] as unknown as typeof data[0];
 					const value = v.v;
-					const m = max(v.y);
 					if (m === 0) {
 						return alpha(color, 0);
 					} else {
@@ -109,11 +108,9 @@ async function renderChart() {
 					}
 				},
 				width(c) {
-					const a = c.chart.chartArea ?? {};
 					return (a.right - a.left) / maxDays - marginEachCell;
 				},
 				height(c) {
-					const a = c.chart.chartArea ?? {};
 					return (a.bottom - a.top) / maxDays - (marginEachCell / 1.5);
 				},
 			}],
@@ -178,12 +175,9 @@ async function renderChart() {
 					enabled: false,
 					callbacks: {
 						title(context) {
-							const v = context[0].dataset.data[context[0].dataIndex];
 							return getYYYYMMDD(new Date(new Date(v.y).getTime() + (v.x * 86400000)));
 						},
 						label(context) {
-							const v = context.dataset.data[context.dataIndex] as unknown as typeof data[0];
-							const m = max(v.y);
 							if (m === 0) {
 								return [`Active: ${v.v} (-%)`];
 							} else {

@@ -94,8 +94,8 @@ import number from '@/filters/number';
 import bytes from '@/filters/bytes';
 import { $i } from '@/account';
 import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { definePage } from '@/utility/page-metadata';
+import { misskeyApi } from '@/utility/misskey-api.js';
 
 const stats = ref<any>({});
 
@@ -111,7 +111,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata({
+definePage({
 	title: i18n.ts.accountInfo,
 	icon: 'ti ti-info-circle',
 });

@@ -722,7 +722,6 @@ function loadMonoTextures() {
 }
 
 function getTextureImageUrl(mono: Mono) {
-	const def = monoDefinitions.value.find(x => x.id === mono.id)!;
 
 	if (monoTextureUrls[def.img]) {
 		return monoTextureUrls[def.img];
@@ -813,19 +812,16 @@ function onClick(ev: MouseEvent) {
 function onTouchend(ev: TouchEvent) {
 	if (!containerElRect) return;
 	if (replaying.value) return;
-	const x = (ev.changedTouches[0].clientX - containerElRect.left) / viewScale;
 	game.drop(x);
 }
 
 function onMousemove(ev: MouseEvent) {
 	if (!containerElRect) return;
-	const x = (ev.clientX - containerElRect.left);
 	moveDropper(containerElRect, x);
 }
 
 function onTouchmove(ev: TouchEvent) {
 	if (!containerElRect) return;
-	const x = (ev.touches[0].clientX - containerElRect.left);
 	moveDropper(containerElRect, x);
 }
 
@@ -1096,11 +1092,7 @@ function attachGameEvents() {
 		}
 
 		if (nextMono) {
-			const def = monoDefinitions.value.find(x => x.id === nextMono.id)!;
 			if (!props.mute) {
-				const panV = x - game.PLAYAREA_MARGIN;
-				const panW = game.GAME_WIDTH - game.PLAYAREA_MARGIN - game.PLAYAREA_MARGIN;
-				const pan = ((panV / panW) - 0.5) * 2;
 				const pitch = def.sfxPitch;
 				if (props.gameMode === 'yen') {
 					sound.playUrl('/client-assets/drop-and-fusion/fusion_yen.mp3', {
@@ -1131,13 +1123,9 @@ function attachGameEvents() {
 	game.addListener('collision', (energy, bodyA, bodyB) => {
 		if (!props.mute && (energy > minCollisionEnergyForSound)) {
 			const volume = (Math.min(maxCollisionEnergyForSound, energy - minCollisionEnergyForSound) / maxCollisionEnergyForSound) / 4;
-			const panV =
 				bodyA.label === '_wall_' ? bodyB.position.x - game.PLAYAREA_MARGIN :
 				bodyB.label === '_wall_' ? bodyA.position.x - game.PLAYAREA_MARGIN :
 				((bodyA.position.x + bodyB.position.x) / 2) - game.PLAYAREA_MARGIN;
-			const panW = game.GAME_WIDTH - game.PLAYAREA_MARGIN - game.PLAYAREA_MARGIN;
-			const pan = ((panV / panW) - 0.5) * 2;
-			const pitch = soundPitchMin + ((soundPitchMax - soundPitchMin) * (1 - (Math.min(10, energy) / 10)));
 
 			if (props.gameMode === 'yen') {
 				sound.playUrl('/client-assets/drop-and-fusion/collision_yen.mp3', {

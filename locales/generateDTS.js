@@ -230,3 +230,5 @@ export default function generateDTS() {
 
 	fs.writeFileSync(`${__dirname}/index.d.ts`, printed, 'utf-8');
 }
+
+generateDTS();

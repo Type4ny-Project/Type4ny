@@ -240,7 +240,6 @@ function saveDraft() {
 }
 
 function deleteDraft() {
-	const drafts = JSON.parse(miLocalStorage.getItem('chatMessageDrafts') || '{}');
 
 	delete drafts[getDraftKey()];
 

@@ -25,8 +25,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 								<MkUserName class="name" :user="user" :nowrap="true"/>
 								<div class="bottom">
 									<span class="username"><MkAcct :user="user" :detail="true"/></span>
-									<span v-if="user.isLocked" :title="i18n.ts._role._condition.isLocked"><i class="ti ti-lock"></i></span>
-									<span v-if="user.isBot" :title="i18n.ts._role._condition.isBot"><i class="ti ti-robot"></i></span>
+									<span v-if="user.isLocked" :title="i18n.ts.isLocked"><i class="ti ti-lock"></i></span>
+									<span v-if="user.isBot" :title="i18n.ts.isBot"><i class="ti ti-robot"></i></span>
 									<button v-if="$i && !isEditingMemo && !memoDraft" class="_button add-note-button" @click="showMemoTextarea">
 										<i class="ti ti-edit"/> {{ i18n.ts.addMemo }}
 									</button>
@@ -44,8 +44,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkUserName :user="user" :nowrap="false" class="name"/>
 							<div class="bottom">
 								<span class="username"><MkAcct :user="user" :detail="true"/></span>
-								<span v-if="user.isLocked" :title="i18n.ts._role._condition.isLocked"><i class="ti ti-lock"></i></span>
-								<span v-if="user.isBot" :title="i18n.ts._role._condition.isBot"><i class="ti ti-robot"></i></span>
+								<span v-if="user.isLocked" :title="i18n.ts.isLocked"><i class="ti ti-lock"></i></span>
+								<span v-if="user.isBot" :title="i18n.ts.isBot"><i class="ti ti-robot"></i></span>
 							</div>
 						</div>
 						<div v-if="user.followedMessage != null" class="followedMessage">
@@ -125,7 +125,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 								<b>{{ number(user.followersCount) }}</b>
 								<span>{{ i18n.ts.followers }}</span>
 							</MkA>
-							<MkA v-if="!user.host && user?.loginBonusIsVisible" :to="userPage(user)">
+							<MkA v-if="!user.host && user?.loginBonusIsVisible">
 								<b> {{ number(user.getPoints) }}</b>
 								<span>{{ instance.pointName ? instance.pointName : i18n.ts.point }}</span>
 							</MkA>
@@ -217,7 +217,7 @@ const XActivity = defineAsyncComponent(() => import('./index.activity.vue'));
 const props = withDefaults(defineProps<{
 	user: Misskey.entities.UserDetailed;
 	/** Test only; MkNotesTimeline currently causes problems in vitest */
-	disableNotes?: boolean;
+	disableNotes: boolean;
 }>(), {
 	disableNotes: false,
 });
