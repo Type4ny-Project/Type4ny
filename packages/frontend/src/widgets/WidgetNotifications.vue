@@ -37,9 +37,9 @@ const widgetPropsDef = {
 		default: 300,
 	},
 	excludeTypes: {
-		type: 'array',
+		type: 'array' as const,
 		hidden: true,
-		default: [] as (typeof notificationTypes[number])[],
+		default: () => [] as (typeof notificationTypes[number])[],
 	},
 } satisfies FormWithDefault;
 

@@ -11,7 +11,7 @@ export type UnicodeEmojiDef = {
 };
 
 // initial converted from https://github.com/muan/emojilib/commit/242fe68be86ed6536843b83f7e32f376468b38fb
-import _emojilist from './emojilist.json' with { type: 'json' };
+import _emojilist from './emojilist.json';
 
 async function loadEmojiList() {
 	let emojilistData = _emojilist;
