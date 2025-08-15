@@ -125,56 +125,31 @@ async function toggleReaction() {
 	if (!canToggle.value) return;
 	if (!props.note) return; // Guard against undefined note
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	const oldReaction = props.note.myReactions?.includes(props.reaction)
-		? props.reaction
-		: null;
-	if (oldReaction) {
+	// Check if already reacted using the same logic as isReacted
+	const alreadyReacted = props.note.myReactions?.includes(props.reaction) ?? false;
+	
+	if (alreadyReacted) {
 		const confirm = await os.confirm({
 			type: 'warning',
-			text:
-				oldReaction !== props.reaction
-					? i18n.ts.changeReactionConfirm
-					: i18n.ts.cancelReactionConfirm,
+			text: i18n.ts.cancelReactionConfirm,
 		});
 		if (confirm.canceled) return;
-
-		// eslint-disable-next-line vue/no-mutating-props
-		props.note.myReactions.splice(
-			props.note.myReactions.indexOf(oldReaction),
-			1,
-		);
-		if (oldReaction !== props.reaction) {
-			sound.playMisskeySfx('reaction');
-		}
 
 		if (mock) {
 			emit('reactionToggled', props.reaction, props.count - 1);
 			return;
 		}
 
+		// Note: The myReactions array will be updated by the noteEvents handler in use-note-capture.ts
+		
 		misskeyApi('notes/reactions/delete', {
 			noteId: props.noteId,
-			reaction: oldReaction,
+			reaction: props.reaction,
 		}).then(() => {
 			noteEvents.emit(`unreacted:${props.noteId}`, {
 				userId: $i!.id,
-				reaction: oldReaction,
+				reaction: props.reaction,
 			});
-			if (
-				oldReaction !== props.reaction
-			) {
-				misskeyApi('notes/reactions/create', {
-					noteId: props.noteId,
-					reaction: props.reaction,
-				}).then(() => {
-					noteEvents.emit(`reacted:${props.noteId}`, {
-						userId: $i!.id,
-						reaction: props.reaction,
-						emoji: emoji.value,
-					});
-				});
-			}
 		});
 	} else {
 		if (prefer.s.confirmOnReact) {
@@ -193,6 +168,7 @@ async function toggleReaction() {
 			return;
 		}
 
+		// Note: The myReactions array will be updated by the noteEvents handler in use-note-capture.ts
 		misskeyApi('notes/reactions/create', {
 			noteId: props.noteId,
 			reaction: props.reaction,

@@ -143,7 +143,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:reactionEmojis="$appearNote.reactionEmojis"
 				:myReaction="$appearNote.myReaction"
 				:noteId="appearNote.id"
-				:note="appearNote"
+				:note="$appearNote"
 				:maxNumber="16"
 				@mockUpdateMyReaction="emitUpdReaction"
 			/>
@@ -166,7 +166,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</button>
 			<button ref="reactButton" :class="$style.noteFooterButton" class="_button" @click="toggleReact()">
 				<i v-if="appearNote.reactionAcceptance === 'likeOnly' && $appearNote.myReactions?.length >= 4 " class="ti ti-heart-filled" style="color: var(--MI_THEME-love);"></i>
-				<i v-else-if="$appearNote.myReactions?.length >= 4 || appearNote.myReaction && appearNote.user.host " class="ti ti-minus" style="color: var(--MI_THEME-accent);"></i>
+				<i v-else-if="$appearNote.myReactions?.length >= 4 || $appearNote.myReaction && appearNote.user.host " class="ti ti-minus" style="color: var(--MI_THEME-accent);"></i>
 				<i v-else-if="appearNote.reactionAcceptance === 'likeOnly'" class="ti ti-heart"></i>
 				<i v-else class="ti ti-plus"></i>
 				<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || prefer.s.showReactionsCount) && $appearNote.reactionCount > 0" :class="$style.noteFooterButtonCount">{{ number($appearNote.reactionCount) }}</p>
@@ -370,6 +370,17 @@ const replies = ref<Misskey.entities.Note[]>([]);
 const mutedReactions = ref<string[]>(store.s.mutedReactions);
 const canRenote = computed(() => appearNote && (['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i?.id));
 
+// Add missing gaming ref
+const gaming = ref<'light' | 'dark' | null>(null);
+
+// Add missing emitUpdReaction function
+function emitUpdReaction(newReaction: string) {
+	// Update the local reaction state
+	if ($appearNote.myReaction !== newReaction) {
+		$appearNote.myReaction = newReaction;
+	}
+}
+
 useGlobalEvent('noteDeleted', (noteId) => {
 	if (noteId === note.id || noteId === appearNote.id) {
 		isDeleted.value = true;
@@ -570,7 +581,7 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 }
 
 function toggleReact() {
-	if (appearNote.value.myReactions?.length < 4 || appearNote.myReaction && appearNote.value.user.host || !appearNote.value.myReactions ) {
+	if (!$appearNote.myReactions || $appearNote.myReactions.length < 4 || ($appearNote.myReaction && appearNote.user.host)) {
 		react();
 	} else {
 		undoReact(appearNote);

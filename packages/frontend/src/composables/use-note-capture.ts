@@ -190,6 +190,7 @@ export type ReactiveNoteData = {
 	reactionCount: Misskey.entities.Note['reactionCount'];
 	reactionEmojis: Misskey.entities.Note['reactionEmojis'];
 	myReaction: Misskey.entities.Note['myReaction'];
+	myReactions: Misskey.entities.Note['myReactions'];
 	pollChoices: NonNullable<Misskey.entities.Note['poll']>['choices'];
 };
 
@@ -219,6 +220,7 @@ export function useNoteCapture(props: {
 		reactionCount: note.reactionCount,
 		reactionEmojis: note.reactionEmojis,
 		myReaction: note.myReaction,
+		myReactions: note.myReactions ?? [],
 		pollChoices: note.poll?.choices ?? [],
 	});
 
@@ -247,6 +249,10 @@ export function useNoteCapture(props: {
 
 		if ($i && (ctx.userId === $i.id)) {
 			$note.myReaction = normalizedName;
+			// Update myReactions array
+			if (!$note.myReactions.includes(normalizedName)) {
+				$note.myReactions.push(normalizedName);
+			}
 		}
 	}
 
@@ -266,6 +272,11 @@ export function useNoteCapture(props: {
 
 		if ($i && (ctx.userId === $i.id)) {
 			$note.myReaction = null;
+			// Update myReactions array
+			const index = $note.myReactions.indexOf(normalizedName);
+			if (index > -1) {
+				$note.myReactions.splice(index, 1);
+			}
 		}
 	}
 

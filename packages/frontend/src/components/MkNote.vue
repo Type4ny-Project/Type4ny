@@ -254,7 +254,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:reactionEmojis="$appearNote.reactionEmojis"
 				:myReaction="$appearNote.myReaction"
 				:noteId="appearNote.id"
-				:note="appearNote"
+				:note="$appearNote"
 				:maxNumber="16"
 				@mockUpdateMyReaction="emitUpdReaction"
 			>
@@ -304,15 +304,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<i
 						v-if="
 							appearNote.reactionAcceptance === 'likeOnly' &&
-								appearNote.myReactions?.length >= 4
+								$appearNote.myReactions?.length >= 4
 						"
 						class="ti ti-heart-filled"
 						style="color: var(--MI_THEME-love)"
 					></i>
 					<i
 						v-else-if="
-							appearNote.myReactions?.length >= 4 ||
-								(appearNote.myReaction && appearNote.user.host)
+							$appearNote.myReactions?.length >= 4 ||
+								($appearNote.myReaction && appearNote.user.host)
 						"
 						class="ti ti-minus"
 						style="color: var(--MI_THEME-accent)"
@@ -554,7 +554,7 @@ const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibili
 const renoteCollapsed = ref(
 	prefer.s.collapseRenotes && isRenote && (
 		($i && ($i.id === note.userId || $i.id === appearNote.userId)) || // `||` must be `||`! See https://github.com/misskey-dev/misskey/issues/13131
-		(appearNote.myReaction != null)
+		($appearNote.myReaction != null)
 	),
 );
 
@@ -855,7 +855,7 @@ function toggleReact() {
 	if ($appearNote.myReaction == null) {
 		react();
 	} else {
-		undoReact($appearNote);
+		undoReact(appearNote);
 	}
 }
 

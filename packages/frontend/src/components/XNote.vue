@@ -94,7 +94,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 				<MkA v-if="appearNote.channel && !inChannel" :class="$style.channel" :to="`/channels/${appearNote.channel.id}`"><i class="ti ti-device-tv"></i> {{ appearNote.channel.name }}</MkA>
 			</div>
-			<MkReactionsViewer v-if="appearNote.reactionAcceptance !== 'likeOnly'" :note="appearNote" :maxNumber="16" @mockUpdateMyReaction="emitUpdReaction">
+			<MkReactionsViewer 
+				v-if="appearNote.reactionAcceptance !== 'likeOnly'" 
+				:noteId="appearNote.id"
+				:reactions="appearNote.reactions"
+				:reactionEmojis="appearNote.reactionEmojis"
+				:myReaction="appearNote.myReaction"
+				:note="appearNote" 
+				:maxNumber="16" 
+				@mockUpdateMyReaction="emitUpdReaction">
 				<template #more>
 					<MkA :to="`/notes/${appearNote.id}/reactions`" :class="[$style.reactionOmitted]">{{ i18n.ts.more }}</MkA>
 				</template>
