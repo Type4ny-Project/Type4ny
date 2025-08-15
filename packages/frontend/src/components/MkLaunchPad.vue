@@ -1,9 +1,10 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkModal ref="modal" v-slot="{ type, maxHeight }" :preferType="preferedModalType" :anchor="anchor" :transparentBg="true" :src="src" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
+<MkModal ref="modal" v-slot="{ type, maxHeight }" :preferType="preferedModalType" :anchor="anchor" :transparentBg="true" :anchorElement="anchorElement" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
 	<div class="szkkfdyq _popup _shadow" :class="{ asDrawer: type === 'drawer' }" :style="{ maxHeight: maxHeight ? maxHeight + 'px' : '' }">
 		<div class="main">
 			<template v-for="item in items" :key="item.text">
@@ -11,13 +12,13 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 					<i class="icon" :class="item.icon"></i>
 					<div class="text">{{ item.text }}</div>
 					<span v-if="item.indicate && item.indicateValue && indicatorCounterToggle" class="_indicateCounter indicatorWithValue">{{ item.indicateValue }}</span>
-					<span v-else-if="item.indicate" class="indicator"><i class="_indicatorCircle"></i></span>
+					<span v-else-if="item.indicate" class="indicator _blink"><i class="_indicatorCircle"></i></span>
 				</button>
 				<MkA v-else v-click-anime :to="item.to" class="item" :class="{gamingDark: gamingType === 'dark',gamingLight: gamingType === 'light' }" @click.passive="close()">
 					<i class="icon" :class="item.icon"></i>
 					<div class="text">{{ item.text }}</div>
 					<span v-if="item.indicate && item.indicateValue && indicatorCounterToggle" class="_indicateCounter indicatorWithValue">{{ item.indicateValue }}</span>
-					<span v-else-if="item.indicate" class="indicator"><i class="_indicatorCircle"></i></span>
+					<span v-else-if="item.indicate" class="indicator _blink"><i class="_indicatorCircle"></i></span>
 				</MkA>
 			</template>
 		</div>
@@ -27,17 +28,18 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
-import { shallowRef } from 'vue';
+import { useTemplateRef } from 'vue';
 import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
-import { defaultStore } from '@/store.js';
-import { deviceKind } from '@/scripts/device-kind.js';
+import { deviceKind } from '@/utility/device-kind.js';
+import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
-const indicatorCounterToggle = computed(defaultStore.makeGetterSetter('indicatorCounterToggle'));
+const gamingType = store.s.gamingType;
+const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 
 const props = withDefaults(defineProps<{
-	src?: HTMLElement;
+	anchorElement?: HTMLElement;
 	anchor?: { x: string; y: string; };
 }>(), {
 	anchor: () => ({ x: 'right', y: 'center' }),
@@ -47,13 +49,13 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-const preferedModalType = (deviceKind === 'desktop' && props.src != null) ? 'popup' :
+const preferedModalType = (deviceKind === 'desktop' && props.anchorElement != null) ? 'popup' :
 	deviceKind === 'smartphone' ? 'drawer' :
 	'dialog';
 
-const modal = shallowRef<InstanceType<typeof MkModal>>();
+const modal = useTemplateRef('modal');
 
-const menu = defaultStore.state.menu;
+const menu = prefer.s.menu;
 
 const items = Object.keys(navbarItemDef).filter(k => !menu.includes(k)).map(k => navbarItemDef[k]).filter(def => def.show == null ? true : def.show).map(def => ({
 	type: def.to ? 'link' : 'button',
@@ -103,7 +105,7 @@ function close() {
 			justify-content: center;
 			vertical-align: bottom;
 			height: 100px;
-			border-radius: var(--radius);
+			border-radius: var(--MI-radius);
 			padding: 10px;
 			box-sizing: border-box;
 
@@ -124,8 +126,8 @@ function close() {
       }
 
 			&:hover {
-				color: var(--accent);
-				background: var(--accentedBg);
+				color: var(--MI_THEME-accent);
+				background: var(--MI_THEME-accentedBg);
 				text-decoration: none;
 			}
 
@@ -156,9 +158,8 @@ function close() {
 				position: absolute;
 				top: 32px;
 				left: 32px;
-				color: var(--indicator);
+				color: var(--MI_THEME-indicator);
 				font-size: 8px;
-				animation: global-blink 1s infinite;
 
 				@media (max-width: 500px) {
 					top: 16px;

@@ -1,11 +1,12 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
 <span
-    v-tooltip="checked ? i18n.ts.itsOn : i18n.ts.itsOff"
-    :class="{
+	v-tooltip="checked ? i18n.ts.itsOn : i18n.ts.itsOff"
+	:class="{
 		[$style.button]: true,
 		[$style.gamingDark]: gamingType === 'dark' && checked,
 		[$style.gamingLight]: gamingType === 'light' && checked,
@@ -13,26 +14,28 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		[$style.buttonDisabled]: props.disabled,
 
 	}"
-    data-cy-switch-toggle
-    @click.prevent.stop="toggle"
+	data-cy-switch-toggle
+	@click.prevent.stop="toggle"
 >
 	<div
-      :class="{ [$style.knob]: true, [$style.knobChecked]: checked,	[$style.gamingDark]: gamingType === 'dark' && checked,[$style.gamingLight]: gamingType === 'light' && checked}"></div>
+		:class="{ [$style.knob]: true, [$style.knobChecked]: checked,	[$style.gamingDark]: gamingType === 'dark' && checked,[$style.gamingLight]: gamingType === 'light' && checked}"
+	></div>
 </span>
 </template>
 
 <script lang="ts" setup>
-import {toRefs, Ref, computed} from 'vue';
-import {i18n} from '@/i18n.js';
-import {defaultStore} from "@/store.js";
+import { toRefs } from 'vue';
+import type { Ref, computed } from 'vue';
+import { i18n } from '@/i18n.js';
+import { store } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = store.s.gamingType;
 
 const props = withDefaults(defineProps<{
   checked: boolean | Ref<boolean>;
   disabled?: boolean | Ref<boolean>;
 }>(), {
-  disabled: false,
+	disabled: false,
 });
 
 const emit = defineEmits<{
@@ -41,7 +44,7 @@ const emit = defineEmits<{
 
 const checked = toRefs(props).checked;
 const toggle = () => {
-  emit('toggle');
+	emit('toggle');
 };
 </script>
 
@@ -55,9 +58,9 @@ const toggle = () => {
   width: calc(var(--height) * 1.6);
   height: calc(var(--height) + 2px); // 枠線
   outline: none;
-  background: var(--switchOffBg);
+  background: var(--MI_THEME-switchOffBg);
   background-clip: content-box;
-  border: solid 1px var(--switchOffBg);
+  border: solid 1px var(--MI_THEME-switchOffBg);
   border-radius: 999px;
   cursor: pointer;
   transition: inherit;
@@ -75,8 +78,8 @@ const toggle = () => {
 }
 
 .buttonChecked {
-  background-color: var(--switchOnBg);
-  border-color: var(--switchOnBg);
+  background-color: var(--MI_THEME-switchOnBg);
+  border-color: var(--MI_THEME-switchOnBg);
 }
 
 .gamingLight {
@@ -109,14 +112,14 @@ const toggle = () => {
 
   &:not(.knobChecked) {
     left: 3px;
-    background: var(--switchOffFg);
+    background: var(--MI_THEME-switchOffFg);
 
   }
 }
 
 .knobChecked {
   left: calc(calc(100% - var(--height)) + 3px);
-  background: var(--switchOnFg);
+  background: var(--MI_THEME-switchOnFg);
 
   &.gamingDark {
     background: white !important;

@@ -4,19 +4,25 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div role="menu" @focusin.passive.stop="() => {}">
+<div
+	role="menu"
+	:class="{
+		[$style.root]: true,
+		[$style.center]: align === 'center',
+		[$style.big]: big,
+		[$style.asDrawer]: asDrawer,
+		[$style.widthSpecified]: width != null,
+		[$style.gamingDark]: gamingType === 'dark',
+		[$style.gamingLight]: gamingType === 'light'
+	}"
+	@focusin.passive.stop="() => {}"
+>
 	<div
 		ref="itemsEl"
 		v-hotkey="keymap"
 		tabindex="0"
 		class="_popup _shadow"
-		:class="{
-			[$style.root]: true,
-			[$style.center]: align === 'center',
-			[$style.asDrawer]: asDrawer,
-			[$style.gamingDark]: gamingType === 'dark',
-			[$style.gamingLight]: gamingType === 'light'
-		}"
+		:class="$style.menu"
 		:style="{
 			width: (width && !asDrawer) ? `${width}px` : '',
 			maxHeight: maxHeight ? `min(${maxHeight}px, calc(100dvh - 32px))` : 'calc(100dvh - 32px)',
@@ -26,12 +32,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 	>
 		<template v-for="item in (items2 ?? [])">
 			<div v-if="item.type === 'divider'" role="separator" tabindex="-1" :class="$style.divider"></div>
-			<span v-else-if="item.type === 'label'" role="menuitem" tabindex="-1" :class="[$style.label, $style.item, {[$style.gamingDark]: gamingType === 'dark', [$style.gamingLight]: gamingType === 'light'}]">
-				<span style="opacity: 0.7;">{{ item.text }}</span>
-			</span>
+
+			<div v-else-if="item.type === 'label'" role="menuitem" tabindex="-1" :class="[$style.label]">
+				<span>{{ item.text }}</span>
+			</div>
+
 			<span v-else-if="item.type === 'pending'" role="menuitem" tabindex="0" :class="[$style.pending, $style.item,{[$style.gamingDark]: gamingType === 'dark', [$style.gamingLight]: gamingType === 'light'}]">
 				<span><MkEllipsis/></span>
 			</span>
+
+			<div v-else-if="item.type === 'component'" role="menuitem" tabindex="-1" :class="[$style.componentItem]">
+				<component :is="item.component" v-bind="item.props"/>
+			</div>
+
 			<MkA
 				v-else-if="item.type === 'link'"
 				role="menuitem"
@@ -45,10 +58,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]"></i>
 				<MkAvatar v-if="item.avatar" :user="item.avatar" :class="$style.avatar"/>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<div :class="$style.item_content_text">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</MkA>
+
 			<a
 				v-else-if="item.type === 'a'"
 				role="menuitem"
@@ -64,10 +81,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]"></i>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<div :class="$style.item_content_text">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</a>
+
 			<button
 				v-else-if="item.type === 'user'"
 				role="menuitem"
@@ -79,9 +100,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<MkAvatar :user="item.user" :class="$style.avatar"/><MkUserName :user="item.user"/>
 				<div v-if="item.indicate" :class="$style.item_content">
-					<span :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<span :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</button>
+
 			<button
 				v-else-if="item.type === 'switch'"
 				role="menuitemcheckbox"
@@ -95,10 +117,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]"></i>
 				<MkSwitchButton v-else :class="$style.switchButton" :checked="item.ref" :disabled="item.disabled" @toggle="switchItem(item)"/>
 				<div :class="$style.item_content">
-					<span :class="[$style.item_content_text, { [$style.switchText]: !item.icon }]">{{ item.text }}</span>
+					<div :class="[$style.item_content_text, { [$style.switchText]: !item.icon }]">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
 					<MkSwitchButton v-if="item.icon" :class="[$style.switchButton, $style.caret]" :checked="item.ref" :disabled="item.disabled" @toggle="switchItem(item)"/>
 				</div>
 			</button>
+
 			<button
 				v-else-if="item.type === 'radio'"
 				role="menuitem"
@@ -111,10 +137,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]" style="pointer-events: none;"></i>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text" style="pointer-events: none;">{{ item.text }}</span>
+					<div :class="$style.item_content_text" style="pointer-events: none;">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
 					<span :class="$style.caret" style="pointer-events: none;"><i class="ti ti-chevron-right ti-fw"></i></span>
 				</div>
 			</button>
+
 			<button
 				v-else-if="item.type === 'radioOption'"
 				role="menuitemradio"
@@ -128,9 +158,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<span :class="[$style.radioIcon, { [$style.radioChecked]: unref(item.active) }]"></span>
 				</div>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text">{{ item.text }}</span>
+					<div :class="$style.item_content_text">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
 				</div>
 			</button>
+
 			<button
 				v-else-if="item.type === 'parent'"
 				role="menuitem"
@@ -142,12 +176,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]" style="pointer-events: none;"></i>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text" style="pointer-events: none;">{{ item.text }}</span>
+					<div :class="$style.item_content_text" style="pointer-events: none;">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
 					<span :class="$style.caret" style="pointer-events: none;"><i class="ti ti-chevron-right ti-fw"></i></span>
 				</div>
 			</button>
+
 			<button
-				v-else role="menuitem"
+				v-else
+				role="menuitem"
 				tabindex="0"
 				:class="['_button', $style.item, { [$style.danger]: item.danger, [$style.active]: unref(item.active) },{[$style.gamingDark]: gamingType === 'dark', [$style.gamingLight]: gamingType === 'light'}]"
 				@click.prevent="unref(item.active) ? close(false) : clicked(item.action, $event)"
@@ -157,11 +196,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<i v-if="item.icon" class="ti-fw" :class="[$style.icon, item.icon]"></i>
 				<MkAvatar v-if="item.avatar" :user="item.avatar" :class="$style.avatar"/>
 				<div :class="$style.item_content">
-					<span :class="$style.item_content_text">{{ item.text }}</span>
-					<span v-if="item.indicate" :class="$style.indicator"><i class="_indicatorCircle"></i></span>
+					<div :class="$style.item_content_text">
+						<div :class="$style.item_content_text_title">{{ item.text }}</div>
+						<div v-if="item.caption" :class="$style.item_content_text_caption">{{ item.caption }}</div>
+					</div>
+					<span v-if="item.indicate" :class="$style.indicator" class="_blink"><i class="_indicatorCircle"></i></span>
 				</div>
 			</button>
 		</template>
+
 		<span v-if="items2 == null || items2.length === 0" tabindex="-1" :class="[$style.none, $style.item]">
 			<span>{{ i18n.ts.none }}</span>
 		</span>
@@ -173,22 +216,23 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts">
-import { computed, defineAsyncComponent, inject, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, unref, watch } from 'vue';
+import { defineAsyncComponent, inject, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, unref, watch, shallowRef } from 'vue';
+import type { MenuItem, InnerMenuItem, MenuPending, MenuAction, MenuSwitch, MenuRadio, MenuRadioOption, MenuParent } from '@/types/menu.js';
+import type { Keymap } from '@/utility/hotkey.js';
 import MkSwitchButton from '@/components/MkSwitch.button.vue';
-import { MenuItem, InnerMenuItem, MenuPending, MenuAction, MenuSwitch, MenuRadio, MenuRadioOption, MenuParent } from '@/types/menu.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { isTouchUsing } from '@/scripts/touch.js';
-import { type Keymap } from '@/scripts/hotkey.js';
-import { isFocusable } from '@/scripts/focus.js';
-import { getNodeOrNull } from '@/scripts/get-dom-node-or-null.js';
-import { defaultStore } from '@/store.js';
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+import { isTouchUsing } from '@/utility/touch.js';
+import { isFocusable } from '@/utility/focus.js';
+import { getNodeOrNull } from '@/utility/get-dom-node-or-null.js';
 
 const childrenCache = new WeakMap<MenuParent, MenuItem[]>();
 </script>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { store } from '@/store.js';
+
 const XChild = defineAsyncComponent(() => import('./MkMenu.child.vue'));
 
 const props = defineProps<{
@@ -204,13 +248,17 @@ const emit = defineEmits<{
 	(ev: 'hide'): void;
 }>();
 
+const gamingType = store.s.gamingType;
+
+const big = isTouchUsing;
+
 const isNestingMenu = inject<boolean>('isNestingMenu', false);
 
-const itemsEl = shallowRef<HTMLElement>();
+const itemsEl = useTemplateRef('itemsEl');
 
 const items2 = ref<InnerMenuItem[]>();
 
-const child = shallowRef<InstanceType<typeof XChild>>();
+const child = useTemplateRef('child');
 
 const keymap = {
 	'up|k|shift+tab': {
@@ -251,7 +299,7 @@ watch(() => props.items, () => {
 });
 
 const childMenu = ref<MenuItem[] | null>();
-const childTarget = shallowRef<HTMLElement | null>();
+const childTarget = shallowRef<HTMLElement>();
 
 function closeChild() {
 	childMenu.value = null;
@@ -301,6 +349,8 @@ async function showRadioOptions(item: MenuRadio, ev: Event) {
 }
 
 async function showChildren(item: MenuParent, ev: Event) {
+	ev.stopPropagation();
+
 	const children: MenuItem[] = await (async () => {
 		if (childrenCache.has(item)) {
 			return childrenCache.get(item)!;
@@ -350,10 +400,10 @@ function switchItem(item: MenuSwitch & { ref: any }) {
 
 function focusUp() {
 	if (disposed) return;
-	if (!itemsEl.value?.contains(document.activeElement)) return;
+	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
 	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
-	const activeIndex = focusableElements.findIndex(el => el === document.activeElement);
+	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
 	const targetIndex = (activeIndex !== -1 && activeIndex !== 0) ? (activeIndex - 1) : (focusableElements.length - 1);
 	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
@@ -362,11 +412,11 @@ function focusUp() {
 
 function focusDown() {
 	if (disposed) return;
-	if (!itemsEl.value?.contains(document.activeElement)) return;
+	if (!itemsEl.value?.contains(window.document.activeElement)) return;
 
 	const focusableElements = Array.from(itemsEl.value.children).filter(isFocusable);
-	const activeIndex = focusableElements.findIndex(el => el === document.activeElement);
-	const targetIndex = (activeIndex !== -1 && activeIndex !== (focusableElements.length - 1)) ? (activeIndex + 1) : 0;
+	const activeIndex = focusableElements.findIndex(el => el === window.document.activeElement);
+	const targetIndex = (activeIndex !== -1 && activeIndex !== focusableElements.length - 1) ? (activeIndex + 1) : 0;
 	const targetElement = focusableElements.at(targetIndex) ?? itemsEl.value;
 
 	targetElement.focus();
@@ -392,9 +442,9 @@ const onGlobalMousedown = (ev: MouseEvent) => {
 
 const setupHandlers = () => {
 	if (!isNestingMenu) {
-		document.addEventListener('focusin', onGlobalFocusin, { passive: true });
+		window.document.addEventListener('focusin', onGlobalFocusin, { passive: true });
 	}
-	document.addEventListener('mousedown', onGlobalMousedown, { passive: true });
+	window.document.addEventListener('mousedown', onGlobalMousedown, { passive: true });
 };
 
 let disposed = false;
@@ -402,9 +452,9 @@ let disposed = false;
 const disposeHandlers = () => {
 	disposed = true;
 	if (!isNestingMenu) {
-		document.removeEventListener('focusin', onGlobalFocusin);
+		window.document.removeEventListener('focusin', onGlobalFocusin);
 	}
-	document.removeEventListener('mousedown', onGlobalMousedown);
+	window.document.removeEventListener('mousedown', onGlobalMousedown);
 };
 
 onMounted(() => {
@@ -422,6 +472,66 @@ onBeforeUnmount(() => {
 
 <style lang="scss" module>
 .root {
+	&.center {
+		> .menu {
+			> .item {
+				text-align: center;
+			}
+		}
+	}
+
+	&:not(.asDrawer):not(.widthSpecified) {
+		> .menu {
+			max-width: 400px;
+		}
+	}
+
+	&.big:not(.asDrawer) {
+		> .menu {
+			min-width: 230px;
+
+			> .item {
+				padding: 6px 20px;
+				font-size: 0.95em;
+				line-height: 24px;
+			}
+		}
+	}
+
+	&.asDrawer {
+		max-width: 600px;
+		margin: auto;
+
+		> .menu {
+			padding: 12px 0 max(env(safe-area-inset-bottom, 0px), 12px) 0;
+			width: 100%;
+			border-radius: 24px;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+
+			> .item {
+				font-size: 1em;
+				padding: 12px 24px;
+
+				&::before {
+					width: calc(100% - 24px);
+					border-radius: 12px;
+				}
+
+				> .icon {
+					margin-right: 14px;
+					width: 24px;
+				}
+			}
+
+			> .divider {
+				margin: 12px 0;
+			}
+		}
+	}
+}
+
+.menu {
 	padding: 8px 0;
 	box-sizing: border-box;
 	max-width: 100vw;
@@ -431,39 +541,6 @@ onBeforeUnmount(() => {
 
 	&:focus-visible {
 		outline: none;
-	}
-
-	&.center {
-		> .item {
-			text-align: center;
-		}
-	}
-
-	&.asDrawer {
-		padding: 12px 0 max(env(safe-area-inset-bottom, 0px), 12px) 0;
-		width: 100%;
-		border-radius: 24px;
-		border-bottom-right-radius: 0;
-		border-bottom-left-radius: 0;
-
-		> .item {
-			font-size: 1em;
-			padding: 12px 24px;
-
-			&::before {
-				width: calc(100% - 24px);
-				border-radius: 12px;
-			}
-
-			> .icon {
-				margin-right: 14px;
-				width: 24px;
-			}
-		}
-
-		> .divider {
-			margin: 12px 0;
-		}
 	}
 }
 
@@ -481,7 +558,7 @@ onBeforeUnmount(() => {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-decoration: none !important;
-	color: var(--menuFg, var(--fg));
+	color: var(--menuFg, var(--MI_THEME-fg));
 
 	&::before {
 		content: "";
@@ -494,14 +571,14 @@ onBeforeUnmount(() => {
 		margin: auto;
 		width: calc(100% - 16px);
 		height: 100%;
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 	}
 
 	&:focus-visible {
 		outline: none;
 
 		&:not(:hover):not(:active)::before {
-			outline: var(--focus) solid 2px;
+			outline: var(--MI_THEME-focus) solid 2px;
 			outline-offset: -2px;
 		}
 	}
@@ -510,7 +587,7 @@ onBeforeUnmount(() => {
 		&:hover,
 		&:focus-visible:active,
 		&:focus-visible.active {
-			color: var(--menuHoverFg, var(--accent));
+			color: var(--menuHoverFg, var(--MI_THEME-accent));
 			&.gamingDark{
 				color:black !important;
 			}
@@ -534,16 +611,16 @@ onBeforeUnmount(() => {
 			}
 
 			&::before {
-				background-color: var(--menuHoverBg, var(--accentedBg));
+				background-color: var(--menuHoverBg, var(--MI_THEME-accentedBg));
 			}
 		}
 
 		&:not(:focus-visible):active,
 		&:not(:focus-visible).active {
-			color: var(--menuActiveFg, var(--fgOnAccent));
+			color: var(--menuActiveFg, var(--MI_THEME-fgOnAccent));
 
 			&::before {
-				background-color: var(--menuActiveBg, var(--accent));
+				background-color: var(--menuActiveBg, var(--MI_THEME-accent));
 			}
 		}
 	}
@@ -553,52 +630,57 @@ onBeforeUnmount(() => {
 	}
 
 	&.danger {
-		--menuFg: #ff2a2a;
+		--menuFg: var(--MI_THEME-error);
 		--menuHoverFg: #fff;
-		--menuHoverBg: #ff4242;
+		--menuHoverBg: var(--MI_THEME-error);
 		--menuActiveFg: #fff;
-		--menuActiveBg: #d42e2e;
+		--menuActiveBg: hsl(from var(--MI_THEME-error) h s calc(l - 10));
 	}
 
 	&:active,
 	&.active {
-		color: var(--fgOnAccent);
+		color: var(--MI_THEME-fgOnAccent);
 		opacity: 1;
-    &.gamingDark{
-      color:black !important;
-    }
-    &.gamingLight{
-      color:white !important;
-    }
-		&:before {
-			background: var(--accent);
-		}
-    &.gamingDark:before{
-      color:black !important;
-      background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);      background-size: 1800% 1800%;
-      -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-    }
 
-    &.gamingLight:before{
-      color:white !important;
-      background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);      background-size: 1800% 1800% !important;
-      -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-    }
+		&.gamingDark {
+			color: black !important;
+		}
+
+		&.gamingLight {
+			color: white !important;
+		}
+
+		&:before {
+			background: var(--MI_THEME-accent);
+		}
+
+		&.gamingDark:before {
+			color: black !important;
+			background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+			background-size: 1800% 1800%;
+			-webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+			-moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+			animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+		}
+
+		&.gamingLight:before {
+			color: white !important;
+			background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+			background-size: 1800% 1800% !important;
+			-webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+			-moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+			animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+		}
+	}
+
+	&.radio {
+		--menuActiveFg: var(--MI_THEME-accent);
+		--menuActiveBg: var(--MI_THEME-accentedBg);
 	}
 
 	&.parent {
-		--menuActiveFg: var(--accent);
-		--menuActiveBg: var(--accentedBg);
-	}
-
-	&.label {
-		pointer-events: none;
-		font-size: 0.7em;
-		padding-bottom: 4px;
+		--menuActiveFg: var(--MI_THEME-accent);
+		--menuActiveBg: var(--MI_THEME-accentedBg);
 	}
 
 	&.pending {
@@ -624,8 +706,17 @@ onBeforeUnmount(() => {
 
 .item_content_text {
 	max-width: calc(100vw - 4rem);
+}
+
+.item_content_text_title {
 	text-overflow: ellipsis;
 	overflow: hidden;
+}
+
+.item_content_text_caption {
+	text-wrap: auto;
+	font-size: 85%;
+	opacity: 0.7;
 }
 
 .switchButton {
@@ -657,14 +748,26 @@ onBeforeUnmount(() => {
 .indicator {
 	display: flex;
 	align-items: center;
-	color: var(--indicator);
+	color: var(--MI_THEME-indicator);
 	font-size: 12px;
-	animation: global-blink 1s infinite;
+}
+
+.label {
+	position: relative;
+	padding: 6px 16px;
+	box-sizing: border-box;
+	white-space: nowrap;
+	font-size: 0.7em;
+	text-align: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	opacity: 0.7;
+	pointer-events: none;
 }
 
 .divider {
 	margin: 8px 0;
-	border-top: solid 0.5px var(--divider);
+	border-top: solid 0.5px var(--MI_THEME-divider);
 }
 
 .radioIcon {
@@ -674,11 +777,11 @@ onBeforeUnmount(() => {
 	height: 1em;
 	vertical-align: -0.125em;
 	border-radius: 50%;
-	border: solid 2px var(--divider);
-	background-color: var(--panel);
+	border: solid 2px var(--MI_THEME-divider);
+	background-color: var(--MI_THEME-panel);
 
 	&.radioChecked {
-		border-color: var(--accent);
+		border-color: var(--MI_THEME-accent);
 
 		&::after {
 			content: "";
@@ -690,7 +793,7 @@ onBeforeUnmount(() => {
 			width: 50%;
 			height: 50%;
 			border-radius: 50%;
-			background-color: var(--accent);
+			background-color: var(--MI_THEME-accent);
 		}
 	}
 }

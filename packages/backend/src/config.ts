@@ -7,7 +7,8 @@ import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import * as yaml from 'js-yaml';
-import * as Sentry from '@sentry/node';
+import type * as Sentry from '@sentry/node';
+import type * as SentryVue from '@sentry/vue';
 import type { RedisOptions } from 'ioredis';
 
 type RedisOptionsSource = Partial<RedisOptions> & {
@@ -27,6 +28,7 @@ type Source = {
 	port?: number;
 	socket?: string;
 	chmodSocket?: string;
+	setupPassword?: string;
 	disableHsts?: boolean;
 	db: {
 		host: string;
@@ -49,6 +51,10 @@ type Source = {
 	redisForPubsub?: RedisOptionsSource;
 	redisForJobQueue?: RedisOptionsSource;
 	redisForTimelines?: RedisOptionsSource;
+	redisForReactions?: RedisOptionsSource;
+	fulltextSearch?: {
+		provider?: FulltextSearchProvider;
+	};
 	meilisearch?: {
 		host: string;
 		port: string;
@@ -61,7 +67,12 @@ type Source = {
 		options: Partial<Sentry.NodeOptions>;
 		enableNodeProfiling: boolean;
 	};
-	sentryForFrontend?: { options: Partial<Sentry.NodeOptions> };
+	sentryForFrontend?: {
+		options: Partial<SentryVue.BrowserOptions> & { dsn: string };
+		vueIntegration?: SentryVue.VueIntegrationOptions | null;
+		browserTracingIntegration?: Parameters<typeof SentryVue.browserTracingIntegration>[0] | null;
+		replayIntegration?: Parameters<typeof SentryVue.replayIntegration>[0] | null;
+	};
 
 	adminUserName?: string;
 	adminPassword?: string;
@@ -93,6 +104,8 @@ type Source = {
 
 	maxFileSize?: number;
 
+	maxReactionsLimit?: number;
+
 	clusterLimit?: number;
 
 	id: string;
@@ -110,16 +123,20 @@ type Source = {
 	inboxJobMaxAttempts?: number;
 
 	mediaProxy?: string;
-	proxyRemoteFiles?: boolean;
 	videoThumbnailGenerator?: string;
-
-	signToActivityPubGet?: boolean;
 
 	perChannelMaxNoteCacheCount?: number;
 	perUserNotificationsMaxCount?: number;
 	deactivateAntennaThreshold?: number;
 	maxLocalUsers?: number;
 	pidFile: string;
+
+	logging?: {
+		sql?: {
+			disableQueryTruncation?: boolean,
+			enableQueryParamLogging?: boolean,
+		}
+	}
 };
 
 export type Config = {
@@ -147,6 +164,9 @@ export type Config = {
 				pass: string;
 		  }[]
 		| undefined;
+	fulltextSearch?: {
+		provider?: FulltextSearchProvider;
+	};
 	meilisearch:
 		| {
 				host: string;
@@ -178,11 +198,16 @@ export type Config = {
 	relationshipJobPerSec: number | undefined;
 	deliverJobMaxAttempts: number | undefined;
 	inboxJobMaxAttempts: number | undefined;
-	proxyRemoteFiles: boolean | undefined;
-	signToActivityPubGet: boolean | undefined;
+	logging?: {
+		sql?: {
+			disableQueryTruncation?: boolean,
+			enableQueryParamLogging?: boolean,
+		}
+	}
 
 	version: string;
 	publishTarballInsteadOfProvideRepositoryUrl: boolean;
+	setupPassword: string | undefined;
 	host: string;
 	hostname: string;
 	scheme: string;
@@ -192,8 +217,10 @@ export type Config = {
 	authUrl: string;
 	driveUrl: string;
 	userAgent: string;
-	clientEntry: string;
-	clientManifestExists: boolean;
+	frontendEntry: { file: string | null };
+	frontendManifestExists: boolean;
+	frontendEmbedEntry: { file: string | null };
+	frontendEmbedManifestExists: boolean;
 	mediaProxy: string;
 	externalMediaProxyEnabled: boolean;
 	videoThumbnailGenerator: string | null;
@@ -201,14 +228,21 @@ export type Config = {
 	redisForPubsub: RedisOptions & RedisOptionsSource;
 	redisForJobQueue: RedisOptions & RedisOptionsSource;
 	redisForTimelines: RedisOptions & RedisOptionsSource;
+	redisForReactions: RedisOptions & RedisOptionsSource;
 	sentryForBackend:
 		| { options: Partial<Sentry.NodeOptions>; enableNodeProfiling: boolean }
 		| undefined;
-	sentryForFrontend: { options: Partial<Sentry.NodeOptions> } | undefined;
+	sentryForFrontend: {
+		options: Partial<SentryVue.BrowserOptions> & { dsn: string };
+		vueIntegration?: SentryVue.VueIntegrationOptions | null;
+		browserTracingIntegration?: Parameters<typeof SentryVue.browserTracingIntegration>[0] | null;
+		replayIntegration?: Parameters<typeof SentryVue.replayIntegration>[0] | null;
+	} | undefined;
 	perChannelMaxNoteCacheCount: number;
 	perUserNotificationsMaxCount: number;
 	deactivateAntennaThreshold: number;
 	maxLocalUsers: number;
+	maxReactionsLimit: number;
 	objectStorage?: {
 		useObjectStorage?: boolean;
 		objectStorageBaseUrl?: string;
@@ -227,6 +261,8 @@ export type Config = {
 	pidFile: string;
 };
 
+export type FulltextSearchProvider = 'sqlLike' | 'sqlPgroonga' | 'meilisearch';
+
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
 
@@ -238,27 +274,24 @@ const dir = `${_dirname}/../../../.config`;
 /**
  * Path of configuration file
  */
-const path = process.env.MISSKEY_CONFIG_YML
+export const path = process.env.MISSKEY_CONFIG_YML
 	? resolve(dir, process.env.MISSKEY_CONFIG_YML)
 	: process.env.NODE_ENV === 'test'
 		? resolve(dir, 'test.yml')
 		: resolve(dir, 'default.yml');
 
 export function loadConfig(): Config {
-	const meta = JSON.parse(
-		fs.readFileSync(`${_dirname}/../../../built/meta.json`, 'utf-8'),
-	);
-	const clientManifestExists = fs.existsSync(
-		_dirname + '/../../../built/_vite_/manifest.json',
-	);
-	const clientManifest = clientManifestExists
-		? JSON.parse(
-			fs.readFileSync(
-				`${_dirname}/../../../built/_vite_/manifest.json`,
-				'utf-8',
-			),
-		)
-		: { 'src/_boot_.ts': { file: 'src/_boot_.ts' } };
+	const meta = JSON.parse(fs.readFileSync(`${_dirname}/../../../built/meta.json`, 'utf-8'));
+
+	const frontendManifestExists = fs.existsSync(_dirname + '/../../../built/_frontend_vite_/manifest.json');
+	const frontendEmbedManifestExists = fs.existsSync(_dirname + '/../../../built/_frontend_embed_vite_/manifest.json');
+	const frontendManifest = frontendManifestExists ?
+		JSON.parse(fs.readFileSync(`${_dirname}/../../../built/_frontend_vite_/manifest.json`, 'utf-8'))
+		: { 'src/_boot_.ts': { file: null } };
+	const frontendEmbedManifest = frontendEmbedManifestExists ?
+		JSON.parse(fs.readFileSync(`${_dirname}/../../../built/_frontend_embed_vite_/manifest.json`, 'utf-8'))
+		: { 'src/boot.ts': { file: null } };
+
 	const config = yaml.load(fs.readFileSync(path, 'utf-8')) as Source;
 
 	const url = tryCreateUrl(config.url ?? process.env.MISSKEY_URL ?? '');
@@ -284,6 +317,7 @@ export function loadConfig(): Config {
 		version,
 		publishTarballInsteadOfProvideRepositoryUrl:
 			!!config.publishTarballInsteadOfProvideRepositoryUrl,
+		setupPassword: config.setupPassword,
 		url: url.origin,
 		port: config.port ?? parseInt(process.env.PORT ?? '', 10),
 		socket: config.socket,
@@ -304,6 +338,7 @@ export function loadConfig(): Config {
 		adminPassword: config.adminPassword,
 		rootUserName: config.rootUserName,
 		rootPassword: config.rootPassword,
+		fulltextSearch: config.fulltextSearch,
 		meilisearch: config.meilisearch,
 		redis,
 		redisForPubsub: config.redisForPubsub
@@ -315,6 +350,7 @@ export function loadConfig(): Config {
 		redisForTimelines: config.redisForTimelines
 			? convertRedisOptions(config.redisForTimelines, host)
 			: redis,
+		redisForReactions: config.redisForReactions ? convertRedisOptions(config.redisForReactions, host) : redis,
 		sentryForBackend: config.sentryForBackend,
 		sentryForFrontend: config.sentryForFrontend,
 		id: config.id,
@@ -334,8 +370,6 @@ export function loadConfig(): Config {
 		relationshipJobPerSec: config.relationshipJobPerSec,
 		deliverJobMaxAttempts: config.deliverJobMaxAttempts,
 		inboxJobMaxAttempts: config.inboxJobMaxAttempts,
-		proxyRemoteFiles: config.proxyRemoteFiles,
-		signToActivityPubGet: config.signToActivityPubGet ?? true,
 		mediaProxy: externalMediaProxy ?? internalMediaProxy,
 		externalMediaProxyEnabled:
 			externalMediaProxy !== null && externalMediaProxy !== internalMediaProxy,
@@ -348,15 +382,19 @@ export function loadConfig(): Config {
 				: config.videoThumbnailGenerator
 			: null,
 		userAgent: `Type4ny/${version} (${config.url})`,
-		clientEntry: clientManifest['src/_boot_.ts'],
-		clientManifestExists: clientManifestExists,
+		frontendEntry: frontendManifest['src/_boot_.ts'],
+		frontendManifestExists: frontendManifestExists,
+		frontendEmbedEntry: frontendEmbedManifest['src/boot.ts'],
+		frontendEmbedManifestExists: frontendEmbedManifestExists,
 		perChannelMaxNoteCacheCount: config.perChannelMaxNoteCacheCount ?? 1000,
 		perUserNotificationsMaxCount: config.perUserNotificationsMaxCount ?? 500,
 		deactivateAntennaThreshold:
 			config.deactivateAntennaThreshold ?? 1000 * 60 * 60 * 24 * 7,
 		maxLocalUsers: config.maxLocalUsers ?? -1,
+		maxReactionsLimit: config.maxReactionsLimit ?? 3,
 		objectStorage: config.objectStorage ?? {},
 		pidFile: config.pidFile,
+		logging: config.logging,
 	};
 }
 

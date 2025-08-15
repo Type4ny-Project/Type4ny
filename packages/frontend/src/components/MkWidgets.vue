@@ -6,12 +6,12 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <div :class="$style.root">
 	<template v-if="edit">
 		<header :class="$style.editHeader">
-			<MkSelect v-model="widgetAdderSelected" style="margin-bottom: var(--margin)" data-cy-widget-select>
+			<MkSelect v-model="widgetAdderSelected" style="margin-bottom: var(--MI-margin)" data-cy-widget-select>
 				<template #label>{{ i18n.ts.selectWidget }}</template>
-				<option v-for="widget in widgetDefs" :key="widget" :value="widget">{{ i18n.ts._widgets[widget] }}</option>
+				<option v-for="widget in _widgetDefs" :key="widget" :value="widget">{{ i18n.ts._widgets[widget] }}</option>
 			</MkSelect>
 			<MkButton inline primary data-cy-widget-add @click="addWidget"><i class="ti ti-plus"></i> {{ i18n.ts.add }}</MkButton>
-			<MkButton inline @click="$emit('exit')">{{ i18n.ts.close }}</MkButton>
+			<MkButton inline @click="emit('exit')">{{ i18n.ts.close }}</MkButton>
 		</header>
 		<Sortable
 			:modelValue="props.widgets"
@@ -33,7 +33,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			</template>
 		</Sortable>
 	</template>
-	<component :is="`widget-${widget.name}`" v-for="widget in widgets" v-else :key="widget.id" :ref="el => widgetRefs[widget.id] = el" :class="$style.widget" :widget="widget" @updateProps="updateWidget(widget.id, $event)" @contextmenu.stop="onContextmenu(widget, $event)"/>
+	<component :is="`widget-${widget.name}`" v-for="widget in _widgets" v-else :key="widget.id" :ref="el => widgetRefs[widget.id] = el" :class="$style.widget" :widget="widget" @updateProps="updateWidget(widget.id, $event)" @contextmenu.stop="onContextmenu(widget, $event)"/>
 </div>
 </template>
 
@@ -49,13 +49,15 @@ export type DefaultStoredWidget = {
 </script>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, ref } from 'vue';
-import { v4 as uuid } from 'uuid';
+import { defineAsyncComponent, ref, computed } from 'vue';
+import { genId } from '@/utility/id.js';
 import MkSelect from '@/components/MkSelect.vue';
 import MkButton from '@/components/MkButton.vue';
-import { widgets as widgetDefs } from '@/widgets/index.js';
+import { widgets as widgetDefs, federationWidgets } from '@/widgets/index.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
+import { isLink } from '@@/js/is-link.js';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
@@ -63,6 +65,16 @@ const props = defineProps<{
 	widgets: Widget[];
 	edit: boolean;
 }>();
+
+const _widgetDefs = computed(() => {
+	if (instance.federation === 'none') {
+		return widgetDefs.filter(x => !federationWidgets.includes(x));
+	} else {
+		return widgetDefs;
+	}
+});
+
+const _widgets = computed(() => props.widgets.filter(x => _widgetDefs.value.includes(x.name)));
 
 const emit = defineEmits<{
 	(ev: 'updateWidgets', widgets: Widget[]): void;
@@ -82,7 +94,7 @@ const addWidget = () => {
 
 	emit('addWidget', {
 		name: widgetAdderSelected.value,
-		id: uuid(),
+		id: genId(),
 		data: {},
 	});
 
@@ -97,13 +109,6 @@ const updateWidget = (id, data) => {
 
 function onContextmenu(widget: Widget, ev: MouseEvent) {
 	const element = ev.target as HTMLElement | null;
-	const isLink = (el: HTMLElement): boolean => {
-		if (el.tagName === 'A') return true;
-		if (el.parentElement) {
-			return isLink(el.parentElement);
-		}
-		return false;
-	};
 	if (element && isLink(element)) return;
 	if (element && (['INPUT', 'TEXTAREA', 'IMG', 'VIDEO', 'CANVAS'].includes(element.tagName) || element.attributes['contenteditable'])) return;
 	if (window.getSelection()?.toString() !== '') return;
@@ -128,7 +133,7 @@ function onContextmenu(widget: Widget, ev: MouseEvent) {
 
 .widget {
 	contain: content;
-	margin: var(--margin) 0;
+	margin: var(--MI-margin) 0;
 
 	&:first-of-type {
 		margin-top: 0;

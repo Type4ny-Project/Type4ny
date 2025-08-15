@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -12,20 +13,21 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 import MkContainer from '@/components/MkContainer.vue';
 import MkClickerGame from '@/components/MkClickerGame.vue';
-import { defaultStore } from '@/store.js';
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
+import { store } from '@/store.js';
+const darkMode = computed(store.makeGetterSetter('darkMode'));
 const name = 'clicker';
 
 const widgetPropsDef = {
 	showHeader: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 

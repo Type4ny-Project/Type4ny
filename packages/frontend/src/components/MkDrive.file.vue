@@ -1,5 +1,6 @@
-<!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+﻿<!--
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -7,7 +8,6 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	:class="[$style.root, { [$style.isSelected]: isSelected || isSelectedFile }]"
 	draggable="true"
 	:title="title"
-	@click="onClick"
 	@contextmenu.stop="onContextmenu"
 	@dragstart="onDragstart"
 	@dragend="onDragend"
@@ -43,13 +43,12 @@ import MkDriveFileThumbnail from '@/components/MkDriveFileThumbnail.vue';
 import bytes from '@/filters/bytes.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { $i } from '@/account.js';
-import { getDriveFileMenu, getDriveMultiFileMenu } from '@/scripts/get-drive-file-menu.js';
-import { isTouchUsing } from '@/scripts/touch.js';
-import { deviceKind } from '@/scripts/device-kind.js';
-import { useRouter } from '@/router/supplier.js';
-
-const router = useRouter();
+import { $i } from '@/i.js';
+import { getDriveFileMenu, getDriveMultiFileMenu } from '@/utility/get-drive-file-menu.js';
+import { isTouchUsing } from '@/utility/touch.js';
+import { setDragData } from '@/drag-and-drop.js';
+import { deviceKind } from '@/utility/device-kind.js';
+import { useRouter } from '@/router.js';
 
 const props = withDefaults(defineProps<{
 	file: Misskey.entities.DriveFile;
@@ -59,15 +58,15 @@ const props = withDefaults(defineProps<{
   SelectFiles?: string[];
 }>(), {
 	isSelected: false,
-	selectMode: false,
 });
 
 const emit = defineEmits<{
-	(ev: 'chosen', r: Misskey.entities.DriveFile): void;
-	(ev: 'dragstart'): void;
+	(ev: 'dragstart', dragEvent: DragEvent): void;
 	(ev: 'dragend'): void;
+	(ev: 'chosen', file: Misskey.entities.DriveFile): void;
 }>();
 
+const router = useRouter();
 const isDragging = ref(false);
 const isSelectedFile = ref(false);
 const title = computed(() => `${props.file.name}\n${props.file.type} ${bytes(props.file.size)}`);
@@ -78,7 +77,6 @@ watch(props.SelectFiles, () => {
 });
 
 function onClick(ev: MouseEvent) {
-
 	if (props.selectMode) {
 		emit('chosen', props.file);
 	} else if (!ev.shiftKey && !isTouchUsing && !isSelectedFile.value) {
@@ -86,8 +84,8 @@ function onClick(ev: MouseEvent) {
 	} else if (!ev.shiftKey && isSelectedFile.value && props.SelectFiles.length === 0) {
 		os.popupMenu(getDriveMultiFileMenu(props.SelectFiles), (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
 	} else if (isTouchUsing && !isSelectedFile.value && props.SelectFiles.length === 0) {
-    os.popupMenu(getDriveFileMenu(props.file, props.folder), (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
-	}else {
+		os.popupMenu(getDriveFileMenu(props.file, props.folder), (ev.currentTarget ?? ev.target ?? undefined) as HTMLElement | undefined);
+	} else {
 		if (deviceKind === 'desktop') {
 			router.push(`/my/drive/file/${props.file.id}`);
 		} else {
@@ -97,7 +95,6 @@ function onClick(ev: MouseEvent) {
 }
 
 function onContextmenu(ev: MouseEvent) {
-
 	if (!isTouchUsing) {
 		if (!ev.shiftKey && !isSelectedFile.value) {
 			os.contextMenu(getDriveFileMenu(props.file, props.folder), ev);
@@ -110,11 +107,11 @@ function onContextmenu(ev: MouseEvent) {
 function onDragstart(ev: DragEvent) {
 	if (ev.dataTransfer) {
 		ev.dataTransfer.effectAllowed = 'move';
-		ev.dataTransfer.setData(_DATA_TRANSFER_DRIVE_FILE_, JSON.stringify(props.file));
+		setDragData(ev, 'driveFiles', [props.file]);
 	}
 	isDragging.value = true;
-	 (isDragging.value)
-	emit('dragstart');
+	 (isDragging.value);
+	emit('dragstart', ev);
 }
 
 function onDragend() {
@@ -134,7 +131,7 @@ function onDragend() {
 	&:hover {
 		background: rgba(#000, 0.05);
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				background: #0b65a5;
@@ -152,7 +149,7 @@ function onDragend() {
 	&:active {
 		background: rgba(#000, 0.1);
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				background: #0b588c;
@@ -168,29 +165,29 @@ function onDragend() {
 	}
 
 	&.isSelected {
-		background: var(--accent);
+		background: var(--MI_THEME-accent);
 
 		&:hover {
-			background: var(--accentLighten);
+			background: hsl(from var(--MI_THEME-accent) h s calc(l + 10));
 		}
 
 		&:active {
-			background: var(--accentDarken);
+			background: hsl(from var(--MI_THEME-accent) h s calc(l - 10));
 		}
 
-		> .label {
+		.label {
 			&::before,
 			&::after {
 				display: none;
 			}
 		}
 
-		> .name {
-			color: #fff;
+		.name {
+			color: var(--MI_THEME-fgOnAccent);
 		}
 
-		> .thumbnail {
-			color: #fff;
+		.thumbnail {
+			color: var(--MI_THEME-fgOnAccent);
 		}
 	}
 }
@@ -260,11 +257,12 @@ function onDragend() {
 
 .name {
 	display: block;
-	margin: 4px 0 0 0;
-	font-size: 0.8em;
+	margin: 8px 0 0 0;
+	padding: 0 2px;
+	font-size: 82%;
 	text-align: center;
 	word-break: break-all;
-	color: var(--fg);
+	color: var(--MI_THEME-fg);
 	overflow: hidden;
 }
 </style>

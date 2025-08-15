@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div :class="[$style.root, { [$style.disabled]: disabled  }]">
+<div :class="[$style.root, { [$style.disabled]: disabled }]">
 	<input
 		ref="input"
 		type="checkbox"
@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		@click="toggle"
 	>
 	<XButton :class="$style.toggle" :checked="checked" :disabled="disabled" @toggle="toggle"/>
-	<span v-if="!noBody" :class="$style.body,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}">
+	<span v-if="!noBody" :class="[$style.body,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">
 		<!-- TODO: 無名slotの方は廃止 -->
 		<span :class="$style.label">
 			<span @click="toggle">
@@ -27,10 +27,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import {toRefs, Ref, ref, computed, watch} from 'vue';
+import { toRefs } from 'vue';
+import type { Ref, ref, computed, watch } from 'vue';
 import XButton from '@/components/MkSwitch.button.vue';
-import {defaultStore} from "@/store.js";
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+import { store } from '@/store.js';
+
+const gamingType = store.s.gamingType;
 
 const props = defineProps<{
 	modelValue: boolean | Ref<boolean>;
@@ -61,7 +63,7 @@ const toggle = () => {
 
 	&:hover {
 		> .button {
-			border-color: var(--inputBorderHover) !important;
+			border-color: var(--MI_THEME-inputBorderHover) !important;
 		}
 	}
 
@@ -102,7 +104,7 @@ const toggle = () => {
 	margin: 0;
 
 	&:focus-visible ~ .toggle {
-		outline: 2px solid var(--focus);
+		outline: 2px solid var(--MI_THEME-focus);
 		outline-offset: 2px;
 	}
 }
@@ -112,7 +114,7 @@ const toggle = () => {
 	margin-top: 2px;
 	display: block;
 	transition: inherit;
-	color: var(--fg);
+	color: var(--MI_THEME-fg);
 }
 
 .label {
@@ -124,7 +126,7 @@ const toggle = () => {
 
 .caption {
 	margin: 8px 0 0 0;
-	color: var(--fgTransparentWeak);
+	color: color(from var(--MI_THEME-fg) srgb r g b / 0.75);
 	font-size: 0.85em;
 
 	&:empty {
@@ -137,6 +139,5 @@ const toggle = () => {
 	font-size: 85%;
 	vertical-align: top;
 }
-
 
 </style>

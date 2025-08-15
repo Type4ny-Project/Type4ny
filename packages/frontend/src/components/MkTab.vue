@@ -1,12 +1,12 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <script lang="ts">
-import {computed, defineComponent, h, resolveDirective, withDirectives , ref , watch} from 'vue';
-import {defaultStore} from "@/store.js";
-
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+import { computed, defineComponent, h, resolveDirective, withDirectives, ref, watch } from 'vue';
+import { store } from '@/store.js';
+const gamingType = store.s.gamingType;
 
 export default defineComponent({
 	props: {
@@ -20,7 +20,7 @@ export default defineComponent({
 		return () => h('div', {
 			class: 'pxhvhrfw',
 		}, options.map(option => withDirectives(h('button', {
-			class: ['_button', { active: props.modelValue === option.props?.value , gamingDark: gamingType.value == 'dark' && props.modelValue === option.props.value,gamingLight: gamingType.value == 'light' && props.modelValue === option.props.value } ],
+			class: ['_button', { active: props.modelValue === option.props?.value, gamingDark: gamingType === 'dark' && props.modelValue === option.props.value, gamingLight: gamingType === 'light' && props.modelValue === option.props.value }],
 			key: option.key as string,
 			disabled: props.modelValue === option.props?.value,
 			onClick: () => {
@@ -49,8 +49,8 @@ export default defineComponent({
 		}
 
 		&.active {
-			color: var(--accent);
-			background: var(--accentedBg);
+			color: var(--MI_THEME-accent);
+			background: var(--MI_THEME-accentedBg);
 
       &.gamingDark{
 				color: black !important;
@@ -72,8 +72,8 @@ export default defineComponent({
 		}
 
 		&:not(.active):hover {
-			color: var(--fgHighlighted);
-			background: var(--panelHighlight);
+			color: var(--MI_THEME-fgHighlighted);
+			background: var(--MI_THEME-panelHighlight);
 		}
 
 		&:not(:first-child) {

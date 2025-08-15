@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <div :class="$style.root">
-	<div style="container-type: inline-size;">
-		<RouterView/>
-	</div>
+	<RouterView/>
 
 	<XCommon/>
 </div>
@@ -14,35 +12,35 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { computed, provide, ref } from 'vue';
+import { instanceName } from '@@/js/config.js';
 import XCommon from './_common_/common.vue';
-import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
-import { instanceName } from '@/config.js';
-import { mainRouter } from '@/router/main.js';
+import type { PageMetadata } from '@/page.js';
+import { provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
+import { mainRouter } from '@/router.js';
+import { DI } from '@/di.js';
 
 const isRoot = computed(() => mainRouter.currentRoute.value.name === 'index');
 
 const pageMetadata = ref<null | PageMetadata>(null);
 
-provide('router', mainRouter);
+provide(DI.router, mainRouter);
 provideMetadataReceiver((metadataGetter) => {
 	const info = metadataGetter();
 	pageMetadata.value = info;
 	if (pageMetadata.value) {
 		if (isRoot.value && pageMetadata.value.title === instanceName) {
-			document.title = pageMetadata.value.title;
+			window.document.title = pageMetadata.value.title;
 		} else {
-			document.title = `${pageMetadata.value.title} | ${instanceName}`;
+			window.document.title = `${pageMetadata.value.title} | ${instanceName}`;
 		}
 	}
 });
 provideReactiveMetadata(pageMetadata);
-
-document.documentElement.style.overflowY = 'scroll';
 </script>
 
 <style lang="scss" module>
 .root {
-	min-height: 100dvh;
-	box-sizing: border-box;
+	position: relative;
+	height: 100dvh;
 }
 </style>

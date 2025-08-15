@@ -34,6 +34,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
+import { deepClone } from '@/utility/clone.js';
+
 const props = defineProps<{
 	activity: {
 		total: number;
@@ -43,10 +45,21 @@ const props = defineProps<{
 	}[]
 }>();
 
-for (const d of props.activity) {
-	d.total = d.notes + d.replies + d.renotes;
-}
-const peak = Math.max(...props.activity.map(d => d.total));
+const activity = deepClone(props.activity).map(d => ({
+	...d,
+	total: d.notes + d.replies + d.renotes,
+	x: 0,
+	date: {
+		year: 0,
+		month: 0,
+		day: 0,
+		weekday: 0,
+	},
+	v: 0,
+	color: '',
+}));
+
+const peak = Math.max(...activity.map(d => d.total));
 
 const now = new Date();
 const year = now.getFullYear();
@@ -54,7 +67,7 @@ const month = now.getMonth();
 const day = now.getDate();
 
 let x = 20;
-props.activity.slice().forEach((d, i) => {
+activity.slice().forEach((d, i) => {
 	d.x = x;
 
 	const date = new Date(year, month, day - i);

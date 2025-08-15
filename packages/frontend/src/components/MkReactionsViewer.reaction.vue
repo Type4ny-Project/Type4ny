@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -12,24 +13,18 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		{
 			[$style.gamingDark]: gamingType === 'dark',
 			[$style.gamingLight]: gamingType === 'light',
-			[$style.reacted]: note.myReactions?.includes(reaction),
+			[$style.reacted]: isReacted,
 			[$style.canToggle]: canToggle,
-			[$style.small]: defaultStore.state.reactionsDisplaySize === 'small',
-			[$style.large]: defaultStore.state.reactionsDisplaySize === 'large',
+			[$style.small]: reactionsDisplaySize === 'small',
+			[$style.large]: reactionsDisplaySize === 'large',
 		},
 	]"
 	@click="toggleReaction()"
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		:class="defaultStore.state.limitWidthOfReaction ? $style.limitWidth : ''"
-		:reaction="reaction"
-		:emojiUrl="
-			note.reactionEmojis[reaction.substring(1, reaction.length - 1)]
-		"
-	/>
-	<span
-		:class="[
+		style="pointer-events: none;" :class="limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
+	<span :class="[
 			$style.count,
 			{
 				[$style.gamingDark]: gamingType === 'dark',
@@ -41,28 +36,42 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onMounted, shallowRef, watch } from 'vue';
+import { computed, inject, onMounted, useTemplateRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
+import { getUnicodeEmoji } from '@@/js/emojilist.js';
 import MkCustomEmojiDetailedDialog from './MkCustomEmojiDetailedDialog.vue';
+import type { MenuItem } from '@/types/menu';
 import XDetails from '@/components/MkReactionsViewer.details.vue';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
 import * as os from '@/os.js';
-import { misskeyApi, misskeyApiGet } from '@/scripts/misskey-api.js';
-import { useTooltip } from '@/scripts/use-tooltip.js';
-import { $i } from '@/account.js';
+import { misskeyApi, misskeyApiGet } from '@/utility/misskey-api.js';
+import { useTooltip } from '@/composables/use-tooltip.js';
+import { $i } from '@/i.js';
 import MkReactionEffect from '@/components/MkReactionEffect.vue';
-import { claimAchievement } from '@/scripts/achievements.js';
-import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
-import * as sound from '@/scripts/sound.js';
-import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
+import * as sound from '@/utility/sound.js';
+import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
 import { customEmojisMap } from '@/custom-emojis.js';
-import { getUnicodeEmoji } from '@/scripts/emojilist.js';
+import { prefer } from '@/preferences.js';
+import { DI } from '@/di.js';
+import { noteEvents } from '@/composables/use-note-capture.js';
+import { mute as muteEmoji, unmute as unmuteEmoji, checkMuted as isEmojiMuted } from '@/utility/emoji-mute.js';
+import { store } from '@/store.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = store.s.gamingType;
+
+// Computed properties to safely access prefer
+const reactionsDisplaySize = computed(() => prefer.s.reactionsDisplaySize);
+const limitWidthOfReaction = computed(() => prefer.s.limitWidthOfReaction);
+
+// Computed property to safely check if reacted
+const isReacted = computed(() => props.note?.myReactions?.includes(props.reaction) ?? false);
 
 const props = defineProps<{
+	noteId: Misskey.entities.Note['id'];
 	reaction: string;
+	reactionEmojis: Misskey.entities.Note['reactionEmojis'];
+	myReaction: Misskey.entities.Note['myReaction'];
 	count: number;
 	isInitial: boolean;
 	note: Misskey.entities.Note & {
@@ -70,13 +79,13 @@ const props = defineProps<{
 	};
 }>();
 
-const mock = inject<boolean>('mock', false);
+const mock = inject(DI.mock, false);
 
 const emit = defineEmits<{
 	(ev: 'reactionToggled', emoji: string, newCount: number): void;
 }>();
 
-const buttonEl = shallowRef<HTMLElement>();
+const buttonEl = useTemplateRef('buttonEl');
 const isLocal = computed(() => !props.reaction.match(/@\w/));
 const emojiName = computed(() =>
 	props.reaction.replace(/:/g, '').replace(/@\./, ''),
@@ -89,17 +98,18 @@ const isAvailable = computed(() =>
 );
 
 const canToggle = computed(() => {
-	return (
-		!props.reaction.match(/@\w/) &&
-		$i &&
-		emoji.value &&
-		checkReactionPermissions($i, props.note, emoji.value)
-	);
+	// TODO
+	//return (
+	//	!props.reaction.match(/@\w/) &&
+	//	$i &&
+	//	emoji.value &&
+	//	checkReactionPermissions($i, props.note, emoji.value)
+	//);
+	return !props.reaction.match(/@\w/) && $i && emoji.value;
 });
+const canGetInfo = computed(() => !props.reaction.match(/@\w/) && props.reaction.includes(':'));
+const isLocalCustomEmoji = props.reaction[0] === ':' && props.reaction.includes('@.');
 
-const canGetInfo = computed(
-	() => !props.reaction.match(/@\w/) && props.reaction.includes(':'),
-);
 const plainReaction = computed(() =>
 	customEmojisMap.has(emojiName.value)
 		? getReactionName(props.reaction, true)
@@ -113,6 +123,7 @@ function getReactionName(reaction: string, formated = false) {
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
+	if (!props.note) return; // Guard against undefined note
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const oldReaction = props.note.myReactions?.includes(props.reaction)
@@ -127,6 +138,8 @@ async function toggleReaction() {
 					: i18n.ts.cancelReactionConfirm,
 		});
 		if (confirm.canceled) return;
+
+		// eslint-disable-next-line vue/no-mutating-props
 		props.note.myReactions.splice(
 			props.note.myReactions.indexOf(oldReaction),
 			1,
@@ -141,21 +154,38 @@ async function toggleReaction() {
 		}
 
 		misskeyApi('notes/reactions/delete', {
-			noteId: props.note.id,
+			noteId: props.noteId,
 			reaction: oldReaction,
 		}).then(() => {
+			noteEvents.emit(`unreacted:${props.noteId}`, {
+				userId: $i!.id,
+				reaction: oldReaction,
+			});
 			if (
-				oldReaction !== props.reaction &&
-				oldReaction !== '🚮' &&
-				props.reaction !== '🚮'
+				oldReaction !== props.reaction
 			) {
 				misskeyApi('notes/reactions/create', {
-					noteId: props.note.id,
+					noteId: props.noteId,
 					reaction: props.reaction,
+				}).then(() => {
+					noteEvents.emit(`reacted:${props.noteId}`, {
+						userId: $i!.id,
+						reaction: props.reaction,
+						emoji: emoji.value,
+					});
 				});
 			}
 		});
 	} else {
+		if (prefer.s.confirmOnReact) {
+			const confirm = await os.confirm({
+				type: 'question',
+				text: i18n.tsx.reactAreYouSure({ emoji: props.reaction.replace('@.', '') }),
+			});
+
+			if (confirm.canceled) return;
+		}
+
 		sound.playMisskeySfx('reaction');
 
 		if (mock) {
@@ -164,73 +194,83 @@ async function toggleReaction() {
 		}
 
 		misskeyApi('notes/reactions/create', {
-			noteId: props.note.id,
+			noteId: props.noteId,
 			reaction: props.reaction,
+		}).then(() => {
+			noteEvents.emit(`reacted:${props.noteId}`, {
+				userId: $i!.id,
+				reaction: props.reaction,
+				emoji: emoji.value,
+			});
 		});
 
-		if (
-			props.note.text &&
-			props.note.text.length > 100 &&
-			Date.now() - new Date(props.note.createdAt).getTime() < 1000 * 3
-		) {
-			claimAchievement('reactWithoutRead');
-		}
+		// TODO: 上位コンポーネントでやる
+		//if (
+		//	props.note.text &&
+		//	props.note.text.length > 100 &&
+		//	Date.now() - new Date(props.note.createdAt).getTime() < 1000 * 3
+		//) {
+		//	claimAchievement('reactWithoutRead');
+		//}
 	}
 }
 
 async function menu(ev) {
-	if (!canGetInfo.value) return;
+	let menuItems: MenuItem[] = [];
 
-	os.popupMenu(
-		[
-			{
-				text: i18n.ts.info,
-				icon: 'ti ti-info-circle',
-				action: async () => {
-					const { dispose } = os.popup(
-						MkCustomEmojiDetailedDialog,
-						{
-							emoji: await misskeyApiGet('emoji', {
-								name: props.reaction.replace(/:/g, '').replace(/@\./, ''),
-							}),
-						},
-						{
-							closed: () => dispose(),
-						},
-					);
-				},
+	if (canGetInfo.value) {
+		menuItems.push({
+			text: i18n.ts.info,
+			icon: 'ti ti-info-circle',
+			action: async () => {
+				const { dispose } = os.popup(MkCustomEmojiDetailedDialog, {
+					emoji: await misskeyApiGet('emoji', {
+						name: props.reaction.replace(/:/g, '').replace(/@\./, ''),
+					}),
+				}, {
+					closed: () => dispose(),
+				});
 			},
-			...(isAvailable.value &&
-			!defaultStore.state[
-				`reactions${defaultStore.state.pickerProfileDefault}`
-			].includes(plainReaction.value)
-				? [
-					{
-						text: i18n.ts.addToDefaultEmojiProfile,
-						icon: 'ti ti-plus',
-						action: () => {
-							defaultStore.set(
-								`reactions${defaultStore.state.pickerProfileDefault}`,
-								[
-									...defaultStore.state[
-										`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault : ''}`
-									],
-									plainReaction.value,
-								],
-							);
-						},
-					},
-				]
-				: []),
-		],
-		ev.currentTarget ?? ev.target,
-	);
+		});
+	}
+
+	if (isEmojiMuted(props.reaction).value) {
+		menuItems.push({
+			text: i18n.ts.emojiUnmute,
+			icon: 'ti ti-mood-smile',
+			action: () => {
+				os.confirm({
+					type: 'question',
+					title: i18n.tsx.unmuteX({ x: isLocalCustomEmoji ? `:${emojiName.value}:` : props.reaction }),
+				}).then(({ canceled }) => {
+					if (canceled) return;
+					unmuteEmoji(props.reaction);
+				});
+			},
+		});
+	} else {
+		menuItems.push({
+			text: i18n.ts.emojiMute,
+			icon: 'ti ti-mood-off',
+			action: () => {
+				os.confirm({
+					type: 'question',
+					title: i18n.tsx.muteX({ x: isLocalCustomEmoji ? `:${emojiName.value}:` : props.reaction }),
+				}).then(({ canceled }) => {
+					if (canceled) return;
+					muteEmoji(props.reaction);
+				});
+			},
+		});
+	}
+
+	os.popupMenu(menuItems, ev.currentTarget ?? ev.target);
 }
 
 function anime() {
 	if (
-		document.hidden ||
-		!defaultStore.state.animation ||
+		window.document.hidden ||
+		!prefer.s.animation ||
 		buttonEl.value == null
 	) return;
 
@@ -262,7 +302,7 @@ if (!mock) {
 		buttonEl,
 		async (showing) => {
 			const reactions = await misskeyApiGet('notes/reactions', {
-				noteId: props.note.id,
+				noteId: props.noteId,
 				type: props.reaction,
 				limit: 10,
 				_cacheKey_: props.count,
@@ -293,16 +333,15 @@ if (!mock) {
 .root {
 	display: inline-flex;
 	height: 42px;
-	margin: 2px;
 	padding: 0 6px;
 	font-size: 1.5em;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s ease;
 
 	&.canToggle {
-		background: var(--buttonBg);
+		background: var(--MI_THEME-buttonBg);
 
 		&:hover {
 			background: rgba(0, 0, 0, 0.1);
@@ -337,9 +376,9 @@ if (!mock) {
 
 	&.reacted,
 	&.reacted:hover {
-		background: var(--accentedBg);
-		color: var(--accent);
-		box-shadow: 0 0 0 1px var(--accent) inset;
+		background: var(--MI_THEME-accentedBg);
+		color: var(--MI_THEME-accent);
+		box-shadow: 0 0 0 1px var(--MI_THEME-accent) inset;
 
 		&.gamingDark {
 			color: black;
@@ -390,7 +429,7 @@ if (!mock) {
 		}
 
 		> .count {
-			color: var(--accent);
+			color: var(--MI_THEME-accent);
 
 			&.gamingLight {
 				color: white;

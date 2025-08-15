@@ -4,51 +4,47 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkStickyContainer>
-	<template #header><MkPageHeader v-model:tab="tab" :tabs="headerTabs" :hide="true" :actions="headerActions"/></template>
-	<MkSpacer :contentMax="800">
-		<MkHorizontalSwipe v-model:tab="tab" :tabs="headerTabs">
-			<div v-if="tab === 'all'" key="all">
-				<XNotifications :class="$style.notifications" :excludeTypes="excludeTypes"/>
-			</div>
-			<div v-else-if="tab === 'mentions'" key="mention">
-				<MkNotes :pagination="mentionsPagination"/>
-			</div>
-			<div v-else-if="tab === 'directNotes'" key="directNotes">
-				<MkNotes :pagination="directNotesPagination"/>
-			</div>
-		</MkHorizontalSwipe>
-	</MkSpacer>
-</MkStickyContainer>
+<PageWithHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs" :swipable="true">
+	<div class="_spacer" style="--MI_SPACER-w: 800px;">
+		<div v-if="tab === 'all'">
+			<MkStreamingNotificationsTimeline :class="$style.notifications" :excludeTypes="excludeTypes"/>
+		</div>
+		<div v-else-if="tab === 'mentions'">
+			<MkNotesTimeline :paginator="mentionsPaginator"/>
+		</div>
+		<div v-else-if="tab === 'directNotes'">
+			<MkNotesTimeline :paginator="directNotesPaginator"/>
+		</div>
+	</div>
+</PageWithHeader>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-import XNotifications from '@/components/MkNotifications.vue';
-import MkNotes from '@/components/MkNotes.vue';
-import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
+import { computed, markRaw, ref, onMounted } from 'vue';
+import { notificationTypes } from '@@/js/const.js';
+import PageWithHeader from '@/components/global/PageWithHeader.vue';
+import MkStreamingNotificationsTimeline from '@/components/MkStreamingNotificationsTimeline.vue';
+import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { notificationTypes } from '@/const.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { definePage } from '@/page.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { Paginator } from '@/utility/paginator.js';
 
 const tab = ref('all');
-const includeTypes = ref<string[] | null>(null);
-const excludeTypes = computed(() => includeTypes.value ? notificationTypes.filter(t => !includeTypes.value.includes(t)) : null);
+const includeTypes = ref<typeof notificationTypes[number][] | null>(null);
+const excludeTypes = computed(() => includeTypes.value ? notificationTypes.filter(t => !includeTypes.value!.includes(t)) : undefined);
 
-const mentionsPagination = {
-	endpoint: 'notes/mentions' as const,
+const mentionsPaginator = markRaw(new Paginator('notes/mentions', {
 	limit: 10,
-};
+}));
 
-const directNotesPagination = {
-	endpoint: 'notes/mentions' as const,
+const directNotesPaginator = markRaw(new Paginator('notes/mentions', {
 	limit: 10,
 	params: {
 		visibility: 'specified',
 	},
-};
+}));
 
 function setFilter(ev) {
 	const typeItems = notificationTypes.map(t => ({
@@ -89,7 +85,7 @@ const headerTabs = computed(() => [{
 	icon: 'ti ti-mail',
 }]);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.notifications,
 	icon: 'ti ti-bell',
 }));
@@ -100,7 +96,7 @@ onMounted(() => {
 
 <style module lang="scss">
 .notifications {
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 }
 </style>

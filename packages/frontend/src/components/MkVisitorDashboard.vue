@@ -18,8 +18,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<div v-html="instance.description || i18n.ts.headlineType4ny"></div>
 			</div>
-			<div v-if="instance.disableRegistration" :class="$style.mainWarn">
-				<MkInfo warn>{{ i18n.ts.invitationRequiredToRegister }}</MkInfo>
+			<div v-if="instance.disableRegistration || instance.federation !== 'all'" :class="$style.mainWarn" class="_gaps_s">
+				<MkInfo v-if="instance.disableRegistration" warn>{{ i18n.ts.invitationRequiredToRegister }}</MkInfo>
+				<MkInfo v-if="instance.federation === 'specified'" warn>{{ i18n.ts.federationSpecified }}</MkInfo>
+				<MkInfo v-else-if="instance.federation === 'none'" warn>{{ i18n.ts.federationDisabled }}</MkInfo>
 			</div>
 			<div class="_gaps_s " :class="$style.mainActions">
 				<MkButton :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
@@ -31,7 +33,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div v-if="instance.policies.ltlAvailable" :class="[$style.tl, $style.panel]">
 		<div :class="$style.tlHeader">{{ i18n.ts.letsLookAtTimeline }}</div>
 		<div :class="$style.tlBody">
-			<MkTimeline :acrylic="true" src="local"/>
+			<MkNotesTimeline :paginator="paginator"/>
 		</div>
 	</div>
 	<div :class="$style.stats">
@@ -44,27 +46,39 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<div :class="$style.statsItemCount"><MkNumber :value="stats?.originalNotesCount"/></div>
 		</div>
 	</div>
+	<div v-if="instance.policies.ltlAvailable" :class="[$style.tl, $style.panel]">
+		<div :class="$style.tlHeader">{{ i18n.ts.letsLookAtTimeline }}</div>
+		<div :class="$style.tlBody">
+			<MkStreamingNotesTimeline src="local"/>
+		</div>
+	</div>
+	<div :class="$style.panel">
+		<XActiveUsersChart/>
+	</div>
 </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { markRaw, ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import type { MenuItem } from '@/types/menu.js';
+import { instanceName } from '@@/js/config.js';
 import XSigninDialog from '@/components/MkSigninDialog.vue';
 import XSignupDialog from '@/components/MkSignupDialog.vue';
 import MkButton from '@/components/MkButton.vue';
-import MkTimeline from '@/components/MkTimeline.vue';
+import MkStreamingNotesTimeline from '@/components/MkStreamingNotesTimeline.vue';
 import MkInfo from '@/components/MkInfo.vue';
-import { instanceName } from '@/config.js';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import MkNumber from '@/components/MkNumber.vue';
-import XActiveUsersChart from '@/components/MkVisitorDashboard.ActiveUsersChart.vue';
 import { openInstanceMenu } from '@/ui/_common_/common.js';
+import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
+import { Paginator } from '@/utility/paginator';
 
+const paginator = markRaw(new Paginator('notes/local-timeline', {
+	limit: 10,
+}));
 const stats = ref<Misskey.entities.StatsResponse | null>(null);
 
 misskeyApi('stats', {}).then((res) => {
@@ -104,10 +118,10 @@ function showMenu(ev: MouseEvent) {
 
 .panel {
 	position: relative;
-	background: var(--acrylicPanel);
-	-webkit-backdrop-filter: var(--blur, blur(15px));
-	backdrop-filter: var(--blur, blur(15px));
-	border-radius: var(--radius);
+	background: var(--MI_THEME-acrylicPanel);
+	border-radius: var(--MI-radius);
+	-webkit-backdrop-filter: var(--MI-blur, blur(8px));
+	backdrop-filter: var(--MI-blur, blur(8px));
 	box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
 }
 
@@ -130,6 +144,7 @@ function showMenu(ev: MouseEvent) {
 	height: 32px;
 	border-radius: 8px;
 	font-size: 18px;
+	z-index: 50;
 }
 
 .mainFg {
@@ -195,14 +210,14 @@ function showMenu(ev: MouseEvent) {
 }
 
 .statsItemLabel {
-	color: var(--fgTransparentWeak);
+	color: color(from var(--MI_THEME-fg) srgb r g b / 0.75);
 	font-size: 0.9em;
 }
 
 .statsItemCount {
 	font-weight: bold;
 	font-size: 1.2em;
-	color: var(--accent);
+	color: var(--MI_THEME-accent);
 }
 
 .tl {
@@ -211,7 +226,7 @@ function showMenu(ev: MouseEvent) {
 
 .tlHeader {
 	padding: 12px 16px;
-	border-bottom: solid 1px var(--divider);
+	border-bottom: solid 1px var(--MI_THEME-divider);
 }
 
 .tlBody {

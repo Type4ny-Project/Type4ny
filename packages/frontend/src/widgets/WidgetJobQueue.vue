@@ -51,26 +51,28 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onUnmounted, reactive, ref } from 'vue';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 import { useStream } from '@/stream.js';
 import kmg from '@/filters/kmg.js';
-import * as sound from '@/scripts/sound.js';
-import { deepClone } from '@/scripts/clone.js';
-import { defaultStore } from '@/store.js';
+import * as sound from '@/utility/sound.js';
+import { deepClone } from '@/utility/clone.js';
+import { prefer } from '@/preferences.js';
+import { genId } from '@/utility/id.js';
 
 const name = 'jobQueue';
 
 const widgetPropsDef = {
 	transparent: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
 	sound: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 
@@ -102,7 +104,7 @@ const prev = reactive({} as typeof current);
 const jammedAudioBuffer = ref<AudioBuffer | null>(null);
 const jammedSoundNodePlaying = ref<boolean>(false);
 
-if (defaultStore.state.sound_masterVolume) {
+if (prefer.s['sound.masterVolume']) {
 	sound.loadAudio('/client-assets/sounds/syuilo/queue-jammed.mp3').then(buf => {
 		if (!buf) throw new Error('[WidgetJobQueue] Failed to initialize AudioBuffer');
 		jammedAudioBuffer.value = buf;
@@ -142,7 +144,7 @@ connection.on('stats', onStats);
 connection.on('statsLog', onStatsLog);
 
 connection.send('requestLog', {
-	id: Math.random().toString().substring(2, 10),
+	id: genId(),
 	length: 1,
 });
 
@@ -172,14 +174,14 @@ defineExpose<WidgetComponentExpose>({
 		padding: 16px;
 
 		&:not(:first-child) {
-			border-top: solid 0.5px var(--divider);
+			border-top: solid 0.5px var(--MI_THEME-divider);
 		}
 
 		> .label {
 			display: flex;
 
 			> .icon {
-				color: var(--warn);
+				color: var(--MI_THEME-warn);
 				margin-left: auto;
 				animation: warnBlink 1s infinite;
 			}
@@ -197,11 +199,11 @@ defineExpose<WidgetComponentExpose>({
 
 				> div:last-child {
 					&.inc {
-						color: var(--warn);
+						color: var(--MI_THEME-warn);
 					}
 
 					&.dec {
-						color: var(--success);
+						color: var(--MI_THEME-success);
 					}
 				}
 			}

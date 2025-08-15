@@ -5,7 +5,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <template>
 <!-- このコンポーネントの要素のclassは親から利用されるのでむやみに弄らないこと -->
 <!-- フォルダの中にはカスタム絵文字だけ（Unicode絵文字もこっち） -->
-<section v-if="!hasChildSection" style="border-radius: var(--radius);">
+<section v-if="!hasChildSection" v-panel style="border-radius: 6px; border-bottom: 0.5px solid var(--MI_THEME-divider);">
 	<header class="_acrylic" @click="shown = !shown">
 		<i class="toggle ti-fw" :class="shown ? 'ti ti-chevron-down' : 'ti ti-chevron-up'"></i> <slot></slot> ({{ emojis.length }})
 	</header>
@@ -15,16 +15,17 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			:key="emoji"
 			:data-emoji="emoji"
 			class="_button item"
-			:disabled="disabledEmojis?.value.includes(emoji)"@pointerenter="computeButtonTitle"
+			:disabled="disabledEmojis?.value.includes(emoji)"
+			@pointerenter="computeButtonTitle"
 			@click="emit('chosen', emoji, $event)"
 		>
-			<MkCustomEmoji v-if="emoji[0] === ':'" class="emoji" :name="emoji" :normal="true":fallbackToImage="true"/>
+			<MkCustomEmoji v-if="emoji[0] === ':'" class="emoji" :name="emoji" :normal="true" :fallbackToImage="true"/>
 			<MkEmoji v-else class="emoji" :emoji="emoji" :normal="true"/>
 		</button>
 	</div>
 </section>
 <!-- フォルダの中にはカスタム絵文字やフォルダがある -->
-<section v-else style="border-radius: var(--radius);">
+<section v-else v-panel style="border-radius: 6px; border-bottom: 0.5px solid var(--MI_THEME-divider);">
 	<header class="_acrylic" @click="shown = !shown">
 		<i class="toggle ti-fw" :class="shown ? 'ti ti-chevron-down' : 'ti ti-chevron-up'"></i> <slot></slot> (フォルダー)
 	</header>
@@ -46,7 +47,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 			v-for="emoji in emojis"
 			:key="emoji"
 			:data-emoji="emoji"
-			class="_button item":disabled="disabledEmojis?.value.includes(emoji)"
+			class="_button item"
+			:disabled="disabledEmojis?.value.includes(emoji)"
 			@pointerenter="computeButtonTitle"
 			@click="emit('chosen', emoji, $event)"
 		>
@@ -58,8 +60,10 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, Ref } from 'vue';
-import { CustomEmojiFolderTree, getEmojiName } from '@/scripts/emojilist.js';
+import { ref, computed } from 'vue';
+import type { Ref } from 'vue';
+import { getEmojiName } from '@@/js/emojilist.js';
+import type { CustomEmojiFolderTree } from '@@/js/emojilist.js';
 import { i18n } from '@/i18n.js';
 import { customEmojis } from '@/custom-emojis.js';
 import MkEmojiPickerSection from '@/components/MkEmojiPicker.section.vue';
@@ -86,7 +90,7 @@ function computeButtonTitle(ev: MouseEvent): void {
 	elm.title = getEmojiName(emoji);
 }
 
-function nestedChosen(emoji: any, ev?: MouseEvent) {
+function nestedChosen(emoji: string, ev?: MouseEvent) {
 	emit('chosen', emoji, ev);
 }
 </script>

@@ -4,9 +4,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkStickyContainer>
-	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
-	<MkSpacer :contentMax="700">
+<PageWithHeader :actions="headerActions" :tabs="headerTabs">
+	<div class="_spacer" style="--MI_SPACER-w: 700px;">
 		<MkFoldableSection style="margin-bottom: 32px;">
 			<template #header>{{ i18n.ts.favoriteLists }}</template>
 
@@ -47,12 +46,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkFoldableSection>
 			<template #header>{{ i18n.ts.myLists }}</template>
 			<div class="_gaps">
-				<div v-if="items.length === 0" class="empty">
-					<div class="_fullinfo">
-						<img :src="infoImageUrl" class="_ghost"/>
-						<div>{{ i18n.ts.nothing }}</div>
-					</div>
-				</div>
+				<MkTip k="userLists">
+				{{ i18n.ts._userLists.tip }}
+			</MkTip>
+
+			<MkResult v-if="items.length === 0" type="empty"/>
 
 				<div v-if="items.length > 0" class="_gaps">
 					<MkA v-for="list in items" :key="list.id" class="_panel" :class="$style.list" :to="`/my/lists/${ list.id }`">
@@ -62,8 +60,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</div>
 		</MkFoldableSection>
-	</MkSpacer>
-</MkStickyContainer>
+	</div>
+</PageWithHeader>
 </template>
 
 <script lang="ts" setup>
@@ -71,14 +69,13 @@ import { onActivated, computed } from 'vue';
 import MkAvatars from '@/components/MkAvatars.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { definePage } from '@/page.js';
 import { userFavoriteListsCache, userListsCache } from '@/cache.js';
-import { infoImageUrl } from '@/instance.js';
-import { signinRequired } from '@/account.js';
+import { ensureSignin } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 
-const $i = signinRequired();
+const $i = ensureSignin();
 
 const items = computed(() => userListsCache.value.value ?? []);
 const localList = await misskeyApi('users/lists/list', { publicAll: true });
@@ -119,7 +116,7 @@ const headerActions = computed(() => [{
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts._exportOrImport.userLists,
 	icon: 'ti ti-list',
 }));
@@ -133,12 +130,12 @@ onActivated(() => {
 .list {
 	display: block;
 	padding: 16px;
-	border: solid 1px var(--divider);
-	border-radius: var(--radius);
+	border: solid 1px var(--MI_THEME-divider);
+	border-radius: var(--MI-radius);
 	margin-bottom: 8px;
 
 	&:hover {
-		border: solid 1px var(--accent);
+		border: solid 1px var(--MI_THEME-accent);
 		text-decoration: none;
 	}
 }

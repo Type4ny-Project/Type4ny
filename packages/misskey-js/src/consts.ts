@@ -14,9 +14,10 @@ import type {
 	ReversiGameDetailed,
 	SystemWebhook,
 	UserLite,
+	ChatRoom,
 } from './autogen/models.js';
 
-export const notificationTypes = ['note', 'follow', 'mention', 'reply', 'renote', 'quote', 'reaction', 'pollVote', 'pollEnded', 'receiveFollowRequest', 'followRequestAccepted', 'groupInvited', 'app', 'roleAssigned', 'achievementEarned'] as const;
+export const notificationTypes = ['note', 'follow', 'mention', 'reply', 'renote', 'quote', 'reaction', 'pollVote', 'pollEnded', 'receiveFollowRequest', 'followRequestAccepted', 'groupInvited', 'app', 'roleAssigned', 'chatRoomInvitationReceived', 'achievementEarned'] as const;
 
 export const noteVisibilities = ['public', 'home', 'followers', 'specified'] as const;
 
@@ -37,8 +38,8 @@ export const permissions = [
 	'write:favorites',
 	'read:following',
 	'write:following',
-	'read:messaging',
-	'write:messaging',
+	'read:messaging', // deprecated
+	'write:messaging', // deprecated
 	'read:mutes',
 	'write:mutes',
 	'write:notes',
@@ -112,6 +113,9 @@ export const permissions = [
 	'read:clip-favorite',
 	'read:federation',
 	'write:report-abuse',
+	'write:chat',
+	'read:chat',
+	'write:point'
 ] as const;
 
 export const moderationLogTypes = [
@@ -144,6 +148,8 @@ export const moderationLogTypes = [
 	'markSensitiveDriveFile',
 	'unmarkSensitiveDriveFile',
 	'resolveAbuseReport',
+	'forwardAbuseReport',
+	'updateAbuseReportNote',
 	'createInvitation',
 	'createAd',
 	'updateAd',
@@ -163,7 +169,20 @@ export const moderationLogTypes = [
 	'deletePage',
 	'deleteFlash',
 	'deleteGalleryPost',
+	'deleteChatRoom',
 	'inboxRejected',
+] as const;
+
+export const queueTypes = [
+	'system',
+	'endedPollNotification',
+	'deliver',
+	'inbox',
+	'db',
+	'relationship',
+	'objectStorage',
+	'userWebhookDeliver',
+	'systemWebhookDeliver',
 ] as const;
 
 // See: packages/backend/src/core/ReversiService.ts@L410
@@ -333,7 +352,18 @@ export type ModerationLogPayloads = {
 	resolveAbuseReport: {
 		reportId: string;
 		report: ReceivedAbuseReport;
-		forwarded: boolean;
+		forwarded?: boolean;
+		resolvedAs?: string | null;
+	};
+	forwardAbuseReport: {
+		reportId: string;
+		report: ReceivedAbuseReport;
+	};
+	updateAbuseReportNote: {
+		reportId: string;
+		report: ReceivedAbuseReport;
+		before: string;
+		after: string;
 	};
 	createInvitation: {
 		invitations: InviteCode[];
@@ -429,5 +459,9 @@ export type ModerationLogPayloads = {
 		postUserId: string;
 		postUserUsername: string;
 		post: GalleryPost;
+	};
+	deleteChatRoom: {
+		roomId: string;
+		room: ChatRoom;
 	};
 };

@@ -6,17 +6,16 @@
 import { generateKeyPair } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
-import {DataSource, In, IsNull, Not} from 'typeorm';
+import { DataSource, In, IsNull, Not } from 'typeorm';
 import { DI } from '@/di-symbols.js';
-import type { UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
+import type { MiMeta, UsedUsernamesRepository, UsersRepository } from '@/models/_.js';
 import { MiUser } from '@/models/User.js';
 import { MiUserProfile } from '@/models/UserProfile.js';
 import { IdService } from '@/core/IdService.js';
 import { MiUserKeypair } from '@/models/UserKeypair.js';
 import { MiUsedUsername } from '@/models/UsedUsername.js';
-import generateUserToken from '@/misc/generate-native-user-token.js';
+import { generateNativeUserToken } from '@/misc/token.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
-import { InstanceActorService } from '@/core/InstanceActorService.js';
 import { bindThis } from '@/decorators.js';
 import UsersChart from '@/core/chart/charts/users.js';
 import { UtilityService } from '@/core/UtilityService.js';
@@ -24,6 +23,7 @@ import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
 import { envOption } from '@/env.js';
 import { UserService } from '@/core/UserService.js';
+import { SystemAccountService } from '@/core/SystemAccountService.js';
 
 @Injectable()
 export class SignupService {
@@ -38,10 +38,10 @@ export class SignupService {
 		private config: Config,
 		private utilityService: UtilityService,
 		private userService: UserService,
+		private metaService: MetaService,
 		private userEntityService: UserEntityService,
 		private idService: IdService,
-		private metaService: MetaService,
-		private instanceActorService: InstanceActorService,
+		private systemAccountService: SystemAccountService,
 		private usersChart: UsersChart,
 	) {}
 
@@ -64,7 +64,7 @@ export class SignupService {
 		if (
 			envOption.managed &&
 			this.config.maxLocalUsers !== -1 &&
-			(await this.usersRepository.count({ where: { host: IsNull() , username: Not(In(['instance.actor','relay.actor'])) } })) >=
+			(await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } })) >=
 				this.config.maxLocalUsers
 		) {
 			throw new Error('MAX_LOCAL_USERS');
@@ -81,7 +81,7 @@ export class SignupService {
 		}
 
 		// Generate secret
-		const secret = generateUserToken();
+		const secret = generateNativeUserToken();
 
 		// Check username duplication
 		if (
@@ -101,15 +101,15 @@ export class SignupService {
 			throw new Error('USED_USERNAME');
 		}
 
-		const isTheFirstUser =
-			!(await this.instanceActorService.realLocalUsersPresent());
-
-		if (!opts.ignorePreservedUsernames && !isTheFirstUser) {
-			const instance = await this.metaService.fetch(true);
-			const isPreserved = instance.preservedUsernames
-				.map((x) => x.toLowerCase())
-				.includes(username.toLowerCase());
+		const meta = await this.metaService.fetch();
+		if (!opts.ignorePreservedUsernames && meta.rootUserId != null) {
+			const isPreserved = meta.preservedUsernames.map(x => x.toLowerCase()).includes(username.toLowerCase());
 			if (isPreserved) {
+				throw new Error('USED_USERNAME');
+			}
+
+			const hasProhibitedWords = this.utilityService.isKeyWordIncluded(username.toLowerCase(), meta.prohibitedWordsForNameOfUser);
+			if (hasProhibitedWords) {
 				throw new Error('USED_USERNAME');
 			}
 		}
@@ -153,7 +153,6 @@ export class SignupService {
 					usernameLower: username.toLowerCase(),
 					host: this.utilityService.toPunyNullable(host),
 					token: secret,
-					isRoot: isTheFirstUser || opts.isRoot,
 				}),
 			);
 
@@ -181,8 +180,13 @@ export class SignupService {
 			);
 		});
 
-		this.usersChart.update(account, true).then();
-		this.userService.notifySystemWebhook(account, 'userCreated').then();
+		this.usersChart.update(account, true);
+		this.userService.notifySystemWebhook(account, 'userCreated');
+
+		const currentMeta = await this.metaService.fetch();
+		if (currentMeta.rootUserId == null) {
+			await this.metaService.update({ rootUserId: account.id });
+		}
 
 		return { account, secret };
 	}

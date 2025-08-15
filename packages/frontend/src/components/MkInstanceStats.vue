@@ -9,7 +9,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<div :class="$style.chart">
 			<div class="selects">
 				<MkSelect v-model="chartSrc" style="margin: 0; flex: 1;">
-					<optgroup :label="i18n.ts.federation">
+					<optgroup v-if="shouldShowFederation" :label="i18n.ts.federation">
 						<option value="federation">{{ i18n.ts._charts.federation }}</option>
 						<option value="ap-request">{{ i18n.ts._charts.apRequest }}</option>
 					</optgroup>
@@ -21,7 +21,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 					<optgroup :label="i18n.ts.notes">
 						<option value="notes">{{ i18n.ts._charts.notesIncDec }}</option>
 						<option value="local-notes">{{ i18n.ts._charts.localNotesIncDec }}</option>
-						<option value="remote-notes">{{ i18n.ts._charts.remoteNotesIncDec }}</option>
+						<option v-if="shouldShowFederation" value="remote-notes">{{ i18n.ts._charts.remoteNotesIncDec }}</option>
 						<option value="notes-total">{{ i18n.ts._charts.notesTotal }}</option>
 					</optgroup>
 					<optgroup :label="i18n.ts.drive">
@@ -45,9 +45,9 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<MkSelect v-model="heatmapSrc" style="margin: 0 0 12px 0;">
 			<option value="active-users">Active users</option>
 			<option value="notes">Notes</option>
-			<option value="ap-requests-inbox-received">AP Requests: inboxReceived</option>
-			<option value="ap-requests-deliver-succeeded">AP Requests: deliverSucceeded</option>
-			<option value="ap-requests-deliver-failed">AP Requests: deliverFailed</option>
+			<option v-if="shouldShowFederation" value="ap-requests-inbox-received">AP Requests: inboxReceived</option>
+			<option v-if="shouldShowFederation" value="ap-requests-deliver-succeeded">AP Requests: deliverSucceeded</option>
+			<option v-if="shouldShowFederation" value="ap-requests-deliver-failed">AP Requests: deliverFailed</option>
 		</MkSelect>
 		<div class="_panel" :class="$style.heatmap">
 			<MkHeatmap :src="heatmapSrc" :label="'Read & Write'"/>
@@ -64,7 +64,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</div>
 	</MkFoldableSection>
 
-	<MkFoldableSection class="item">
+	<MkFoldableSection v-if="shouldShowFederation" class="item">
 		<template #header>Federation</template>
 		<div :class="$style.federation">
 			<div class="pies">
@@ -83,28 +83,33 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, shallowRef } from 'vue';
+import { onMounted, ref, computed, useTemplateRef } from 'vue';
 import { Chart } from 'chart.js';
+import type { HeatmapSource } from '@/components/MkHeatmap.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkChart from '@/components/MkChart.vue';
-import { useChartTooltip } from '@/scripts/use-chart-tooltip.js';
+import { useChartTooltip } from '@/composables/use-chart-tooltip.js';
+import { $i } from '@/i.js';
 import * as os from '@/os.js';
-import { misskeyApiGet } from '@/scripts/misskey-api.js';
+import { misskeyApiGet } from '@/utility/misskey-api.js';
+import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
-import MkHeatmap, { type HeatmapSource } from '@/components/MkHeatmap.vue';
+import MkHeatmap from '@/components/MkHeatmap.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import MkRetentionHeatmap from '@/components/MkRetentionHeatmap.vue';
 import MkRetentionLineChart from '@/components/MkRetentionLineChart.vue';
-import { initChart } from '@/scripts/init-chart.js';
+import { initChart } from '@/utility/init-chart.js';
 
 initChart();
+
+const shouldShowFederation = computed(() => instance.federation !== 'none' || $i?.isModerator);
 
 const chartLimit = 500;
 const chartSpan = ref<'hour' | 'day'>('hour');
 const chartSrc = ref('active-users');
 const heatmapSrc = ref<HeatmapSource>('active-users');
-const subDoughnutEl = shallowRef<HTMLCanvasElement>();
-const pubDoughnutEl = shallowRef<HTMLCanvasElement>();
+const subDoughnutEl = useTemplateRef('subDoughnutEl');
+const pubDoughnutEl = useTemplateRef('pubDoughnutEl');
 
 const { handler: externalTooltipHandler1 } = useChartTooltip({
 	position: 'middle',
@@ -120,7 +125,7 @@ function createDoughnut(chartEl, tooltip, data) {
 			labels: data.map(x => x.name),
 			datasets: [{
 				backgroundColor: data.map(x => x.color),
-				borderColor: getComputedStyle(document.documentElement).getPropertyValue('--panel'),
+				borderColor: getComputedStyle(window.document.documentElement).getPropertyValue('--MI_THEME-panel'),
 				borderWidth: 2,
 				hoverOffset: 0,
 				data: data.map(x => x.value),
@@ -255,8 +260,8 @@ onMounted(() => {
 				flex: 1;
 				min-width: 0;
 				position: relative;
-				background: var(--panel);
-				border-radius: var(--radius);
+				background: var(--MI_THEME-panel);
+				border-radius: var(--MI-radius);
 				padding: 24px;
 				max-height: 300px;
 

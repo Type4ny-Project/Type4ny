@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <MkStickyContainer>
 	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
 	<div style="overflow: clip;">
-		<MkSpacer :contentMax="600" :marginMin="20">
+		<div class="_spacer" style="--MI_SPACER-w: 600px; --MI_SPACER-min: 20px;">
 			<div class="_gaps_m znqjceqz">
 				<div v-panel class="about">
 					<div ref="containerEl" class="container" :class="{ playing: easterEggEngine != null }">
@@ -22,10 +22,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<button v-if="thereIsTreasure" class="_button treasure" @click="getTreasure"><img src="/fluent-emoji/1f3c6.png" class="treasureImg"></button>
 				</div>
 				<div style="text-align: center;">
-					{{ i18n.ts._aboutType4ny.about }}<br><a href="https://misskey-hub.net/docs/about-misskey/" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
+					{{ i18n.ts._aboutType4ny.about }}<br><a href="https://type4ny-hub.net/about-type4ny" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
 				</div>
 				<div v-if="$i != null" style="text-align: center;">
-					<MkButton primary rounded inline @click="iLoveMisskey">I <Mfm text="$[jelly ❤]"/> #Misskey</MkButton>
+					<MkButton primary rounded inline @click="iLoveType4ny">I <Mfm text="$[jelly ?]"/> #Type4ny</MkButton>
 				</div>
 				<FormSection>
 					<div class="_gaps_s">
@@ -72,6 +72,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<img src="https://avatars.githubusercontent.com/u/56515516?v=4" :class="$style.contributorAvatar">
 							<span :class="$style.contributorUsername">@mattyatea</span>
 						</a>
+						<a href="https://github.com/Suzulu-activity" target="_blank" :class="$style.contributor">
+							<img src="https://avatars.githubusercontent.com/u/101928455?v=4" :class="$style.contributorAvatar">
+							<span :class="$style.contributorUsername">@Suzulu-activity</span>
+						</a>
 					</div>
 				</FormSection>
 				<MkFoldableSection :expanded="false">
@@ -108,7 +112,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</MkFoldableSection>
 				<FormSection>
-					<template #label><Mfm text="$[jelly ❤]"/> {{ i18n.ts._aboutType4ny.patrons }}</template>
+					<template #label><Mfm text="$[jelly ?]"/> {{ i18n.ts._aboutType4ny.patrons }}</template>
 					<div :class="$style.patronsWithIcon">
 						<div v-for="patron in patronsWithIcon" :class="$style.patronWithIcon">
 							<img :src="patron.icon" :class="$style.patronIcon">
@@ -121,26 +125,26 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<p v-if="patrons.length =! -1">{{ i18n.ts._aboutType4ny.morePatrons }}</p>
 				</FormSection>
 			</div>
-		</MkSpacer>
+		</div>
 	</div>
 </MkStickyContainer>
 </template>
 
 <script lang="ts" setup>
 import { nextTick, onBeforeUnmount, ref, shallowRef, computed } from 'vue';
-import { version } from '@/config.js';
+import { version } from '@@/js/config.js';
 import FormLink from '@/components/form/link.vue';
 import FormSection from '@/components/form/section.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInfo from '@/components/MkInfo.vue';
-import { physics } from '@/scripts/physics.js';
+import { physics } from '@/utility/physics.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import * as os from '@/os.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
-import { claimAchievement, claimedAchievements } from '@/scripts/achievements.js';
-import { $i } from '@/account.js';
+import { definePage } from '@/page.js';
+import { claimAchievement, claimedAchievements } from '@/utility/achievements.js';
+import { $i } from '@/i.js';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 
 const patronsWithIcon = [];
@@ -161,7 +165,7 @@ const easterEggEngine = ref<{ stop: () => void } | null>(null);
 const containerEl = shallowRef<HTMLElement>();
 
 function iconLoaded() {
-	const emojis = defaultStore.state.reactions;
+	const emojis = store.s.reactions;
 	const containerWidth = containerEl.value.offsetWidth;
 	for (let i = 0; i < 32; i++) {
 		easterEggEmojis.value.push({
@@ -183,9 +187,9 @@ function gravity() {
 	easterEggEngine.value = physics(containerEl.value);
 }
 
-function iLoveMisskey() {
+function iLoveType4ny() {
 	os.post({
-		initialText: 'I $[jelly ❤] #Misskey',
+		initialText: 'I $[jelly ?] #Type4ny',
 		instant: true,
 	});
 }
@@ -205,7 +209,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.aboutType4ny,
 	icon: null,
 }));
@@ -215,7 +219,7 @@ definePageMetadata(() => ({
 .znqjceqz {
 	> .about {
 		position: relative;
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 
 		> .treasure {
 			position: absolute;
@@ -303,17 +307,17 @@ definePageMetadata(() => ({
 	display: flex;
 	align-items: center;
 	padding: 12px;
-	background: var(--buttonBg);
-	border-radius: var(--radius);
+	background: var(--MI_THEME-buttonBg);
+	border-radius: var(--MI-radius);
 
 	&:hover {
 		text-decoration: none;
-		background: var(--buttonHoverBg);
+		background: var(--MI_THEME-buttonHoverBg);
 	}
 
 	&.active {
-		color: var(--accent);
-		background: var(--buttonHoverBg);
+		color: var(--MI_THEME-accent);
+		background: var(--MI_THEME-buttonHoverBg);
 	}
 }
 
@@ -336,8 +340,8 @@ definePageMetadata(() => ({
 	display: flex;
 	align-items: center;
 	padding: 12px;
-	background: var(--buttonBg);
-	border-radius: var(--radius);
+	background: var(--MI_THEME-buttonBg);
+	border-radius: var(--MI-radius);
 }
 
 .patronIcon {

@@ -4,9 +4,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkStickyContainer>
-	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
-	<MkSpacer :contentMax="700">
+<PageWithHeader :actions="headerActions" :tabs="headerTabs">
+	<div class="_spacer" style="--MI_SPACER-w: 700px;">
 		<div v-if="channelId == null || channel != null" class="_gaps_m">
 			<MkInput v-model="name">
 				<template #label>{{ i18n.ts.name }}</template>
@@ -62,36 +61,40 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</Sortable>
 				</div>
 			</MkFolder>
-			<MkFolder v-if="collaboratorUsers.some(x => x.id !== $i.id)" :defaultOpen="true">
+			<MkFolder v-if="isRoot" :defaultOpen="true">
 				<template #label>{{ i18n.ts._channel.collaborators }}</template>
 				<div class="_gaps">
 					<MkButton @click="addUser()">
 						{{ i18n.ts._channel.addCollaborator }}
 					</MkButton>
-					<div v-for="user in collaboratorUsers" :class="$style.collaborator">
-						<MkAvatar :user="user" style="height: 48px; width: 48px"/>
-						<MkAcct :user="user"/>
+					<div v-for="( user, i ) in collaboratorUsers" :class="$style.userItem">
+						<div :class="$style.userItemMain">
+							<MkA :class="$style.userItemMainBody" :to="`${userPage(user)}`">
+								<MkUserCardMini :user="user"/>
+							</MkA>
+							<button class="_button" :class="$style.unassign" @click="collaboratorUserDelete(i)"><i class="ti ti-x"></i></button>
+						</div>
 					</div>
 				</div>
 			</MkFolder>
 
-			<MkFolder v-if="collaboratorUsers.some(x => x.id !== $i.id)">
+			<MkFolder v-if="isRoot">
 				<template #label>{{ i18n.ts._channel.dangerSettings }}</template>
 
-				<MkButton danger @click="transferAdmin()">
+				<MkButton style="margin: 16px" danger @click="transferAdmin()">
 					{{ i18n.ts._channel.transferAdminConfirmTitle }}
 				</MkButton>
+				<MkButton v-if="channelId" style="margin: 16px" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 			</MkFolder>
 
 			<div>
 				<div class="_buttons">
 					<MkButton primary @click="save()"><i class="ti ti-device-floppy"></i> {{ channelId ? i18n.ts.save : i18n.ts.create }}</MkButton>
-					<MkButton v-if="channelId" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 				</div>
 			</div>
 		</div>
-	</MkSpacer>
-</MkStickyContainer>
+	</div>
+</PageWithHeader>
 </template>
 
 <script lang="ts" setup>
@@ -100,16 +103,18 @@ import * as Misskey from 'misskey-js';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
-import { selectFile } from '@/scripts/select-file.js';
+import { selectFile } from '@/utility/drive.js';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { definePage } from '@/page.js';
 import { i18n } from '@/i18n.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
-import { useRouter } from '@/router/supplier.js';
-import { $i } from '@/account.js';
+import { useRouter } from '@/router.js';
+import { $i, iAmModerator } from '@/i.js';
+import { userPage } from '@/filters/user';
+import MkUserCardMini from '@/components/MkUserCardMini.vue';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
@@ -129,6 +134,7 @@ const isSensitive = ref(false);
 const allowRenoteToExternal = ref(true);
 const isLocalOnly = ref(false);
 const pinnedNotes = ref<{ id: Misskey.entities.Note['id'] }[]>([]);
+const isRoot = ref(false);
 
 watch(() => bannerId.value, async () => {
 	if (bannerId.value == null) {
@@ -160,6 +166,7 @@ async function fetchChannel() {
 	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
 	isLocalOnly.value = channel.value.isLocalOnly;
 	collaboratorUsers.value = channel.value.collaboratorUsers;
+	isRoot.value = (($i && $i.id === channel.value.userId) || iAmModerator);
 }
 
 function transferAdmin() {
@@ -167,7 +174,7 @@ function transferAdmin() {
 		os.confirm({
 			type: 'warning',
 			title: i18n.ts._channel.transferAdminConfirmTitle,
-			text: i18n.tsx._channel.transferAdminConfirmDescription({ user: user.name }),
+			text: i18n.tsx._channel.transferAdminConfirmDescription({ user: user.username }),
 		}).then(({ canceled }) => {
 			if (canceled) return;
 			os.confirm({
@@ -201,7 +208,13 @@ function addUser() {
 				user,
 			];
 		}
+		save();
 	});
+}
+
+function collaboratorUserDelete (i:number) {
+	collaboratorUsers.value.splice( i, 1 );
+	save();
 }
 
 fetchChannel();
@@ -241,7 +254,11 @@ function save() {
 		os.apiWithDialog('channels/update', params);
 	} else {
 		os.apiWithDialog('channels/create', params).then(created => {
-			router.push(`/channels/${created.id}`);
+			router.push('/channels/:channelId', {
+				params: {
+					channelId: created.id,
+				},
+			});
 		});
 	}
 }
@@ -264,7 +281,10 @@ async function archive() {
 }
 
 function setBannerImage(evt) {
-	selectFile(evt.currentTarget ?? evt.target, null).then(file => {
+	selectFile({
+		anchorElement: evt.currentTarget ?? evt.target,
+		multiple: false,
+	}).then(file => {
 		bannerId.value = file.id;
 	});
 }
@@ -277,7 +297,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: props.channelId ? i18n.ts._channel.edit : i18n.ts._channel.create,
 	icon: 'ti ti-device-tv',
 }));
@@ -291,7 +311,7 @@ definePageMetadata(() => ({
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-	color: var(--navFg);
+	color: var(--MI_THEME-navFg);
 }
 
 .pinnedNoteRemove {
@@ -317,4 +337,26 @@ definePageMetadata(() => ({
 	margin: 8px 0;
 	align-items: center;
 }
+
+.userItemMain {
+	display: flex;
+}
+
+.userItemMainBody {
+	flex: 1;
+	min-width: 0;
+	margin-right: 8px;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+.unassign {
+	width: 32px;
+	height: 32px;
+	align-self: center;
+	color: #ff2a2a;
+}
+
 </style>

@@ -4,63 +4,70 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div>
-	<MkStickyContainer>
-		<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
-		<MkSpacer :contentMax="900">
-			<div class="ogwlenmc">
-				<div v-if="tab === 'local'" class="local">
-					<MkCustomEmojiEditLocal/>
-				</div>
-				<div v-if="tab === 'request'" class="request">
-					<MkCustomEmojiEditRequest/>
-				</div>
-				<div v-else-if="tab === 'remote'" class="remote">
-					<MkCustomEmojiEditRemote/>
-				</div>
+<PageWithHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs">
+	<div class="_spacer" style="--MI_SPACER-w: 900px;">
+		<div class="ogwlenmc">
+			<div v-if="tab === 'local'" class="local">
+				<MkCustomEmojiEditLocal/>
 			</div>
-		</MkSpacer>
-	</MkStickyContainer>
-</div>
+			<div v-if="tab === 'request'" class="request">
+				<MkCustomEmojiEditRequest/>
+			</div>
+			<div v-else-if="tab === 'remote'" class="remote">
+				<MkCustomEmojiEditRemote/>
+			</div>
+		</div>
+	</div>
+</PageWithHeader>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, ref } from 'vue';
+import { computed, ref, markRaw } from 'vue';
+import PageWithHeader from '@/components/global/PageWithHeader.vue';
 import MkCustomEmojiEditRequest from '@/components/MkCustomEmojiEditRequest.vue';
 import MkCustomEmojiEditLocal from '@/components/MkCustomEmojiEditLocal.vue';
 import MkCustomEmojiEditRemote from '@/components/MkCustomEmojiEditRemote.vue';
-import { selectFile } from '@/scripts/select-file';
-import * as os from '@/os';
-import { misskeyApi } from '@/scripts/misskey-api.js';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import { selectFile } from '@/utility/select-file.js';
+import * as os from '@/os.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
+import { i18n } from '@/i18n.js';
+import { definePage } from '@/page.js';
+import { Paginator } from '@/utility/paginator.js';
 
-const tab = ref('request');
+const tab = ref('local');
+const query = ref<string | null>(null);
+const selectedEmojis = ref<string[]>([]);
+
+const paginator = markRaw(new Paginator('admin/emoji/list', {
+	limit: 30,
+	computedParams: computed(() => ({
+		query: (query.value && query.value !== '') ? query.value : null,
+	})),
+}));
+
+const emojisPaginationComponent = ref<any>(null);
+const selectAll = () => {
+	if (selectedEmojis.value.length > 0) {
+		selectedEmojis.value = [];
+	} else {
+		selectedEmojis.value = emojisPaginationComponent.value.paginator.items.value.map(item => item.id);
+	}
+};
+
+const toggleSelect = (emoji) => {
+	if (selectedEmojis.value.includes(emoji.id)) {
+		selectedEmojis.value = selectedEmojis.value.filter(emojiId => emojiId !== emoji.id);
+	} else {
+		selectedEmojis.value.push(emoji.id);
+	}
+};
 
 const add = async (ev: MouseEvent) => {
-	const { dispose } = os.popup(defineAsyncComponent(() => import('../components/MkEmojiEditDialog.vue')), {
+	const { dispose } = await os.popupAsyncWithDialog(import('../components/MkEmojiEditDialog.vue').then(module => module.default), {
 	}, {
 		done: result => {
 			if (result.created) {
-				emojisPaginationComponent.value.prepend(result.created);
-			}
-		},
-		closed: () => dispose(),
-	});
-};
-
-const edit = (emoji) => {
-	const { dispose } = os.popup(defineAsyncComponent(() => import('../components/MkEmojiEditDialog.vue')), {
-		emoji: emoji,
-	}, {
-		done: result => {
-			if (result.updated) {
-				emojisPaginationComponent.value.updateItem(result.updated.id, (oldEmoji: any) => ({
-					...oldEmoji,
-					...result.updated,
-				}));
-			} else if (result.deleted) {
-				emojisPaginationComponent.value.removeItem(emoji.id);
+				paginator.prepend(result.created);
 			}
 		},
 		closed: () => dispose(),
@@ -90,7 +97,10 @@ const menu = (ev: MouseEvent) => {
 		icon: 'ti ti-upload',
 		text: i18n.ts.import,
 		action: async () => {
-			const file = await selectFile(ev.currentTarget ?? ev.target);
+			const file = await selectFile({
+				anchorElement: ev.currentTarget ?? ev.target,
+				multiple: false,
+			});
 			misskeyApi('admin/emoji/import-zip', {
 				fileId: file.id,
 			})
@@ -130,7 +140,7 @@ const headerTabs = computed(() => [{
 	title: i18n.ts.remote,
 }]);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.customEmojis,
 	icon: 'ti ti-icons',
 }));

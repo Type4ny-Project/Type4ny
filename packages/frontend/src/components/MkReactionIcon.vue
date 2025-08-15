@@ -8,8 +8,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, shallowRef } from 'vue';
-import { useTooltip } from '@/scripts/use-tooltip.js';
+import { defineAsyncComponent, useTemplateRef } from 'vue';
+import { useTooltip } from '@/composables/use-tooltip.js';
 import * as os from '@/os.js';
 
 const props = defineProps<{
@@ -19,10 +19,11 @@ const props = defineProps<{
 	withTooltip?: boolean;
 }>();
 
-const elRef = shallowRef();
+const elRef = useTemplateRef('elRef');
 
 if (props.withTooltip) {
 	useTooltip(elRef, (showing) => {
+		if (elRef.value == null) return;
 		const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkReactionTooltip.vue')), {
 			showing,
 			reaction: props.reaction.replace(/^:(\w+):$/, ':$1@.:'),

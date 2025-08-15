@@ -4,19 +4,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div>
-	<MkStickyContainer>
-		<template #header>
-			<XHeader :tabs="headerTabs"/>
-		</template>
-		<MkSpacer :contentMax="700" :marginMin="16" :marginMax="32">
-			<FormSuspense :p="init">
-				<div class="_gaps_m">
-					<MkInput v-model="iconUrl" type="url">
-						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts._serverSettings.iconUrl }}</template>
-					</MkInput>
-					<MkInput v-model="iconDark" type="url">
+<PageWithHeader :tabs="headerTabs">
+	<div class="_spacer" style="--MI_SPACER-w: 700px; --MI_SPACER-min: 16px; --MI_SPACER-max: 32px;">
+		<SearchMarker path="/admin/branding" :label="i18n.ts.branding" :keywords="['branding']" icon="ti ti-paint">
+			<div class="_gaps_m">
+				<SearchMarker :keywords="['icon', 'image']">
+				<MkInput v-model="iconUrl" type="url">
+					<template #prefix><i class="ti ti-link"></i></template>
+					<template #label><SearchLabel>{{ i18n.ts._serverSettings.iconUrl }}</SearchLabel></template>
+				</MkInput><MkInput v-model="iconDark" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
 						<template #label>
 							{{ i18n.ts._serverSettings.iconUrl }} (Dark)
@@ -29,228 +25,209 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</template>
 					</MkInput>
 
-
-					<MkButton @click="addBackgroundImages">
-						{{ i18n.ts.add }}
-					</MkButton>
-
-					<div v-if="backgroundImageUrls && backgroundImageUrls.length > 0 ">
-						<div v-for="(url,index) in backgroundImageUrls" :key="url">
-							<MkInput v-model="backgroundImageUrls[index]" type="url">
-								<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
-							</MkInput>
+					<MkFolder>
+						<template #icon><i class="ti ti-image"></i></template>
+						<template #label>{{ i18n.ts.backgroundImageUrls }}</template>
+						<div class="_gaps">
+							<MkButton @click="()=>backgroundImageUrls.push('')">
+								{{ i18n.ts.add }}
+							</MkButton>
+							<div v-for="(url,i) in backgroundImageUrls">
+								<MkInput v-model="backgroundImageUrls[0].url">
+									<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
+								</MkInput>
+								<MkButton danger @click="()=>backgroundImageUrls.splice(i,1)">
+									<template #default>
+										<i class="ti ti-trash"></i>
+										<span>{{ i18n.ts.remove }}</span>
+									</template>
+								</MkButton>
+							</div>
 						</div>
-					</div>
+					</MkFolder>
 
+					<MkInput v-model="backgroundImageUrl" type="url">
+						<template #prefix><i class="ti ti-link"></i></template>
+						<template #label>
+							{{ i18n.ts.backgroundImageUrl }} (deprecated)
+						</template>
+					</MkInput>
+				</SearchMarker>
+
+				<SearchMarker :keywords="['icon', 'image']">
 					<MkInput v-model="app192IconUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>
-							{{ i18n.ts._serverSettings.iconUrl }} (App/192px)
-						</template>
+						<template #label><SearchLabel>{{ i18n.ts._serverSettings.iconUrl }} (App/192px)
+						</SearchLabel></template>
 						<template #caption>
-							<div>
-								{{
-									i18n.tsx._serverSettings.appIconDescription({
-										host: instance.name ?? host,
+							<div>{{ i18n.tsx._serverSettings.appIconDescription({ host: instance.name ?? host ,
 									})
-								}}
-							</div>
+								}}</div>
 							<div>({{ i18n.ts._serverSettings.appIconUsageExample }})</div>
-							<div>
-								{{ i18n.ts._serverSettings.appIconStyleRecommendation }}
-							</div>
-							<div>
-								<strong>{{
-									i18n.tsx._serverSettings.appIconResolutionMustBe({
-										resolution: "192x192px",
-									})
-								}}</strong>
-							</div>
+							<div>{{ i18n.ts._serverSettings.appIconStyleRecommendation }}</div>
+							<div><strong>{{ i18n.tsx._serverSettings.appIconResolutionMustBe({ resolution: "192x192px",
+									}) }}</strong></div>
 						</template>
 					</MkInput>
+				</SearchMarker>
 
+				<SearchMarker :keywords="['icon', 'image']">
 					<MkInput v-model="app512IconUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>
-							{{ i18n.ts._serverSettings.iconUrl }} (App/512px)
-						</template>
+						<template #label><SearchLabel>{{ i18n.ts._serverSettings.iconUrl }} (App/512px)
+						</SearchLabel></template>
 						<template #caption>
-							<div>
-								{{
-									i18n.tsx._serverSettings.appIconDescription({
-										host: instance.name ?? host,
+							<div>{{ i18n.tsx._serverSettings.appIconDescription({ host: instance.name ?? host ,
 									})
-								}}
-							</div>
+								}}</div>
 							<div>({{ i18n.ts._serverSettings.appIconUsageExample }})</div>
-							<div>
-								{{ i18n.ts._serverSettings.appIconStyleRecommendation }}
-							</div>
-							<div>
-								<strong>{{
-									i18n.tsx._serverSettings.appIconResolutionMustBe({
-										resolution: "512x512px",
-									})
-								}}</strong>
-							</div>
+							<div>{{ i18n.ts._serverSettings.appIconStyleRecommendation }}</div>
+							<div><strong>{{ i18n.tsx._serverSettings.appIconResolutionMustBe({ resolution: "512x512px",
+									}) }}</strong></div>
 						</template>
 					</MkInput>
+				</SearchMarker>
 
-					<MkInput v-model="bannerUrl" type="url">
-						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.bannerUrl }}</template>
-					</MkInput>
+				<SearchMarker :keywords="['banner', 'image']">
+				<MkInput v-model="bannerUrl" type="url">
+					<template #prefix><i class="ti ti-link"></i></template>
+					<template #label>{{ i18n.ts.bannerUrl }}</template>
+				</MkInput>
+				</SearchMarker>
+					<SearchMarker :keywords="['banner', 'image']">
 					<MkInput v-model="bannerDark" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
 						<template #label>{{ i18n.ts.bannerUrl }} (Dark)</template>
 					</MkInput>
-					<MkInput v-model="bannerLight" type="url">
-						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.bannerUrl }} (Light)</template>
-					</MkInput>
+					</SearchMarker>
+						<SearchMarker :keywords="['banner', 'image']">
+				<MkInput v-model="bannerLight" type="url">
+					<template #prefix><i class="ti ti-link"></i></template>
+					<template #label>{{ i18n.ts.bannerUrl }} (Light)</template>
+				</MkInput>
+		</SearchMarker>
 
-					<MkInput v-model="backgroundImageUrl" type="url">
-						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.backgroundImageUrl }}</template>
-					</MkInput>
-
+				<SearchMarker :keywords="['image']">
 					<MkInput v-model="notFoundImageUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.notFoundDescription }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.notFoundDescription }}</SearchLabel></template>
 					</MkInput>
+				</SearchMarker>
 
+				<SearchMarker :keywords="['image']">
 					<MkInput v-model="infoImageUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.nothing }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.nothing }}</SearchLabel></template>
 					</MkInput>
+				</SearchMarker>
 
+				<SearchMarker :keywords="['image']">
 					<MkInput v-model="serverErrorImageUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.somethingHappened }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.somethingHappened }}</SearchLabel></template>
 					</MkInput>
-					<MkInput v-model="googleAnalyticsId" type="url">
-						<template #label>GoogleAnalyticsId</template>
-					</MkInput>
-					<MkInput v-model="pointName">
-						<template #label>{{ i18n.ts.pointName }}</template>
-					</MkInput>
+				</SearchMarker>
+				<MkInput v-model="googleAnalyticsId" type="url">
+					<template #label>GoogleAnalyticsId</template>
+				</MkInput>
+				<MkInput v-model="pointName">
+					<template #label>{{ i18n.ts.pointName }}</template>
+				</MkInput>
+				<SearchMarker :keywords="['theme', 'color']">
 					<MkColorInput v-model="themeColor">
-						<template #label>{{ i18n.ts.themeColor }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.themeColor }}</SearchLabel></template>
 					</MkColorInput>
+				</SearchMarker>
 
+				<SearchMarker :keywords="['theme', 'default', 'light']">
 					<MkTextarea v-model="defaultLightTheme">
-						<template #label>
-							{{ i18n.ts.instanceDefaultLightTheme }}
-						</template>
-						<template #caption>
-							{{ i18n.ts.instanceDefaultThemeDescription }}
-						</template>
+						<template #label><SearchLabel>{{ i18n.ts.instanceDefaultLightTheme }}
+						</SearchLabel></template>
+						<template #caption>{{ i18n.ts.instanceDefaultThemeDescription }}</template>
 					</MkTextarea>
+				</SearchMarker>
 
+				<SearchMarker :keywords="['theme', 'default', 'dark']">
 					<MkTextarea v-model="defaultDarkTheme">
-						<template #label>{{ i18n.ts.instanceDefaultDarkTheme }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.instanceDefaultDarkTheme }}</SearchLabel></template>
 						<template #caption>
 							{{ i18n.ts.instanceDefaultThemeDescription }}
 						</template>
 					</MkTextarea>
+				</SearchMarker>
 
+				<SearchMarker>
 					<MkInput v-model="repositoryUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.repositoryUrl }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.repositoryUrl }}</SearchLabel></template>
 					</MkInput>
+				</SearchMarker>
 
+				<SearchMarker>
 					<MkInput v-model="feedbackUrl" type="url">
 						<template #prefix><i class="ti ti-link"></i></template>
-						<template #label>{{ i18n.ts.feedbackUrl }}</template>
+						<template #label><SearchLabel>{{ i18n.ts.feedbackUrl }}</SearchLabel></template>
 					</MkInput>
+				</SearchMarker>
 
+				<SearchMarker>
 					<MkTextarea v-model="manifestJsonOverride">
-						<template #label>
-							{{ i18n.ts._serverSettings.manifestJsonOverride }}
-						</template>
+						<template #label><SearchLabel>{{ i18n.ts._serverSettings.manifestJsonOverride }}
+						</SearchLabel></template>
 					</MkTextarea>
-				</div>
-			</FormSuspense>
-		</MkSpacer>
-		<template #footer>
-			<div :class="$style.footer">
-				<MkSpacer :contentMax="700" :marginMin="16" :marginMax="16">
-					<MkButton primary rounded @click="save">
+				</SearchMarker>
+			</div>
+		</SearchMarker>
+	</div>
+	<template #footer>
+		<div :class="$style.footer">
+			<div class="_spacer" style="--MI_SPACER-w: 700px; --MI_SPACER-min: 16px; --MI_SPACER-max: 16px;">
+				<MkButton primary rounded @click="save">
 						<i class="ti ti-check"></i> {{ i18n.ts.save }}
 					</MkButton>
-				</MkSpacer>
 			</div>
-		</template>
-	</MkStickyContainer>
-</div>
+		</div>
+	</template>
+</PageWithHeader>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import JSON5 from 'json5';
-import XHeader from './_header_.vue';
+import { host } from '@@/js/config.js';
 import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
-import FormSuspense from '@/components/form/suspense.vue';
 import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+import { misskeyApi } from '@/utility/misskey-api.js';
 import { fetchInstance, instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { definePage } from '@/page.js';
 import MkButton from '@/components/MkButton.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
-import { host } from '@/config.js';
+import MkFolder from '@/components/MkFolder.vue';
 
-const iconUrl = ref<string | null>(null);
-const app192IconUrl = ref<string | null>(null);
-const app512IconUrl = ref<string | null>(null);
-const bannerUrl = ref<string | null>(null);
-const backgroundImageUrl = ref<string | null>(null);
-const themeColor = ref<string | null>(null);
-const defaultLightTheme = ref<string | null>(null);
-const defaultDarkTheme = ref<string | null>(null);
-const serverErrorImageUrl = ref<string | null>(null);
-const googleAnalyticsId = ref<string | null>(null);
+const meta = await misskeyApi('admin/meta');
 
-const infoImageUrl = ref<string | null>(null);
-const notFoundImageUrl = ref<string | null>(null);
-const repositoryUrl = ref<string | null>(null);
-const feedbackUrl = ref<string | null>(null);
-const iconDark = ref<string | null>(null);
-const iconLight = ref<string | null>(null);
-const bannerDark = ref<string | null>(null);
-const bannerLight = ref<string | null>(null);
-const manifestJsonOverride = ref<string>('{}');
-const backgroundImageUrls = ref<string[]>([]);
-const pointName = ref<string | null>(null);
-
-async function init() {
-	const meta = await misskeyApi('admin/meta');
-	iconUrl.value = meta.iconUrl;
-	app192IconUrl.value = meta.app192IconUrl;
-	app512IconUrl.value = meta.app512IconUrl;
-	bannerUrl.value = meta.bannerUrl;
-	backgroundImageUrl.value = meta.backgroundImageUrl;
-	themeColor.value = meta.themeColor;
-	defaultLightTheme.value = meta.defaultLightTheme;
-	defaultDarkTheme.value = meta.defaultDarkTheme;
-	serverErrorImageUrl.value = meta.serverErrorImageUrl;
-	infoImageUrl.value = meta.infoImageUrl;
-	notFoundImageUrl.value = meta.notFoundImageUrl;
-	repositoryUrl.value = meta.repositoryUrl;
-	feedbackUrl.value = meta.feedbackUrl;
-	pointName.value = meta.pointName;
-	googleAnalyticsId.value = meta.googleAnalyticsId;
-	backgroundImageUrls.value = meta.backgroundImageUrls;
-	manifestJsonOverride.value =
-		meta.manifestJsonOverride === ''
-			? '{}'
-			: JSON.stringify(JSON.parse(meta.manifestJsonOverride), null, '\t');
-	iconDark.value = meta.iconDark;
-	iconLight.value = meta.iconLight;
-	bannerDark.value = meta.bannerDark;
-	bannerLight.value = meta.bannerLight;
-}
+const iconUrl = ref(meta.iconUrl);
+const app192IconUrl = ref(meta.app192IconUrl);
+const app512IconUrl = ref(meta.app512IconUrl);
+const bannerUrl = ref(meta.bannerUrl);
+const backgroundImageUrl = ref(meta.backgroundImageUrl);
+const themeColor = ref(meta.themeColor);
+const defaultLightTheme = ref(meta.defaultLightTheme);
+const defaultDarkTheme = ref(meta.defaultDarkTheme);
+const serverErrorImageUrl = ref(meta.serverErrorImageUrl);
+const infoImageUrl = ref(meta.infoImageUrl);
+const notFoundImageUrl = ref(meta.notFoundImageUrl);
+const repositoryUrl = ref(meta.repositoryUrl);
+const feedbackUrl = ref(meta.feedbackUrl);
+const manifestJsonOverride = ref(meta.manifestJsonOverride === '' ? '{}' : JSON.stringify(JSON.parse(meta.manifestJsonOverride), null, '\t'));
+const iconDark = ref<string | null>(meta.iconDark);
+const iconLight = ref<string | null>(meta.iconLight);
+const bannerDark = ref<string | null>(meta.bannerDark);
+const bannerLight = ref<string | null>(meta.bannerLight);
+const backgroundImageUrls = ref<string[]>(meta.backgroundImageUrl === '' ? '{}' : JSON.stringify(JSON.parse(meta.backgroundImageUrl), null, '\t'));
+const pointName = ref<string | null>(meta.pointName);
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
@@ -288,13 +265,9 @@ function save() {
 	});
 }
 
-function addBackgroundImages() {
-	backgroundImageUrls.value.push('');
-}
-
 const headerTabs = computed(() => []);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: i18n.ts.branding,
 	icon: 'ti ti-paint',
 }));
@@ -302,7 +275,7 @@ definePageMetadata(() => ({
 
 <style lang="scss" module>
 .footer {
-	-webkit-backdrop-filter: var(--blur, blur(15px));
-	backdrop-filter: var(--blur, blur(15px));
+	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
+	backdrop-filter: var(--MI-blur, blur(15px));
 }
 </style>

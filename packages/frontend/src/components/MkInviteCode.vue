@@ -7,15 +7,21 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 	<template #label>{{ invite.code }}</template>
 	<template #suffix>
 		<span v-if="invite.used">{{ i18n.ts.used }}</span>
-		<span v-else-if="isExpired" style="color: var(--error)">{{ i18n.ts.expired }}</span>
-		<span v-else style="color: var(--success)">{{ i18n.ts.unused }}</span>
+		<span v-else-if="isExpired" style="color: var(--MI_THEME-error)">{{ i18n.ts.expired }}</span>
+		<span v-else style="color: var(--MI_THEME-success)">{{ i18n.ts.unused }}</span>
+	</template>
+	<template #footer>
+		<div class="_buttons">
+			<MkButton v-if="!invite.used && !isExpired" primary rounded @click="copyInviteCode()"><i class="ti ti-copy"></i> {{ i18n.ts.copy }}</MkButton>
+			<MkButton v-if="!invite.used || moderator" danger rounded @click="deleteCode()"><i class="ti ti-trash"></i> {{ i18n.ts.delete }}</MkButton>
+		</div>
 	</template>
 
-	<div class="_gaps_s" :class="$style.root">
+	<div :class="$style.root">
 		<div :class="$style.items">
 			<div>
 				<div :class="$style.label">{{ i18n.ts.invitationCode }}</div>
-				<div>{{ invite.code }}</div>
+				<div class="_selectableAtomic">{{ invite.code }}</div>
 			</div>
 			<div v-if="moderator">
 				<div :class="$style.label">{{ i18n.ts.inviteCodeCreator }}</div>
@@ -48,10 +54,6 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 				<div><MkTime :time="invite.createdAt" mode="absolute"/></div>
 			</div>
 		</div>
-		<div :class="$style.buttons">
-			<MkButton v-if="!invite.used && !isExpired" primary rounded @click="copyInviteCode()"><i class="ti ti-copy"></i> {{ i18n.ts.copy }}</MkButton>
-			<MkButton v-if="!invite.used || moderator" danger rounded @click="deleteCode()"><i class="ti ti-trash"></i> {{ i18n.ts.delete }}</MkButton>
-		</div>
 	</div>
 </MkFolder>
 </template>
@@ -61,7 +63,7 @@ import { computed } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkButton from '@/components/MkButton.vue';
-import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
+import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
 import { i18n } from '@/i18n.js';
 import * as os from '@/os.js';
 
@@ -87,7 +89,6 @@ function deleteCode() {
 
 function copyInviteCode() {
 	copyToClipboard(props.invite.code);
-	os.success();
 }
 </script>
 
@@ -119,10 +120,5 @@ function copyInviteCode() {
 	--height: 24px;
 	width: var(--height);
 	height: var(--height);
-}
-
-.buttons {
-	display: flex;
-	gap: 8px;
 }
 </style>

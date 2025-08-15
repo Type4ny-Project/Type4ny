@@ -41,7 +41,7 @@ const props = defineProps<{
 .eyeCatchingImageRoot {
 	width: 100%;
 	height: 200px;
-	border-radius: var(--radius) var(--radius) 0 0;
+	border-radius: var(--MI-radius) var(--MI-radius) 0 0;
 	overflow: hidden;
 }
 </style>
@@ -53,7 +53,7 @@ const props = defineProps<{
 
 	&:hover {
 		text-decoration: none;
-		color: var(--accent);
+		color: var(--MI_THEME-accent);
 	}
 
 	&:focus-within {
@@ -66,22 +66,22 @@ const props = defineProps<{
 			left: 0;
 			width: 100%;
 			height: 100%;
-			border-radius: var(--radius);
+			border-radius: var(--MI-radius);
 			pointer-events: none;
-			box-shadow: inset 0 0 0 2px var(--focus);
+			box-shadow: inset 0 0 0 2px var(--MI_THEME-focus);
 		}
 	}
 
 	> .thumbnail {
 		& + article {
-			border-radius: 0 0 var(--radius) var(--radius);
+			border-radius: 0 0 var(--MI-radius) var(--MI-radius);
 		}
 	}
 
 	> article {
-		background-color: var(--panel);
+		background-color: var(--MI_THEME-panel);
 		padding: 16px;
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 
 		> header {
 			margin-bottom: 8px;
@@ -114,7 +114,6 @@ const props = defineProps<{
 			> p {
 				display: inline-block;
 				margin: 0;
-				color: var(--urlPreviewInfo);
 				font-size: 0.8em;
 				line-height: 16px;
 				vertical-align: top;

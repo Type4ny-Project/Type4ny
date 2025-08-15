@@ -3,18 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Directive } from 'vue';
+import { throttle } from 'throttle-debounce';
+import type { Directive } from 'vue';
 
 export default {
 	mounted(src, binding, vn) {
 		const fn = binding.value;
 		if (fn == null) return;
 
-		const observer = new IntersectionObserver(entries => {
+		const check = throttle(1000, (entries) => {
 			if (entries.some(entry => entry.isIntersecting)) {
 				fn();
 			}
 		});
+
+		const observer = new IntersectionObserver(check);
 
 		observer.observe(src);
 

@@ -16,30 +16,31 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onUnmounted, ref, watch } from 'vue';
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form.js';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form.js';
 
 const name = 'unixClock';
 
 const widgetPropsDef = {
 	transparent: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: false,
 	},
 	fontSize: {
-		type: 'number' as const,
+		type: 'number',
 		default: 1.5,
 		step: 0.1,
 	},
 	showMs: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: true,
 	},
 	showLabel: {
-		type: 'boolean' as const,
+		type: 'boolean',
 		default: true,
 	},
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 
@@ -52,7 +53,7 @@ const { widgetProps, configure } = useWidgetPropsManager(name,
 	emit,
 );
 
-let intervalId;
+let intervalId: number | null = null;
 const ss = ref('');
 const ms = ref('');
 const showColon = ref(false);
@@ -82,7 +83,10 @@ watch(() => widgetProps.showMs, () => {
 }, { immediate: true });
 
 onUnmounted(() => {
-	window.clearInterval(intervalId);
+	if (intervalId) {
+		window.clearInterval(intervalId);
+		intervalId = null;
+	}
 });
 
 defineExpose<WidgetComponentExpose>({

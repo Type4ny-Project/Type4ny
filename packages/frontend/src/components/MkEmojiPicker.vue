@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -50,8 +51,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<div v-if="tab === 'index'" class="group index">
 			<section v-if="showPinned">
 				<div style="display: flex; ">
-					<div v-for="a in profileMax" :key="a" :title="defaultStore.state[`pickerProfileName${a > 1 ? a - 1 : ''}`]" class="sllfktkhgl" :class="{ active: activeIndex === a }" @click="pinnedProfileSelect(a)">
-						{{ defaultStore.state[`pickerProfileName${a > 1 ? a - 1 : ''}`] }}
+					<div v-for="a in profileMax" :key="a" :title="store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`]" class="sllfktkhgl" :class="{ active: activeIndex === a }" @click="pinnedProfileSelect(a)">
+						{{ store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`] }}
 					</div>
 				</div>
 				<div class="body">
@@ -68,6 +69,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 						<MkCustomEmoji v-if="!emoji.hasOwnProperty('char')" class="emoji" :name="getKey(emoji)" :normal="true"/>
 						<MkEmoji v-else class="emoji" :emoji="getKey(emoji)" :normal="true"/>
 					</button>
+					<button v-tooltip="i18n.ts.settings" class="_button config" @click="settings"><i class="ti ti-settings"></i></button>
 				</div>
 			</section>
 
@@ -119,30 +121,36 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, computed, watch, onMounted } from 'vue';
+import { ref, useTemplateRef, computed, watch, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
-import XSection from '@/components/MkEmojiPicker.section.vue';
 import {
 	emojilist,
 	emojiCharByCategory,
-	UnicodeEmojiDef,
 	unicodeEmojiCategories as categories,
 	getEmojiName,
-	CustomEmojiFolderTree,
 	getUnicodeEmoji,
-} from '@/scripts/emojilist.js';
+} from '@@/js/emojilist.js';
+import type {
+	UnicodeEmojiDef,
+	CustomEmojiFolderTree,
+} from '@@/js/emojilist.js';
+import XSection from '@/components/MkEmojiPicker.section.vue';
 import MkRippleEffect from '@/components/MkRippleEffect.vue';
 import * as os from '@/os.js';
-import { isTouchUsing } from '@/scripts/touch.js';
-import { deviceKind } from '@/scripts/device-kind.js';
+import { isTouchUsing } from '@/utility/touch.js';
+import { deviceKind } from '@/utility/device-kind.js';
 import { i18n } from '@/i18n.js';
-import { defaultStore } from '@/store.js';
+import { store } from '@/store.js';
 import { customEmojiCategories, customEmojis, customEmojisMap } from '@/custom-emojis.js';
-import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
-import { deepClone } from '@/scripts/clone.js';
+import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
+import { deepClone } from '@/utility/clone.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
-import { $i } from '@/account.js';
+import { $i } from '@/i.js';
+import { prefer } from '@/preferences.js';
+import { useRouter } from '@/router.js';
+
+const router = useRouter();
 
 const props = withDefaults(defineProps<{
 	showPinned?: boolean;
@@ -161,15 +169,16 @@ const emit = defineEmits<{
 	(ev: 'esc'): void;
 }>();
 const profileMax = $i?.policies.emojiPickerProfileLimit;
-const searchEl = shallowRef<HTMLInputElement>();
-const emojisEl = shallowRef<HTMLDivElement>();
+const searchEl = useTemplateRef('searchEl');
+const emojisEl = useTemplateRef('emojisEl');
 
 const {
 	emojiPickerScale,
 	emojiPickerWidth,
 	emojiPickerHeight,
-	recentlyUsedEmojis,
-} = defaultStore.reactiveState;
+} = prefer.r;
+
+const recentlyUsedEmojis = store.r.recentlyUsedEmojis;
 
 const recentlyUsedEmojisDef = computed(() => {
 	return recentlyUsedEmojis.value.map(getDef);
@@ -309,12 +318,12 @@ watch(q, () => {
 		const max = 100;
 		const emojis = emojilist;
 		const matches = new Set<UnicodeEmojiDef>();
+		const keywords = newQ.split(' ');
 
 		const exactMatch = emojis.find(emoji => emoji.name === newQ);
 		if (exactMatch) matches.add(exactMatch);
 
 		if (newQ.includes(' ')) { // AND検索
-			const keywords = newQ.split(' ');
 
 			for (const emoji of emojis) {
 				if (keywords.every(keyword => emoji.name.includes(keyword))) {
@@ -324,7 +333,7 @@ watch(q, () => {
 			}
 			if (matches.size >= max) return matches;
 
-			for (const index of Object.values(defaultStore.state.additionalUnicodeEmojiIndexes)) {
+			for (const index of Object.values(store.s.additionalUnicodeEmojiIndexes)) {
 				for (const emoji of emojis) {
 					if (keywords.every(keyword => index[emoji.char].some(k => k.includes(keyword)))) {
 						matches.add(emoji);
@@ -341,7 +350,7 @@ watch(q, () => {
 			}
 			if (matches.size >= max) return matches;
 
-			for (const index of Object.values(defaultStore.state.additionalUnicodeEmojiIndexes)) {
+			for (const index of Object.values(store.s.additionalUnicodeEmojiIndexes)) {
 				for (const emoji of emojis) {
 					if (index[emoji.char].some(k => k.startsWith(newQ))) {
 						matches.add(emoji);
@@ -358,7 +367,7 @@ watch(q, () => {
 			}
 			if (matches.size >= max) return matches;
 
-			for (const index of Object.values(defaultStore.state.additionalUnicodeEmojiIndexes)) {
+			for (const index of Object.values(store.s.additionalUnicodeEmojiIndexes)) {
 				for (const emoji of emojis) {
 					if (index[emoji.char].some(k => k.includes(newQ))) {
 						matches.add(emoji);
@@ -380,7 +389,7 @@ function canReact(emoji: Misskey.entities.EmojiSimple | UnicodeEmojiDef | string
 }
 
 function filterCategory(emoji: Misskey.entities.EmojiSimple, category: string): boolean {
-	return category === '' ? (emoji.category === 'null' || !emoji.category) : emoji.category === category && !customEmojis.value.some(e => e.category !== null && e.category.includes(emoji.category + '/')) || emoji.category === category + '/' + category && !emoji.category;
+	return category === '' ? (emoji.category === 'null' || !emoji.category) : emoji.category === category && !customEmojis.value.some(customEmoji => customEmoji.category !== null && customEmoji.category.includes(emoji.category + '/')) || emoji.category === category + '/' + category && !emoji.category;
 }
 
 function focus() {
@@ -418,9 +427,9 @@ function computeButtonTitle(ev: MouseEvent): void {
 	elm.title = getEmojiName(emoji);
 }
 
-function chosen(emoji: any, ev?: MouseEvent) {
+function chosen(emoji: string | Misskey.entities.EmojiSimple | UnicodeEmojiDef, ev?: MouseEvent) {
 	const el = ev && (ev.currentTarget ?? ev.target) as HTMLElement | null | undefined;
-	if (el) {
+	if (el && prefer.s.animation) {
 		const rect = el.getBoundingClientRect();
 		const x = rect.left + (el.offsetWidth / 2);
 		const y = rect.top + (el.offsetHeight / 2);
@@ -434,10 +443,10 @@ function chosen(emoji: any, ev?: MouseEvent) {
 
 	// 最近使った絵文字更新
 	if (!pinned.value?.includes(key)) {
-		let recents = defaultStore.state.recentlyUsedEmojis;
-		recents = recents.filter((emoji: any) => emoji !== key);
+		let recents = store.s.recentlyUsedEmojis;
+		recents = recents.filter((emoji) => emoji !== key);
 		recents.unshift(key);
-		defaultStore.set('recentlyUsedEmojis', recents.splice(0, 32));
+		store.set('recentlyUsedEmojis', recents.splice(0, 32));
 	}
 }
 
@@ -469,11 +478,11 @@ function onKeydown(ev: KeyboardEvent) {
 	}
 }
 
-const activeIndex = ref(defaultStore.state.pickerProfileDefault);
-pinnedEmojis.value = props.asReactionPicker ? deepClone(defaultStore.state[`reactions${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]) : deepClone(defaultStore.state[`pinnedEmojis${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]);
+const activeIndex = ref(store.s.pickerProfileDefault);
+pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]);
 
 function pinnedProfileSelect(index:number) {
-	pinnedEmojis.value = props.asReactionPicker ? deepClone(defaultStore.state[`reactions${index > 1 ? index - 1 : ''}`]) : deepClone(defaultStore.state[`pinnedEmojis${index > 1 ? index - 1 : ''}`]);
+	pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${index > 1 ? index - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${index > 1 ? index - 1 : ''}`]);
 	activeIndex.value = index;
 }
 
@@ -500,6 +509,11 @@ function done(query?: string): boolean | void {
 		chosen(searchResultUnicode.value[0]);
 		return true;
 	}
+}
+
+function settings() {
+	emit('esc');
+	router.push('/settings/emoji-palette');
 }
 
 onMounted(() => {
@@ -589,6 +603,14 @@ defineExpose({
 					grid-template-columns: var(--columns);
 					font-size: 30px;
 
+					> .config {
+						aspect-ratio: 1 / 1;
+						width: auto;
+						height: auto;
+						min-width: 0;
+						font-size: 14px;
+					}
+
 					> .item {
 						aspect-ratio: 1 / 1;
 						width: auto;
@@ -597,7 +619,7 @@ defineExpose({
 
 						&:disabled {
 							cursor: not-allowed;
-							background: linear-gradient(-45deg, transparent 0% 48%, var(--X6) 48% 52%, transparent 52% 100%);
+							background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 							opacity: 1;
 
 							> .emoji {
@@ -628,10 +650,11 @@ defineExpose({
 						width: auto;
 						height: auto;
 						min-width: 0;
+						padding: 0;
 
 						&:disabled {
 							cursor: not-allowed;
-							background: linear-gradient(-45deg, transparent 0% 48%, var(--X6) 48% 52%, transparent 52% 100%);
+							background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 							opacity: 1;
 
 							> .emoji {
@@ -654,7 +677,7 @@ defineExpose({
 		outline: none;
 		border: none;
 		background: transparent;
-		color: var(--fg);
+		color: var(--MI_THEME-fg);
 
 		&:not(:focus):not(.filled) {
 			margin-bottom: env(safe-area-inset-bottom, 0px);
@@ -663,7 +686,7 @@ defineExpose({
 		&:not(.filled) {
 			order: 1;
 			z-index: 2;
-			box-shadow: 0px -1px 0 0px var(--divider);
+			box-shadow: 0px -1px 0 0px var(--MI_THEME-divider);
 		}
 	}
 
@@ -674,11 +697,11 @@ defineExpose({
 		> .tab {
 			flex: 1;
 			height: 38px;
-			border-top: solid 0.5px var(--divider);
+			border-top: solid 0.5px var(--MI_THEME-divider);
 
 			&.active {
-				border-top: solid 1px var(--accent);
-				color: var(--accent);
+				border-top: solid 1px var(--MI_THEME-accent);
+				color: var(--MI_THEME-accent);
 			}
 		}
 	}
@@ -687,17 +710,12 @@ defineExpose({
 		height: 100%;
 		overflow-y: auto;
 		overflow-x: hidden;
-
 		scrollbar-width: none;
-
-		&::-webkit-scrollbar {
-			display: none;
-		}
 
 		> .group {
 			&:not(.index) {
 				padding: 4px 0 8px 0;
-				border-top: solid 0.5px var(--divider);
+				border-top: solid 0.5px var(--MI_THEME-divider);
 			}
 
 			> header {
@@ -725,7 +743,7 @@ left: 0;*/
 				cursor: pointer;
 
 				&:hover {
-					color: var(--accent);
+					color: var(--MI_THEME-accent);
 				}
 			}
 
@@ -733,9 +751,18 @@ left: 0;*/
 				position: relative;
 				padding: $pad;
 
+				> .config {
+					position: relative;
+					padding: 0 3px;
+					width: var(--eachSize);
+					height: var(--eachSize);
+					contain: strict;
+					opacity: 0.5;
+				}
+
 				> .item {
 					position: relative;
-					padding: 0;
+					padding: 0 3px;
 					width: var(--eachSize);
 					height: var(--eachSize);
 					contain: strict;
@@ -747,13 +774,13 @@ left: 0;*/
 					}
 
 					&:active {
-						background: var(--accent);
+						background: var(--MI_THEME-accent);
 						box-shadow: inset 0 0.15em 0.3em rgba(27, 31, 35, 0.15);
 					}
 
 					&:disabled {
 						cursor: not-allowed;
-						background: linear-gradient(-45deg, transparent 0% 48%, var(--X6) 48% 52%, transparent 52% 100%);
+						background: linear-gradient(-45deg, transparent 0% 48%, light-dark(rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.15)) 48% 52%, transparent 52% 100%);
 						opacity: 1;
 
 						> .emoji {
@@ -774,7 +801,7 @@ left: 0;*/
 			}
 
 			&.result {
-				border-bottom: solid 0.5px var(--divider);
+				border-bottom: solid 0.5px var(--MI_THEME-divider);
 
 				&:empty {
 					display: none;
@@ -789,11 +816,11 @@ left: 0;*/
 	font-size: 12px;
 	line-height: 32px;
 	text-align: center;
-	color: var(--fg);
+	color: var(--MI_THEME-fg);
 	cursor: pointer;
 	width: 100%;
 	transition: transform 0.3s ease;
-	box-shadow: 0 1.5px 0 var(--divider);
+	box-shadow: 0 1.5px 0 var(--MI_THEME-divider);
 	height: 32px;
 	overflow: hidden;
 	&:hover {

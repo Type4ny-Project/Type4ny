@@ -4,12 +4,15 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
+import { In, IsNull, Not } from 'typeorm';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
 import { DI } from '@/di-symbols.js';
 import { DEFAULT_POLICIES } from '@/core/RoleService.js';
+import { SystemAccountService } from '@/core/SystemAccountService.js';
 import { envOption } from '@/env.js';
+import type { UsersRepository } from '@/models/_.js';
 
 export const meta = {
 	tags: ['meta'],
@@ -82,6 +85,14 @@ export const meta = {
 				type: 'string',
 				optional: false,
 				nullable: true,
+			},
+			enableTestcaptcha: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			googleAnalyticsMeasurementId: {
+				type: 'string',
+				optional: false, nullable: true,
 			},
 			swPublickey: {
 				type: 'string',
@@ -204,6 +215,13 @@ export const meta = {
 					type: 'string',
 				},
 			},
+			prohibitedWordsForNameOfUser: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+				},
+			},
 			bannedEmailDomains: {
 				type: 'array',
 				optional: true,
@@ -265,7 +283,7 @@ export const meta = {
 			proxyAccountId: {
 				type: 'string',
 				optional: false,
-				nullable: true,
+				nullable: false,
 				format: 'id',
 			},
 			email: {
@@ -458,6 +476,10 @@ export const meta = {
 				optional: false,
 				nullable: false,
 			},
+			enableReactionsBuffering: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			notesPerOneAd: {
 				type: 'number',
 				optional: false,
@@ -600,6 +622,10 @@ export const meta = {
 				optional: false,
 				nullable: false,
 			},
+			urlPreviewAllowRedirect: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			urlPreviewTimeout: {
 				type: 'number',
 				optional: false,
@@ -629,6 +655,73 @@ export const meta = {
 			iconDark: { type: 'string', nullable: true },
 			bannerLight: { type: 'string', nullable: true },
 			bannerDark: { type: 'string', nullable: true },
+			maxLocalUsers: { type: 'number', nullable: true },
+			nowLocalUsers: { type: 'number', nullable: true },
+			isManaged: { type: 'boolean', nullable: true },
+			federation: {
+				type: 'string',
+				enum: ['all', 'specified', 'none'],
+				optional: false, nullable: false,
+			},
+			federationHosts: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+					optional: false, nullable: false,
+				},
+			},
+			deliverSuspendedSoftware: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'object',
+					optional: false, nullable: false,
+					properties: {
+						software: {
+							type: 'string',
+							optional: false, nullable: false,
+						},
+						versionRange: {
+							type: 'string',
+							optional: false, nullable: false,
+						},
+					},
+				},
+			},
+			singleUserMode: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			ugcVisibilityForVisitor: {
+				type: 'string',
+				enum: ['all', 'local', 'none'],
+				optional: false, nullable: false,
+			},
+			proxyRemoteFiles: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			signToActivityPubGet: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			allowExternalApRedirect: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			enableRemoteNotesCleaning: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			remoteNotesCleaningExpiryDaysForEachNotes: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
+			remoteNotesCleaningMaxProcessingDurationInMinutes: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
 		},
 	},
 } as const;
@@ -644,10 +737,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
 		private metaService: MetaService,
+		private systemAccountService: SystemAccountService,
 	) {
 		super(meta, paramDef, async (_, me) => {
 			const instance = await this.metaService.fetch(true);
+
+			const proxy = await this.systemAccountService.fetch('proxy');
+
 			const commonResponse = {
 				maintainerName: instance.maintainerName,
 				maintainerEmail: instance.maintainerEmail,
@@ -674,6 +773,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				recaptchaSiteKey: instance.recaptchaSiteKey,
 				enableTurnstile: instance.enableTurnstile,
 				turnstileSiteKey: instance.turnstileSiteKey,
+				enableTestcaptcha: instance.enableTestcaptcha,
+				googleAnalyticsMeasurementId: instance.googleAnalyticsMeasurementId,
 				swPublickey: instance.swPublicKey,
 				themeColor: instance.themeColor,
 				requestEmojiAllOk: instance.requestEmojiAllOk,
@@ -702,6 +803,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				mediaSilencedHosts: instance.mediaSilencedHosts || [],
 				sensitiveWords: instance.sensitiveWords,
 				prohibitedWords: instance.prohibitedWords,
+				prohibitedWordsForNameOfUser: instance.prohibitedWordsForNameOfUser,
 				preservedUsernames: instance.preservedUsernames,
 				hcaptchaSecretKey: instance.hcaptchaSecretKey,
 				mcaptchaSecretKey: instance.mcaptchaSecretKey,
@@ -711,7 +813,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				sensitiveMediaDetectionSensitivity: instance.sensitiveMediaDetectionSensitivity,
 				setSensitiveFlagAutomatically: instance.setSensitiveFlagAutomatically,
 				enableSensitiveMediaDetectionForVideos: instance.enableSensitiveMediaDetectionForVideos,
-				proxyAccountId: instance.proxyAccountId,
+				proxyAccountId: proxy.id,
 				email: instance.email,
 				smtpSecure: instance.smtpSecure,
 				smtpHost: instance.smtpHost,
@@ -754,6 +856,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				perRemoteUserUserTimelineCacheMax: instance.perRemoteUserUserTimelineCacheMax,
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
+				enableReactionsBuffering: instance.enableReactionsBuffering,
 				notesPerOneAd: instance.notesPerOneAd,
 				DiscordWebhookUrl: instance.DiscordWebhookUrl,
 				DiscordWebhookUrlWordBlock: instance.DiscordWebhookUrlWordBlock,
@@ -764,18 +867,32 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				proxyCheckioApiKey: instance.proxyCheckioApiKey,
 				summalyProxy: instance.urlPreviewSummaryProxyUrl,
 				urlPreviewEnabled: instance.urlPreviewEnabled,
+				urlPreviewAllowRedirect: instance.urlPreviewAllowRedirect,
 				urlPreviewTimeout: instance.urlPreviewTimeout,
 				urlPreviewMaximumContentLength: instance.urlPreviewMaximumContentLength,
 				urlPreviewRequireContentLength: instance.urlPreviewRequireContentLength,
 				urlPreviewUserAgent: instance.urlPreviewUserAgent,
 				urlPreviewSummaryProxyUrl: instance.urlPreviewSummaryProxyUrl,
-				iconLight: instance.iconLight,
-				iconDark: instance.iconDark,
-				bannerLight: instance.bannerLight,
-				bannerDark: instance.bannerDark,
-				isManaged: false,
-				pointName: instance.pointName,
-				googleAnalyticsId: instance.googleAnalyticsId,
+				isManaged: envOption.managed,
+				...(envOption.managed ? {
+					nowLocalUsers: await this.usersRepository.count({ where: { host: IsNull(), username: Not(In(['instance.actor', 'relay.actor', this.config.adminUserName, this.config.rootUserName])) } }),
+					maxLocalUsers: this.config.maxLocalUsers,
+
+				} : {
+					nowLocalUsers: 0,
+					maxLocalUsers: 0,
+				}),
+				deliverSuspendedSoftware: instance.deliverSuspendedSoftware,
+				singleUserMode: instance.singleUserMode,
+				ugcVisibilityForVisitor: instance.ugcVisibilityForVisitor,
+				proxyRemoteFiles: instance.proxyRemoteFiles,
+				signToActivityPubGet: instance.signToActivityPubGet,
+				allowExternalApRedirect: instance.allowExternalApRedirect,
+				enableRemoteNotesCleaning: instance.enableRemoteNotesCleaning,
+				remoteNotesCleaningExpiryDaysForEachNotes: instance.remoteNotesCleaningExpiryDaysForEachNotes,
+				remoteNotesCleaningMaxProcessingDurationInMinutes: instance.remoteNotesCleaningMaxProcessingDurationInMinutes,
+				federation: 'all' as const,
+				federationHosts: [] as string[],
 			};
 
 			if (!envOption.managed || this.config.rootUserName === me.username) {
@@ -796,7 +913,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					objectStorageUseProxy: false,
 					objectStorageSetPublicRead: false,
 					objectStorageS3ForcePathStyle: false,
-					isManaged: true,
+					summalyProxy: 'Masked',
+					deeplAuthKey: 'Masked',
 				};
 			}
 		});

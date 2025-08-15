@@ -63,7 +63,7 @@ export class FeedService {
 			generator: 'Type4ny',
 			description: `${user.notesCount} Notes, ${profile.followingVisibility === 'public' ? user.followingCount : '?'} Following, ${profile.followersVisibility === 'public' ? user.followersCount : '?'} Followers${profile.description ? ` · ${profile.description}` : ''}`,
 			link: author.link,
-			image: user.avatarUrl ?? this.userEntityService.getIdenticonUrl(user),
+			image: (user.avatarId == null ? null : user.avatarUrl) ?? this.userEntityService.getIdenticonUrl(user),
 			feedLinks: {
 				json: `${author.link}.json`,
 				atom: `${author.link}.atom`,

@@ -15,6 +15,18 @@ export class MiMeta {
 	})
 	public id: string;
 
+	@Column({
+		...id(),
+		nullable: true,
+	})
+	public rootUserId: MiUser['id'] | null;
+
+	@ManyToOne(type => MiUser, {
+		onDelete: 'SET NULL',
+		nullable: true,
+	})
+	public rootUser: MiUser | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,
@@ -52,7 +64,7 @@ export class MiMeta {
 	public maintainerEmail: string | null;
 
 	@Column('boolean', {
-		default: false,
+		default: true,
 	})
 	public disableRegistration: boolean;
 
@@ -103,6 +115,11 @@ export class MiMeta {
 		array: true,
 		default: '{}',
 	})
+	public prohibitedWordsForNameOfUser: string[];
+
+	@Column('varchar', {
+		length: 1024, array: true, default: '{}',
+	})
 	public silencedHosts: string[];
 
 	@Column('varchar', {
@@ -138,7 +155,6 @@ export class MiMeta {
 		default: [],
 	})
 	public backgroundImageUrls: { url: string }[];
-
 
 	@Column('varchar', {
 		length: 1024,
@@ -196,18 +212,6 @@ export class MiMeta {
 		default: true,
 	})
 	public cacheRemoteSensitiveFiles: boolean;
-
-	@Column({
-		...id(),
-		nullable: true,
-	})
-	public proxyAccountId: MiUser['id'] | null;
-
-	@ManyToOne((type) => MiUser, {
-		onDelete: 'SET NULL',
-	})
-	@JoinColumn()
-	public proxyAccount: MiUser | null;
 
 	@Column('boolean', {
 		default: false,
@@ -310,6 +314,11 @@ export class MiMeta {
 	})
 	public turnstileSecretKey: string | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public enableTestcaptcha: boolean;
+
 	// chaptcha系を追加した際にはnodeinfoのレスポンスに追加するのを忘れないようにすること
 
 	@Column('enum', {
@@ -371,7 +380,6 @@ export class MiMeta {
 		nullable: true,
 	})
 	public smtpUser: string | null;
-
 
 	@Column('varchar', {
 		length: 1024,
@@ -646,7 +654,7 @@ export class MiMeta {
 		length: 1024,
 		array: true,
 		default:
-			'{ "admin", "administrator", "root", "system", "maintainer", "host", "mod", "moderator", "owner", "superuser", "staff", "auth", "i", "me", "everyone", "all", "mention", "mentions", "example", "user", "users", "account", "accounts", "official", "help", "helps", "support", "supports", "info", "information", "informations", "announce", "announces", "announcement", "announcements", "notice", "notification", "notifications", "dev", "developer", "developers", "tech", "misskey" }',
+			['admin', 'administrator', 'root', 'system', 'maintainer', 'host', 'mod', 'moderator', 'owner', 'superuser', 'staff', 'auth', 'i', 'me', 'everyone', 'all', 'mention', 'mentions', 'example', 'user', 'users', 'account', 'accounts', 'official', 'help', 'helps', 'support', 'supports', 'info', 'information', 'informations', 'announce', 'announces', 'announcement', 'announcements', 'notice', 'notification', 'notifications', 'dev', 'developer', 'developers', 'tech', 'misskey'],
 	})
 	public preservedUsernames: string[];
 
@@ -680,6 +688,11 @@ export class MiMeta {
 	})
 	public perUserListTimelineCacheMax: number;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public enableReactionsBuffering: boolean;
+
 	@Column('integer', {
 		default: 0,
 	})
@@ -711,6 +724,11 @@ export class MiMeta {
 	})
 	public urlPreviewEnabled: boolean;
 
+	@Column('boolean', {
+		default: true,
+	})
+	public urlPreviewAllowRedirect: boolean;
+
 	@Column('integer', {
 		default: 10000,
 	})
@@ -722,7 +740,7 @@ export class MiMeta {
 	public urlPreviewMaximumContentLength: number;
 
 	@Column('boolean', {
-		default: true,
+		default: false,
 	})
 	public urlPreviewRequireContentLength: boolean;
 
@@ -735,6 +753,77 @@ export class MiMeta {
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,
+		default: null,
 	})
 	public urlPreviewUserAgent: string | null;
+
+	@Column('varchar', {
+		length: 128,
+		default: 'none',
+	})
+	public federation: 'all' | 'specified' | 'none';
+
+	@Column('varchar', {
+		length: 1024,
+		array: true,
+		default: '{}',
+	})
+	public federationHosts: string[];
+
+	@Column('varchar', {
+		length: 128,
+		default: 'local',
+	})
+	public ugcVisibilityForVisitor: 'all' | 'local' | 'none';
+
+	@Column('varchar', {
+		length: 64,
+		nullable: true,
+	})
+	public googleAnalyticsMeasurementId: string | null;
+
+	@Column('jsonb', {
+		default: [],
+	})
+	public deliverSuspendedSoftware: SoftwareSuspension[];
+
+	@Column('boolean', {
+		default: false,
+	})
+	public singleUserMode: boolean;
+
+	@Column('boolean', {
+		default: true,
+	})
+	public proxyRemoteFiles: boolean;
+
+	@Column('boolean', {
+		default: true,
+	})
+	public signToActivityPubGet: boolean;
+
+	@Column('boolean', {
+		default: true,
+	})
+	public allowExternalApRedirect: boolean;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public enableRemoteNotesCleaning: boolean;
+
+	@Column('integer', {
+		default: 60, // minutes
+	})
+	public remoteNotesCleaningMaxProcessingDurationInMinutes: number;
+
+	@Column('integer', {
+		default: 90, // days
+	})
+	public remoteNotesCleaningExpiryDaysForEachNotes: number;
 }
+
+export type SoftwareSuspension = {
+	software: string,
+	versionRange: string,
+};

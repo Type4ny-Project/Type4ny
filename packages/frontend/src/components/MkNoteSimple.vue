@@ -1,9 +1,10 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div v-show="!isDeleted" :class="$style.root" :tabindex="!isDeleted ? '-1' : undefined">
+<div v-if="!isDeleted" :class="$style.root" :tabindex="!isDeleted ? '-1' : undefined">
 	<MkAvatar :class="$style.avatar" :user="note.user" link preview/>
 	<div :class="$style.main">
 		<MkNoteHeader :class="$style.header" :note="note" :mini="true"/>
@@ -22,27 +23,34 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		</div>
 	</div>
 </div>
+<div v-else :class="$style.deleted">
+	{{ i18n.ts.deletedNote }}
+</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import { i18n } from '../i18n.js';
+import * as os from '@/os.js';
+import { i18n } from '@/i18n.js';
 import MkNoteHeader from '@/components/MkNoteHeader.vue';
 import MkSubNoteContent from '@/components/MkSubNoteContent.vue';
 import MkCwButton from '@/components/MkCwButton.vue';
 import MkButton from '@/components/MkButton.vue';
-import * as os from '@/os.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
+
+import { misskeyApi } from '@/utility/misskey-api.js';
 const isDeleted = ref(false);
-const props = defineProps<{
+
+const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note & {
 		id: string | null;
 		isSchedule?: boolean;
 		scheduledNoteId?: string;
 	};
-	emojireq:boolean;
-}>();
+	emojireq?: boolean;
+}>(), {
+	emojireq: false,
+});
 
 const emit = defineEmits<{
   (ev: 'editScheduleNote'): void;
@@ -95,8 +103,8 @@ const showContent = ref(false);
 
 }
 .button{
-  margin-right: var(--margin);
-  margin-bottom: var(--margin);
+  margin-right: var(--MI-margin);
+  margin-bottom: var(--MI-margin);
 }
 .avatar {
 	flex-shrink: 0;
@@ -106,7 +114,7 @@ const showContent = ref(false);
 	height: 34px;
 	border-radius: 8px;
 	position: sticky !important;
-	top: calc(16px + var(--stickyTop, 0px));
+	top: calc(16px + var(--MI-stickyTop, 0px));
 	left: 0;
 }
 
@@ -155,5 +163,15 @@ const showContent = ref(false);
 		width: 48px;
 		height: 48px;
 	}
+}
+
+.deleted {
+	text-align: center;
+	padding: 8px !important;
+	margin: 8px 8px 0 8px;
+	--color: light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15));
+	background-size: auto auto;
+	background-image: repeating-linear-gradient(135deg, transparent, transparent 10px, var(--color) 4px, var(--color) 14px);
+	border-radius: 8px;
 }
 </style>

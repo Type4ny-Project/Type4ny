@@ -21,8 +21,6 @@ import { IdService } from '@/core/IdService.js';
 import { RoleService } from '@/core/RoleService.js';
 import { DI } from '@/di-symbols.js';
 import { isQuote, isRenote } from '@/misc/is-renote.js';
-import { MetaService } from '@/core/MetaService.js';
-import { UtilityService } from '@/core/UtilityService.js';
 import { IdentifiableError } from '@/misc/identifiable-error.js';
 import { ApiError } from '../../error.js';
 
@@ -321,7 +319,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			let renote: MiNote | null = null;
 			if (ps.renoteId != null) {
 				// Fetch renote to note
-				renote = await this.notesRepository.findOneBy({ id: ps.renoteId });
+				renote = await this.notesRepository.findOne({
+					where: { id: ps.renoteId },
+					relations: ['user', 'renote', 'reply'],
+				});
 
 				if (renote == null) {
 					throw new ApiError(meta.errors.noSuchRenoteTarget);
@@ -367,7 +368,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			let reply: MiNote | null = null;
 			if (ps.replyId != null) {
 				// Fetch reply
-				reply = await this.notesRepository.findOneBy({ id: ps.replyId });
+				reply = await this.notesRepository.findOne({
+					where: { id: ps.replyId },
+					relations: ['user'],
+				});
 
 				if (reply == null) {
 					throw new ApiError(meta.errors.noSuchReplyTarget);

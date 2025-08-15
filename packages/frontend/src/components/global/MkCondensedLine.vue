@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <span :class="$style.container">
-	<span ref="content" :class="$style.content">
+	<span ref="content" :class="$style.content" :style="{ maxWidth: `${100 / minScale}%` }">
 		<slot/>
 	</span>
 </span>

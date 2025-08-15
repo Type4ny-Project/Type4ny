@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 -->
 
 <template>
-<MkModal ref="modal" v-slot="{ type }" :zPriority="'high'" :src="src" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
+<MkModal ref="modal" v-slot="{ type }" :zPriority="'high'" :anchorElement="anchorElement" @click="modal?.close()" @closed="emit('closed')" @esc="modal?.close()">
 	<div class="_popup" :class="{ [$style.root]: true, [$style.asDrawer]: type === 'drawer' }">
 		<div :class="[$style.label, $style.item]">
 			{{ i18n.ts.visibility }}
@@ -41,18 +41,18 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { nextTick, shallowRef, ref } from 'vue';
+import { nextTick, useTemplateRef, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkModal from '@/components/MkModal.vue';
 import { i18n } from '@/i18n.js';
 
-const modal = shallowRef<InstanceType<typeof MkModal>>();
+const modal = useTemplateRef('modal');
 
 const props = withDefaults(defineProps<{
 	currentVisibility: typeof Misskey.noteVisibilities[number];
 	isSilenced: boolean;
 	localOnly: boolean;
-	src?: HTMLElement;
+	anchorElement?: HTMLElement;
 	isReplyVisibilitySpecified?: boolean;
 }>(), {
 });
@@ -123,7 +123,7 @@ function choose(visibility: typeof Misskey.noteVisibilities[number]): void {
 	}
 
 	&.active {
-		color: var(--accent);
+		color: var(--MI_THEME-accent);
 	}
 }
 

@@ -16,7 +16,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { defaultIdlingRenderScheduler } from '@/scripts/idle-render.js';
+import { defaultIdlingRenderScheduler } from '@/utility/idle-render.js';
 
 const props = withDefaults(defineProps<{
 	showS?: boolean;

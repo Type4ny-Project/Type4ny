@@ -12,7 +12,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, shallowRef, ref } from 'vue';
+import { onMounted, onUnmounted, useTemplateRef, ref } from 'vue';
 import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
 	maxHeight: 200,
 });
 
-const content = shallowRef<HTMLElement>();
+const content = useTemplateRef('content');
 const omitted = ref(false);
 const ignoreOmit = ref(false);
 
@@ -46,7 +46,7 @@ onUnmounted(() => {
 
 <style lang="scss" module>
 .content {
-	--stickyTop: 0px;
+	--MI-stickyTop: 0px;
 
 	&.omitted {
 		position: relative;
@@ -61,11 +61,11 @@ onUnmounted(() => {
 			left: 0;
 			width: 100%;
 			height: 64px;
-			background: linear-gradient(0deg, var(--panel), color(from var(--panel) srgb r g b / 0));
+			background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
 
 			> .fadeLabel {
 				display: inline-block;
-				background: var(--panel);
+				background: var(--MI_THEME-panel);
 				padding: 6px 10px;
 				font-size: 0.8em;
 				border-radius: 999px;
@@ -74,7 +74,7 @@ onUnmounted(() => {
 
 			&:hover {
 				> .fadeLabel {
-					background: var(--panelHighlight);
+					background: var(--MI_THEME-panelHighlight);
 				}
 			}
 		}

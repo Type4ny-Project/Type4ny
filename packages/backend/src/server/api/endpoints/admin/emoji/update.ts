@@ -15,7 +15,7 @@ export const meta = {
 	tags: ['admin'],
 
 	requireCredential: true,
-	requireRolePolicy: 'canManageCustomEmojis',
+	requiredRolePolicy: 'canManageCustomEmojis',
 	kind: 'write:admin:emoji',
 
 	errors: {
@@ -43,30 +43,45 @@ export const meta = {
 } as const;
 
 export const paramDef = {
-	type: 'object',
-	properties: {
-		id: { type: 'string', format: 'misskey:id' },
-		name: { type: 'string', pattern: '^[a-zA-Z0-9_]+$' },
-		fileId: { type: 'string', format: 'misskey:id' },
-		category: {
-			type: 'string',
-			nullable: true,
-			description: 'Use `null` to reset the category.',
+	allOf: [
+		{
+			anyOf: [
+				{
+					type: 'object',
+					properties: {
+						id: { type: 'string', format: 'misskey:id' },
+					},
+					required: ['id'],
+				},
+				{
+					type: 'object',
+					properties: {
+						name: { type: 'string', pattern: '^[a-zA-Z0-9_]+$' },
+					},
+					required: ['name'],
+				},
+			],
 		},
-		aliases: { type: 'array', items: {
-			type: 'string',
-		} },
-		license: { type: 'string', nullable: true },
-		isSensitive: { type: 'boolean' },
-		localOnly: { type: 'boolean' },
-		roleIdsThatCanBeUsedThisEmojiAsReaction: { type: 'array', items: {
-			type: 'string',
-		} },
-		Request: { type: 'boolean' },
-	},
-	anyOf: [
-		{ required: ['id'] },
-		{ required: ['name'] },
+		{
+			type: 'object',
+			properties: {
+				fileId: { type: 'string', format: 'misskey:id' },
+				category: {
+					type: 'string',
+					nullable: true,
+					description: 'Use `null` to reset the category.',
+				},
+				aliases: { type: 'array', items: {
+					type: 'string',
+				} },
+				license: { type: 'string', nullable: true },
+				isSensitive: { type: 'boolean' },
+				localOnly: { type: 'boolean' },
+				roleIdsThatCanBeUsedThisEmojiAsReaction: { type: 'array', items: {
+					type: 'string',
+				} },
+			Request: { type: 'boolean' },},
+		},
 	],
 } as const;
 
@@ -86,50 +101,58 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				if (driveFile == null) throw new ApiError(meta.errors.noSuchFile);
 			}
 
+			const required = 'id' in ps
+				? { id: ps.id, name: 'name' in ps ? ps.name as string : undefined }
+				: { name: ps.name };
+
+			const params = ps as any;
 			let emojiId, emoji;
-			if (ps.id) {
-				emojiId = ps.id;
-				const emoji = await this.customEmojiService.getEmojiById(ps.id);
+			if (params.id) {
+				emojiId = params.id;
+				const emoji = await this.customEmojiService.getEmojiById(params.id);
 				if (!emoji) throw new ApiError(meta.errors.noSuchEmoji);
-				if (ps.name && (ps.name !== emoji.name)) {
-					const isDuplicate = await this.customEmojiService.checkDuplicate(ps.name);
+				if (params.name && (params.name !== emoji.name)) {
+					const isDuplicate = await this.customEmojiService.checkDuplicate(params.name);
 					if (isDuplicate) throw new ApiError(meta.errors.sameNameEmojiExists);
 				}
 			} else {
-				if (!ps.name) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
-				emoji = await this.customEmojiService.getEmojiByName(ps.name);
+				if (!params.name) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
+				emoji = await this.customEmojiService.getEmojiByName(params.name);
 				if (!emoji) throw new ApiError(meta.errors.noSuchEmoji);
 				emojiId = emoji.id;
 			}
 
 			if (!isRequest) {
-				await this.customEmojiService.update(emojiId, {
-					driveFile,
-					name: ps.name,
-					category: ps.category,
-					aliases: ps.aliases,
-					license: ps.license,
-					isSensitive: ps.isSensitive,
-					localOnly: ps.localOnly,
-					roleIdsThatCanBeUsedThisEmojiAsReaction: ps.roleIdsThatCanBeUsedThisEmojiAsReaction,
+				await this.customEmojiService.update({
+					id: emojiId,
+					originalUrl: driveFile != null ? driveFile.url : undefined,
+				publicUrl: driveFile != null ? (driveFile.webpublicUrl ?? driveFile.url) : undefined,
+				fileType: driveFile != null ? (driveFile.webpublicType ?? driveFile.type) : undefined,
+					name: params.name,
+					category: params.category,
+					aliases: params.aliases,
+					license: params.license,
+					isSensitive: params.isSensitive,
+					localOnly: params.localOnly,
+					roleIdsThatCanBeUsedThisEmojiAsReaction: params.roleIdsThatCanBeUsedThisEmojiAsReaction,
 				}, me);
 			} else {
 				if (!emoji) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
 				const file = await this.driveFileEntityService.getFromUrl(emoji.originalUrl);
 				if (file === null) throw new ApiError(meta.errors.noSuchFile);
-				if (!ps.name) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
-				if (!ps.id) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
+				if (!params.name) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
+				if (!params.id) throw new Error('Invalid Params unexpectedly passed. This is a BUG. Please report it to the development team.');
 
 				await this.customEmojiService.request({
 					driveFile: file,
-					name: ps.name,
-					category: ps.category ?? null,
-					aliases: ps.aliases ?? [],
-					license: ps.license ?? null,
-					isSensitive: ps.isSensitive ?? false,
-					localOnly: ps.localOnly ?? false,
+					name: params.name,
+					category: params.category ?? null,
+					aliases: params.aliases ?? [],
+					license: params.license ?? null,
+					isSensitive: params.isSensitive ?? false,
+					localOnly: params.localOnly ?? false,
 				}, me);
-				await this.customEmojiService.delete(ps.id);
+				await this.customEmojiService.delete(params.id);
 			}
 		});
 	}

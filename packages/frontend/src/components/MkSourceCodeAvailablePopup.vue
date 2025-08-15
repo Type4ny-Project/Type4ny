@@ -40,7 +40,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <script lang="ts" setup>
 import MkButton from '@/components/MkButton.vue';
-import { host } from '@/config.js';
+import { host } from '@@/js/config.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { miLocalStorage } from '@/local-storage.js';
@@ -62,12 +62,12 @@ function close() {
 .root {
 	position: fixed;
 	z-index: v-bind(zIndex);
-	bottom: var(--margin);
+	bottom: var(--MI-margin);
 	left: 0;
 	right: 0;
 	margin: auto;
 	box-sizing: border-box;
-	width: calc(100% - (var(--margin) * 2));
+	width: calc(100% - (var(--MI-margin) * 2));
 	max-width: 500px;
 	display: flex;
 }
@@ -76,7 +76,7 @@ function close() {
 	text-align: center;
 	padding-top: 25px;
 	width: 100px;
-	color: var(--accent);
+	color: var(--MI_THEME-accent);
 }
 @media (max-width: 500px) {
 	.icon {

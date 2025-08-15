@@ -31,7 +31,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, toRefs, shallowRef, nextTick } from 'vue';
+import { ref, watch, toRefs, useTemplateRef, nextTick } from 'vue';
 import { debounce } from 'throttle-debounce';
 import MkButton from '@/components/MkButton.vue';
 import { i18n } from '@/i18n.js';
@@ -60,7 +60,7 @@ const { modelValue } = toRefs(props);
 const v = ref<string>(modelValue.value ?? '');
 const focused = ref(false);
 const changed = ref(false);
-const inputEl = shallowRef<HTMLTextAreaElement>();
+const inputEl = useTemplateRef('inputEl');
 
 const focus = () => inputEl.value?.focus();
 
@@ -75,9 +75,10 @@ const onKeydown = (ev: KeyboardEvent) => {
 
 	emit('keydown', ev);
 
+	const pos = inputEl.value?.selectionStart ?? 0;
+	const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
+
 	if (ev.code === 'Enter') {
-		const pos = inputEl.value?.selectionStart ?? 0;
-		const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
 		if (pos === posEnd) {
 			const lines = v.value.slice(0, pos).split('\n');
 			const currentLine = lines[lines.length - 1];
@@ -93,8 +94,6 @@ const onKeydown = (ev: KeyboardEvent) => {
 	}
 
 	if (ev.key === 'Tab') {
-		const pos = inputEl.value?.selectionStart ?? 0;
-		const posEnd = inputEl.value?.selectionEnd ?? v.value.length;
 		v.value = v.value.slice(0, pos) + '\t' + v.value.slice(posEnd);
 		nextTick(() => {
 			inputEl.value?.setSelectionRange(pos + 1, pos + 1);
@@ -139,7 +138,7 @@ watch(v, newValue => {
 .caption {
 	font-size: 0.85em;
 	padding: 8px 0 0 0;
-	color: var(--fgTransparentWeak);
+	color: color(from var(--MI_THEME-fg) srgb r g b / 0.75);
 
 	&:empty {
 		display: none;
@@ -157,20 +156,20 @@ watch(v, newValue => {
 	overflow-y: hidden;
 	box-sizing: border-box;
 	margin: 0;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	padding: 0;
-	color: var(--fg);
-	border: solid 1px var(--panel);
+	color: var(--MI_THEME-fg);
+	border: solid 1px var(--MI_THEME-panel);
 	transition: border-color 0.1s ease-out;
 	font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
 	&:hover {
-		border-color: var(--inputBorderHover) !important;
+		border-color: var(--MI_THEME-inputBorderHover) !important;
 	}
 }
 
 .focused.codeEditorRoot {
-	border-color: var(--accent) !important;
-	border-radius: var(--radius);
+	border-color: var(--MI_THEME-accent) !important;
+	border-radius: var(--MI-radius);
 }
 
 .codeEditorScroller {
@@ -195,10 +194,10 @@ watch(v, newValue => {
 	resize: none;
 	text-align: left;
 	color: transparent;
-	caret-color: var(--fg);
+	caret-color: var(--MI_THEME-fg);
 	background-color: transparent;
 	border: 0;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	box-sizing: border-box;
 	outline: 0;
 	min-width: calc(100% - 24px);
@@ -210,6 +209,6 @@ watch(v, newValue => {
 }
 
 .textarea::selection {
-	color: var(--bg);
+	color: var(--MI_THEME-bg);
 }
 </style>

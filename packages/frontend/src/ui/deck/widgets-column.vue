@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 
 <template>
 <XColumn :menu="menu" :naked="true" :column="column" :isStacked="isStacked">
-	<template #header><i class="ti ti-apps" style="margin-right: 8px;"></i>{{ column.name }}</template>
+	<template #header><i class="ti ti-apps" style="margin-right: 8px;"></i>{{ column.name || i18n.ts._deck._columns[props.column.type] }}</template>
 
 	<div :class="$style.root">
 		<div v-if="!(column.widgets && column.widgets.length > 0) && !edit" :class="$style.intro">{{ i18n.ts._deck.widgetsIntroduction }}</div>
@@ -16,7 +16,8 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 <script lang="ts" setup>
 import { ref } from 'vue';
 import XColumn from './column.vue';
-import { addColumnWidget, Column, removeColumnWidget, setColumnWidgets, updateColumnWidget } from './deck-store.js';
+import { addColumnWidget, removeColumnWidget, setColumnWidgets, updateColumnWidget } from '@/deck.js';
+import type { Column } from '@/deck.js';
 import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 
@@ -56,10 +57,10 @@ const menu = [{
 
 <style lang="scss" module>
 .root {
-	--margin: 8px;
-	--panelBorder: none;
+	--MI-margin: 8px;
+	--MI_THEME-panelBorder: none;
 
-	padding: 0 var(--margin);
+	padding: 0 var(--MI-margin);
 }
 
 .intro {

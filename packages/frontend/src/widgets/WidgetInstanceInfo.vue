@@ -1,10 +1,11 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
 <div class="_panel">
-	<div :class="$style.container" :style="{ backgroundImage: instance.bannerUrl ? `url(${ bannerUrl })` : null }">
+	<div :class="$style.container" :style="{ backgroundImage: instance.bannerUrl ? `url(${ bannerUrl })` : undefined }">
 		<div :class="$style.iconContainer">
 			<img :src="iconUrl" alt="" :class="$style.icon"/>
 		</div>
@@ -19,36 +20,39 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import { useWidgetPropsManager, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
-import { GetFormResultType } from '@/scripts/form';
-import { host } from '@/config';
+import { ref } from 'vue';
+import { host } from '@@/js/config';
+import { useWidgetPropsManager } from './widget.js';
+import type { WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
+import type { FormWithDefault, GetFormResultType } from '@/utility/form';
 import { instance } from '@/instance';
-import {bannerDark, bannerLight, defaultStore, iconDark, iconLight} from "@/store";
-import {computed, ref, watch} from "vue";
+import { store } from '@/store';
 
 const name = 'instanceInfo';
-let bannerUrl = ref(defaultStore.state.bannerUrl);
-let iconUrl = ref(defaultStore.state.iconUrl);
-const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
-if (darkMode.value){
-  bannerUrl.value = bannerDark;
-  iconUrl.value = iconDark;
-}else{
-  bannerUrl.value = bannerLight;
-  iconUrl.value = iconLight;
+let bannerUrl = ref('TODO');
+let iconUrl = ref('TODO');
+// const darkMode = computed(store.makeGetterSetter('darkMode'));
+// if (darkMode.value) {
+// 	bannerUrl.value = bannerDark;
+// 	iconUrl.value = iconDark;
+// } else {
+// 	bannerUrl.value = bannerLight;
+// 	iconUrl.value = iconLight;
+// }
+// watch(darkMode, () => {
+// 	if (darkMode.value) {
+// 		bannerUrl.value = bannerDark;
+// 		iconUrl.value = iconDark;
+// 	} else {
+// 		bannerUrl.value = bannerLight;
+// 		iconUrl.value = iconLight;
+// 	}
+// });
+if (!iconUrl.value) {
+	iconUrl.value = instance.iconUrl || '/favicon.ico';
 }
-watch(darkMode, () => {
-  if (darkMode.value){
-    bannerUrl.value = bannerDark;
-    iconUrl.value = iconDark;
-  }else{
-    bannerUrl.value = bannerLight;
-    iconUrl.value = iconLight;
-  }
-})
-
 const widgetPropsDef = {
-};
+} satisfies FormWithDefault;
 
 type WidgetProps = GetFormResultType<typeof widgetPropsDef>;
 

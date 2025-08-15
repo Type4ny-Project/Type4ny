@@ -13,50 +13,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</template>
 		</I18n>
 	</template>
-	<Transition
-		mode="out-in"
-		:enterActiveClass="$style.transition_x_enterActive"
-		:leaveActiveClass="$style.transition_x_leaveActive"
-		:enterFromClass="$style.transition_x_enterFrom"
-		:leaveToClass="$style.transition_x_leaveTo"
-	>
-		<template v-if="page === 0">
-			<MkSpacer :marginMin="20" :marginMax="28">
-				<div class="_gaps_m" :class="$style.root">
-					<MkPagination v-slot="{items}" :key="user.id" :pagination="Pagination" :disableAutoLoad="true">
-						<div v-for="item in items" :key="item.id" :class="$style.note">
-							<MkSwitch :modelValue="abuseNotesId.includes(item.id)" @update:modelValue="pushAbuseReportNote($event,item.id)"></MkSwitch>
-							<MkAvatar :user="item.user" preview/>
-							<MkNoteSimple :note="item"/>
-						</div>
-					</MkPagination>
-					<div class="_buttonsCenter">
-						<MkButton primary rounded gradate @click="page++">{{ i18n.ts.continue }} <i class="ti ti-arrow-right"></i></MkButton>
-					</div>
-				</div>
-			</MkSpacer>
-		</template>
-
-		<template v-else-if="page === 1">
-			<MkSpacer :marginMin="20" :marginMax="28">
-				<div class="_gaps_m" :class="$style.root">
-					<MkTextarea v-model="comment">
-						<template #label>{{ i18n.ts.details }}</template>
-						<template #caption>{{ i18n.ts.fillAbuseReportDescription }}</template>
-					</MkTextarea>
-					<div class="_buttonsCenter">
-						<MkButton @click="page--"><i class="ti ti-arrow-left"></i> {{ i18n.ts.goBack }}</MkButton>
-						<MkButton primary :disabled="comment.length === 0" @click="send">{{ i18n.ts.send }}</MkButton>
-					</div>
-				</div>
-			</MkSpacer>
-		</template>
-	</Transition>
+	<div class="_spacer" style="--MI_SPACER-min: 20px; --MI_SPACER-max: 28px;">
+		<div class="_gaps_m" :class="$style.root">
+			<div class="">
+				<MkTextarea v-model="comment">
+					<template #label>{{ i18n.ts.details }}</template>
+					<template #caption>{{ i18n.ts.fillAbuseReportDescription }}</template>
+				</MkTextarea>
+			</div>
+			<div class="">
+				<MkButton primary full :disabled="comment.length === 0" @click="send">{{ i18n.ts.send }}</MkButton>
+			</div>
+		</div>
+	</div>
 </MkWindow>
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkWindow from '@/components/MkWindow.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
@@ -86,7 +60,7 @@ const emit = defineEmits<{
 
 const abuseNotesId = ref(props.initialNoteId ? [props.initialNoteId] : []);
 const page = ref(0);
-const uiWindow = shallowRef<InstanceType<typeof MkWindow>>();
+const uiWindow = useTemplateRef('uiWindow');
 const comment = ref(props.initialComment ?? '');
 
 function pushAbuseReportNote(ev, id) {
@@ -131,7 +105,7 @@ function send() {
 }
 .note{
   display: flex;
-  margin: var(--margin) 0;
+  margin: var(--MI-margin) 0;
   align-items: center;
 
 }
