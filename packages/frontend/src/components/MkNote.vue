@@ -852,10 +852,10 @@ function undoReact(targetNote: Misskey.entities.Note): void {
 }
 
 function toggleReact() {
-	if ($appearNote.myReaction == null) {
+	console.log($appearNote.myReactions?.length);
+	if ($appearNote.myReactions?.length < 3 ||
+		($appearNote.myReaction && appearNote.user.host)) {
 		react();
-	} else {
-		undoReact(appearNote);
 	}
 }
 

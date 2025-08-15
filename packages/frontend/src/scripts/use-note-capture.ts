@@ -39,7 +39,6 @@ export function useNoteCapture(props: {
 
 				if ($i && (body.userId === $i.id)) {
 					note.value.myReaction = reaction;
-					console.log(note.value.myReactions);
 					if (!note.value.myReactions) {
 						note.value.myReactions = [];
 						note.value.myReactions.push(reaction);
@@ -62,7 +61,7 @@ export function useNoteCapture(props: {
 
 				if ($i && (body.userId === $i.id)) {
 					note.value.myReaction = null;
-					note.value.myReactions = note.value.myReactions.filter(r => r !== reaction);
+					note.value.myReactions = note.value.myReactions?.filter(r => r !== reaction);
 				}
 				break;
 			}

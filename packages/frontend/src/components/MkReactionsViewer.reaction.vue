@@ -23,8 +23,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon
-		style="pointer-events: none;" :class="limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
-	<span :class="[
+		style="pointer-events: none;" :class="limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="reactionEmojis[reaction.substring(1, reaction.length - 1)]"
+	/>
+	<span
+		:class="[
 			$style.count,
 			{
 				[$style.gamingDark]: gamingType === 'dark',
@@ -127,7 +129,7 @@ async function toggleReaction() {
 
 	// Check if already reacted using the same logic as isReacted
 	const alreadyReacted = props.note.myReactions?.includes(props.reaction) ?? false;
-	
+
 	if (alreadyReacted) {
 		const confirm = await os.confirm({
 			type: 'warning',
@@ -141,7 +143,7 @@ async function toggleReaction() {
 		}
 
 		// Note: The myReactions array will be updated by the noteEvents handler in use-note-capture.ts
-		
+
 		misskeyApi('notes/reactions/delete', {
 			noteId: props.noteId,
 			reaction: props.reaction,
