@@ -41,6 +41,10 @@ export interface Locale extends ILocale {
      */
     "reset": string;
     /**
+     * {fileCount}つのファイルを削除します。
+     */
+    "driveMultiFileDeleteConfirm": ParameterizedString<"fileCount">;
+    /**
      * 通知
      */
     "notifications": string;

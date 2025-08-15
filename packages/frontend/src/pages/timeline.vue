@@ -48,7 +48,7 @@ import { miLocalStorage } from '@/local-storage.js';
 import { availableBasicTimelines, hasWithReplies, isAvailableBasicTimeline, isBasicTimeline, basicTimelineIconClass } from '@/timelines.js';
 import { prefer } from '@/preferences.js';
 import { ui } from '@@/js/config.js';
-import { timelineHeaderItemDef } from '@/timeline-header';
+import { timelineHeaderItemDef, updateTimelineHeaderItems } from '@/timeline-header';
 const XPostForm = defineAsyncComponent(() => import('@/components/XPostForm.vue'));
 
 const tlComponent = useTemplateRef('tlComponent');
@@ -214,10 +214,12 @@ function switchTlIfNeeded() {
 	}
 }
 
-onMounted(() => {
+onMounted(async () => {
+	await updateTimelineHeaderItems();
 	switchTlIfNeeded();
 });
-onActivated(() => {
+onActivated(async () => {
+	await updateTimelineHeaderItems();
 	switchTlIfNeeded();
 });
 

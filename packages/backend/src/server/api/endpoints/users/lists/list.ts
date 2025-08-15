@@ -51,7 +51,7 @@ export const paramDef = {
 	type: 'object',
 	properties: {
 		userId: { type: 'string', format: 'misskey:id' },
-		publicAll: { type: 'boolean', nullable: false },
+		publicAll: { type: 'boolean' },
 	},
 	required: [],
 } as const;
@@ -68,7 +68,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private userListEntityService: UserListEntityService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			if (!ps.publicAll ) {
+			if (!ps.publicAll) {
 				if (typeof ps.userId !== 'undefined') {
 					const user = await this.usersRepository.findOneBy({ id: ps.userId });
 					if (user === null) throw new ApiError(meta.errors.noSuchUser);

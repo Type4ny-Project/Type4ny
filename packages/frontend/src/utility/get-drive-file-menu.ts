@@ -87,21 +87,27 @@ async function deleteFile(file: Misskey.entities.DriveFile) {
 
 	globalEvents.emit('driveFilesDeleted', [file]);
 }
+
 async function MultideleteFile(files: Misskey.entities.DriveFile[] | null) {
+	if (!files || files.length === 0) return;
+
 	const { canceled } = await os.confirm({
 		type: 'warning',
-		text: i18n.t('driveMultiFileDeleteConfirm', { name: files.length }),
+		text: i18n.tsx.driveMultiFileDeleteConfirm({ fileCounts: files.length }),
 	});
 
 	if (canceled) return;
-	files.forEach((e)=>{
+	files.forEach((e) => {
 		misskeyApi('drive/files/delete', {
 			fileId: e.id,
-        });
-	})
+		});
+	});
 }
-function isSensitive(files: Misskey.entities.DriveFile[] | null ,sensitive:boolean) {
-	files.forEach((e)=>{
+
+function isSensitive(files: Misskey.entities.DriveFile[] | null, sensitive: boolean) {
+	if (!files || files.length === 0) return;
+
+	files.forEach((e) => {
 		misskeyApi('drive/files/update', {
 			fileId: e.id,
 			isSensitive: sensitive,
@@ -112,9 +118,9 @@ function isSensitive(files: Misskey.entities.DriveFile[] | null ,sensitive:boole
 				text: err.message,
 			});
 		});
-	})
-
+	});
 }
+
 export function getDriveFileMenu(file: Misskey.entities.DriveFile, folder?: Misskey.entities.DriveFolder | null): MenuItem[] {
 	const isImage = file.type.startsWith('image/');
 
@@ -179,16 +185,15 @@ export function getDriveFileMenu(file: Misskey.entities.DriveFile, folder?: Miss
 
 	return menuItems;
 }
-export function getDriveMultiFileMenu(files: string[] & boolean): MenuItem[] {
-	let menu;
-	menu = [{
-		text:  i18n.ts.unmarkAsSensitive,
+export function getDriveMultiFileMenu(files: Misskey.entities.DriveFile[]): MenuItem[] {
+	const menu = [{
+		text: i18n.ts.unmarkAsSensitive,
 		icon: 'ti ti-eye',
-		action: () => isSensitive(files,false),
-	},{
+		action: () => isSensitive(files, false),
+	}, {
 		text: i18n.ts.markAsSensitive,
-		icon:  'ti ti-eye-exclamation',
-		action: () => isSensitive(files,true),
+		icon: 'ti ti-eye-exclamation',
+		action: () => isSensitive(files, true),
 	}, {
 		text: i18n.ts.delete,
 		icon: 'ti ti-trash',

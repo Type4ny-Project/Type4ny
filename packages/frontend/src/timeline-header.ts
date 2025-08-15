@@ -35,12 +35,6 @@ type TimelineHeaderItemsDef = {
 	iconOnly?: boolean; // わからん
 };
 
-const lists = await userListsCache.fetch();
-const userChannels = await userChannelsCache.fetch();
-const userChannelFollowings = await userChannelFollowingsCache.fetch();
-const userFavoriteLists = await userFavoriteListsCache.fetch();
-const antenna = await antennasCache.fetch();
-
 export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem, TimelineHeaderItemsDef>>>({
 	home: {
 		title: i18n.ts._timelines.home,
@@ -83,45 +77,82 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 		title: i18n.ts.channel,
 		iconOnly: false,
 	},
-	...lists.reduce((acc, l) => {
-		acc['list:' + l.id] = {
-			title: i18n.ts.lists + ':' + l.name,
-			icon: 'ti ti-star',
-			iconOnly: false,
-		};
-		return acc;
-	}, {}),
-	...userChannels.reduce((acc, l) => {
-		acc['channel:' + l.id] = {
-			title: i18n.ts.channel + ':' + l.name,
-			icon: 'ti ti-star',
-			iconOnly: false,
-		};
-		return acc;
-	}, {}),
-	...userChannelFollowings.reduce((acc, l) => {
-		acc['channel:' + l.id] = {
-			title: i18n.ts.channel + ':' + l.name,
-			icon: 'ti ti-star',
-			iconOnly: false,
-		};
-		return acc;
-	}, {}),
-	...userFavoriteLists.reduce((acc, l) => {
-		acc['channel:' + l.id] = {
-			title: i18n.ts.channel + ':' + l.name,
-			icon: 'ti ti-star',
-			iconOnly: false,
-		};
-		return acc;
-	}, {}),
-	...antenna.reduce((acc, l) => {
-		acc['antenna:' + l.id] = {
-			title: i18n.ts.antennas + ':' + l.name,
-			icon: 'ti ti-star',
-			iconOnly: false,
-		};
-		return acc;
-	}, {}),
 });
+
+export async function updateTimelineHeaderItems() {
+	try {
+		const [lists, userChannels, userChannelFollowings, userFavoriteLists, antenna] = await Promise.all([
+			userListsCache.fetch(),
+			userChannelsCache.fetch(),
+			userChannelFollowingsCache.fetch(),
+			userFavoriteListsCache.fetch(),
+			antennasCache.fetch(),
+		]);
+
+		// Clear existing dynamic items
+		for (const key in timelineHeaderItemDef) {
+			if (key.startsWith('list:') || key.startsWith('channel:') || key.startsWith('antenna:')) {
+				delete timelineHeaderItemDef[key];
+			}
+		}
+
+		// Add lists
+		lists.forEach(l => {
+			timelineHeaderItemDef[`list:${l.id}`] = {
+				title: `${i18n.ts.lists}:${l.name}`,
+				icon: 'ti ti-star',
+				iconOnly: false,
+			};
+		});
+
+		// Add user channels
+		userChannels.forEach(l => {
+			timelineHeaderItemDef[`channel:${l.id}`] = {
+				title: `${i18n.ts.channel}:${l.name}`,
+				icon: 'ti ti-device-tv',
+				iconOnly: false,
+			};
+		});
+
+		// Add channel followings
+		userChannelFollowings.forEach(l => {
+			// Only add if not already added by userChannels
+			if (!timelineHeaderItemDef[`channel:${l.id}`]) {
+				timelineHeaderItemDef[`channel:${l.id}`] = {
+					title: `${i18n.ts.channel}:${l.name}`,
+					icon: 'ti ti-device-tv',
+					iconOnly: false,
+				};
+			}
+		});
+
+		// Add favorite lists (these should probably be lists, not channels)
+		userFavoriteLists.forEach(l => {
+			// This seems like a bug - favorite lists should use 'list:' prefix
+			if (!timelineHeaderItemDef[`list:${l.id}`]) {
+				timelineHeaderItemDef[`list:${l.id}`] = {
+					title: `${i18n.ts.lists}:${l.name}`,
+					icon: 'ti ti-star',
+					iconOnly: false,
+				};
+			}
+		});
+
+		// Add antennas
+		antenna.forEach(l => {
+			timelineHeaderItemDef[`antenna:${l.id}`] = {
+				title: `${i18n.ts.antennas}:${l.name}`,
+				icon: 'ti ti-antenna',
+				iconOnly: false,
+			};
+		});
+	} catch (error) {
+		console.error('Failed to update timeline header items:', error);
+	}
+}
+
+// Initialize on first load if user is logged in
+if ($i) {
+	updateTimelineHeaderItems();
+}
 

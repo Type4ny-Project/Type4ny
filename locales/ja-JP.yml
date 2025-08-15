@@ -6,6 +6,7 @@ poweredByType4nyDescription: "{name}は、オープンソースのプラット�
 monthAndDay: "{month}月 {day}日"
 search: "検索"
 reset: "リセット"
+driveMultiFileDeleteConfirm: "{fileCount}つのファイルを削除します。"
 notifications: "通知"
 username: "ユーザー名"
 password: "パスワード"

@@ -87,12 +87,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { defineAsyncComponent, onMounted, provide, ref, computed, shallowRef, watch } from 'vue';
+import { instanceName, ui } from '@@/js/config.js';
 import XSidebar from './twilike.sidebar.vue';
 import XCommon from './_common_/common.vue';
-import { instanceName, ui } from '@/config.js';
+import type { PageMetadata } from '@/page.js';
 import * as os from '@/os.js';
 import { definePage, provideMetadataReceiver, provideReactiveMetadata } from '@/page.js';
-import type { PageMetadata } from '@/page.js';
 import { store } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import { miLocalStorage } from '@/local-storage.js';
