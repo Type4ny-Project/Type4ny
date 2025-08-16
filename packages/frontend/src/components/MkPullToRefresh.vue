@@ -105,6 +105,7 @@ function moveStartByMouse(event: MouseEvent) {
 
 function moveStartByTouch(event: TouchEvent) {
 	if (isRefreshing.value) return;
+	const scrollPos = scrollEl!.scrollTop;
 
 	if (scrollPos !== 0) {
 		unlockDownScroll();
@@ -177,6 +178,7 @@ function onPullRelease() {
 }
 
 function toggleScrollLockOnTouchEnd() {
+	const scrollPos = scrollEl!.scrollTop;
 	if (scrollPos === 0) {
 		lockDownScroll();
 	} else {
