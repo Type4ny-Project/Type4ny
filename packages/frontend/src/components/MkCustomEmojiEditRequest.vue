@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: Type4ny-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 <template>
-<MkPagination ref="emojisRequestPaginationComponent" :pagination="paginationRequest">
+<MkPagination ref="emojisRequestPaginationComponent" :paginator="paginatorRequest">
 	<template #empty><span>{{ i18n.ts.noCustomEmojis }}</span></template>
 	<template #default="{items}">
 		<template v-for="emoji in items" :key="emoji.id">
@@ -36,24 +36,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, ref, shallowRef } from 'vue';
+import { computed, defineAsyncComponent, ref, shallowRef, markRaw } from 'vue';
 import MkPagination from '@/components/MkPagination.vue';
 import * as os from '@/os';
 import { i18n } from '@/i18n';
 import MkButton from '@/components/MkButton.vue';
 import { misskeyApi } from '@/utility/misskey-api.js';
+import { Paginator } from '@/utility/paginator.js';
 
 const emojisRequestPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
 const query = ref(null);
 
-const paginationRequest = {
-	endpoint: 'admin/emoji/list-request' as const,
+const paginatorRequest = markRaw(new Paginator('admin/emoji/list-request', {
 	limit: 30,
-	params: computed(() => ({
+	computedParams: computed(() => ({
 		query: (query.value && query.value !== '') ? query.value : null,
 	})),
-};
+}));
 
 function editRequest(emoji) {
 	os.popup(defineAsyncComponent(() => import('@/components/MkEmojiEditDialog.vue')), {
@@ -62,14 +62,14 @@ function editRequest(emoji) {
 	}, {
 		done: result => {
 			if (result.updated) {
-				emojisRequestPaginationComponent.value.updateItem(result.updated.id, (oldEmoji: any) => ({
+				emojisRequestPaginationComponent.value.paginator.updateItem(result.updated.id, (oldEmoji: any) => ({
 					...oldEmoji,
 					...result.updated,
 				}));
-				emojisRequestPaginationComponent.value.reload();
+				emojisRequestPaginationComponent.value.paginator.reload();
 			} else if (result.deleted) {
-				emojisRequestPaginationComponent.value.removeItem((item) => item.id === emoji.id);
-				emojisRequestPaginationComponent.value.reload();
+				emojisRequestPaginationComponent.value.paginator.removeItem((item) => item.id === emoji.id);
+				emojisRequestPaginationComponent.value.paginator.reload();
 			}
 		},
 	}, 'closed');
@@ -94,8 +94,8 @@ async function unrequested(emoji) {
 		isRequest: false,
 	});
 
-	emojisRequestPaginationComponent.value.removeItem((item) => item.id === emoji.id);
-	emojisRequestPaginationComponent.value.reload();
+	emojisRequestPaginationComponent.value.paginator.removeItem((item) => item.id === emoji.id);
+	emojisRequestPaginationComponent.value.paginator.reload();
 }
 
 async function deleteRequest(emoji) {
@@ -119,7 +119,7 @@ async function deleteRequest(emoji) {
   align-items: center;
   padding: 11px;
   text-align: left;
-  border: solid 1px var(--panel);
+  border: solid 1px var(--MI_THEME-panel);
   margin: 10px;
 }
 .img {

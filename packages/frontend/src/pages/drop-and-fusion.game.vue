@@ -1547,7 +1547,7 @@ definePage(() => ({
 	color: #f00;
 	font-weight: bold;
 	background: #0008;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	pointer-events: none;
 }
 

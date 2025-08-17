@@ -146,7 +146,7 @@ const initStats = () => misskeyApi('stats', {});
 <style lang="scss" module>
 .banner {
 	text-align: center;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 	overflow: clip;
 	background-color: var(--MI_THEME-panel);
 	background-size: cover;

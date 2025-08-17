@@ -136,7 +136,6 @@ export function getAbuseNoteMenu(note: Misskey.entities.Note, text: string): Men
 		icon: 'ti ti-exclamation-circle',
 		text,
 		action: async (): Promise<void> => {
-			const u = note.url ?? note.uri ?? `${url}/notes/${note.id}`;
 			const { dispose } = await os.popupAsyncWithDialog(import('@/components/MkAbuseReportWindow.vue').then(x => x.default), {
 				user: note.user,
 				initialNoteId: note.id,
@@ -177,6 +176,8 @@ export function getNoteMenu(props: {
 	currentClip?: Misskey.entities.Clip;
 }) {
 	const appearNote = getAppearNote(props.note);
+	if (!appearNote) return { menu: [], cleanup: () => {} };
+
 	const link = appearNote.url ?? appearNote.uri;
 
 	const cleanups = [] as (() => void)[];
@@ -187,6 +188,7 @@ export function getNoteMenu(props: {
 			text: i18n.ts.noteDeleteConfirm,
 		}).then(({ canceled }) => {
 			if (canceled) return;
+			if (!appearNote) return;
 			if ($i == null) return;
 
 			misskeyApi('notes/delete', {
@@ -202,6 +204,7 @@ export function getNoteMenu(props: {
 	}
 
 	function delEdit(): void {
+		if (!appearNote) return;
 		os.confirm({
 			type: 'warning',
 			text: i18n.ts.deleteAndEditConfirm,
@@ -215,7 +218,7 @@ export function getNoteMenu(props: {
 				globalEvents.emit('noteDeleted', appearNote.id);
 			});
 
-			os.post({ initialNote: appearNote, renote: appearNote.renote, reply: appearNote.reply, channel: appearNote.channel });
+			os.post({ initialNote: appearNote, renote: appearNote.renote ?? undefined, reply: appearNote.reply ?? undefined, channel: appearNote.channel ?? undefined });
 
 			if (Date.now() - new Date(appearNote.createdAt).getTime() < 1000 * 60 && appearNote.userId === $i.id) {
 				claimAchievement('noteDeletedWithin1min');
@@ -224,10 +227,12 @@ export function getNoteMenu(props: {
 	}
 
 	function edit(): void {
-		os.post({ initialNote: appearNote, renote: appearNote.renote, reply: appearNote.reply, channel: appearNote.channel, updateMode: true });
+		if (!appearNote) return;
+		os.post({ initialNote: appearNote, renote: appearNote.renote ?? undefined, reply: appearNote.reply ?? undefined, channel: appearNote.channel ?? undefined, updateMode: true });
 	}
 
 	function toggleFavorite(favorite: boolean): void {
+		if (!appearNote) return;
 		claimAchievement('noteFavorited1');
 		os.apiWithDialog(favorite ? 'notes/favorites/create' : 'notes/favorites/delete', {
 			noteId: appearNote.id,
@@ -235,16 +240,19 @@ export function getNoteMenu(props: {
 	}
 
 	function toggleThreadMute(mute: boolean): void {
+		if (!appearNote) return;
 		os.apiWithDialog(mute ? 'notes/thread-muting/create' : 'notes/thread-muting/delete', {
 			noteId: appearNote.id,
 		});
 	}
 
 	function copyContent(): void {
+		if (!appearNote) return;
 		copyToClipboard(appearNote.text);
 	}
 
 	function togglePin(pin: boolean): void {
+		if (!appearNote) return;
 		os.apiWithDialog(pin ? 'i/pin' : 'i/unpin', {
 			noteId: appearNote.id,
 		}, undefined, {
@@ -255,24 +263,13 @@ export function getNoteMenu(props: {
 	}
 
 	async function unclip(): Promise<void> {
+		if (!appearNote) return;
 		if (!props.currentClip) return;
 		os.apiWithDialog('clips/remove-note', { clipId: props.currentClip.id, noteId: appearNote.id });
 	}
 
-	async function promote(): Promise<void> {
-		const { canceled, result: days } = await os.inputNumber({
-			title: i18n.ts.numberOfDays,
-		});
-
-		if (canceled || days == null) return;
-
-		os.apiWithDialog('admin/promo/create', {
-			noteId: appearNote.id,
-			expiresAt: Date.now() + (86400000 * days),
-		});
-	}
-
 	function share(): void {
+		if (!appearNote) return;
 		navigator.share({
 			title: i18n.tsx.noteOf({ user: appearNote.user.name ?? appearNote.user.username }),
 			text: appearNote.text ?? '',
@@ -281,11 +278,13 @@ export function getNoteMenu(props: {
 	}
 
 	function openDetail(): void {
+		if (!appearNote) return;
 		os.pageWindow(`/notes/${appearNote.id}`);
 	}
 
 	async function translate(): Promise<void> {
 		if (props.translation.value != null) return;
+		if (!appearNote) return;
 		props.translating.value = true;
 		const res = await misskeyApi('notes/translate', {
 			noteId: appearNote.id,
@@ -464,12 +463,12 @@ export function getNoteMenu(props: {
 					action: delEdit,
 				});
 			}
-			if (appearNote.userId === $i.id && $i.policies.canEditNote){
+			if (appearNote.userId === $i.id && $i.policies.canEditNote) {
 				menuItems.push({
 					icon: 'ti ti-edit',
 					text: i18n.ts.edit,
 					action: edit,
-				})
+				});
 			}
 
 			menuItems.push({
@@ -564,6 +563,7 @@ export function getRenoteMenu(props: {
 	mock?: boolean;
 }) {
 	const appearNote = getAppearNote(props.note);
+	if (!appearNote) return { menu: [] };
 
 	const channelRenoteItems: MenuItem[] = [];
 	const normalRenoteItems: MenuItem[] = [];
@@ -601,7 +601,7 @@ export function getRenoteMenu(props: {
 				if (!props.mock) {
 					os.post({
 						renote: appearNote,
-						channel: appearNote.channel,
+						channel: appearNote.channel ?? undefined,
 					});
 				}
 			},

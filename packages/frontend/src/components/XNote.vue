@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</button>
 					<button ref="reactButton" :class="$style.footerButton" class="_button" @click="toggleReact()">
 						<i v-if="appearNote.reactionAcceptance === 'likeOnly' && appearNote.myReaction != null" class="ti ti-heart-filled" style="color: var(--eventReactionHeart);"></i>
-						<i v-else-if="appearNote.myReaction != null" class="ti ti-minus" style="color: var(--accent);"></i>
+						<i v-else-if="appearNote.myReaction != null" class="ti ti-minus" style="color: var(--MI_THEME-accent);"></i>
 						<i v-else-if="appearNote.reactionAcceptance === 'likeOnly'" class="ti ti-heart"></i>
 						<i v-else class="ti ti-plus"></i>
 						<p v-if="(appearNote.reactionAcceptance === 'likeOnly' || store.s.showReactionsCount) && appearNote.reactionCount > 0" :class="$style.footerButtonCount">{{ number(appearNote.reactionCount) }}</p>
@@ -639,7 +639,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 			width: calc(100% - 8px);
 			height: calc(100% - 8px);
 			border: dashed 1px var(--focus);
-			border-radius: var(--radius);
+			border-radius: var(--MI-radius);
 			box-sizing: border-box;
 		}
 	}
@@ -688,7 +688,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 			margin-bottom: 0 !important;
 			background: var(--popup);
 			border-radius: 8px;
-			box-shadow: 0px 4px 32px var(--shadow);
+			box-shadow: 0px 4px 32px var(--MI-shadow);
 		}
 
 		.footerButton {
@@ -876,7 +876,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 	z-index: 2;
 	width: 100%;
 	height: 64px;
-	background: linear-gradient(0deg, var(--panel), var(--X15));
+	background: linear-gradient(0deg, var(--MI_THEME-panel), var(--X15));
 
 	&:hover > .collapsedLabel {
 		background: var(--panelHighlight);
@@ -885,7 +885,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 
 .collapsedLabel {
 	display: inline-block;
-	background: var(--panel);
+	background: var(--MI_THEME-panel);
 	padding: 6px 10px;
 	font-size: 0.8em;
 	border-radius: 999px;
@@ -897,13 +897,13 @@ function emitUpdReaction(emoji: string, delta: number) {
 }
 
 .replyIcon {
-	color: var(--accent);
+	color: var(--MI_THEME-accent);
 	margin-right: 0.5em;
 }
 
 .translation {
-	border: solid 0.5px var(--divider);
-	border-radius: var(--radius);
+	border: solid 0.5px var(--MI_THEME-divider);
+	border-radius: var(--MI-radius);
 	padding: 12px;
 	margin-top: 8px;
 }

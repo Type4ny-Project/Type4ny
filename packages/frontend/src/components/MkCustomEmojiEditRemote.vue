@@ -8,7 +8,7 @@
 		<template #label>{{ i18n.ts.host }}</template>
 	</MkInput>
 </FormSplit>
-<MkPagination :pagination="remotePagination">
+<MkPagination :paginator="remotePaginator">
 	<template #empty><span>{{ i18n.ts.noCustomEmojis }}</span></template>
 	<template #default="{items}">
 		<div :class="$style.root">
@@ -25,24 +25,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, markRaw } from 'vue';
 import MkInput from '@/components/MkInput.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import FormSplit from '@/components/form/split.vue';
 import * as os from '@/os';
 import { i18n } from '@/i18n';
+import { Paginator } from '@/utility/paginator.js';
 
 const queryRemote = ref(null);
 const host = ref(null);
 
-const remotePagination = {
-	endpoint: 'admin/emoji/list-remote' as const,
+const remotePaginator = markRaw(new Paginator('admin/emoji/list-remote', {
 	limit: 30,
-	params: computed(() => ({
+	computedParams: computed(() => ({
 		query: (queryRemote.value && queryRemote.value !== '') ? queryRemote.value : null,
 		host: (host.value && host.value !== '') ? host.value : null,
 	})),
-};
+}));
 
 const im = (emoji) => {
 	os.apiWithDialog('admin/emoji/copy', {
@@ -78,7 +78,7 @@ const remoteMenu = (emoji, ev: MouseEvent) => {
   text-align: left;
 
   &:hover {
-    color: var(--accent);
+    color: var(--MI_THEME-accent);
   }
 }
 

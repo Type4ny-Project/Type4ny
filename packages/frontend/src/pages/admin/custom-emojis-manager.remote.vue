@@ -161,6 +161,12 @@ import MkPagingButtons from '@/components/MkPagingButtons.vue';
 import MkSortOrderEditor from '@/components/MkSortOrderEditor.vue';
 import { useLoading } from '@/composables/use-loading.js';
 
+function cleanObj<T extends Record<string, any>>(obj: T): T {
+	return Object.fromEntries(
+		Object.entries(obj).filter(([_, v]) => v !== undefined && v !== null)
+	) as T;
+}
+
 type GridItem = {
 	checked: boolean;
 	id: string;

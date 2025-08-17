@@ -112,7 +112,7 @@ const remove = (index: number): void => {
 	height: 40px;
 	color: var(--MI_THEME-error);
 	margin-left: auto;
-	border-radius: var(--radius);
+	border-radius: var(--MI-radius);
 
 	&:hover {
 		background: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));

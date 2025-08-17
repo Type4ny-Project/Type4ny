@@ -162,7 +162,7 @@ function showMenu(ev: MouseEvent) {
 .root {
 	display: flex;
 	margin: var(--MI-margin) 0;
-	background: var(--panel);
+	background: var(--MI_THEME-panel);
 	border-radius: var(--MI-radius);
 	overflow: clip;
 }

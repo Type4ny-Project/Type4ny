@@ -175,7 +175,7 @@ onUnmounted(() => {
 			top: 0;
 			z-index: 1;
 			padding: 16px 0;
-			background: var(--bg);
+			background: var(--MI_THEME-bg);
 
 			> .button {
 				min-width: 0;
@@ -235,7 +235,7 @@ onUnmounted(() => {
 				position: absolute;
 				top: 0;
 				left: 0;
-				color: var(--navIndicator);
+				color: var(--MI_THEME-navIndicator);
 				font-size: 8px;
 				animation: global-blink 1s infinite;
 
@@ -248,11 +248,11 @@ onUnmounted(() => {
 
 			&:hover {
 				text-decoration: none;
-				color: var(--navHoverFg);
+				color: var(--MI_THEME-navHoverFg);
 			}
 
 			&.active {
-				color: var(--navActive);
+				color: var(--MI_THEME-navActive);
 			}
 		}
 	}

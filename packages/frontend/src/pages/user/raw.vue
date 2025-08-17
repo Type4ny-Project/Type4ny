@@ -107,7 +107,7 @@ const suspended = computed(() => props.user.isSuspended ?? false);
 	> .moderator {
 		display: inline-block;
 		border: solid 1px;
-		border-radius: var(--radius);
+		border-radius: var(--MI-radius);
 		padding: 2px 6px;
 		font-size: 85%;
 	}

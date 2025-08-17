@@ -17,7 +17,7 @@
 	<MkButton inline @click="setlocalOnlyBulk">Set localOnly</MkButton>
 	<MkButton inline danger @click="delBulk">Delete</MkButton>
 </div>
-<MkPagination ref="emojisPaginationComponent" :pagination="pagination" :displayLimit="100">
+<MkPagination ref="emojisPaginationComponent" :paginator="paginator" :displayLimit="100">
 	<template #empty><span>{{ i18n.ts.noCustomEmojis }}</span></template>
 	<template #default="{items}">
 		<div :class="$style.root">
@@ -43,13 +43,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, ref, shallowRef } from 'vue';
+import { computed, defineAsyncComponent, ref, shallowRef, markRaw } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
+import { Paginator } from '@/utility/paginator.js';
 
 const emojisPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
@@ -57,20 +58,19 @@ const query = ref(null);
 const selectMode = ref(false);
 const selectedEmojis = ref<string[]>([]);
 
-const pagination = {
-	endpoint: 'admin/emoji/list' as const,
+const paginator = markRaw(new Paginator('admin/emoji/list', {
 	limit: 30,
-	params: computed(() => ({
+	computedParams: computed(() => ({
 		query: (query.value && query.value !== '') ? query.value : null,
 	})),
-};
+}));
 
 const selectAll = () => {
 
     if (selectedEmojis.value.length > 0) {
         selectedEmojis.value = [];
     } else {
-        selectedEmojis.value = Array.from(emojisPaginationComponent.value.items.values(), item => item.id);
+        selectedEmojis.value = Array.from(emojisPaginationComponent.value.paginator.items.value, item => item.id);
     }
 };
 const setisSensitiveBulk = async () => {
@@ -83,7 +83,7 @@ const setisSensitiveBulk = async () => {
 		ids: selectedEmojis.value,
 		isSensitive: result
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 const setlocalOnlyBulk = async () => {
 	const { canceled, result } = await os.switch1({
@@ -95,7 +95,7 @@ const setlocalOnlyBulk = async () => {
 		ids: selectedEmojis.value,
 		localOnly: result
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 
@@ -115,13 +115,13 @@ const edit = (emoji) => {
 	}, {
 		done: result => {
 			if (result.updated) {
-				emojisPaginationComponent.value.updateItem(result.updated.id, (oldEmoji: any) => ({
+				emojisPaginationComponent.value.paginator.updateItem(result.updated.id, (oldEmoji: any) => ({
 					...oldEmoji,
 					...result.updated,
 				}));
-				emojisPaginationComponent.value.reload();
+				emojisPaginationComponent.value.paginator.reload();
 			} else if (result.deleted) {
-				emojisPaginationComponent.value.removeItem((item) => item.id === emoji.id);
+				emojisPaginationComponent.value.paginator.removeItem((item) => item.id === emoji.id);
 			}
 		},
 	}, 'closed');
@@ -136,7 +136,7 @@ const setCategoryBulk = async () => {
 		ids: selectedEmojis.value,
 		category: result,
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const setLisenceBulk = async () => {
@@ -148,7 +148,7 @@ const setLisenceBulk = async () => {
 		ids: selectedEmojis.value,
 		license: result,
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const isSensitiveBulk = async () => {
@@ -160,7 +160,7 @@ const isSensitiveBulk = async () => {
 		ids: selectedEmojis.value,
 		license: result,
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const addTagBulk = async () => {
@@ -172,7 +172,7 @@ const addTagBulk = async () => {
 		ids: selectedEmojis.value,
 		aliases: result.split(' '),
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const removeTagBulk = async () => {
@@ -184,7 +184,7 @@ const removeTagBulk = async () => {
 		ids: selectedEmojis.value,
 		aliases: result.split(' '),
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const setTagBulk = async () => {
@@ -196,7 +196,7 @@ const setTagBulk = async () => {
 		ids: selectedEmojis.value,
 		aliases: result.split(' '),
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 
 const delBulk = async () => {
@@ -208,7 +208,7 @@ const delBulk = async () => {
 	await os.apiWithDialog('admin/emoji/delete-bulk', {
 		ids: selectedEmojis.value,
 	});
-	emojisPaginationComponent.value.reload();
+	emojisPaginationComponent.value.paginator.reload();
 };
 </script>
 
@@ -223,7 +223,7 @@ const delBulk = async () => {
   align-items: center;
   padding: 11px;
   text-align: left;
-  border: solid 1px var(--panel);
+  border: solid 1px var(--MI_THEME-panel);
   width: 100%;
 
   &:hover {
@@ -233,7 +233,7 @@ const delBulk = async () => {
 
 }
 .selected {
-  border-color: var(--accent);
+  border-color: var(--MI_THEME-accent);
 }
 .img {
   width: 42px;

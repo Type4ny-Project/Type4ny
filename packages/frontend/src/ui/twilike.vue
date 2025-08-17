@@ -287,7 +287,7 @@ $widgets-hide-threshold: 1200px;
 		padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px));
 		box-sizing: border-box;
 		overflow: auto;
-		background: var(--bg);
+		background: var(--MI_THEME-bg);
 	}
 
 	> .ivnzpscs {
@@ -330,8 +330,8 @@ $widgets-hide-threshold: 1200px;
 		min-width: 0;
 		width: 750px;
 		margin: 0 16px 0 0;
-		border-left: solid 1px var(--divider);
-		border-right: solid 1px var(--divider);
+		border-left: solid 1px var(--MI_THEME-divider);
+		border-right: solid 1px var(--MI_THEME-divider);
 		border-radius: 0;
 		overflow: clip;
 		--margin: 12px;
@@ -368,8 +368,8 @@ $widgets-hide-threshold: 1200px;
 	&.withGlobalHeader {
 		> .main {
 			margin-top: 0;
-			border: solid 1px var(--divider);
-			border-radius: var(--radius);
+			border: solid 1px var(--MI_THEME-divider);
+			border-radius: var(--MI-radius);
 			--stickyTop: var(--globalHeaderHeight);
 		}
 
@@ -391,7 +391,7 @@ $widgets-hide-threshold: 1200px;
 		margin: 0;
 
 		> .sidebar {
-			border-right: solid 0.5px var(--divider);
+			border-right: solid 0.5px var(--MI_THEME-divider);
 		}
 
 		> .main {
@@ -415,8 +415,8 @@ $widgets-hide-threshold: 1200px;
 	box-sizing: border-box;
 	-webkit-backdrop-filter: var(--blur, blur(24px));
 	backdrop-filter: var(--blur, blur(24px));
-	background-color: var(--bg);
-	border-top: solid 0.5px var(--divider);
+	background-color: var(--MI_THEME-bg);
+	border-top: solid 0.5px var(--MI_THEME-divider);
 	height: 52px;
 }
 
@@ -456,7 +456,7 @@ $widgets-hide-threshold: 1200px;
 	box-sizing: border-box;
 	overflow: auto;
 	overscroll-behavior: contain;
-	background: var(--bg);
+	background: var(--MI_THEME-bg);
 }
 .widgetsCloseButton {
 	padding: 8px;
