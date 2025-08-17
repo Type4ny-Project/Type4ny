@@ -224,6 +224,31 @@ export async function common(createVue: () => Promise<App<Element>>) {
 		}
 	}, { immediate: true });
 
+	// Gaming mode and type management
+	const updateGamingType = () => {
+		const darkMode = store.s.darkMode;
+		const gamingMode = store.s.gamingMode;
+		
+		let gamingType: 'dark' | 'light' | 'none' = 'none';
+		if (darkMode && gamingMode) {
+			gamingType = 'dark';
+		} else if (!darkMode && gamingMode) {
+			gamingType = 'light';
+		} else {
+			gamingType = 'none';
+		}
+		
+		store.set('gamingType', gamingType);
+	};
+
+	// Watch for gaming mode and dark mode changes
+	watch([() => store.s.darkMode, () => store.s.gamingMode], updateGamingType, { immediate: true });
+
+	// Gaming speed animation
+	watch(prefer.r.numberOfGamingSpeed, value => {
+		window.document.documentElement.style.setProperty('--gamingspeed', value + 's');
+	}, { immediate: true });
+
 	// Keep screen on
 	const onVisibilityChange = () => window.document.addEventListener('visibilitychange', () => {
 		if (window.document.visibilityState === 'visible') {

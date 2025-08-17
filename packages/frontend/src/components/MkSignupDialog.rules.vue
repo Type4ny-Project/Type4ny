@@ -72,9 +72,9 @@ import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import * as os from '@/os.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const availableServerRules = instance.serverRules.length > 0;
 const availableTos = instance.tosUrl != null && instance.tosUrl !== '';

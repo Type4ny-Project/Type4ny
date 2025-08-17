@@ -139,10 +139,10 @@ import MkAnimBg from '@/components/MkAnimBg.vue';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowButton.vue';
-import { store } from '@/store.js';
 import * as os from '@/os.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const emit = defineEmits<{
 	(ev: 'closed'): void;

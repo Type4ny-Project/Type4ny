@@ -166,9 +166,9 @@ import { misskeyApi } from '@/utility/misskey-api.js';
 import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { login } from '@/accounts.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 const props = withDefaults(defineProps<{
 	autoSet?: boolean;
 }>(), {

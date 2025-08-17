@@ -1,0 +1,125 @@
+/**
+ * Gaming Mode Animations
+ * Centralized animation definitions for better performance and maintainability
+ */
+
+// Animation keyframes - defined once globally
+@keyframes AnimationLight {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+@keyframes AnimationDark {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+// Vendor-prefixed versions for compatibility
+@-webkit-keyframes AnimationLight {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+@-webkit-keyframes AnimationDark {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+@-moz-keyframes AnimationLight {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+@-moz-keyframes AnimationDark {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+// CSS Variables for conditional application
+:root {
+  // Always define the animations and gradients
+  // Light theme
+  --gaming-animation-light: AnimationLight var(--gamingspeed, 43s) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+  --gaming-bg-light: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+  --gaming-border-light: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+  --gaming-text-light: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+  
+  // Dark theme
+  --gaming-animation-dark: AnimationDark var(--gamingspeed, 43s) cubic-bezier(0, 0.45, 0.30, 1) infinite;
+  --gaming-bg-dark: linear-gradient(270deg, #191919, #252525, #323232, #3e3e3e, #4a4a4a, #565656, #626262, #6f6f6f, #7b7b7b);
+  --gaming-border-dark: linear-gradient(270deg, #434343, #5e5e5e, #6b6b6b, #7a7a7a, #898989, #989898, #a8a8a8, #b7b7b7, #c6c6c6);
+  --gaming-text-dark: linear-gradient(270deg, #5d5d5d, #797979, #8d8d8d, #a0a0a0, #b3b3b3, #c6c6c6, #d9d9d9, #ededed, #fff);
+}
+
+// Utility classes for gaming animations
+.gaming-animation-light {
+  animation: var(--gaming-animation-light);
+  -webkit-animation: var(--gaming-animation-light);
+  -moz-animation: var(--gaming-animation-light);
+  background: var(--gaming-bg-light);
+  background-size: 1800% 1800% !important;
+  
+  // Performance optimizations
+  will-change: background-position;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+.gaming-animation-dark {
+  animation: var(--gaming-animation-dark);
+  -webkit-animation: var(--gaming-animation-dark);
+  -moz-animation: var(--gaming-animation-dark);
+  background: var(--gaming-bg-dark);
+  background-size: 1800% 1800% !important;
+  
+  // Performance optimizations
+  will-change: background-position;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+// Text gradient animations
+.gaming-text-light {
+  background: var(--gaming-text-light);
+  background-size: 1800% 1800% !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: var(--gaming-animation-light);
+  -webkit-animation: var(--gaming-animation-light);
+  -moz-animation: var(--gaming-animation-light);
+}
+
+.gaming-text-dark {
+  background: var(--gaming-text-dark);
+  background-size: 1800% 1800% !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: var(--gaming-animation-dark);
+  -webkit-animation: var(--gaming-animation-dark);
+  -moz-animation: var(--gaming-animation-dark);
+}
+
+// Border animations
+.gaming-border-light {
+  border-image: var(--gaming-border-light) !important;
+  border-image-slice: 1 !important;
+  animation: var(--gaming-animation-light);
+  -webkit-animation: var(--gaming-animation-light);
+  -moz-animation: var(--gaming-animation-light);
+}
+
+.gaming-border-dark {
+  border-image: var(--gaming-border-dark) !important;
+  border-image-slice: 1 !important;
+  animation: var(--gaming-animation-dark);
+  -webkit-animation: var(--gaming-animation-dark);
+  -moz-animation: var(--gaming-animation-dark);
+}

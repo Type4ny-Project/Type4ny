@@ -45,7 +45,7 @@ import { computed, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
 const props = withDefaults(defineProps<{
   channel: Misskey.entities.Channel;
@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<{
 	full: false,
 });
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const isFollowing = ref(props.channel.isFollowing);
 const wait = ref(false);

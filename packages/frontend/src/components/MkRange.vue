@@ -38,9 +38,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, defineAsyncComponent, onMounted, onUnmounted, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { isTouchUsing } from '@/utility/touch.js';
 import * as os from '@/os.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 const props = withDefaults(defineProps<{
 	modelValue: number;
 	disabled?: boolean;

@@ -188,6 +188,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkSwitch>
 		</SearchMarker>
 
+		<SearchMarker :keywords="['gaming', 'themes', 'devices']">
+			<MkSwitch v-model="gamingMode">
+				<template #label>
+					<SearchLabel>
+						{{ i18n.ts.gamingMode }}
+					</SearchLabel>
+				</template>
+			</MkSwitch>
+
+			<MkRange v-model="numberOfGamingSpeed" :min="1" :max="60" :step="1" easing>
+				<template #label>{{ i18n.ts.gamingSpeedChange }}</template>
+				<template #caption>{{ i18n.ts.gamingSpeedChangeInfo }}</template>
+			</MkRange>
+		</SearchMarker>
+
 		<FormSection>
 			<div class="_formLinksGrid">
 				<FormLink to="/settings/theme/manage">
@@ -236,6 +251,7 @@ import { uniqueBy } from '@/utility/array.js';
 import { definePage } from '@/page.js';
 import { prefer } from '@/preferences.js';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
+import MkRange from '@/components/MkRange.vue';
 
 const installedThemes = getThemesRef();
 const builtinThemes = getBuiltinThemesRef();
@@ -247,6 +263,8 @@ const instanceLightTheme = computed<Theme | null>(() => instance.defaultLightThe
 const installedLightThemes = computed(() => installedThemes.value.filter(t => t.base === 'light' || t.kind === 'light'));
 const builtinLightThemes = computed(() => builtinThemes.value.filter(t => t.base === 'light' || t.kind === 'light'));
 const themes = computed(() => uniqueBy([instanceDarkTheme.value, instanceLightTheme.value, ...builtinThemes.value, ...installedThemes.value].filter(x => x != null), theme => theme.id));
+const gamingMode = computed(store.makeGetterSetter('gamingMode'));
+const numberOfGamingSpeed = computed(store.makeGetterSetter('numberOfGamingSpeed'));
 
 const darkTheme = prefer.r.darkTheme;
 const darkThemeName = computed(() => darkTheme.value?.name ?? defaultDarkTheme.name);

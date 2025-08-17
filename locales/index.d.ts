@@ -3801,11 +3801,11 @@ export interface Locale extends ILocale {
     /**
      * ゲーミングの光るスピードの調整
      */
-    "GamingSpeedChange": string;
+    "gamingSpeedChange": string;
     /**
      * 左にすれば早くなる、右にすれば遅くなる。それだけ。
      */
-    "GamingSpeedChangeInfo": string;
+    "gamingSpeedChangeInfo": string;
     /**
      * メールアドレスの設定がされていません。
      */

@@ -78,9 +78,9 @@ import { claimAchievement } from '@/utility/achievements.js';
 import { pleaseLogin } from '@/utility/please-login.js';
 import { $i } from '@/i.js';
 import { prefer } from '@/preferences.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed,
@@ -216,22 +216,22 @@ onBeforeUnmount(() => {
 
   &.gamingDark {
     color: black !important;
-    background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+    animation: var(--gaming-animation-dark);
+    background: var(--gaming-border-light);
     background-size: 1800% 1800%;
-    -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-    -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-    animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
     border: solid 1px black;
+    will-change: background-position;
+    transform: translateZ(0);
   }
 
   &.gamingLight {
     color: white !important;
-    background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+    animation: var(--gaming-animation-light);
+    background: var(--gaming-bg-light);
     background-size: 1800% 1800% !important;
-    -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-    -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-    animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
     border: solid 1px white;
+    will-change: background-position;
+    transform: translateZ(0);
   }
 
   &.full {
@@ -239,21 +239,20 @@ onBeforeUnmount(() => {
     font-size: 14px;
     &.gamingDark {
       color: black;
-      background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+      animation: var(--gaming-animation-dark);
+      background: var(--gaming-border-light);
       background-size: 1800% 1800%;
-      -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-
+      will-change: background-position;
+      transform: translateZ(0);
     }
 
     &.gamingLight {
       color: white;
-      background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+      animation: var(--gaming-animation-light);
+      background: var(--gaming-bg-light);
       background-size: 1800% 1800% !important;
-      -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
+      will-change: background-position;
+      transform: translateZ(0);
     }
   }
 
@@ -295,40 +294,32 @@ onBeforeUnmount(() => {
 
     &.gamingDark:hover {
       color: black;
-      background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+      animation: var(--gaming-animation-dark);
+      background: var(--gaming-border-light);
       background-size: 1800% 1800%;
-      -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
       border: solid 1px white;
     }
 
     &.gamingDark:active {
       color: black;
-      background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+      animation: var(--gaming-animation-dark);
+      background: var(--gaming-border-light);
       background-size: 1800% 1800%;
-      -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
       border: solid 1px white;
     }
 
     &.gamingLight:hover {
-      background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+      animation: var(--gaming-animation-light);
+      background: var(--gaming-bg-light);
       background-size: 1800% 1800% !important;
-      -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
       border: solid 1px white;
     }
 
     &.gamingLight:active {
       color: white;
-      background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+      animation: var(--gaming-animation-light);
+      background: var(--gaming-bg-light);
       background-size: 1800% 1800% !important;
-      -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
       border: solid 1px white;
     }
 
@@ -336,23 +327,22 @@ onBeforeUnmount(() => {
       -webkit-text-fill-color: unset !important;
       color: black;
       border: solid 1px white;
-      background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+      animation: var(--gaming-animation-dark);
+      background: var(--gaming-border-light);
       background-size: 1800% 1800%;
-      -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-      animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+      will-change: background-position;
+      transform: translateZ(0);
     }
 
     &.gamingLight {
       -webkit-text-fill-color: unset !important;
       color: white;
       border: solid 1px white;
-      background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+      animation: var(--gaming-animation-light);
+      background: var(--gaming-bg-light);
       background-size: 1800% 1800% !important;
-      -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-      animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-
+      will-change: background-position;
+      transform: translateZ(0);
     }
 
   }
@@ -378,75 +368,4 @@ onBeforeUnmount(() => {
 
 }
 
-@-webkit-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@-moz-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@-webkit-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@-moz-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
 </style>

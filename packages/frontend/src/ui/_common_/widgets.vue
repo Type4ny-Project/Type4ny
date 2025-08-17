@@ -20,9 +20,9 @@ const editMode = ref(false);
 import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = computed(() => store.s.gamingType);
+const { gamingType } = useGamingMode();
 const props = withDefaults(defineProps<{
 	// null = 全てのウィジェットを表示
 	// left = place: leftだけを表示
@@ -80,102 +80,44 @@ function updateWidgets(thisWidgets) {
 .edit {
 	width: 100%;
   &.gamingDark{
-    background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);    background-size: 1800% 1800% !important;
-    -webkit-animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    -moz-animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
+    animation: var(--gaming-animation-dark);
+    background: var(--gaming-text-dark);
+    background-size: 1800% 1800% !important;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+    will-change: background-position;
+    transform: translateZ(0);
   }
   &.gamingLight{
-    background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+    animation: var(--gaming-animation-light);
+    background: var(--gaming-text-light);
     background-size: 1800% 1800% !important;
-    -webkit-animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    -moz-animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+    will-change: background-position;
+    transform: translateZ(0);
   }
 }
 .gamingDark{
-  background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);  background-size: 1800% 1800% !important;
-  -webkit-animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-  -moz-animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-  animation: AnimationDark 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
+  animation: var(--gaming-animation-dark);
+  background: var(--gaming-text-dark);
+  background-size: 1800% 1800% !important;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 .gamingLight{
-  background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);  background-size: 1800% 1800% !important;
-  -webkit-animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-  -moz-animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-  animation: AnimationLight 45s cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
+  animation: var(--gaming-animation-light);
+  background: var(--gaming-text-light);
+  background-size: 1800% 1800% !important;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-@-webkit-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@-moz-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}  @keyframes AnimationLight {
-     0% {
-       background-position: 0% 50%
-     }
-     50% {
-       background-position: 100% 50%
-     }
-     100% {
-       background-position: 0% 50%
-     }
-   }
-@-webkit-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@-moz-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
+  background-clip: text;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 </style>

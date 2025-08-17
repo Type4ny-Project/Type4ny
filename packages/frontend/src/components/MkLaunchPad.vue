@@ -33,9 +33,9 @@ import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
 import { deviceKind } from '@/utility/device-kind.js';
 import { prefer } from '@/preferences.js';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 const indicatorCounterToggle = computed(store.makeGetterSetter('indicatorCounterToggle'));
 
 const props = withDefaults(defineProps<{

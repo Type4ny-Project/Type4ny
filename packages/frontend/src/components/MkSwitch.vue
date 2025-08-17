@@ -30,9 +30,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { toRefs } from 'vue';
 import type { Ref, ref, computed, watch } from 'vue';
 import XButton from '@/components/MkSwitch.button.vue';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const props = defineProps<{
 	modelValue: boolean | Ref<boolean>;
@@ -75,22 +75,20 @@ const toggle = () => {
   &.gamingDarkDisabled{
     opacity: 0.6;
     cursor: not-allowed;
+    animation: var(--gaming-animation-dark);
     background: linear-gradient(270deg, #a84f4f, #a88c4f, #9aa24b, #6da85c, #53a8a6, #7597b5, #8679b5, #b579b5, #b56d96);
     background-size: 1800% 1800% !important;
-    -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-    animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite !important;
-
+    will-change: background-position;
+    transform: translateZ(0);
   }
   &.gamingLightDisabled{
     opacity: 0.6;
     cursor: not-allowed;
-    background: linear-gradient(270deg, #c06161, #c0a567, #b6ba69, #81bc72, #63c3be, #8bacd6, #9f8bd6, #d18bd6, #d883b4);
+    animation: var(--gaming-animation-light);
+    background: var(--gaming-bg-light);
     background-size: 1800% 1800%;
-    -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite;
-    -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite;
-    animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.25, 0.25, 1) infinite;
-
+    will-change: background-position;
+    transform: translateZ(0);
   }
 	//&.checked {
 	//}
@@ -115,6 +113,28 @@ const toggle = () => {
 	display: block;
 	transition: inherit;
 	color: var(--MI_THEME-fg);
+
+	&.gamingDark {
+		animation: var(--gaming-animation-dark);
+		background: var(--gaming-text-dark);
+		background-size: 1800% 1800%;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		will-change: background-position;
+		transform: translateZ(0);
+	}
+
+	&.gamingLight {
+		animation: var(--gaming-animation-light);
+		background: var(--gaming-text-light);
+		background-size: 1800% 1800%;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		will-change: background-position;
+		transform: translateZ(0);
+	}
 }
 
 .label {

@@ -19,11 +19,11 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { useStream } from '@/stream.js';
-import { store } from '@/store.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { $i } from '@/i.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const gamingType = computed(() => store.s.gamingType);
+const { gamingType } = useGamingMode();
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed,

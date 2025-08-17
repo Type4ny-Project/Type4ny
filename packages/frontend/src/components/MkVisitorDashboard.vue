@@ -183,19 +183,17 @@ function showMenu(ev: MouseEvent) {
 
 .gamingDark{
 	color: black;
-  background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd);
+  animation: var(--gaming-animation-dark);
+  background: var(--gaming-border-light);
   background-size: 1800% 1800%;
-  -webkit-animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-  -moz-animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-  animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 .gamingDark:hover{
 	color: black;
-	background: linear-gradient(270deg, #e7a2a2, #e3cfa2, #ebefa1, #b3e7a6, #a6ebe7, #aec5e3, #cabded, #e0b9e3, #f4bddd) !important;
+	animation: var(--gaming-animation-dark);
+	background: var(--gaming-border-light) !important;
 	background-size: 1800% 1800% !important;
-	-webkit-animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-	-moz-animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
-	animation:AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite !important;
 }
 .stats {
 	display: grid;
@@ -232,70 +230,5 @@ function showMenu(ev: MouseEvent) {
 .tlBody {
 	height: 350px;
 	overflow: auto;
-}
-@-webkit-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@-moz-keyframes AnimationLight {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}  @keyframes AnimationLight {
-     0% {
-       background-position: 0% 50%
-     }
-     50% {
-       background-position: 100% 50%
-     }
-     100% {
-       background-position: 0% 50%
-     }
-   }
-@-webkit-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@-moz-keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
-}
-@keyframes AnimationDark {
-  0% {
-    background-position: 0% 50%
-  }
-  50% {
-    background-position: 100% 50%
-  }
-  100% {
-    background-position: 0% 50%
-  }
 }
 </style>

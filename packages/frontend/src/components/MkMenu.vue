@@ -231,7 +231,7 @@ const childrenCache = new WeakMap<MenuParent, MenuItem[]>();
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { store } from '@/store.js';
+import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
 const XChild = defineAsyncComponent(() => import('./MkMenu.child.vue'));
 
@@ -248,7 +248,7 @@ const emit = defineEmits<{
 	(ev: 'hide'): void;
 }>();
 
-const gamingType = store.s.gamingType;
+const { gamingType } = useGamingMode();
 
 const big = isTouchUsing;
 
