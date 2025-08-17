@@ -33,6 +33,7 @@ import MkModal from '@/components/MkModal.vue';
 import { navbarItemDef } from '@/navbar.js';
 import { deviceKind } from '@/utility/device-kind.js';
 import { prefer } from '@/preferences.js';
+import { store } from '@/store.js';
 import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
 const { gamingType } = useGamingMode();

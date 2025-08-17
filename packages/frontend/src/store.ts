@@ -213,6 +213,10 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'device',
 		default: '',
 	},
+	indicatorCounterToggle: {
+		where: 'device',
+		default: false,
+	},
 	additionalUnicodeEmojiIndexes: {
 		where: 'device',
 		default: {} as Record<string, Record<string, string[]>>,
