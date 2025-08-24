@@ -23,6 +23,7 @@
 	}
 
 	//#region Detect language
+	// eslint-disable-next-line no-undef -- LANGS_REPLACEはBuild時に置換される
 	const supportedLangs = LANGS_REPLACE;
 	/** @type { string } */
 	let lang = localStorage.getItem('lang');
