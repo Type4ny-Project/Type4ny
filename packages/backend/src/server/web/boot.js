@@ -23,7 +23,7 @@
 	}
 
 	//#region Detect language
-	const supportedLangs = LANGS;
+	const supportedLangs = LANGS_REPLACE;
 	/** @type { string } */
 	let lang = localStorage.getItem('lang');
 	if (lang == null || !supportedLangs.includes(lang)) {

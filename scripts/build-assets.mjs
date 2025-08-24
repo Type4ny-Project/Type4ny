@@ -51,7 +51,6 @@ async function copyBackendViews() {
 
 async function buildBackendScript() {
   await fs.mkdir('./packages/backend/built/server/web', { recursive: true });
-
   for (const file of [
     './packages/backend/src/server/web/boot.js',
     './packages/backend/src/server/web/boot.embed.js',
@@ -60,7 +59,7 @@ async function buildBackendScript() {
     './packages/backend/src/server/web/error.js',
   ]) {
     let source = await fs.readFile(file, { encoding: 'utf-8' });
-    source = source.replaceAll('LANGS', JSON.stringify(Object.keys(locales)));
+    source = source.replaceAll('LANGS_REPLACE', JSON.stringify(Object.keys(locales)));
     const { code } = await terser.minify(source, { toplevel: true });
     await fs.writeFile(`./packages/backend/built/server/web/${path.basename(file)}`, code);
   }

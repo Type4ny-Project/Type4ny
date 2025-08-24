@@ -410,6 +410,7 @@ import MkButton from '@/components/MkButton.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import { useForm } from '@/composables/use-form.js';
 import MkFormFooter from '@/components/MkFormFooter.vue';
+import MkRadios from '@/components/MkRadios.vue';
 
 const meta = await misskeyApi('admin/meta');
 
@@ -447,6 +448,18 @@ const pinnedUsersForm = useForm({
 }, async (state) => {
 	await os.apiWithDialog('admin/update-meta', {
 		pinnedUsers: state.pinnedUsers.split('\n'),
+	});
+	fetchInstance(true);
+});
+
+const isManaged = computed(() => instance.isManaged);
+const filesForm = useForm({
+	cacheRemoteFiles: meta.cacheRemoteFiles,
+	cacheRemoteSensitiveFiles: meta.cacheRemoteSensitiveFiles,
+}, async (state) => {
+	await os.apiWithDialog('admin/update-meta', {
+		cacheRemoteFiles: state.cacheRemoteFiles,
+		cacheRemoteSensitiveFiles: state.cacheRemoteSensitiveFiles,
 	});
 	fetchInstance(true);
 });
