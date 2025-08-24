@@ -59,7 +59,7 @@ import * as os from '@/os.js';
 import { navbarItemDef } from '@/navbar.js';
 import { openAccountMenu as openAccountMenu_, $i } from '@/i.js';
 import MkButton from '@/components/MkButton.vue';
-// import { StickySidebar } from '@/scripts/sticky-sidebar.js';
+// import { StickySidebar } from '@/utility/sticky-sidebar.js';
 // import { mainRouter } from '@/router.js';
 //import MisskeyLogo from '@assets/client/misskey.svg';
 import { store } from '@/store.js';
