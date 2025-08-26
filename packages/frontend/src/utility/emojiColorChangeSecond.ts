@@ -42,7 +42,11 @@ function analyzeApng(bytes: Uint8Array) {
 
 // GIFフレーム抽出関数
 function extractGifFrames(bytes: Uint8Array) {
-	const frames = [];
+	const frames: {
+		r: number;
+		g: number;
+		b: number;
+	}[] = [];
 	let i = 0;
 	while (i < bytes.length) {
 		// GIFのヘッダーとロジカルスクリーンディスクリプタをスキップ
