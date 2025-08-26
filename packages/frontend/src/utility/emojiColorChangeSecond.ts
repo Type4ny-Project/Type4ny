@@ -1,3 +1,5 @@
+import { onMounted, ref } from 'vue';
+
 const imageUrl = ref<string>('path_to_your_image.gif'); // または '.apng'
 
 // 1秒あたりの色変化数を保持するリアクティブ変数
@@ -11,7 +13,7 @@ onMounted(() => {
 // 画像を取得する関数
 async function fetchImage(url: string) {
 	try {
-		const response = await fetch(url);
+		const response = await window.fetch(url);
 		const blob = await response.blob();
 		const arrayBuffer = await blob.arrayBuffer();
 		const bytes = new Uint8Array(arrayBuffer);
@@ -81,7 +83,11 @@ function extractGifFrames(bytes: Uint8Array) {
 
 // APNGフレーム抽出関数
 function extractApngFrames(bytes: Uint8Array) {
-	const frames = [];
+	const frames: {
+		r: number;
+		g: number;
+		b: number;
+	}[] = [];
 	let i = 8; // PNGシグネチャをスキップ
 
 	while (i < bytes.length) {
