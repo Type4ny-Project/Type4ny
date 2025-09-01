@@ -73,8 +73,7 @@ export class DeliverProcessorService {
 			return 'skip (suspended)';
 		}
 
-		const meta = await this.metaService.fetch();
-		const i = await (meta.enableChartsForFederatedInstances
+		const i = await (this.meta.enableChartsForFederatedInstances
 			? this.federatedInstanceService.fetch(host)
 			: this.federatedInstanceService.fetch(host));
 

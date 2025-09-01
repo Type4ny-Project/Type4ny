@@ -144,12 +144,11 @@ export class EmailService {
 
 		try {
 			// TODO: htmlサニタイズ
-			const meta = await this.metaService.fetch();
 			const info = await transporter.sendMail({
-				from: meta.name ? {
-					name: meta.name,
-					address: meta.email!,
-				} : meta.email!,
+				from: this.meta.name ? {
+					name: this.meta.name,
+					address: this.meta.email!,
+				} : this.meta.email!,
 				to: to,
 				subject: subject,
 				text: text,
@@ -224,7 +223,7 @@ export class EmailService {
 				reason: validated.reason ? formatReason[validated.reason] ?? null : null,
 			};
 		}
-		if (meta.enableActiveEmailValidation) {
+		if (this.meta.enableActiveEmailValidation) {
 			const dispose = await this.httpRequestService.send('https://raw.githubusercontent.com/mattyatea/disposable-email-domains/master/disposable_email_blocklist.conf', {
 				method: 'GET',
 			});
