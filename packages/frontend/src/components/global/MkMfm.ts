@@ -433,12 +433,14 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 					return [h(MkCustomEmoji, {
 						key: Math.random(),
 						name: token.props.name,
+						url: props.emojiUrls && props.emojiUrls[token.props.name],
 						normal: props.plain,
 						host: null,
 						useOriginalSize: scale >= 2.5,
 						menu: props.enableEmojiMenu,
 						menuReaction: props.enableEmojiMenuReaction,
 						fallbackToImage: false,
+						isRequest: props.emojireq,
 					})];
 				} else {
 					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -454,6 +456,7 @@ export default function (props: MfmProps, { emit }: { emit: SetupContext<MfmEven
 							useOriginalSize: scale >= 2.5,
 							menu: props.enableEmojiMenu,
 							menuReaction: false,
+							isRequest: props.emojireq,
 						})];
 					}
 				}

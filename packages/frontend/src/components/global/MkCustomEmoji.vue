@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	draggable="false"
 	style="-webkit-user-drag: none;"
 />
-<span v-else-if="errored || isDraft">:{{ customEmojiName }}:</span>
+<span v-else-if="errored || (isDraft && !isRequest)">:{{ customEmojiName }}:</span>
 <img
 	v-else
 	:class="[$style.root, { [$style.normal]: normal, [$style.noStyle]: noStyle }]"
@@ -63,6 +63,7 @@ const props = defineProps<{
 	menuReaction?: boolean;
 	fallbackToImage?: boolean;
 	ignoreMuted?: boolean;
+	isRequest?: boolean;
 }>();
 
 const react = inject(DI.mfmEmojiReactCallback, undefined);

@@ -68,7 +68,7 @@ function editRequest(emoji) {
 				}));
 				emojisRequestPaginationComponent.value.paginator.reload();
 			} else if (result.deleted) {
-				emojisRequestPaginationComponent.value.paginator.removeItem((item) => item.id === emoji.id);
+				emojisRequestPaginationComponent.value.paginator.removeItem(emoji.id);
 				emojisRequestPaginationComponent.value.paginator.reload();
 			}
 		},
@@ -94,7 +94,7 @@ async function unrequested(emoji) {
 		isRequest: false,
 	});
 
-	emojisRequestPaginationComponent.value.paginator.removeItem((item) => item.id === emoji.id);
+	emojisRequestPaginationComponent.value.paginator.removeItem(emoji.id);
 	emojisRequestPaginationComponent.value.paginator.reload();
 }
 

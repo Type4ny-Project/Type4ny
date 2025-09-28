@@ -8,6 +8,7 @@ import { reactive, ref } from 'vue';
 import * as os from '@/os.js';
 import { misskeyApi } from '@/utility/misskey-api.js';
 import { i18n } from '@/i18n.js';
+import { $i } from '@/i.js';
 
 type UploadItem = {
 	id: string;
@@ -56,6 +57,7 @@ export function uploadFile(
 			if (name) formData.append('name', name);
 			formData.append('force', 'true');
 			formData.append('isSensitive', 'false');
+			if ($i) formData.append('i', $i.token);
 			
 			const xhr = new XMLHttpRequest();
 			xhr.open('POST', '/api/drive/files/create', true);
