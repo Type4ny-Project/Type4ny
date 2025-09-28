@@ -12,7 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<XSidebar/>
 		</div>
 		<div v-else-if="!pageMetadata?.needWideArea && isDesktop" ref="widgetsLeft" :class="[$style.widgets,$style.left]">
-			<XWidgets place="left" :marginTop="'var(--margin)'"/>
+			<XWidgets place="left" :marginTop="'var(--MI-margin)'"/>
 		</div>
 
 		<main :class="[$style.main, {[$style.wide]: pageMetadata?.needWideArea} ]" @contextmenu.stop="onContextmenu">
@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</main>
 
 		<div v-if="isDesktop && !pageMetadata?.needWideArea" ref="widgetsRight" :class="$style.widgets">
-			<XWidgets :place="showMenuOnTop ? 'right' : null" :marginTop="showMenuOnTop ? '0' : 'var(--margin)'"/>
+			<XWidgets :place="showMenuOnTop ? 'right' : null" :marginTop="showMenuOnTop ? '0' : 'var(--MI-margin)'"/>
 		</div>
 	</div>
 
@@ -283,8 +283,8 @@ $widgets-hide-threshold: 1200px;
 		right: 0;
 		z-index: 1001;
 		height: 100dvh;
-		margin-top: var(--stickyTop);
-		padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px));
+		margin-top: var(--MI-stickyTop);
+		padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px));
 		box-sizing: border-box;
 		overflow: auto;
 		background: var(--MI_THEME-bg);
@@ -334,15 +334,15 @@ $widgets-hide-threshold: 1200px;
 		border-right: solid 1px var(--MI_THEME-divider);
 		border-radius: 0;
 		overflow: clip;
-		--margin: 12px;
+		--MI-margin: 12px;
 		max-width: 600px;
 	}
 
 	> .widgets {
-		//--panelBorder: none;
+		//--MI_THEME-panelBorder: none;
 		width: 300px;
 		height: 100vh;
-		padding-bottom: calc(var(--margin) + env(safe-area-inset-bottom, 0px));
+		padding-bottom: calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px));
 		position: sticky;
 		overflow-y: auto;
 		top: 0;
@@ -370,11 +370,11 @@ $widgets-hide-threshold: 1200px;
 			margin-top: 0;
 			border: solid 1px var(--MI_THEME-divider);
 			border-radius: var(--MI-radius);
-			--stickyTop: var(--globalHeaderHeight);
+			--MI-stickyTop: var(--globalHeaderHeight);
 		}
 
 		> .widgets {
-			--stickyTop: var(--globalHeaderHeight);
+			--MI-stickyTop: var(--globalHeaderHeight);
 			margin-top: 0;
 		}
 	}
@@ -413,8 +413,8 @@ $widgets-hide-threshold: 1200px;
 	grid-gap: 8px;
 	width: 100%;
 	box-sizing: border-box;
-	-webkit-backdrop-filter: var(--blur, blur(24px));
-	backdrop-filter: var(--blur, blur(24px));
+	-webkit-backdrop-filter: var(--MI-blur, blur(24px));
+	backdrop-filter: var(--MI-blur, blur(24px));
 	background-color: var(--MI_THEME-bg);
 	border-top: solid 0.5px var(--MI_THEME-divider);
 	height: 52px;
@@ -435,7 +435,7 @@ $widgets-hide-threshold: 1200px;
 	contain: strict;
 	overflow: auto;
 	overscroll-behavior: contain;
-	background: var(--navBg);
+	background: var(--MI_THEME-navBg);
 }
 
 .navButton{
@@ -452,7 +452,7 @@ $widgets-hide-threshold: 1200px;
 	z-index: 1001;
 	width: 310px;
 	height: 100dvh;
-	padding: var(--margin) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px)) !important;
+	padding: var(--MI-margin) var(--MI-margin) calc(var(--MI-margin) + env(safe-area-inset-bottom, 0px)) !important;
 	box-sizing: border-box;
 	overflow: auto;
 	overscroll-behavior: contain;

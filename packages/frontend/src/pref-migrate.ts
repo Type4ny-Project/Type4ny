@@ -12,6 +12,7 @@ import { deckStore } from '@/ui/deck/deck-store.js';
 import { unisonReload } from '@/utility/unison-reload.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
+import { migrateEmojiProfilesToPalettesIfNeeded } from '@/utility/migrate-emoji-profiles.js';
 
 // TODO: そのうち消す
 export function migrateOldSettings() {
@@ -72,6 +73,7 @@ export function migrateOldSettings() {
 		}]);
 		prefer.commit('emojiPaletteForMain', 'pinnedEmojis');
 		prefer.commit('emojiPaletteForReaction', 'reactions');
+		await migrateEmojiProfilesToPalettesIfNeeded();
 		prefer.commit('overridedDeviceKind', store.s.overridedDeviceKind);
 		prefer.commit('widgets', store.s.widgets);
 		prefer.commit('keepCw', store.s.keepCw);

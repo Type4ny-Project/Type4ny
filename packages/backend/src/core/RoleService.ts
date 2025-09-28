@@ -63,7 +63,6 @@ export type RolePolicies = {
 	userEachUserListsLimit: number;
 	rateLimitFactor: number;
 	avatarDecorationLimit: number;
-	emojiPickerProfileLimit: number;
 	listPinnedLimit: number;
 	localTimelineAnyLimit: number;
 	loginBonusGrantEnabled: boolean;
@@ -125,7 +124,6 @@ export const DEFAULT_POLICIES: RolePolicies = {
 		'audio/*',
 	],
 	noteDraftLimit: 10,
-	emojiPickerProfileLimit: 2,
 	listPinnedLimit: 2,
 	localTimelineAnyLimit: 3,
 	loginBonusGrantEnabled: true,
@@ -457,7 +455,6 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 				return [...set];
 			}),
 			noteDraftLimit: calc('noteDraftLimit', vs => Math.max(...vs)),
-			emojiPickerProfileLimit: calc('emojiPickerProfileLimit', vs => Math.max(...vs)),
 			listPinnedLimit: calc('listPinnedLimit', vs => Math.max(...vs)),
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),
 			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),

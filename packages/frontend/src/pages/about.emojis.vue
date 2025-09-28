@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template #header><MkPageHeader v-model:tab="tab" :hide="true" :actions="headerActions" :tabs="headerTabs"/></template>
 	<div v-if="tab === 'emojis'" class="_spacer" style="--MI_SPACER-w: 1000px; --MI_SPACER-min: 20px;">
 		<MkButton v-if="$i && ($i.isModerator || $i.policies.canManageCustomEmojis)" primary link to="/custom-emojis-manager">{{ i18n.ts.manageCustomEmojis }}</MkButton>
-		<MkButton v-if="$i && (!$i.isModerator || $i.policies.canRequestCustomEmojis)" primary @click="edit">{{ i18n.ts.requestCustomEmojis }}</MkButton>
+		<MkButton v-if="$i && $i.policies.canRequestCustomEmojis" primary @click="edit">{{ i18n.ts.requestCustomEmojis }}</MkButton>
 
 		<div class="query" style="margin-top: 10px;">
 			<MkInput v-model="q" class="" :placeholder="i18n.ts.search" autocapitalize="off">

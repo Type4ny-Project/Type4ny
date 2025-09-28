@@ -677,11 +677,11 @@ function menuEdit() {
 		transition: all 0.2s ease;
 
     &.gamingDark {
-      color: var(--navFg);
+      color: var(--MI_THEME-navFg);
     }
 
     &.gamingLight {
-      color: var(--navFg);
+      color: var(--MI_THEME-navFg);
     }
 
     &:hover {

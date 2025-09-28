@@ -2126,7 +2126,6 @@ _role:
     gtlAvailable: "グローバルタイムラインの閲覧"
     loginBonusGrantEnabled: "ログインボーナスの付与"
     canSendPoints: "ポイントの送信"
-    emojiPickerProfileLimit: "絵文字ピッカーのプロファイルの上限数(最大5)"
     ltlAvailable: "ローカルタイムラインの閲覧"
     canPublicNote: "パブリック投稿の許可"
     canEditNote: "ノートの編集"

@@ -164,7 +164,7 @@ async function updateAgreeNote(v: boolean) {
     -webkit-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
     -moz-animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
     animation: AnimationDark var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-    color: var(--navFg);
+    color: var(--MI_THEME-navFg);
   }
 
   &.gamingLight {
@@ -173,7 +173,7 @@ async function updateAgreeNote(v: boolean) {
     -webkit-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
     -moz-animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
     animation: AnimationLight var(--gamingspeed) cubic-bezier(0, 0.2, 0.90, 1) infinite;
-    color: var(--navFg);
+    color: var(--MI_THEME-navFg);
   }
 }
 

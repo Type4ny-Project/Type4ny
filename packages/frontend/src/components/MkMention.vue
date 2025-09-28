@@ -40,7 +40,7 @@ const isMe = $i && (
 	`@${props.username}@${toUnicode(props.host)}` === `@${$i.username}@${toUnicode(localHost)}`.toLowerCase()
 );
 
-const bg = tinycolor(getComputedStyle(document.documentElement).getPropertyValue(isMe ? '--mentionMe' : '--mention'));
+const bg = tinycolor(getComputedStyle(document.documentElement).getPropertyValue(isMe ? '--MI_THEME-mentionMe' : '--MI_THEME-mention'));
 bg.setAlpha(0.1);
 
 const avatarUrl = computed(() => prefer.s.disableShowingAnimatedImages || prefer.s.dataSaver.avatar

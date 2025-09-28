@@ -108,7 +108,6 @@ export const ROLE_POLICIES = [
 	'userEachUserListsLimit',
 	'rateLimitFactor',
 	'avatarDecorationLimit',
-	'emojiPickerProfileLimit',
 	'listPinnedLimit',
 	'localTimelineAnyLimit',
 	'loginBonusGrantEnabled',

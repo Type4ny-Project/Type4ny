@@ -216,7 +216,7 @@ const delBulk = async () => {
 .root {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-	grid-gap: var(--margin);
+	grid-gap: var(--MI-margin);
 }
 .emoji {
   display: flex;
@@ -227,7 +227,7 @@ const delBulk = async () => {
   width: 100%;
 
   &:hover {
-    border-color: var(--inputBorderHover);
+    border-color: var(--MI_THEME-inputBorderHover);
   }
 
 

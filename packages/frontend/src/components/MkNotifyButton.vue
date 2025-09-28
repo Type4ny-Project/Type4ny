@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
       right: -5px;
       bottom: -5px;
       left: -5px;
-      border: 2px solid var(--focus);
+      border: 2px solid var(--MI_THEME-focus);
       border-radius: 32px;
     }
   }

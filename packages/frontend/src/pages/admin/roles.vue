@@ -144,13 +144,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</MkFolder></MkFoldableSection>
 						<MkFoldableSection>
 							<template #header>Type4ny独自機能系</template>
-							<MkFolder v-if="matchQuery([i18n.ts._role._options.emojiPickerProfileLimit, 'pickerProfileDefault'])" class="_margin">
-								<template #label>{{ i18n.ts._role._options.emojiPickerProfileLimit }}</template>
-								<template #suffix>{{ policies.emojiPickerProfileLimit }}</template>
-								<MkInput v-model="policies.emojiPickerProfileLimit" type="number">
-								</MkInput>
-							</MkFolder>
-
 					<MkFolder v-if="matchQuery([i18n.ts._role._options.listPinnedLimit, 'listPinnedLimit'])" class="_margin">
 						<template #label>{{ i18n.ts._role._options.listPinnedLimit }}</template>
 						<template #suffix>{{ policies.listPinnedLimit }}</template>

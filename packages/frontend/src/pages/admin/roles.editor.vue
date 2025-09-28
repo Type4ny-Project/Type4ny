@@ -401,24 +401,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			</MkFoldableSection>
 			<MkFoldableSection>
 				<template #header>Type4ny</template>
-				<MkFolder v-if="matchQuery([i18n.ts._role._options.emojiPickerProfileLimit, 'emojiPickerProfileLimit'])" class="_margin">
-					<template #label>{{ i18n.ts._role._options.emojiPickerProfileLimit }}</template>
-					<template #suffix>
-						<span v-if="role.policies.emojiPickerProfileLimit.useDefault" :class="$style.useDefaultLabel">{{ i18n.ts._role.useBaseValue }}</span>
-						<span v-else>{{ role.policies.emojiPickerProfileLimit.value }}</span>
-						<span :class="$style.priorityIndicator"><i :class="getPriorityIcon(role.policies.emojiPickerProfileLimit)"></i></span>
-					</template>
-					<div class="_gaps">
-						<MkSwitch v-model="role.policies.emojiPickerProfileLimit.useDefault" :readonly="readonly">
-							<template #label>{{ i18n.ts._role.useBaseValue }}</template>
-						</MkSwitch>
-						<MkInput v-model="role.policies.emojiPickerProfileLimit.value" :disabled="role.policies.emojiPickerProfileLimit.useDefault" type="number" :readonly="readonly">
-						</MkInput>
-						<MkRange v-model="role.policies.emojiPickerProfileLimit.priority" :min="0" :max="2" :step="1" easing :textConverter="(v) => v === 0 ? i18n.ts._role._priority.low : v === 1 ? i18n.ts._role._priority.middle : v === 2 ? i18n.ts._role._priority.high : ''">
-							<template #label>{{ i18n.ts._role.priority }}</template>
-						</MkRange>
-					</div>
-				</MkFolder>
 				<MkFolder v-if="matchQuery([i18n.ts._role._options.listPinnedLimit, 'listPinnedLimit'])" class="_margin">
 					<template #label>{{ i18n.ts._role._options.listPinnedLimit }}</template>
 					<template #suffix>

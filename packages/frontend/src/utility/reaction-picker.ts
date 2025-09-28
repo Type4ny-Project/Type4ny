@@ -9,6 +9,7 @@ import type { Ref } from 'vue';
 import { popup } from '@/os.js';
 import { prefer } from '@/preferences.js';
 import MkEmojiPickerDialog from '@/components/MkEmojiPickerDialog.vue';
+import { migrateEmojiProfilesToPalettesIfNeeded } from '@/utility/migrate-emoji-profiles.js';
 
 class ReactionPicker {
 	private anchorElement: Ref<HTMLElement | null> = ref(null);
@@ -22,6 +23,7 @@ class ReactionPicker {
 	}
 
 	public async init() {
+		await migrateEmojiProfilesToPalettesIfNeeded();
 		const reactionsRef = ref<string[]>([]);
 
 		watch([prefer.r.emojiPaletteForReaction, prefer.r.emojiPalettes], () => {

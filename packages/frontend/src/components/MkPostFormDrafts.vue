@@ -145,10 +145,10 @@ onMounted(async () => {
 	align-items: center;
 	justify-content: center;
 	padding: 16px;
-	color: var(--error);
+	color: var(--MI_THEME-error);
 
 	&:hover {
-		background-color: var(--error);
+		background-color: var(--MI_THEME-error);
 		color: white;
 	}
 }

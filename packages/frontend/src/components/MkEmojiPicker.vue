@@ -50,11 +50,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<div v-if="tab === 'index'" class="group index">
 			<section v-if="showPinned">
-				<div style="display: flex; ">
-					<div v-for="a in profileMax" :key="a" :title="store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`]" class="sllfktkhgl" :class="{ active: activeIndex === a }" @click="pinnedProfileSelect(a)">
-						{{ store.s[`pickerProfileName${a > 1 ? a - 1 : ''}`] }}
-					</div>
-				</div>
 				<div class="body">
 					<button
 						v-for="emoji in pinnedEmojisDef"
@@ -143,7 +138,6 @@ import { i18n } from '@/i18n.js';
 import { store } from '@/store.js';
 import { customEmojiCategories, customEmojis, customEmojisMap } from '@/custom-emojis.js';
 import { checkReactionPermissions } from '@/utility/check-reaction-permissions.js';
-import { deepClone } from '@/utility/clone.js';
 import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
 import { $i } from '@/i.js';
@@ -168,7 +162,6 @@ const emit = defineEmits<{
 	(ev: 'chosen', v: string): void;
 	(ev: 'esc'): void;
 }>();
-const profileMax = $i?.policies.emojiPickerProfileLimit;
 const searchEl = useTemplateRef('searchEl');
 const emojisEl = useTemplateRef('emojisEl');
 
@@ -183,11 +176,9 @@ const recentlyUsedEmojis = store.r.recentlyUsedEmojis;
 const recentlyUsedEmojisDef = computed(() => {
 	return recentlyUsedEmojis.value.map(getDef);
 });
-const pinnedEmojisDef = computed(() => {
-	return pinnedEmojis.value?.map(getDef);
-});
+const pinnedEmojis = computed<string[]>(() => props.pinnedEmojis ?? []);
+const pinnedEmojisDef = computed(() => pinnedEmojis.value.map(getDef));
 
-const pinned = computed(() => props.pinnedEmojis);
 const size = computed(() => emojiPickerScale.value);
 const width = computed(() => emojiPickerWidth.value);
 const height = computed(() => emojiPickerHeight.value);
@@ -195,7 +186,6 @@ const q = ref<string>('');
 const searchResultCustom = ref<Misskey.entities.EmojiSimple[]>([]);
 const searchResultUnicode = ref<UnicodeEmojiDef[]>([]);
 const tab = ref<'index' | 'custom' | 'unicode' | 'tags'>('index');
-const pinnedEmojis = ref(pinned.value);
 const customEmojiFolderRoot: CustomEmojiFolderTree = { value: '', category: '', children: [] };
 
 function parseAndMergeCategories(input: string, root: CustomEmojiFolderTree): CustomEmojiFolderTree {
@@ -476,14 +466,6 @@ function onKeydown(ev: KeyboardEvent) {
 		ev.stopPropagation();
 		emit('esc');
 	}
-}
-
-const activeIndex = ref(store.s.pickerProfileDefault);
-pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${activeIndex.value > 1 ? activeIndex.value - 1 : ''}`]);
-
-function pinnedProfileSelect(index:number) {
-	pinnedEmojis.value = props.asReactionPicker ? deepClone(store.s[`reactions${index > 1 ? index - 1 : ''}`]) : deepClone(store.s[`pinnedEmojis${index > 1 ? index - 1 : ''}`]);
-	activeIndex.value = index;
 }
 
 function done(query?: string): boolean | void {
@@ -808,26 +790,6 @@ left: 0;*/
 				}
 			}
 		}
-	}
-}
-.sllfktkhgl{
-	display: inline-block;
-	padding: 0 4px;
-	font-size: 12px;
-	line-height: 32px;
-	text-align: center;
-	color: var(--MI_THEME-fg);
-	cursor: pointer;
-	width: 100%;
-	transition: transform 0.3s ease;
-	box-shadow: 0 1.5px 0 var(--MI_THEME-divider);
-	height: 32px;
-	overflow: hidden;
-	&:hover {
-		transform: translateY(1.5px);
-	}
-	&.active {
-		transform: translateY(5px);
 	}
 }
 </style>

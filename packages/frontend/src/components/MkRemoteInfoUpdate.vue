@@ -26,8 +26,8 @@ function UserInfoUpdate() {
 .root {
 	font-size: 0.8em;
 	padding: 16px;
-	background: var(--infoWarnBg);
-	color: var(--infoWarnFg);
+	background: var(--MI_THEME-infoWarnBg);
+	color: var(--MI_THEME-infoWarnFg);
 	border-radius: var(--MI-radius);
 	overflow: clip;
 }

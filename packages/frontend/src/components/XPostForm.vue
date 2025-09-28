@@ -1232,7 +1232,7 @@ defineExpose({
 	right: 2px;
 	padding: 4px 6px;
 	font-size: .9em;
-	color: var(--warn);
+	color: var(--MI_THEME-warn);
 	border-radius: 6px;
 	min-width: 1.6em;
 	text-align: center;

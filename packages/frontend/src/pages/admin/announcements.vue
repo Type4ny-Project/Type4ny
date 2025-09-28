@@ -169,10 +169,12 @@ async function save(announcement) {
 
 function more() {
 	loadingMore.value = true;
-	misskeyApi('admin/announcements/list', {
+	const params: Record<string, any> = {
 		status: announcementsStatus.value,
-		untilId: announcements.value.reduce((acc, announcement) => announcement.id != null ? announcement : acc).id,
-	}).then(announcementResponse => {
+	};
+	const lastAnnouncementWithId = [...announcements.value].reverse().find(announcement => announcement.id != null);
+	if (lastAnnouncementWithId?.id != null) params.untilId = lastAnnouncementWithId.id;
+	misskeyApi('admin/announcements/list', params).then(announcementResponse => {
 		announcements.value = announcements.value.concat(announcementResponse);
 		loadingMore.value = false;
 	});

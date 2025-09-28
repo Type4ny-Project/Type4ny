@@ -389,7 +389,7 @@ function onDrop(ev) {
 
 	&.paged {
 		background: var(--MI_THEME-bg) !important;
-		scrollbar-color: var(--scrollbarHandle) transparent;
+		scrollbar-color: var(--MI_THEME-scrollbarHandle) transparent;
 
 		> .body {
 			background: var(--MI_THEME-bg) !important;

@@ -137,7 +137,7 @@ defineExpose({
 	}
 
 	&:not(.date-separated-list-nogap) > *:not(:last-child) {
-		margin-bottom: var(--margin);
+		margin-bottom: var(--MI-margin);
 	}
 }
 
@@ -191,7 +191,7 @@ defineExpose({
 	line-height: 32px;
 	text-align: center;
 	font-size: 12px;
-	color: var(--dateLabelFg);
+	color: var(--MI_THEME-dateLabelFg);
 }
 
 .date1 {

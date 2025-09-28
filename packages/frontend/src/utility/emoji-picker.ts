@@ -8,6 +8,7 @@ import type { Ref } from 'vue';
 import { popup } from '@/os.js';
 import { prefer } from '@/preferences.js';
 import MkEmojiPickerDialog from '@/components/MkEmojiPickerDialog.vue';
+import { migrateEmojiProfilesToPalettesIfNeeded } from '@/utility/migrate-emoji-profiles.js';
 /**
  * 絵文字ピッカーを表示する。
  * 類似の機能として{@link ReactionPicker}が存在しているが、この機能とは動きが異なる。
@@ -25,6 +26,7 @@ class EmojiPicker {
 	}
 
 	public async init() {
+		await migrateEmojiProfilesToPalettesIfNeeded();
 		const emojisRef = ref<string[]>([]);
 
 		watch([prefer.r.emojiPaletteForMain, prefer.r.emojiPalettes], () => {

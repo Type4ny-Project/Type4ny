@@ -76,7 +76,7 @@ const mock = inject<boolean>('mock', false);
 	opacity: 0.7;
 
 	&:hover {
-		color: var(--fgHighlighted);
+		color: var(--MI_THEME-fgHighlighted);
 	}
 }
 .name {
