@@ -1301,20 +1301,31 @@ async function insertEmoji(ev: MouseEvent, cwMode = false) {
 	let pos = textareaEl.value?.selectionStart ?? 0;
 	let posEnd = textareaEl.value?.selectionEnd ?? text.value.length;
 	let cwPos = cwInputEl.value?.selectionStart ?? 0;
-	let cwPosEnd = cwInputEl.value?.selectionEnd ?? cw.value?.length;
+	let cwPosEnd = cwInputEl.value?.selectionEnd ?? (cw.value?.length ?? 0);
 	emojiPicker.show(
 		target as HTMLElement,
 		emoji => {
 			if (cwMode && useCw.value) {
-				const textBefore = cw.value?.substring(0, cwPos);
-				const textAfter = cw.value?.substring(cwPosEnd);
+				const currentCw = cw.value ?? '';
+				const textBefore = currentCw.substring(0, cwPos);
+				const textAfter = currentCw.substring(cwPosEnd);
 				cw.value = textBefore + emoji + textAfter;
+				cwPos += emoji.length;
+				cwPosEnd = cwPos;
+				nextTick(() => {
+					cwInputEl.value?.setSelectionRange(cwPos, cwPos);
+				});
 			} else {
+				const currentText = text.value;
+				const textBefore = currentText.substring(0, pos);
+				const textAfter = currentText.substring(posEnd);
 				text.value = textBefore + emoji + textAfter;
+				pos += emoji.length;
+				posEnd = pos;
+				nextTick(() => {
+					textareaEl.value?.setSelectionRange(pos, pos);
+				});
 			}
-
-			pos += emoji.length;
-			posEnd += emoji.length;
 		},
 		() => {
 			textAreaReadOnly.value = false;
