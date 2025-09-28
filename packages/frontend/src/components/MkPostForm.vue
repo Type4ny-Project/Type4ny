@@ -33,7 +33,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<span :class="$style.headerRightButtonText">{{ targetChannel.name }}</span>
 				</button>
 			</template>
-			<button v-click-anime v-tooltip="i18n.ts.drafts" class="_button" :class="$style.headerRightItem" @click="chooseDraft"><i class="ti ti-note"></i></button>
 			<button v-tooltip="i18n.ts._visibility.disableFederation" class="_button" :class="[$style.headerRightItem, { [$style.danger]: localOnly || channel != null && channel.isLocalOnly }]" :disabled="targetChannel != null && channel.isLocalOnly || visibility === 'specified'" @click="toggleLocalOnly">
 				<span v-if="!(channel && channel?.isLocalOnly) && !localOnly"><i class="ti ti-rocket"></i></span>
 				<span v-else><i class="ti ti-rocket-off"></i></span>
@@ -99,7 +98,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-if="useCw" v-tooltip="i18n.ts.cwInsertEmoji" :class="['_button', $style.footerButton]" @click="(ev) => insertEmoji(ev,true)"><i class="ti ti-eye-edit"></i></button>
 			<button v-if="showAddMfmFunction" v-tooltip="i18n.ts.addMfmFunction" :class="['_button', $style.footerButton]" @click="insertMfmFunction"><i class="ti ti-palette"></i></button>
 			<button v-tooltip="i18n.ts.ruby" :class="['_button', $style.footerButton]" @click="insertRuby"><i class="ti ti-abc"></i></button>
-			<button v-tooltip="i18n.ts.saveAsDraft" class="_button" :class="$style.footerButton" @click="saveDraft(false)"><i class="ti ti-device-floppy"></i></button>
 		</div>
 		<div :class="$style.footerRight">
 			<button v-tooltip="i18n.ts.emoji" :class="['_button', $style.footerButton]" @click="insertEmoji"><i class="ti ti-mood-happy"></i></button>
@@ -373,9 +371,6 @@ const bottomItemActionDef = ref({
 	clearPost: {
 		action: clear,
 	},
-	saveAsDraft: {
-		action: () => saveDraft(false),
-	},
 });
 
 watch(text, () => {
@@ -417,10 +412,6 @@ const bottomItemDef = {
 	clearPost: {
 		title: i18n.ts.clearPost,
 		icon: 'ti-trash',
-	},
-	saveAsDraft: {
-		title: i18n.ts.saveAsDraft,
-		icon: 'ti-note',
 	},
 };
 
@@ -974,24 +965,6 @@ async function saveDraft(auto = true) {
 
 function deleteDraft() {
 	noteDrafts.remove(draftType.value, $i.id, 'default', draftAuxId.value as string);
-}
-
-function chooseDraft() {
-	os.popup(defineAsyncComponent(() => import('@/components/MkPostFormDrafts.vue')), {
-		channelId: props.channel?.id,
-	}, {
-		selected: async (res) => {
-			if (text.value !== '' || files.value.length > 0) {
-				const { canceled } = await os.confirm({
-					type: 'warning',
-					text: i18n.ts.draftOverwriteConfirm,
-				});
-				if (canceled) return;
-			}
-
-			applyDraft(res);
-		},
-	}, 'closed');
 }
 
 async function applyDraft(draft: noteDrafts.NoteDraft, native = false) {
