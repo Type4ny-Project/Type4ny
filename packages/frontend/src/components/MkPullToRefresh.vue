@@ -79,7 +79,7 @@ function unlockDownScroll() {
 }
 
 function moveStartByMouse(event: MouseEvent) {
-	if (event.button !== 1) return;
+	if (event.button !== 0) return;
 	if (isRefreshing.value) return;
 
 	const scrollPos = scrollEl!.scrollTop;
