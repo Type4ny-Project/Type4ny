@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkCwButton v-model="showContent" :text="note.text" :files="note.files" :poll="note.poll"/>
 			</p>
 			<div v-show="note.cw == null || showContent">
-				<MkSubNoteContent :emojireq="emojireq" :class="$style.text" :note="note"/>
+				<MkSubNoteContent :emojireq="emojireq" :class="$style.text" :note="note" :emojiUrls="note.emojis"/>
 			</div>
 			<div v-if="note.isSchedule" style="margin-top: 10px;">
 				<MkButton :class="$style.button" inline @click="editScheduleNote()"><i class="ti ti-pencil"></i> {{ i18n.ts.deleteAndEdit }}</MkButton>
@@ -53,7 +53,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-  (ev: 'editScheduleNote'): void;
+	(ev: 'editScheduleNote'): void;
 }>();
 
 async function deleteScheduleNote() {
