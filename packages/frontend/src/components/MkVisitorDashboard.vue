@@ -30,12 +30,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</div>
 
-	<div v-if="instance.policies.ltlAvailable" :class="[$style.tl, $style.panel]">
-		<div :class="$style.tlHeader">{{ i18n.ts.letsLookAtTimeline }}</div>
-		<div :class="$style.tlBody">
-			<MkNotesTimeline :paginator="paginator"/>
-		</div>
-	</div>
 	<div :class="$style.stats">
 		<div :class="[$style.statsItem, $style.panel]">
 			<div :class="$style.statsItemLabel">{{ i18n.ts.users }}</div>
@@ -52,14 +46,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkStreamingNotesTimeline src="local"/>
 		</div>
 	</div>
-	<div :class="$style.panel">
-		<XActiveUsersChart/>
-	</div>
 </div>
 </template>
 
 <script lang="ts" setup>
-import { markRaw, ref } from 'vue';
+import { ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import { instanceName } from '@@/js/config.js';
 import XSigninDialog from '@/components/MkSigninDialog.vue';
@@ -73,12 +64,7 @@ import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import MkNumber from '@/components/MkNumber.vue';
 import { openInstanceMenu } from '@/ui/_common_/common.js';
-import MkNotesTimeline from '@/components/MkNotesTimeline.vue';
-import { Paginator } from '@/utility/paginator';
-
-const paginator = markRaw(new Paginator('notes/local-timeline', {
-	limit: 10,
-}));
+import { getProxiedImageUrlNullable } from '@/utility/media-proxy';
 const stats = ref<Misskey.entities.StatsResponse | null>(null);
 
 misskeyApi('stats', {}).then((res) => {
@@ -118,10 +104,8 @@ function showMenu(ev: MouseEvent) {
 
 .panel {
 	position: relative;
-	background: var(--MI_THEME-acrylicPanel);
+	background: var(--MI_THEME-panel);
 	border-radius: var(--MI-radius);
-	-webkit-backdrop-filter: var(--MI-blur, blur(8px));
-	backdrop-filter: var(--MI-blur, blur(8px));
 	box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
 }
 

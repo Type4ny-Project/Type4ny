@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div :class="$style.shape2"></div>
 	<div :class="$style.logoWrapper">
 		<div :class="$style.poweredBy">Powered by</div>
-		<img :src="misskeysvg" :class="$style.misskey"/>
+		<img :src="type4nySVG" :class="$style.misskey"/>
 	</div>
 	<div :class="$style.contents">
 		<MkVisitorDashboard/>
@@ -37,10 +37,14 @@ import MkFeaturedPhotos from '@/components/MkFeaturedPhotos.vue';
 import type4nySVG from '/client-assets/Type4ny-Logo.svg';
 import { misskeyApiGet } from '@/utility/misskey-api.js';
 import MkVisitorDashboard from '@/components/MkVisitorDashboard.vue';
-import { getProxiedImageUrl } from '@/utility/media-proxy.js';
+import { getProxiedImageUrlNullable } from '@/utility/media-proxy.js';
 import { instance as meta } from '@/instance.js';
 
 const instances = ref<Misskey.entities.FederationInstance[]>();
+
+function getInstanceIcon(instance): string {
+	return getProxiedImageUrlNullable(instance.iconUrl, 'preview') ?? getProxiedImageUrlNullable(instance.faviconUrl, 'preview') ?? '/client-assets/dummy.png';
+}
 
 misskeyApiGet('federation/instances', {
 	sort: '+pubSub',
