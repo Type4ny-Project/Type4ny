@@ -161,12 +161,6 @@ import MkPagingButtons from '@/components/MkPagingButtons.vue';
 import MkSortOrderEditor from '@/components/MkSortOrderEditor.vue';
 import { useLoading } from '@/composables/use-loading.js';
 
-function cleanObj<T extends Record<string, any>>(obj: T): T {
-	return Object.fromEntries(
-		Object.entries(obj).filter(([_, v]) => v !== undefined && v !== null)
-	) as T;
-}
-
 type GridItem = {
 	checked: boolean;
 	id: string;
@@ -213,7 +207,7 @@ function setupGrid(): GridSetting {
 			{ bindTo: 'publicUrl', title: 'publicUrl', type: 'text', editable: false, width: 'auto' },
 		],
 		cells: {
-			contextMenuFactory: (col, row, value, context) => {
+			contextMenuFactory: (col, row) => {
 				return [
 					{
 						type: 'button',
@@ -225,7 +219,7 @@ function setupGrid(): GridSetting {
 								emoji: {
 									id: target.id,
 									name: target.name,
-									host: target.host!,
+									host: target.host ?? '',
 									license: target.license,
 									url: target.publicUrl,
 								},
@@ -244,6 +238,7 @@ function setupGrid(): GridSetting {
 						text: i18n.ts._customEmojisManager._remote.importSelectionRangesRows,
 						icon: 'ti ti-download',
 						action: async () => {
+							const targets = [gridItems.value[row.index]];
 							await importEmojis(targets);
 						},
 					},
@@ -296,6 +291,7 @@ async function onPageChanged(pageNumber: number) {
 }
 
 async function onImportClicked() {
+	const targets = gridItems.value.filter(it => it.checked);
 	await importEmojis(targets);
 }
 
@@ -331,7 +327,7 @@ async function importEmojis(targets: GridItem[]) {
 				misskeyApi(
 					'admin/emoji/copy',
 					{
-						emojiId: item.id!,
+						emojiId: item.id,
 					})
 					.then(() => ({ item, success: true, err: undefined }))
 					.catch(err => ({ item, success: false, err })),
@@ -372,11 +368,11 @@ async function refreshCustomEmojis() {
 		currentPage.value = 1;
 	}
 
-	const result = await misskeyApi('admin/emoji/list-remote', cleanObj({
+	const result = await loadingHandler.scope(() => misskeyApi('v2/admin/emoji/list', {
 		limit: queryLimit.value,
 		query: query,
 		page: currentPage.value,
-		sortKeys: sortOrders.value.map(({ key, direction }) => `${direction}${key}`) as never[],
+		sortKeys: sortOrders.value.map(({ key, direction }) => `${direction}${key}`),
 	}));
 
 	customEmojis.value = result.emojis;
@@ -388,7 +384,7 @@ async function refreshCustomEmojis() {
 		url: it.publicUrl,
 		name: it.name,
 		license: it.license,
-		host: it.host!,
+		host: it.host ?? '',
 	}));
 }
 
