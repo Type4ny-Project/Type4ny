@@ -265,6 +265,8 @@ async function onRegistryClicked() {
 			);
 	};
 
+	const result = await Promise.all(upload());
+
 	const failedItems = result.filter(it => !it.success);
 
 	if (failedItems.length > 0) {
