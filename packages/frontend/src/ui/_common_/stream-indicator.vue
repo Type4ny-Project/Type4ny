@@ -43,11 +43,13 @@ function reload() {
 }
 
 if (store.s.realtimeMode) {
+	useStream().on('_connected_', resetDisconnected);
 	useStream().on('_disconnected_', onDisconnected);
 
 	onUnmounted(() => {
-		window.clearTimeout(timeoutId);
-	useStream().off('_connected_', resetDisconnected);useStream().off('_disconnected_', onDisconnected);
+		window.clearTimeout(timeoutId.value);
+		useStream().off('_connected_', resetDisconnected);
+		useStream().off('_disconnected_', onDisconnected);
 	});
 }
 </script>
