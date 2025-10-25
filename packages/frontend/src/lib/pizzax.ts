@@ -38,10 +38,18 @@ export class Pizzax<T extends StateDef> {
 
 	public readonly key: string;
 	public readonly deviceStateKeyName: `pizzax::${this['key']}`;
-	public readonly deviceAccountStateKeyName: `pizzax::${this['key']}::${string}` | '';
-	public readonly registryCacheKeyName: `pizzax::${this['key']}::cache::${string}` | '';
 
 	public readonly def: T;
+
+	// deviceAccountStateKeyName と registryCacheKeyName は動的に取得する必要がある
+	// (アカウント切り替え時に $i.id が変わるため)
+	public get deviceAccountStateKeyName(): `pizzax::${this['key']}::${string}` | '' {
+		return $i ? `pizzax::${this.key}::${$i.id}` : '';
+	}
+
+	public get registryCacheKeyName(): `pizzax::${this['key']}::cache::${string}` | '' {
+		return $i ? `pizzax::${this.key}::cache::${$i.id}` : '';
+	}
 
 	// TODO: これが実装されたらreadonlyにしたい: https://github.com/microsoft/TypeScript/issues/37487
 	/**
@@ -70,8 +78,6 @@ export class Pizzax<T extends StateDef> {
 	constructor(key: string, def: T) {
 		this.key = key;
 		this.deviceStateKeyName = `pizzax::${key}`;
-		this.deviceAccountStateKeyName = $i ? `pizzax::${key}::${$i.id}` : '';
-		this.registryCacheKeyName = $i ? `pizzax::${key}::cache::${$i.id}` : '';
 		this.def = def;
 
 		this.pizzaxChannel = new BroadcastChannel(`pizzax::${key}`);

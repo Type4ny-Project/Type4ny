@@ -158,9 +158,11 @@ export const PREF_DEF = definePreferences({
 		default: true,
 	},
 	defaultNoteVisibility: {
+		accountDependent: true,
 		default: 'public' as (typeof Misskey.noteVisibilities)[number],
 	},
 	defaultNoteLocalOnly: {
+		accountDependent: true,
 		default: false,
 	},
 	keepCw: {
