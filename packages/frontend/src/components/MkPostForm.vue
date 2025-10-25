@@ -99,9 +99,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-if="showAddMfmFunction" v-tooltip="i18n.ts.addMfmFunction" :class="['_button', $style.footerButton]" @click="insertMfmFunction"><i class="ti ti-palette"></i></button>
 			<button v-tooltip="i18n.ts.ruby" :class="['_button', $style.footerButton]" @click="insertRuby"><i class="ti ti-abc"></i></button>
 		</div>
-		<div :class="$style.footerRight">
-			<button v-tooltip="i18n.ts.emoji" :class="['_button', $style.footerButton]" @click="insertEmoji"><i class="ti ti-mood-happy"></i></button>
-		</div>
 	</footer>
 	<datalist id="hashtags">
 		<option v-for="hashtag in recentHashtags" :key="hashtag" :value="hashtag"/>
@@ -596,7 +593,7 @@ function focus() {
 
 function chooseFileFrom(ev: MouseEvent) {
 	if (props.mock) return;
-	
+
 	os.popupMenu([{
 		text: i18n.ts.upload,
 		icon: 'ti ti-upload',
