@@ -9,7 +9,7 @@
 @use './styles/gaming-animations.scss';
 
 :root {
-	--MI-radius: 14px;
+	--MI-radius: 8px;
 	--MI-marginFull: 16px;
 	--MI-marginHalf: 10px;
 
@@ -144,7 +144,7 @@ optgroup, option {
 hr {
 	margin: 0;
 	border: none;
-	border-radius: 999px;
+	border-radius: var(--MI-radius);
 	height: 1px;
 	background: var(--MI_THEME-divider);
 }

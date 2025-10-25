@@ -197,10 +197,6 @@ export const store = markRaw(new Pizzax('base', {
 		where: 'device',
 		default: false,
 	},
-	numberOfGamingSpeed: {
-		where: 'device',
-		default: 44,
-	},
 	menuDisplay: {
 		where: 'device',
 		default: 'sideFull' as 'sideFull' | 'sideIcon' | 'top',

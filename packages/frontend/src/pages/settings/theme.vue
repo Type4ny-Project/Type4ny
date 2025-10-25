@@ -252,6 +252,7 @@ import { definePage } from '@/page.js';
 import { prefer } from '@/preferences.js';
 import { copyToClipboard } from '@/utility/copy-to-clipboard.js';
 import MkRange from '@/components/MkRange.vue';
+import { suggestReload } from '@/utility/reload-suggest';
 
 const installedThemes = getThemesRef();
 const builtinThemes = getBuiltinThemesRef();
@@ -264,7 +265,7 @@ const installedLightThemes = computed(() => installedThemes.value.filter(t => t.
 const builtinLightThemes = computed(() => builtinThemes.value.filter(t => t.base === 'light' || t.kind === 'light'));
 const themes = computed(() => uniqueBy([instanceDarkTheme.value, instanceLightTheme.value, ...builtinThemes.value, ...installedThemes.value].filter(x => x != null), theme => theme.id));
 const gamingMode = computed(store.makeGetterSetter('gamingMode'));
-const numberOfGamingSpeed = computed(store.makeGetterSetter('numberOfGamingSpeed'));
+const numberOfGamingSpeed = prefer.model('numberOfGamingSpeed');
 
 const darkTheme = prefer.r.darkTheme;
 const darkThemeName = computed(() => darkTheme.value?.name ?? defaultDarkTheme.name);
@@ -366,6 +367,13 @@ function onThemeContextmenu(theme: Theme, ev: MouseEvent) {
 const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
+
+watch([
+	numberOfGamingSpeed,
+	gamingMode,
+], () => {
+	suggestReload();
+});
 
 definePage(() => ({
 	title: i18n.ts.theme,

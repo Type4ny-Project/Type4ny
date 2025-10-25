@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		@click="toggle"
 	>
 	<XButton :class="$style.toggle" :checked="checked" :disabled="disabled" @toggle="toggle"/>
-	<span v-if="!noBody" :class="[$style.body,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light'}]">
+	<span v-if="!noBody" :class="$style.body">
 		<!-- TODO: 無名slotの方は廃止 -->
 		<span :class="$style.label">
 			<span @click="toggle">
@@ -30,9 +30,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { toRefs } from 'vue';
 import type { Ref, ref, computed, watch } from 'vue';
 import XButton from '@/components/MkSwitch.button.vue';
-import { useGamingMode } from '@/composables/use-gaming-mode.js';
-
-const { gamingType } = useGamingMode();
 
 const props = defineProps<{
 	modelValue: boolean | Ref<boolean>;
@@ -113,28 +110,6 @@ const toggle = () => {
 	display: block;
 	transition: inherit;
 	color: var(--MI_THEME-fg);
-
-	&.gamingDark {
-		animation: var(--gaming-animation-dark);
-		background: var(--gaming-text-dark);
-		background-size: 1800% 1800%;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		will-change: background-position;
-		transform: translateZ(0);
-	}
-
-	&.gamingLight {
-		animation: var(--gaming-animation-light);
-		background: var(--gaming-text-light);
-		background-size: 1800% 1800%;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		will-change: background-position;
-		transform: translateZ(0);
-	}
 }
 
 .label {

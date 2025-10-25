@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef, watch, nextTick, defineAsyncComponent } from 'vue';
+import { ref, useTemplateRef, watch, nextTick, defineAsyncComponent } from 'vue';
 import { host } from '@@/js/config.js';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -141,6 +141,7 @@ import { instance } from '@/instance.js';
 import MkPushNotificationAllowButton from '@/components/MkPushNotificationAllowButton.vue';
 import * as os from '@/os.js';
 import { useGamingMode } from '@/composables/use-gaming-mode.js';
+import { store } from '@/store.js';
 
 const { gamingType } = useGamingMode();
 

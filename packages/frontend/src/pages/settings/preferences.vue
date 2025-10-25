@@ -20,6 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<SearchMarker :keywords="['language']">
 							<MkSelect v-model="lang">
 								<template #label><SearchLabel>{{ i18n.ts.uiLanguage }}</SearchLabel></template>
+								<option v-if="!langs.some(x => x[0] === lang)" :value="lang" selected>{{ lang }}</option>
 								<option v-for="x in langs" :key="x[0]" :value="x[0]">{{ x[1] }}</option>
 								<template #caption>
 									<I18n :src="i18n.ts.i18nInfo" tag="span">
@@ -841,7 +842,7 @@ import MkColorInput from '@/components/MkColorInput.vue';
 
 const $i = ensureSignin();
 
-const lang = ref(miLocalStorage.getItem('lang'));
+const lang = ref(miLocalStorage.getItem('lang') ?? 'en-US');
 const dataSaver = ref(prefer.s.dataSaver);
 const realtimeMode = computed(store.makeGetterSetter('realtimeMode'));
 
@@ -945,8 +946,6 @@ watch([
 	mediaListWithOneImageAppearance,
 	reactionsDisplaySize,
 	limitWidthOfReaction,
-	mediaListWithOneImageAppearance,
-	limitWidthOfReaction,
 	instanceTicker,
 	squareAvatars,
 	highlightSensitiveMedia,
@@ -1039,6 +1038,8 @@ function enableAllDataSaver() {
 }
 
 function disableAllDataSaver() {
+	const g = { ...prefer.s.dataSaver };
+
 	Object.keys(g).forEach((key) => { g[key] = false; });
 
 	dataSaver.value = g;

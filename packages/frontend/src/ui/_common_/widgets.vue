@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 <div>
 	<XWidgets :edit="editMode" :widgets="widgets" @addWidget="addWidget" @removeWidget="removeWidget" @updateWidget="updateWidget" @updateWidgets="updateWidgets" @exit="editMode = false"/>
 
-	<button v-if="editMode" class="_textButton" style="font-size: 0.9em;" :class="{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }" @click="editMode = false"><i class="ti ti-check"></i> {{ i18n.ts.editWidgetsExit }}</button>
-	<button v-else class="_textButton" data-cy-widget-edit :class="[$style.edit, {[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light' }]" style="font-size: 0.9em;" @click="editMode = true"><i class="ti ti-pencil"></i> {{ i18n.ts.editWidgets }}</button>
+	<button v-if="editMode" class="_textButton" style="font-size: 0.9em;" @click="editMode = false"><i class="ti ti-check"></i> {{ i18n.ts.editWidgetsExit }}</button>
+	<button v-else class="_textButton" data-cy-widget-edit :class="$style.edit" style="font-size: 0.9em;" @click="editMode = true"><i class="ti ti-pencil"></i> {{ i18n.ts.editWidgets }}</button>
 </div>
 </template>
 
@@ -20,9 +20,7 @@ const editMode = ref(false);
 import XWidgets from '@/components/MkWidgets.vue';
 import { i18n } from '@/i18n.js';
 import { prefer } from '@/preferences.js';
-import { useGamingMode } from '@/composables/use-gaming-mode.js';
 
-const { gamingType } = useGamingMode();
 const props = withDefaults(defineProps<{
 	// null = 全てのウィジェットを表示
 	// left = place: leftだけを表示
@@ -79,45 +77,5 @@ function updateWidgets(thisWidgets) {
 <style lang="scss" module>
 .edit {
 	width: 100%;
-  &.gamingDark{
-    animation: var(--gaming-animation-dark);
-    background: var(--gaming-text-dark);
-    background-size: 1800% 1800% !important;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    will-change: background-position;
-    transform: translateZ(0);
-  }
-  &.gamingLight{
-    animation: var(--gaming-animation-light);
-    background: var(--gaming-text-light);
-    background-size: 1800% 1800% !important;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    will-change: background-position;
-    transform: translateZ(0);
-  }
-}
-.gamingDark{
-  animation: var(--gaming-animation-dark);
-  background: var(--gaming-text-dark);
-  background-size: 1800% 1800% !important;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  will-change: background-position;
-  transform: translateZ(0);
-}
-.gamingLight{
-  animation: var(--gaming-animation-light);
-  background: var(--gaming-text-light);
-  background-size: 1800% 1800% !important;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  will-change: background-position;
-  transform: translateZ(0);
 }
 </style>
