@@ -165,8 +165,8 @@ export function compile(theme: Theme): Record<string, string> {
 			return getColor(theme.props[val]);
 		} else if (val[0] === ':') { // func
 			const parts = val.split('<');
-			const func = parts.shift().substring(1);
-			const arg = parseFloat(parts.shift());
+			const func = parts.shift()?.substring(1);
+			const arg = parseFloat(parts.shift() ?? '0');
 			const color = getColor(parts.join('<'));
 
 			switch (func) {

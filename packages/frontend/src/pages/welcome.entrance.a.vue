@@ -49,7 +49,7 @@ function getInstanceIcon(instance): string {
 misskeyApiGet('federation/instances', {
 	sort: '+pubSub',
 	limit: 20,
-	blocked: 'false',
+	blocked: false,
 }).then(_instances => {
 	instances.value = _instances;
 });
@@ -95,10 +95,10 @@ misskeyApiGet('federation/instances', {
 	width: 100vw;
 	height: 100vh;
 	background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
-		background-size: 2000% 2000%;
-		-webkit-animation: AnimationLight 11s ease infinite;
-		-moz-animation: AnimationLight 11s ease infinite;
-		animation: AnimationLight 11s ease infinite;
+	background-size: 2000% 2000%;
+	-webkit-animation: AnimationLight 11s ease infinite;
+	-moz-animation: AnimationLight 11s ease infinite;
+	animation: AnimationLight 11s ease infinite;
 	clip-path: polygon(0% 0%, 45% 0%, 20% 100%, 0% 100%);
 }
 .shape2 {
@@ -108,10 +108,10 @@ misskeyApiGet('federation/instances', {
 	width: 100vw;
 	height: 100vh;
 	background: linear-gradient(270deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
-		background-size: 2000% 2000%;
-    -webkit-animation: AnimationLight 11s ease infinite;
-    -moz-animation: AnimationLight 11s ease infinite;
-    animation: AnimationLight 11s ease  infinite;
+	background-size: 2000% 2000%;
+  -webkit-animation: AnimationLight 11s ease infinite;
+  -moz-animation: AnimationLight 11s ease infinite;
+  animation: AnimationLight 11s ease  infinite;
 	clip-path: polygon(0% 0%, 25% 0%, 35% 100%, 0% 100%);
 	opacity: 0.5;
 }
@@ -143,11 +143,8 @@ misskeyApiGet('federation/instances', {
 	width: min(430px, calc(100% - 32px));
 	padding: 128px 0 0 0;
 	top: 0;
-		bottom: 0;
-		margin-right: 32px;
-	@media (max-width: 1200px) {
-		margin: auto;
-	}
+	bottom: 0;
+	margin: auto auto var(--MI-margin) auto;
 }
 
 .federation {

@@ -6,8 +6,8 @@
 import { computed, watch, version as vueVersion } from 'vue';
 import { compareVersions } from 'compare-versions';
 import { version, lang, apiUrl, isSafeMode } from '@@/js/config.js';
-import defaultLightTheme from '@@/themes/l-light.json5';
-import defaultDarkTheme from '@@/themes/d-green-lime.json5';
+import defaultLightTheme from '@@/themes/l-TypeLightEmerald.json5';
+import defaultDarkTheme from '@@/themes/d-TypeDarkEmerald.json5';
 import { storeBootloaderErrors } from '@@/js/store-boot-errors';
 import type { App } from 'vue';
 import widgets from '@/widgets/index.js';
@@ -228,7 +228,7 @@ export async function common(createVue: () => Promise<App<Element>>) {
 	const updateGamingType = () => {
 		const darkMode = store.s.darkMode;
 		const gamingMode = store.s.gamingMode;
-		
+
 		let gamingType: 'dark' | 'light' | 'none' = 'none';
 		if (darkMode && gamingMode) {
 			gamingType = 'dark';
@@ -237,7 +237,7 @@ export async function common(createVue: () => Promise<App<Element>>) {
 		} else {
 			gamingType = 'none';
 		}
-		
+
 		store.set('gamingType', gamingType);
 	};
 
