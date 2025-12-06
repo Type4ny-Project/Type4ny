@@ -29,7 +29,21 @@ globalThis.addEventListener('activate', ev => {
 });
 
 async function offlineContentHTML() {
-	const i18n = await (swLang.i18n ?? swLang.fetchLocale()) as Partial<I18n<Locale>>;
+	const controller = new AbortController();
+	const timeout = globalThis.setTimeout(() => {
+		controller.abort('i18n-timeout');
+	}, 3000);
+
+	let i18n: Partial<I18n<Locale>>;
+
+	try {
+		i18n = await (swLang.i18n ?? swLang.fetchLocale()) as Partial<I18n<Locale>>;
+	} catch {
+		i18n = {};
+	} finally {
+		globalThis.clearTimeout(timeout);
+	}
+
 	const messages = {
 		title: i18n.ts?._offlineScreen.title ?? 'Offline - Could not connect to server',
 		header: i18n.ts?._offlineScreen.header ?? 'Could not connect to server',
@@ -50,19 +64,36 @@ globalThis.addEventListener('fetch', ev => {
 	}
 
 	if (!isHTMLRequest) return;
-	ev.respondWith(
-		fetch(ev.request)
-			.catch(async () => {
-				const html = await offlineContentHTML();
-				return new Response(html, {
-					status: 200,
-					headers: {
-						'content-type': 'text/html',
-					},
-				});
-			}),
-	);
+	ev.respondWith(respondToNavigation(ev.request));
 });
+
+async function respondToNavigation(request: Request): Promise<Response> {
+	const controller = new AbortController();
+	const timeout = globalThis.setTimeout(() => {
+		controller.abort('navigation-timeout');
+	}, 5000);
+
+	try {
+		const response = await fetch(request, { signal: controller.signal });
+
+		if (response?.status && response.status < 400) return response;
+		if (response?.type === 'opaqueredirect') return response;
+	} catch (error) {
+		if (_DEV_) {
+			console.warn('navigation fetch failed; showing offline page', error);
+		}
+	} finally {
+		globalThis.clearTimeout(timeout);
+	}
+
+	const html = await offlineContentHTML();
+	return new Response(html, {
+		status: 200,
+		headers: {
+			'content-type': 'text/html',
+		},
+	});
+}
 
 globalThis.addEventListener('push', ev => {
 	// クライアント取得
