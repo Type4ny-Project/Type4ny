@@ -12,6 +12,36 @@ import { createEmptyNotification, createNotification } from '@/scripts/create-no
 import { swLang } from '@/scripts/lang.js';
 import * as swos from '@/scripts/operations.js';
 
+const FETCH_TIMEOUT_MS = 5000;
+
+async function respondToNavigation(request: Request): Promise<Response> {
+	const controller = new AbortController();
+	const timeout = globalThis.setTimeout(() => {
+		controller.abort('navigation-timeout');
+	}, FETCH_TIMEOUT_MS);
+
+	try {
+		const response = await fetch(request, { signal: controller.signal });
+
+		if (response?.status && response.status < 400) return response;
+		if (response?.type === 'opaqueredirect') return response;
+	} catch (error) {
+		if (_DEV_) {
+			console.warn('navigation fetch failed; showing offline page', error);
+		}
+	} finally {
+		globalThis.clearTimeout(timeout);
+	}
+
+	const html = await offlineContentHTML();
+	return new Response(html, {
+		status: 200,
+		headers: {
+			'content-type': 'text/html',
+		},
+	});
+}
+
 globalThis.addEventListener('install', () => {
 	// ev.waitUntil(globalThis.skipWaiting());
 });
@@ -32,7 +62,7 @@ async function offlineContentHTML() {
 	const controller = new AbortController();
 	const timeout = globalThis.setTimeout(() => {
 		controller.abort('i18n-timeout');
-	}, 3000);
+	}, FETCH_TIMEOUT_MS);
 
 	let i18n: Partial<I18n<Locale>>;
 
@@ -66,34 +96,6 @@ globalThis.addEventListener('fetch', ev => {
 	if (!isHTMLRequest) return;
 	ev.respondWith(respondToNavigation(ev.request));
 });
-
-async function respondToNavigation(request: Request): Promise<Response> {
-	const controller = new AbortController();
-	const timeout = globalThis.setTimeout(() => {
-		controller.abort('navigation-timeout');
-	}, 5000);
-
-	try {
-		const response = await fetch(request, { signal: controller.signal });
-
-		if (response?.status && response.status < 400) return response;
-		if (response?.type === 'opaqueredirect') return response;
-	} catch (error) {
-		if (_DEV_) {
-			console.warn('navigation fetch failed; showing offline page', error);
-		}
-	} finally {
-		globalThis.clearTimeout(timeout);
-	}
-
-	const html = await offlineContentHTML();
-	return new Response(html, {
-		status: 200,
-		headers: {
-			'content-type': 'text/html',
-		},
-	});
-}
 
 globalThis.addEventListener('push', ev => {
 	// クライアント取得
