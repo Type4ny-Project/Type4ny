@@ -153,3 +153,5 @@ export const MFM_PARAMS: Record<typeof MFM_TAGS[number], string[]> = {
 	ruby: [],
 	unixtime: [],
 };
+
+export const FETCH_TIMEOUT_MS = 10000;
