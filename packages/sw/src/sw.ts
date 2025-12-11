@@ -13,34 +13,34 @@ import { createEmptyNotification, createNotification } from '@/scripts/create-no
 import { swLang } from '@/scripts/lang.js';
 import * as swos from '@/scripts/operations.js';
 
-async function respondToNavigation(request: Request): Promise<Response> {
-	const controller = new AbortController();
-	const timeout = globalThis.setTimeout(() => {
-		controller.abort('navigation-timeout');
-	}, FETCH_TIMEOUT_MS);
-
-	try {
-		const response = await fetch(request, { signal: controller.signal });
-
-		if (response?.status && response.status < 500) return response;
-		if (response?.type === 'opaqueredirect') return response;
-	} catch (error) {
-		if (_DEV_) {
-			console.warn('navigation fetch failed; showing offline page', error);
-		}
-	} finally {
-		globalThis.clearTimeout(timeout);
-	}
-
-	// Only show offline page when network request actually fails
-	const html = await offlineContentHTML();
-	return new Response(html, {
-		status: 200,
-		headers: {
-			'content-type': 'text/html',
-		},
-	});
-}
+// async function respondToNavigation(request: Request): Promise<Response> {
+// 	const controller = new AbortController();
+// 	const timeout = globalThis.setTimeout(() => {
+// 		controller.abort('navigation-timeout');
+// 	}, FETCH_TIMEOUT_MS);
+//
+// 	try {
+// 		const response = await fetch(request, { signal: controller.signal });
+//
+// 		if (response?.status && response.status < 500) return response;
+// 		if (response?.type === 'opaqueredirect') return response;
+// 	} catch (error) {
+// 		if (_DEV_) {
+// 			console.warn('navigation fetch failed; showing offline page', error);
+// 		}
+// 	} finally {
+// 		globalThis.clearTimeout(timeout);
+// 	}
+//
+// 	// Only show offline page when network request actually fails
+// 	const html = await offlineContentHTML();
+// 	return new Response(html, {
+// 		status: 200,
+// 		headers: {
+// 			'content-type': 'text/html',
+// 		},
+// 	});
+// }
 
 async function offlineContentHTML() {
 	let i18n: Partial<I18n<Locale>>;
@@ -75,19 +75,19 @@ globalThis.addEventListener('activate', ev => {
 	);
 });
 
-globalThis.addEventListener('fetch', ev => {
-	let isHTMLRequest = false;
-	if (ev.request.headers.get('sec-fetch-dest') === 'document') {
-		isHTMLRequest = true;
-	} else if (ev.request.headers.get('accept')?.includes('/html')) {
-		isHTMLRequest = true;
-	} else if (ev.request.url.endsWith('/')) {
-		isHTMLRequest = true;
-	}
-
-	if (!isHTMLRequest) return;
-	ev.respondWith(respondToNavigation(ev.request));
-});
+// globalThis.addEventListener('fetch', ev => {
+// 	let isHTMLRequest = false;
+// 	if (ev.request.headers.get('sec-fetch-dest') === 'document') {
+// 		isHTMLRequest = true;
+// 	} else if (ev.request.headers.get('accept')?.includes('/html')) {
+// 		isHTMLRequest = true;
+// 	} else if (ev.request.url.endsWith('/')) {
+// 		isHTMLRequest = true;
+// 	}
+//
+// 	if (!isHTMLRequest) return;
+// 	ev.respondWith(respondToNavigation(ev.request));
+// });
 
 globalThis.addEventListener('push', ev => {
 	// クライアント取得
